@@ -10,7 +10,7 @@ public class Player {
     
     public PlayerBoard playerBoard;
     public Hand hand;
-    public Mathc match;
+    public Match match;
 
     public void draw(ArrayList<> deck);
 
