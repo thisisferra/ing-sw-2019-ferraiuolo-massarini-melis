@@ -5,10 +5,10 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>it.polimi.se2019</groupId>
-  <artifactId>adrenalina</artifactId>
+  <artifactId>Adrenalina</artifactId>
   <version>1.0-SNAPSHOT</version>
 
-  <name>adrenalina</name>
+  <name>Adrenalina</name>
   <url>http://www.example.com</url>
 
   <properties>

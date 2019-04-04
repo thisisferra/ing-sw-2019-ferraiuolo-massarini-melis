@@ -1,5 +1,9 @@
-public abstract class Square {
+package it.polimi.se2019.model.map;
 
+import it.polimi.se2019.model.player.Player;
+import java.util.ArrayList;
+
+public abstract class Square {
     private int[] position;
     private ArrayList<Square> roomSquares;
     private ArrayList<Square> hammingSquare;
@@ -8,9 +12,6 @@ public abstract class Square {
     private boolean spawnPoint;
     private ArrayList<Player> playersOn;
     private String color;
-
-    public Map map;
-
 
     public void restock(ArrayList<> deck);
 }

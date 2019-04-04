@@ -1,5 +1,8 @@
-public class Player {
+package it.polimi.se2019.model.player;
 
+import it.polimi.se2019.model.game.Match;
+
+public class Player {
     private String clientName;
     private int[] position;
     private int score;
@@ -7,11 +10,6 @@ public class Player {
     private PlayerBoard playerBoard;
     private boolean firstPlayer;
     private boolean suspended;
-    
-    public PlayerBoard playerBoard;
-    public Hand hand;
-    public Match match;
 
     public void draw(ArrayList<> deck);
-
 }

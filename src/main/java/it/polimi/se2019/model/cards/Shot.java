@@ -1,6 +1,13 @@
+package it.polimi.se2019.model.cards;
+
+import it.polimi.se2019.model.game.Cubes;
+import it.polimi.se2019.model.player.Player;
+import it.polimi.se2019.model.map.Square;
+import java.util.ArrayList;
+
 public class Shot {
     private boolean notUsed;
-    private int[] cost;
+    private Cubes cost;
     private int damage;
     private int tags;
     private boolean peekingRequired;
@@ -12,7 +19,6 @@ public class Shot {
     private int shockDisplacement;
 
     public void getInfo();
-    public ArrayList<Player> approchable(Square from);
+    public ArrayList<Player> approachable(Square from);
     public void use();
-
 }
