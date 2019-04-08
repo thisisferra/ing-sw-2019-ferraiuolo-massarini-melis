@@ -1,6 +1,11 @@
+package it.polimi.se2019.controller;
+import it.polimi.se2019.model.game.Match;
+import it.polimi.se2019.model.player.Player;
+import java.util.ArrayList;
+
 public class Controller {
   //references to the player who's performing actions and the match state
-  ArrayList <Player> player;
+  ArrayList<Player> player;
   ArrayList <Match> match;
   //each player draws two cards in their first turn and discard one
   public void startingDraw(){

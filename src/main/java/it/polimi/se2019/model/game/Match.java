@@ -17,8 +17,22 @@ public class Match {
     private int chosenMap;
     private ArrayList<Integer> killShotTrack;
 
-    public void initPlayers();
-    public void initGameField();
-    public void round(Player player);
-    public void shuffle(ArrayList<> deck);
+    public void initPlayers(){
+
+    }
+    public void initGameField(){
+
+    }
+    public void round(Player player){
+
+    }
+    public void shuffleWeapons(ArrayList<Weapon> deck){
+
+    }
+    public void shufflePowerUp(ArrayList<PowerUp> deck){
+
+    }
+    public void shuffleAmmo(ArrayList<Ammo> deck){
+
+    }
 }

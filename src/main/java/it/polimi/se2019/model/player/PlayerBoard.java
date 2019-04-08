@@ -9,8 +9,16 @@ public class PlayerBoard {
     private int deaths;
     private Cubes ammoCubes;
 
-    public void showTags();
-    public void showDamage();
-    public void showDeaths();
-    public void showCubes();
+    public void showTags(){
+
+    }
+    public void showDamage(){
+
+    }
+    public void showDeaths(){
+
+    }
+    public void showCubes(){
+
+    }
 }

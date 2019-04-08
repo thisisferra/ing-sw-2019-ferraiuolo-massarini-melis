@@ -18,7 +18,14 @@ public class Shot {
     private int targetableEnemies;
     private int shockDisplacement;
 
-    public void getInfo();
-    public ArrayList<Player> approachable(Square from);
-    public void use();
+    public void getInfo(){
+
+    }
+    public ArrayList<Player> approachable(Square from){
+        ArrayList<Player> to = null;
+        return to;
+    }
+    public void use(){
+
+    }
 }

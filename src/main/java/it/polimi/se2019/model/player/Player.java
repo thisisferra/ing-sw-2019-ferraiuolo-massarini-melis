@@ -1,6 +1,9 @@
 package it.polimi.se2019.model.player;
 
+import it.polimi.se2019.model.cards.PowerUp;
 import it.polimi.se2019.model.game.Match;
+
+import java.util.ArrayList;
 
 public class Player {
     private String clientName;
@@ -11,5 +14,7 @@ public class Player {
     private boolean firstPlayer;
     private boolean suspended;
 
-    public void draw(ArrayList<> deck);
+    public void draw(ArrayList<PowerUp> deck){
+
+    }
 }

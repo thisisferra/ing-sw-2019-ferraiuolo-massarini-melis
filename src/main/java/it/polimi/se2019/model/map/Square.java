@@ -13,5 +13,5 @@ public abstract class Square {
     private ArrayList<Player> playersOn;
     private String color;
 
-    public void restock(ArrayList<> deck);
+
 }
