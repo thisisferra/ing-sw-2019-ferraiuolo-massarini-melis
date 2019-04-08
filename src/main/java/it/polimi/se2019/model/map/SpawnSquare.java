@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 public class SpawnSquare extends Square {
     private Weapon[] armory;
+    //refill the weapon slots
     public void restock(ArrayList<Weapon> deck){
 
     }

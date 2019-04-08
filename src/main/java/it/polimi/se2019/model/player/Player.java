@@ -14,6 +14,7 @@ public class Player {
     private boolean firstPlayer;
     private boolean suspended;
 
+    //it draws a card rom the powerup deck
     public void draw(ArrayList<PowerUp> deck){
 
     }

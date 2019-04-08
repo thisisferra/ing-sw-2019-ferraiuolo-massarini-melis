@@ -8,5 +8,6 @@ public abstract class Weapon {
     private Cubes buyingCost;
     private Cubes reloadCost;
 
+    //abstract function that represent the reload action
     public abstract void reload(Cubes cost);
 }

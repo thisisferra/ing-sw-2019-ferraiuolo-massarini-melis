@@ -17,21 +17,26 @@ public class Match {
     private int chosenMap;
     private ArrayList<Integer> killShotTrack;
 
+    //generate instances of players
     public void initPlayers(){
 
     }
+    //generate the gamefield
     public void initGameField(){
 
     }
     public void round(Player player){
 
     }
+    //shuffle the weapons deck
     public void shuffleWeapons(ArrayList<Weapon> deck){
 
     }
+    //shuffle the powerups deck
     public void shufflePowerUp(ArrayList<PowerUp> deck){
 
     }
+    //shuffle the ammo stack
     public void shuffleAmmo(ArrayList<Ammo> deck){
 
     }
