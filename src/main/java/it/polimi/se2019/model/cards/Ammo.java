@@ -6,4 +6,16 @@ public class Ammo {
 
     private Cubes ammoCubes;
     private boolean powerUpCard;
+
+    public Ammo getAmmo(){
+        return this;
+    }
+    public void setAmmo(Cubes ammoCubes, boolean powerUpCard){
+        this.ammoCubes = ammoCubes;
+        this.powerUpCard=powerUpCard;
+    }
+    public Ammo(Cubes ammoCubes,boolean powerUpCard){
+        this.ammoCubes = ammoCubes;
+        this.powerUpCard=powerUpCard;
+    }
 }

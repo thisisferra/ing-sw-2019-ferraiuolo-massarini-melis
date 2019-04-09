@@ -21,10 +21,9 @@ public class Shot {
     public void getInfo(){
 
     }
-    //return the list of player apporachable from a given square
+    //return the list of player approachable from a given square
     public ArrayList<Player> approachable(Square from){
-        ArrayList<Player> to = null;
-        return to;
+        return new ArrayList<Player>();
     }
     //apply the effect related to the weapon
     public void use(){

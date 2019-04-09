@@ -10,4 +10,14 @@ public class Cubes {
         this.yellows = yellows;
         this.blues = blues;
     }
+
+    public int getReds(){
+        return this.reds;
+    }
+    public int getYellows(){
+        return this.yellows;
+    }
+    public int getBlues(){
+        return this.blues;
+    }
 }

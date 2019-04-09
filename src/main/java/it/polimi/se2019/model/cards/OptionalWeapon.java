@@ -7,9 +7,5 @@ public class OptionalWeapon extends Weapon {
     private Shot alphaOptional;
     private Shot betaOptional;
 
-    //reload the weapons paying its cost
-    @Override
-    public void reload(Cubes cost) {
 
-    }
 }
