@@ -25,4 +25,8 @@ public class PlayerBoard {
     public void showCubes(){
 
     }
+
+    public Cubes getAmmoCubes() {
+        return this.ammoCubes;
+    }
 }

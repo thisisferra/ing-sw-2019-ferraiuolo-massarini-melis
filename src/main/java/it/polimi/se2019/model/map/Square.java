@@ -12,6 +12,11 @@ public abstract class Square {
     private boolean spawnPoint;
     private ArrayList<Player> playersOn;
     private String color;
+    protected boolean full;          //bool that indicates if square is full or not
+
+    public void setFull() {
+        this.full = true;
+    }
 
 
 }
