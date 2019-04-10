@@ -10,15 +10,14 @@ public class Hand {
     /*
       discard one card from the player hand,
       the card is lost if it's a weapons card,
-      otherwise is added on the corresponding
+      otherwise it's added on the corresponding
       discarded list
     */
 
-    public void discard(Weapon card){
+    public void discardWeapon(){
 
     }
-    //same as below, this method has been overloaded
-    public void discard(PowerUp card){
+    public void discardPower(){
 
     }
 }

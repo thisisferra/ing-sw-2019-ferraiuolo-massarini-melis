@@ -5,7 +5,7 @@ public class Cubes {
     private int yellows;
     private int blues;
 
-    Cubes (int reds, int yellows, int blues) {
+    public Cubes (int reds, int yellows, int blues) {
         this.reds = reds;
         this.yellows = yellows;
         this.blues = blues;

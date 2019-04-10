@@ -13,9 +13,38 @@ public class Player {
     private PlayerBoard playerBoard;
     private boolean firstPlayer;
     private boolean suspended;
+    private Hand playerHand;
 
     //it draws a card rom the powerup deck
     public void draw(ArrayList<PowerUp> deck){
 
     }
+    public String getClientName(){
+        return this.clientName;
+    }
+
+    public String getColor(){
+        return this.color;
+    }
+
+    public int getScore(){
+        return this.score;
+    }
+
+    public int[] getPosition(){
+        return this.position;
+    }
+
+    public boolean isFirstPlayer() {
+        return firstPlayer;
+    }
+
+    public boolean isSuspended() {
+        return suspended;
+    }
+
+    public void setClientName(String clientName){
+        this.clientName= clientName;
+    }
+
 }

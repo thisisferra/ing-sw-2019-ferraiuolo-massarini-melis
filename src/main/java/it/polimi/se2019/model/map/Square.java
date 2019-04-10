@@ -18,5 +18,18 @@ public abstract class Square {
         this.full = true;
     }
 
+    public boolean isFull(){
+        return this.full;
+    }
 
+    public String getColor(){
+        return this.color;
+    }
+
+    public boolean isSpawnPoint(){
+        return this.spawnPoint;
+    }
+    public int[] getPosition(){
+        return this.position;
+    }
 }

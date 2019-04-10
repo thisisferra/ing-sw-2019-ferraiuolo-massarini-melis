@@ -14,7 +14,7 @@ public class Shot {
     private int movesRequired;
     private int movesGranted;
     private boolean stepByStep;
-    private boolean cardinalDirectionrequired;
+    private boolean cardinalDirectionRequired;
     private int targetableEnemies;
     private int shockDisplacement;
 
@@ -28,5 +28,49 @@ public class Shot {
     //apply the effect related to the weapon
     public void use(){
 
+    }
+
+    public boolean isCardinalDirectionRequired() {
+        return cardinalDirectionRequired;
+    }
+
+    public boolean isNotUsed() {
+        return notUsed;
+    }
+
+    public boolean isPeekingRequired() {
+        return peekingRequired;
+    }
+
+    public boolean isStepByStep() {
+        return stepByStep;
+    }
+
+    public Cubes getCost() {
+        return cost;
+    }
+
+    public int getDamage() {
+        return damage;
+    }
+
+    public int getMovesGranted() {
+        return movesGranted;
+    }
+
+    public int getMovesRequired() {
+        return movesRequired;
+    }
+
+    public int getShockDisplacement() {
+        return shockDisplacement;
+    }
+
+    public int getTags() {
+        return tags;
+    }
+
+    public int getTargetableEnemies() {
+        return targetableEnemies;
     }
 }

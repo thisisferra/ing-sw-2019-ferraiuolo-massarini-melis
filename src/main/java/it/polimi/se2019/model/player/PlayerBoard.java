@@ -18,12 +18,8 @@ public class PlayerBoard {
 
     }
     //show deaths of all players
-    public void showDeaths(){
-
-    }
-    //show cubes owned by all players
-    public void showCubes(){
-
+    public int getDeaths(){
+        return this.deaths;
     }
 
     public Cubes getAmmoCubes() {
