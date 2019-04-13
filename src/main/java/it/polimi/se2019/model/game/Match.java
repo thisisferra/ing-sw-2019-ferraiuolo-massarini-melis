@@ -3,6 +3,7 @@ package it.polimi.se2019.model.game;
 import it.polimi.se2019.model.cards.Ammo;
 import it.polimi.se2019.model.cards.PowerUp;
 import it.polimi.se2019.model.cards.Weapon;
+import it.polimi.se2019.model.map.WeaponSlot;
 import it.polimi.se2019.model.player.Player;
 import java.util.ArrayList;
 
@@ -16,6 +17,7 @@ public class Match {
     private ArrayList<Ammo> discardedAmmos;
     private int chosenMap;
     private ArrayList<Integer> killShotTrack;
+    private WeaponSlot[] arsenal;
 
     //generate instances of players
     public void initPlayers(){
