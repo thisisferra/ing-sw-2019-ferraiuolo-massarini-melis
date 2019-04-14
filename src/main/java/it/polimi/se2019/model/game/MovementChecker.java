@@ -1,6 +1,7 @@
 package it.polimi.se2019.model.game;
 import it.polimi.se2019.model.map.Square;
 
+import java.sql.SQLOutput;
 import java.util.*;
 
 public class MovementChecker {
@@ -46,18 +47,49 @@ public class MovementChecker {
 
     public void check(){
         int i =0;
-        while(reachableSquares.get(i).getStep()<this.steps-1){
-            if(reachableSquares.get(i).getNorth()>=0 ) {
-                reachableSquares.add(allSquares[reachableSquares.get(i).getNorth()]);
-                allSquares[reachableSquares.get(i).getNorth()].setStep();
+        Square newSquare;
+        reachableSquares.add(allSquares[index]);
+
+        while(reachableSquares.get(i).getStep()<this.steps){
+
+            if(reachableSquares.get(i).getNorth()>=0 && !allSquares[reachableSquares.get(i).getNorth()].getVisited()) {
+                newSquare = new Square(allSquares[reachableSquares.get(i).getNorth()]);
+                newSquare.setStep(reachableSquares.get(i).getStep()+1);
+                allSquares[newSquare.getPosition()].setVisited(true);
+                reachableSquares.add(newSquare);
+
             }
-            if(reachableSquares.get(i).getEast()>=0 ) reachableSquares.add(allSquares[reachableSquares.get(i).getEast()]);
-            if(reachableSquares.get(i).getSouth()>=0 ) reachableSquares.add(allSquares[reachableSquares.get(i).getSouth()]);
-            if(reachableSquares.get(i).getWest()>=0 ) reachableSquares.add(allSquares[reachableSquares.get(i).getWest()]);
+            if(reachableSquares.get(i).getEast()>=0 && !allSquares[reachableSquares.get(i).getEast()].getVisited()) {
+                newSquare = new Square(allSquares[reachableSquares.get(i).getEast()]);
+                newSquare.setStep(reachableSquares.get(i).getStep()+1);
+                allSquares[newSquare.getPosition()].setVisited(true);
+                reachableSquares.add(newSquare);
+
+            }
+            if(reachableSquares.get(i).getSouth()>=0 && !allSquares[reachableSquares.get(i).getSouth()].getVisited()) {
+                newSquare = new Square(allSquares[reachableSquares.get(i).getSouth()]);
+                newSquare.setStep(reachableSquares.get(i).getStep()+1);
+                allSquares[newSquare.getPosition()].setVisited(true);
+                reachableSquares.add(newSquare);
+
+            }
+            if(reachableSquares.get(i).getWest()>=0 && !allSquares[reachableSquares.get(i).getWest()].getVisited()) {
+                newSquare = new Square(allSquares[reachableSquares.get(i).getWest()]);
+                newSquare.setStep(reachableSquares.get(i).getStep()+1);
+                allSquares[newSquare.getPosition()].setVisited(true);
+                reachableSquares.add(newSquare);
+
+            }
+            allSquares[reachableSquares.get(i).getPosition()].setVisited(true);
+
+
             i++;
-            System.out.println(reachableSquares);
+
+
 
         }
+        reachableSquares.sort(Comparator.comparing(Square::getPosition));
+        for(Square object: reachableSquares) System.out.println(object.toString());
     }
     public ArrayList<Square> getReachableSquares(){
         return this.reachableSquares;

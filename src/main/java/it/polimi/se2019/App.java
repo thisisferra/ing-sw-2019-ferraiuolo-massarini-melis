@@ -12,7 +12,7 @@ public class App {
 
             Map map = new Map();
             map.setAllSquare();
-            MovementChecker mCheck = new MovementChecker(map.getAllSquare(),3,6);
+            MovementChecker mCheck = new MovementChecker(map.getAllSquare(),1,11);
             mCheck.check();
             System.out.println(mCheck.getReachableSquares());
 

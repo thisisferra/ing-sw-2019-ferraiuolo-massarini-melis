@@ -1,14 +1,13 @@
 package it.polimi.se2019.model.map;
 import com.google.gson.Gson;
-import it.polimi.se2019.model.game.MovementChecker;
-
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.Arrays;
 
 public class Map {
     private int mapID;
     private int[] dimensions;
-    private Square[] allSquare;
+    private  Square[] allSquare;
     public int[] getDimensions() {
         return dimensions;
     }

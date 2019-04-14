@@ -3,7 +3,7 @@ import it.polimi.se2019.model.player.Player;
 import java.util.ArrayList;
 
 public  class Square {
-    // position and the four cardinal direction indicates room the're adjacent with, in the square array.
+    // position and the four cardinal direction indicates squares they're adjacent with, in the square array.
     private int position = -1;
     private int north = -1;
     private int east = -1;
@@ -26,9 +26,6 @@ public  class Square {
     public boolean getVisited(){
         return this.visited;
     }
-    public void setFull() {
-        this.full = true;
-    }
     public boolean isFull(){
         return this.full;
     }
@@ -43,7 +40,7 @@ public  class Square {
     }
     public void restock(){
         if (!this.full && !this.spawnPoint) {
-            this.setFull();
+            this.setFull(true);
         }
     }
     public int getNorth(){
@@ -58,15 +55,53 @@ public  class Square {
     public int getWest(){
         return this.west;
     }
+    public void setPosition(int position){
+        this.position=position;
+    }
+    public void setNorth(int north){
+        this.north=north;
+    }
+    public void setEast(int east){
+        this.east=east;
+    }
+    public void setSouth(int south){
+        this.south=south;
+    }
+    public void setWest(int west){
+        this.west=west;
+    }
     public void setStep(int step){
         this.step=step;
+    }
+    public void setColor(String color){
+        this.color=color;
+    }
+    public void setFull(boolean full){
+        this.full=full;
+    }
+    public void setSpawnPoint(boolean spawnPoint){
+        this.spawnPoint=spawnPoint;
+    }
+    public Square(Square square){
+        this.spawnPoint=square.spawnPoint;
+        this.position=square.position;
+        this.step=square.step;
+        this.color=square.color;
+        this.visited=square.visited;
+        this.north=square.north;
+        this.east=square.east;
+        this.south=square.south;
+        this.west=square.west;
+        this.full=square.full;
+
     }
     public int getStep(){
         return this.step;
     }
+
     @Override
     public String toString(){
-        return "Cella: "+ this.getPosition();
+        return "C: " + this.getPosition();
     }
 
 }
