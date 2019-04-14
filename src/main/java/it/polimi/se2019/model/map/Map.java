@@ -26,7 +26,7 @@ public class Map {
     public void setAllSquare(){
         Gson gson = new Gson();
         try {
-            allSquare = gson.fromJson(new FileReader("/home/mattia/IdeaProjects/ing-sw-2019-ferraiuolo-massarini-melis/src/main/java/it/polimi/se2019/map1.json"), Square[].class);
+            allSquare = gson.fromJson(new FileReader("it/polimi/se2019/map1.json"), Square[].class);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
