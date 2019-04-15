@@ -51,7 +51,7 @@ public class Player {
     }
 
     public void pickUpAmmo(Square currentSquare, Match currentMatch) {
-        //Check if I am in an ammo square
+        //Check if the player is in an ammo square
         if(!(currentSquare.isSpawnPoint())) {
             //check if there is an ammo in the current square
             if(currentSquare.isFull()) {
@@ -59,8 +59,11 @@ public class Player {
                 currentSquare.setFull(false);
                 //Create an ammo object where i put the ammo I've picked up
                 Ammo currentAmmo = currentMatch.pickUpAmmoStack();
+                //Add the current ammo into the discardedAmmos list
+                currentMatch.discardAmmo(currentAmmo);
                 //If the ammo I've picked up has a power up -> pick a power up card from ArrayList
-                if(currentAmmo.getPowerUpCard() == true) {
+                if(currentAmmo.getPowerUpCard()) {
+                    //Add a power up to player's hand
                     playerHand.addPowerUp(currentMatch.pickUpPowerUp());
                 }
                 //Create an object cubes that contains the cubes in the ammo that I've picked up
