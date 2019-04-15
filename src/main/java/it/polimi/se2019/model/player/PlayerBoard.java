@@ -25,4 +25,8 @@ public class PlayerBoard {
     public Cubes getAmmoCubes() {
         return this.ammoCubes;
     }
+
+    public void setAmmoCubes(Cubes currentCubes) {
+        ammoCubes.setCubes(currentCubes);
+    }
 }

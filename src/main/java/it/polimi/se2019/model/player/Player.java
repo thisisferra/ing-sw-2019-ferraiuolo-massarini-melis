@@ -1,7 +1,10 @@
 package it.polimi.se2019.model.player;
 
+import it.polimi.se2019.model.cards.Ammo;
 import it.polimi.se2019.model.cards.PowerUp;
+import it.polimi.se2019.model.game.Cubes;
 import it.polimi.se2019.model.game.Match;
+import it.polimi.se2019.model.map.Square;
 
 import java.util.ArrayList;
 
@@ -45,6 +48,30 @@ public class Player {
 
     public void setClientName(String clientName){
         this.clientName= clientName;
+    }
+
+    public void pickUpAmmo(Square currentSquare, Match currentMatch) {
+        //Check if I am in an ammo square
+        if(!(currentSquare.isSpawnPoint())) {
+            //check if there is an ammo in the current square
+            if(currentSquare.isFull()) {
+                //Set the square to empty
+                currentSquare.setFull(false);
+                //Create an ammo object where i put the ammo I've picked up
+                Ammo currentAmmo = currentMatch.pickUpAmmoStack();
+                //If the ammo I've picked up has a power up -> pick a power up card from ArrayList
+                if(currentAmmo.getPowerUpCard() == true) {
+                    playerHand.addPowerUp(currentMatch.pickUpPowerUp());
+                }
+                //Create an object cubes that contains the cubes in the ammo that I've picked up
+                Cubes currentCubes = currentAmmo.getAmmoCubes();
+                //Change the value of the cubes I own
+                playerBoard.setAmmoCubes(currentCubes);
+            }
+        }
+        else{
+            System.out.println("You are in a spawn point, you can't pick up an ammo");
+        }
     }
 
 }

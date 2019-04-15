@@ -41,4 +41,20 @@ public class Match {
 
     }
 
+    public Ammo pickUpAmmoStack() {
+        int size = ammoStack.size();
+        return ammoStack.get(size-1);
+    }
+
+    public PowerUp pickUpPowerUp() {
+        int size = powerUpStack.size();
+        return powerUpStack.get(size - 1);
+    }
+
+    public void discardAmmo(Ammo currentAmmo) {
+        //currentAmmo is the last ammo I've picked up
+        int size = discardedAmmos.size();
+        discardedAmmos.add(size - 1, currentAmmo);
+    }
+
 }

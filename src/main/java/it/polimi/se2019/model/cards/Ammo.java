@@ -12,8 +12,12 @@ public class Ammo {
     private Cubes ammoCubes;
     private boolean powerUpCard;
 
-    public Cubes getAmmo(){
+    public Cubes getAmmoCubes(){
         return this.ammoCubes;
+    }
+
+    public boolean getPowerUpCard() {
+        return this.powerUpCard;
     }
 
     public Ammo(Cubes ammoCubes,boolean powerUpCard){
