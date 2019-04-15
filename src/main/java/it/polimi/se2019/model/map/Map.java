@@ -1,8 +1,8 @@
 package it.polimi.se2019.model.map;
+import  it.polimi.se2019.*;
 import com.google.gson.Gson;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.Arrays;
 
 public class Map {
     private int mapID;
@@ -26,7 +26,7 @@ public class Map {
     public void setAllSquare(){
         Gson gson = new Gson();
         try {
-            allSquare = gson.fromJson(new FileReader("it/polimi/se2019/map1.json"), Square[].class);
+            allSquare = gson.fromJson(new FileReader("./src/main/resources/map4.json"), Square[].class);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

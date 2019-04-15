@@ -1,5 +1,4 @@
 package it.polimi.se2019;
-
 import it.polimi.se2019.model.game.MovementChecker;
 import it.polimi.se2019.model.map.Map;
 
@@ -12,9 +11,10 @@ public class App {
 
             Map map = new Map();
             map.setAllSquare();
-            MovementChecker mCheck = new MovementChecker(map.getAllSquare(),1,11);
+            MovementChecker mCheck = new MovementChecker(map.getAllSquare(),3,6);
             mCheck.check();
             System.out.println(mCheck.getReachableSquares());
+
 
     }
 }

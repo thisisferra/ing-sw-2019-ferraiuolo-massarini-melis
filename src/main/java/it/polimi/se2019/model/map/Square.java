@@ -2,7 +2,7 @@ package it.polimi.se2019.model.map;
 import it.polimi.se2019.model.player.Player;
 import java.util.ArrayList;
 
-public  class Square {
+public class Square {
     // position and the four cardinal direction indicates squares they're adjacent with, in the square array.
     private int position = -1;
     private int north = -1;

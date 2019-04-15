@@ -16,34 +16,6 @@ public class MovementChecker {
         this.index=index;
     }
 
-    /*public void check(){
-        int i=0;
-        int k=(int)Math.pow(4.0, this.steps-1);
-        int l= 1;
-        System.out.println(k);
-        reachableSquares.add(allSquares[this.index]);
-        Square dummySquare = new Square();
-        while(i<k){
-            if(reachableSquares.get(i).getNorth()>=0 ) reachableSquares.add(allSquares[reachableSquares.get(i).getNorth()]);
-            else reachableSquares.add(dummySquare);
-            if(reachableSquares.get(i).getEast()>=0 ) reachableSquares.add(allSquares[reachableSquares.get(i).getEast()]);
-            else reachableSquares.add(dummySquare);
-            if(reachableSquares.get(i).getSouth()>=0 ) reachableSquares.add(allSquares[reachableSquares.get(i).getSouth()]);
-            else reachableSquares.add(dummySquare);
-            if(reachableSquares.get(i).getWest()>=0 ) reachableSquares.add(allSquares[reachableSquares.get(i).getWest()]);
-            else reachableSquares.add(dummySquare);
-            i++;
-            System.out.println(l + ":" +reachableSquares);
-            l++;
-        }
-        Set<Square> set = new HashSet<>(reachableSquares);
-
-        reachableSquares.clear();
-        reachableSquares.addAll(set);
-        reachableSquares.removeIf(obj-> obj.getPosition() == this.index);
-        reachableSquares.sort(Comparator.comparing(Square::getPosition));
-
-    }*/
 
     public void check(){
         int i =0;
@@ -81,14 +53,10 @@ public class MovementChecker {
 
             }
             allSquares[reachableSquares.get(i).getPosition()].setVisited(true);
-
-
             i++;
-
-
-
         }
         reachableSquares.sort(Comparator.comparing(Square::getPosition));
+        //sort square list from the lowest position to the highest
         for(Square object: reachableSquares) System.out.println(object.toString());
     }
     public ArrayList<Square> getReachableSquares(){

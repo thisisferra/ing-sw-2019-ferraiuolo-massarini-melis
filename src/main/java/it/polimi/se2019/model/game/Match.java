@@ -30,7 +30,7 @@ public class Match {
     public void initGameField(){
         Gson gson = new Gson();
         try {
-            ammoStack = gson.fromJson(new FileReader("/src/main/java/it/polimi/se2019/ammo.json"), ArrayList.class);
+            ammoStack = gson.fromJson(new FileReader("./src/main/resources/ammo.json"), ArrayList.class);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
