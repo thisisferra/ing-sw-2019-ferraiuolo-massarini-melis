@@ -8,7 +8,7 @@
       "color": "red",
       "full": true,
       "spawnPoint": false,
-      "visibleRoom" : [0, 1, 2, 4]
+      "visibleSquare" : [0, 1, 2, 4]
     },
     {
       "position": 1,
