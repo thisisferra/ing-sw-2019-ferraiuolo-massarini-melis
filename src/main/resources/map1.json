@@ -7,7 +7,8 @@
       "west": -1,
       "color": "red",
       "full": true,
-      "spawnPoint": false
+      "spawnPoint": false,
+      "visibleRoom" : [0, 1, 2, 4]
     },
     {
       "position": 1,
@@ -17,7 +18,8 @@
       "west": 0,
       "color": "blue",
       "full": true,
-      "spawnPoint": false
+      "spawnPoint": false,
+      "visibleSquare" : [0, 1, 2, 4, 5, 6]
     },
     {
       "position": 2,
@@ -27,7 +29,8 @@
       "west": 1,
       "color": "blue",
       "full": true,
-      "spawnPoint": true
+      "spawnPoint": true,
+      "visibleSquare" : [1, 2, 5, 6]
     },
     {
       "position": 3,
@@ -37,7 +40,8 @@
       "west": -1,
       "color": "",
       "full": false,
-      "spawnPoint": false
+      "spawnPoint": false,
+      "visibleSquare" : []
     },
     {
     "position": 4,
@@ -47,7 +51,8 @@
     "west": -1,
     "color": "red",
     "full": true,
-    "spawnPoint": true
+    "spawnPoint": true,
+    "visibleSquare" : [0, 4, 8, 9, 10]
     },
     {
       "position": 5,
@@ -57,7 +62,8 @@
       "west": -1,
       "color": "purple",
       "full": true,
-      "spawnPoint": false
+      "spawnPoint": false,
+      "visibleSquare" : [1, 2, 5, 6, 8, 9, 10]
     },
     {
       "position": 6,
@@ -67,7 +73,8 @@
       "west": 5,
       "color": "purple",
       "full": true,
-      "spawnPoint": false
+      "spawnPoint": false,
+      "visibleSquare" : [1, 2, 5, 6, 7, 11]
     },
     {
       "position": 7,
@@ -77,7 +84,8 @@
       "west": 6,
       "color": "yellow",
       "full": true,
-      "spawnPoint": false
+      "spawnPoint": false,
+      "visibleSquare" : [5, 6, 7, 11]
     },
     {
       "position": 8,
@@ -87,7 +95,8 @@
       "west": -1,
       "color": "white",
       "full": true,
-      "spawnPoint": false
+      "spawnPoint": false,
+      "visibleSquare" : [0, 4, 8, 9, 10]
     },
     {
       "position": 9,
@@ -97,7 +106,8 @@
       "west": 8,
       "color": "white",
       "full": true,
-      "spawnPoint": false
+      "spawnPoint": false,
+      "visibleSquare" : [5, 6, 8, 9, 10]
     },
     {
       "position": 10,
@@ -107,7 +117,8 @@
       "west": 9,
       "color": "white",
       "full": true,
-      "spawnPoint": false
+      "spawnPoint": false,
+      "visibleSquare" : [7, 8, 9, 10, 11]
     },
     {
       "position": 11,
@@ -117,6 +128,7 @@
       "west": 10,
       "color": "yellow",
       "full": true,
-      "spawnPoint": true
+      "spawnPoint": true,
+      "visibleSquare" : [7, 8, 9, 10, 11]
     }
   ]
