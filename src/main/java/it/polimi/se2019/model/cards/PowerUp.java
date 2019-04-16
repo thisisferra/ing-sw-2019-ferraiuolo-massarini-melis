@@ -1,9 +1,11 @@
 package it.polimi.se2019.model.cards;
 import it.polimi.se2019.model.game.Cubes;
+import javafx.scene.effect.Effect;
 
 public class PowerUp {
     private String type;
     private String color;
+    private Shot effect;
 
     //apply the effect
     public void effect(){
@@ -27,7 +29,7 @@ public class PowerUp {
 
     }
     //return the infos about the powerup
-    public void getInfo(){
-        System.out.println(this.type + "Color:" + this.color);
+    public String toString(){
+        return "Type: " + this.type + " Color: " + this.color;
     }
 }

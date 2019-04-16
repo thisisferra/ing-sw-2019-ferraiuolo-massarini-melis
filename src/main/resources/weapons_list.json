@@ -1,0 +1,296 @@
+ [
+   {
+     "type":"lock_rifle",
+     "load": true,
+     "buyingCost": {
+       "reds": 0 ,
+       "yellows": 0 ,
+       "blues" : 1
+      },
+      "reloadCost": {
+        "reds": 0 ,
+        "yellows": 0 ,
+        "blues" : 2
+      }
+   },
+   {
+     "type":"machine_gun",
+     "load": true,
+     "buyingCost": {
+       "reds": 1 ,
+       "yellows": 0 ,
+       "blues" : 0
+     },
+     "reloadCost": {
+       "reds": 1 ,
+       "yellows": 0 ,
+       "blues" : 1
+     }
+   },
+   {
+     "type":"thor",
+     "load": true,
+     "buyingCost": {
+       "reds": 1 ,
+       "yellows": 0 ,
+       "blues" : 0
+     },
+     "reloadCost": {
+       "reds": 1 ,
+       "yellows": 0 ,
+       "blues" : 1
+     }
+   },
+   {
+     "type":"plasma_gun",
+     "load": true,
+     "buyingCost": {
+       "reds": 0 ,
+       "yellows": 1 ,
+       "blues" : 0
+     },
+     "reloadCost": {
+       "reds": 0 ,
+       "yellows": 1 ,
+       "blues" : 1
+     }
+   },
+   {
+     "type":"whisper",
+     "load": true,
+     "buyingCost": {
+       "reds": 0 ,
+       "yellows": 1 ,
+       "blues" : 1
+     },
+     "reloadCost": {
+       "reds": 0 ,
+       "yellows": 1 ,
+       "blues" : 2
+     }
+   },
+   {
+     "type":"electroscythe",
+     "load": true,
+     "buyingCost": {
+       "reds": 0 ,
+       "yellows": 0 ,
+       "blues" : 0
+     },
+     "reloadCost": {
+       "reds": 0 ,
+       "yellows": 0 ,
+       "blues" : 1
+     }
+   },
+   {
+     "type":"tractor_beam",
+     "load": true,
+     "buyingCost": {
+       "reds": 0 ,
+       "yellows": 0 ,
+       "blues" : 0
+     },
+     "reloadCost": {
+       "reds": 0 ,
+       "yellows": 0 ,
+       "blues" : 1
+     }
+   },
+   {
+     "type":"vortex_cannon",
+     "load": true,
+     "buyingCost": {
+       "reds": 0 ,
+       "yellows": 0 ,
+       "blues" : 1
+     },
+     "reloadCost": {
+       "reds": 1 ,
+       "yellows": 0 ,
+       "blues" : 1
+     }
+   },
+   {
+     "type":"furnace",
+     "load": true,
+     "buyingCost": {
+       "reds": 0 ,
+       "yellows": 0 ,
+       "blues" : 1
+     },
+     "reloadCost": {
+       "reds": 1 ,
+       "yellows": 0 ,
+       "blues" : 1
+     }
+   },
+   {
+     "type":"heatseeker",
+     "load": true,
+     "buyingCost": {
+       "reds": 1 ,
+       "yellows": 1 ,
+       "blues" : 0
+     },
+     "reloadCost": {
+       "reds": 2 ,
+       "yellows": 1 ,
+       "blues" : 0
+     }
+   },
+   {
+     "type":"hellion",
+     "load": true,
+     "buyingCost": {
+       "reds": 0 ,
+       "yellows": 1 ,
+       "blues" : 0
+     },
+     "reloadCost": {
+       "reds": 1 ,
+       "yellows": 1 ,
+       "blues" : 0
+     }
+   },
+   {
+     "type":"flamethrower",
+     "load": true,
+     "buyingCost": {
+       "reds": 0 ,
+       "yellows": 0 ,
+       "blues" : 0
+     },
+     "reloadCost": {
+       "reds": 1 ,
+       "yellows": 0 ,
+       "blues" : 0
+     }
+   },
+   {
+     "type":"grenade_launcher",
+     "load": true,
+     "buyingCost": {
+       "reds": 0,
+       "yellows": 0 ,
+       "blues" : 0
+     },
+     "reloadCost": {
+       "reds": 1 ,
+       "yellows": 0 ,
+       "blues" : 0
+     }
+   },
+   {
+     "type":"rocket_launcher",
+     "load": true,
+     "buyingCost": {
+       "reds": 1 ,
+       "yellows": 0 ,
+       "blues" : 0
+     },
+     "reloadCost": {
+       "reds": 2 ,
+       "yellows": 0 ,
+       "blues" : 0
+     }
+   },
+   {
+     "type":"railgun",
+     "load": true,
+     "buyingCost": {
+       "reds": 0 ,
+       "yellows": 1 ,
+       "blues" : 1
+     },
+     "reloadCost": {
+       "reds": 0 ,
+       "yellows": 2 ,
+       "blues" : 1
+     }
+   },
+   {
+     "type":"cyberblade",
+     "load": true,
+     "buyingCost": {
+       "reds": 1 ,
+       "yellows": 0 ,
+       "blues" : 0
+     },
+     "reloadCost": {
+       "reds": 1,
+       "yellows": 1 ,
+       "blues" : 0
+     }
+   },
+   {
+     "type":"zx-2",
+     "load": true,
+     "buyingCost": {
+       "reds": 1 ,
+       "yellows": 0 ,
+       "blues" : 0
+     },
+     "reloadCost": {
+       "reds": 1 ,
+       "yellows": 1 ,
+       "blues" : 0
+     }
+   },
+   {
+     "type":"shotgun",
+     "load": true,
+     "buyingCost": {
+       "reds": 0 ,
+       "yellows": 1 ,
+       "blues" : 0
+     },
+     "reloadCost": {
+       "reds": 0 ,
+       "yellows": 2 ,
+       "blues" : 0
+     }
+   },
+   {
+     "type":"power_glove",
+     "load": true,
+     "buyingCost": {
+       "reds": 0 ,
+       "yellows": 0 ,
+       "blues" : 1
+     },
+     "reloadCost": {
+       "reds": 0 ,
+       "yellows": 1 ,
+       "blues" : 1
+     }
+   },
+   {
+     "type":"shockwave",
+     "load": true,
+     "buyingCost": {
+       "reds": 0 ,
+       "yellows": 0 ,
+       "blues" : 0
+     },
+     "reloadCost": {
+       "reds": 0 ,
+       "yellows": 1 ,
+       "blues" : 0
+     }
+   },
+   {
+     "type":"sledgehammer",
+     "load": true,
+     "buyingCost": {
+       "reds": 0 ,
+       "yellows": 0 ,
+       "blues" : 0
+     },
+     "reloadCost": {
+       "reds": 0 ,
+       "yellows": 1 ,
+       "blues" : 0
+     }
+   }
+ ]

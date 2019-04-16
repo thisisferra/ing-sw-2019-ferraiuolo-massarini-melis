@@ -62,4 +62,7 @@ public class Cubes {
         }
 
     }
+    public String toString(){
+        return "Reds: "+ this.getReds() + " Blues: " + this.getBlues() + " Yellows: " + this.getYellows();
+    }
 }
