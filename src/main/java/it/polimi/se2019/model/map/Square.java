@@ -14,6 +14,7 @@ public class Square {
     private boolean full;          //bool that indicates if square is full or not
     private boolean spawnPoint;      //bool that indicates if square is a spawn point or not
     private boolean visited;
+    private int[] visibleSquare;
     private ArrayList<Square> roomSquares;
     private ArrayList<Square> hammingSquare;
     private ArrayList<Square> axialSquares;
@@ -97,6 +98,9 @@ public class Square {
     }
     public int getStep(){
         return this.step;
+    }
+    public int[] getVisibleSquare() {
+        return this.visibleSquare;
     }
 
     @Override
