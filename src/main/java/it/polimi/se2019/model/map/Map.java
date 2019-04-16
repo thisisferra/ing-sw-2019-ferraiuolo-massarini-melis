@@ -28,12 +28,8 @@ public class Map {
     public Square[] getAllSquare(){
         return this.allSquare;
     }
-<<<<<<< HEAD
-    public void setAllSquare(int number){
-=======
 
-    public void setAllSquare(){
->>>>>>> 68f2dfd937574276bec8eb74058724e64a388b1e
+    public void setAllSquare(int number){
         Gson gson = new Gson();
         try {
             if(number ==1) allSquare = gson.fromJson(new FileReader("./src/main/resources/map1.json"), Square[].class);
