@@ -4,13 +4,14 @@ import it.polimi.se2019.model.cards.Ammo;
 import it.polimi.se2019.model.cards.PowerUp;
 import it.polimi.se2019.model.game.Cubes;
 import it.polimi.se2019.model.game.Match;
+import it.polimi.se2019.model.map.Map;
 import it.polimi.se2019.model.map.Square;
 
 import java.util.ArrayList;
 
 public class Player {
     private String clientName;
-    private int[] position;
+    private int position;
     private int score;
     private String color;
     private PlayerBoard playerBoard;
@@ -18,10 +19,7 @@ public class Player {
     private boolean suspended;
     private Hand playerHand;
 
-    //it draws a card rom the powerup deck
-    public void draw(ArrayList<PowerUp> deck){
 
-    }
     public String getClientName(){
         return this.clientName;
     }
@@ -34,7 +32,7 @@ public class Player {
         return this.score;
     }
 
-    public int[] getPosition(){
+    public int getPosition(){
         return this.position;
     }
 
