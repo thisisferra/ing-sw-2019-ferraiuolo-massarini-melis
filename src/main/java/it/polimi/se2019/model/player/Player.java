@@ -4,30 +4,59 @@ import it.polimi.se2019.model.cards.Ammo;
 import it.polimi.se2019.model.cards.PowerUp;
 import it.polimi.se2019.model.game.Cubes;
 import it.polimi.se2019.model.game.Match;
-import it.polimi.se2019.model.map.Map;
 import it.polimi.se2019.model.map.Square;
-
-import java.util.ArrayList;
 
 public class Player {
     private String clientName;
+    private String color;
     private int position;
     private int score;
-    private String color;
-    private PlayerBoard playerBoard;
     private boolean firstPlayer;
     private boolean suspended;
     private Hand playerHand;
+    private PlayerBoard playerBoard;
+    private Match match;
 
+    public Player(String clientName, String color,Match match){
+        this.clientName = clientName;
+        this.color=color;
+        this.match = match;
+        this.suspended=false;
+        this.score = 0;
+        this.firstPlayer = false;
+        System.out.print(this.clientName + " has picked ");
+        if(this.color == "yellow") {
+            System.out.println(":D-struct-OR ...");
+        }else if(this.color.equals("purple")) {
+            System.out.println("Violet!" );
+        }else if(this.color.equals("grey")) {
+            System.out.println("Dozer!");
+        }else if(this.color.equals("green")) {
+            System.out.println("Sprog!");
+        }else if(this.color.equals("blue")) {
+            System.out.println("Banshee!");
+        } else System.out.println("something from the floor probably");
 
+        this.playerBoard = new PlayerBoard();
+        this.playerHand = new Hand();
+    }
+    public void initPlayer(){
+
+    }
+
+    //return player name
     public String getClientName(){
         return this.clientName;
     }
 
+    //return color figure,
+    //N.B. it can be used to differentiate players since each player has a different color
     public String getColor(){
         return this.color;
     }
 
+    //return player score
+    //N.B. each score can be seen only by it's owner
     public int getScore(){
         return this.score;
     }
@@ -73,6 +102,34 @@ public class Player {
         else{
             System.out.println("You are in a spawn point, you can't pick up an ammo");
         }
+    }
+
+    //trade the current powerup in a cube of the matching color as a Cubes object
+    public void tradeCube(){
+        PowerUp powerUp = this.playerHand.chooseToDiscard();
+        Cubes cubeObtained;
+        if(powerUp.getColor().equals("red"))  {
+            cubeObtained = new Cubes(1,0,0);
+            //powerup discarded goes into discardedPowerUps
+            this.match.getDiscardedPowerUps().add(powerUp);
+        }
+        else if(powerUp.getColor().equals("blue")) {
+            cubeObtained = new Cubes(0,0,1);
+            //powerup discarded goes into discardedPowerUps
+            this.match.getDiscardedPowerUps().add(powerUp);
+        }
+        else if (powerUp.getColor().equals("yellow")) {
+            cubeObtained = new Cubes(0,1,0);
+            this.match.getDiscardedPowerUps().add(powerUp);
+            //powerup discarded goes into discardedPowerUps
+        } else {
+            //if an error occurs, no cubes are returned and the powerup cards goes back
+            //in playerHand
+            cubeObtained  = null;
+            this.playerHand.addPowerUp(powerUp);
+        }
+        //the cube is added to ammoCubes field in playerBoard
+        this.playerBoard.setAmmoCubes(cubeObtained);
     }
 
 }

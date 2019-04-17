@@ -24,14 +24,14 @@ public class Cubes {
     }
 
     public void setCubes(Cubes cube) {
-        if (checkNumberRedCubes(cube) == true) {
+        if (checkNumberRedCubes(cube)) {
             reds = reds + cube.getReds();
         } else reds = 3;
 
-        if (checkNumberYellowCubes(cube) == true) {
+        if (checkNumberYellowCubes(cube)) {
             yellows = yellows + cube.getReds();
         } else yellows = 3;
-        if (checkNumberBlueCubes(cube) == true) {
+        if (checkNumberBlueCubes(cube)) {
             blues = blues + cube.getReds();
         } else blues = 3;
     }

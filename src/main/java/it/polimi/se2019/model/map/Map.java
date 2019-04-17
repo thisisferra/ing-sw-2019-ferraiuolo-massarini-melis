@@ -6,37 +6,28 @@ import java.io.FileReader;
 
 public class Map {
     private int mapID;
-    private int[] dimensions;
     private  Square[] allSquare;
-
-    public int[] getDimensions() {
-        return dimensions;
-    }
 
     public void setMapID(int mapID){
         this.mapID=mapID;
     }
-
     public int getMapID(){
         return this.mapID;
     }
-
-    public void setDimensions(int[] dimensions){
-        this.dimensions=dimensions;
-    }
-
     public Square[] getAllSquare(){
         return this.allSquare;
     }
-
-    public void setAllSquare(int number){
+    public Map(int mapID){
+        this.mapID = mapID;
+    }
+    public void setAllSquare(){
         Gson gson = new Gson();
         try {
-            if(number ==1) allSquare = gson.fromJson(new FileReader("./src/main/resources/map1.json"), Square[].class);
-            else if(number ==2) allSquare = gson.fromJson(new FileReader("./src/main/resources/map1.json"), Square[].class);
-                else if (number == 3) allSquare = gson.fromJson(new FileReader("./src/main/resources/map1.json"), Square[].class);
-                    else if (number == 4) allSquare = gson.fromJson(new FileReader("./src/main/resources/map1.json"), Square[].class);
-                        else System.out.println("Map number :"+ number +" doesn't exist!");
+            if(mapID ==1) allSquare = gson.fromJson(new FileReader("./src/main/resources/map1.json"), Square[].class);
+            else if(mapID ==2) allSquare = gson.fromJson(new FileReader("./src/main/resources/map2.json"), Square[].class);
+                else if (mapID == 3) allSquare = gson.fromJson(new FileReader("./src/main/resources/map3.json"), Square[].class);
+                    else if (mapID == 4) allSquare = gson.fromJson(new FileReader("./src/main/resources/map4.json"), Square[].class);
+                        else System.out.println("Map number :"+ mapID +" doesn't exist!");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

@@ -22,6 +22,10 @@ public class PlayerBoard {
         return this.deaths;
     }
 
+    public PlayerBoard(){
+        this.deaths = 0;
+        this.ammoCubes = new Cubes(1,1,1);
+    }
     public Cubes getAmmoCubes() {
         return this.ammoCubes;
     }

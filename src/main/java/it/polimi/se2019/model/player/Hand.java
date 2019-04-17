@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Hand {
-    private ArrayList<Weapon> weapons = new ArrayList<>();
-    private ArrayList<PowerUp> powerUps = new ArrayList<>();
+    private ArrayList<Weapon> weapons = new ArrayList<Weapon>();
+    private ArrayList<PowerUp> powerUps = new ArrayList<PowerUp>();
 
     /*
       discard one card from the player hand,
@@ -57,7 +57,7 @@ public class Hand {
         }
     }
 
-    public void chooseToDiscard() {
+    public PowerUp chooseToDiscard() {
         int index = 1;
         Scanner input = new Scanner(System.in);
         System.out.println("Choose one powerUp to discard (insert an index):");
@@ -70,10 +70,12 @@ public class Hand {
         int powerUpChoosed = Integer.parseInt(input.nextLine());
         if(powerUpChoosed >=4) {
             System.out.println("You have typed an illegal number");
+            return null;
         }
         else {
             //remove from the ArrayList the PowerUp chosen
-            powerUps.remove(powerUpChoosed -  1);
+            return powerUps.remove(powerUpChoosed -  1);
+
         }
     }
 }
