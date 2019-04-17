@@ -36,7 +36,7 @@ public class Controller {
     public void reloadWeapons(){
 
     }
-    //it fills back weapons and ammo cards grabbed during the previous turn
+    //it fills back weapon and ammo cards grabbed during the previous turn
     public void restoreMap(){
 
     }
@@ -45,7 +45,7 @@ public class Controller {
 
     }
     //at the end of each turn the game has to perform several tasks: refilling
-    //the weapons slot, ammo and resurrecting players killed.
+    //the weapon slot, ammo and resurrecting players killed.
     public void endTurn(){
 
     }

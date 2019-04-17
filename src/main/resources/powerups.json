@@ -1,0 +1,98 @@
+[
+  {
+    "type":"targeting_scope",
+    "color": "red"
+  },
+  {
+    "type": "targeting_scope",
+    "color": "blue"
+  },
+  {
+    "type": "targeting_scope",
+    "color": "yellow"
+  },
+  {
+    "type": "venom",
+    "color": "red"
+  },
+  {
+    "type": "venom",
+    "color": "blue"
+  },
+  {
+    "type": "venom",
+    "color": "yellow"
+  },
+  {
+    "type": "tagback_grenade",
+    "color": "red"
+  },
+  {
+    "type": "tagback_grenade",
+    "color": "blue"
+  },
+  {
+    "type": "tagback_grenade",
+    "color": "yellow"
+  },
+  {
+    "type": "newton",
+    "color": "red"
+  },
+  {
+    "type": "newton",
+    "color": "blue"
+  },
+  {
+    "type": "newton",
+    "color": "yellow"
+  },
+  {
+  "type":"targeting_scope",
+  "color": "red"
+  },
+  {
+    "type": "targeting_scope",
+    "color": "blue"
+  },
+  {
+    "type": "targeting_scope",
+    "color": "yellow"
+  },
+  {
+    "type": "venom",
+    "color": "red"
+  },
+  {
+    "type": "venom",
+    "color": "blue"
+  },
+  {
+    "type": "venom",
+    "color": "yellow"
+  },
+  {
+    "type": "tagback_grenade",
+    "color": "red"
+  },
+  {
+    "type": "tagback_grenade",
+    "color": "blue"
+  },
+  {
+    "type": "tagback_grenade",
+    "color": "yellow"
+  },
+  {
+    "type": "newton",
+    "color": "red"
+  },
+  {
+    "type": "newton",
+    "color": "blue"
+  },
+  {
+    "type": "newton",
+    "color": "yellow"
+  }
+]

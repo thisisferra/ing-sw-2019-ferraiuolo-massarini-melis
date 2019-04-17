@@ -1,7 +1,7 @@
 package it.polimi.se2019.model.cards;
 import it.polimi.se2019.model.game.Cubes;
 
-public abstract class Weapon {
+public class Weapon {
     private String type;
     private boolean load;
     private  Cubes buyingCost;
@@ -26,6 +26,10 @@ public abstract class Weapon {
 
     public String getType() {
         return type;
+    }
+
+    public String toString(){
+        return this.type + " BC: " + this.buyingCost + " RC: " + this.reloadCost;
     }
 
 }

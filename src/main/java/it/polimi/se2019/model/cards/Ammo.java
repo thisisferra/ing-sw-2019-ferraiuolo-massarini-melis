@@ -24,4 +24,7 @@ public class Ammo {
         this.ammoCubes = ammoCubes;
         this.powerUpCard=powerUpCard;
     }
+    public String toString(){
+        return this.ammoCubes.toString() +" PUC: " + this.powerUpCard;
+    }
 }

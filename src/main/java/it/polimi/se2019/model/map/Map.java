@@ -29,10 +29,14 @@ public class Map {
         return this.allSquare;
     }
 
-    public void setAllSquare(){
+    public void setAllSquare(int number){
         Gson gson = new Gson();
         try {
-            allSquare = gson.fromJson(new FileReader("./src/main/resources/map4.json"), Square[].class);
+            if(number ==1) allSquare = gson.fromJson(new FileReader("./src/main/resources/map1.json"), Square[].class);
+            else if(number ==2) allSquare = gson.fromJson(new FileReader("./src/main/resources/map1.json"), Square[].class);
+                else if (number == 3) allSquare = gson.fromJson(new FileReader("./src/main/resources/map1.json"), Square[].class);
+                    else if (number == 4) allSquare = gson.fromJson(new FileReader("./src/main/resources/map1.json"), Square[].class);
+                        else System.out.println("Map number :"+ number +" doesn't exist!");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

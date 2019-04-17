@@ -17,7 +17,7 @@ public class View {
     public void showPlayers(){
 
     }
-    //the weapons owned or on the field
+    //the w.json owned or on the field
     public void showWeapons(){
 
     }

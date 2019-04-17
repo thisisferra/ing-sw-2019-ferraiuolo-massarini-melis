@@ -1,7 +1,7 @@
 package it.polimi.se2019.model.map;
 
 import it.polimi.se2019.model.cards.Weapon;
-/*WeaponSlot represent one three slots array containing 3 weapons ready to picked up.
+/*WeaponSlot represent one three slots array containing 3 w.json ready to picked up.
 * Each of them has a color (red,blue,yellow)*/
 
 public class WeaponSlot {
