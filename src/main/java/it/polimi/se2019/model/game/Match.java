@@ -12,6 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Arrays;
 
+
 public class Match {
     private ArrayList<Player> players;
     private Player turn;
@@ -39,8 +40,13 @@ public class Match {
     }
 
     //generate instances of players
+    //each player should type in his name and his figure(color figure)
     public void initPlayers(){
-
+        players = new ArrayList<>();
+        for(int i=0; i<this.numberOfPlayers;i++){
+            players.add(new Player("Mattia","blue",this));
+            players.add(new Player("Marco","grey",this));
+        }
     }
 
     /*Generate the game field:
@@ -61,22 +67,28 @@ public class Match {
 
         try {
             aS = gson.fromJson(new FileReader("./src/main/resources/ammo.json"), Ammo[].class);
-            ammoStack = new ArrayList<Ammo>(Arrays.asList(aS));
+            ammoStack = new ArrayList<>(Arrays.asList(aS));
             wS = gson.fromJson(new FileReader("./src/main/resources/weapons_list.json"),Weapon[].class);
-            weaponStack = new ArrayList<Weapon>(Arrays.asList(wS));
+            weaponStack = new ArrayList<>(Arrays.asList(wS));
             pUS = gson.fromJson(new FileReader("./src/main/resources/powerups.json"),PowerUp[].class);
-            powerUpStack = new ArrayList<PowerUp>(Arrays.asList(pUS));
+            powerUpStack = new ArrayList<>(Arrays.asList(pUS));
 
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
         //prints all decks
-        for(Ammo ammo : ammoStack)
-            System.out.println(ammo.toString());
-        for(Weapon weapon : weaponStack)
-            System.out.println(weapon.toString());
-        for(PowerUp powerup : powerUpStack)
-            System.out.println(powerup.toString());
+        if(!ammoStack.isEmpty()){
+            for(Ammo ammo : ammoStack)
+                System.out.println(ammo.toString());
+        }
+        if(!weaponStack.isEmpty()){
+            for(Weapon weapon : weaponStack)
+                System.out.println(weapon.toString());
+        }
+        if(!powerUpStack.isEmpty()){
+            for(PowerUp powerup : powerUpStack)
+                System.out.println(powerup.toString());
+        }
     }
 
 

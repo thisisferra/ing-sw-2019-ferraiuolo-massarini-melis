@@ -10,7 +10,7 @@ public class WeaponSlot {
 
     public WeaponSlot(String color){
             this.cabinetColor = color;
-            /* vector is initialized drawing three cards from weaponsdeck
+            /* vector is initialized by drawing three cards from weaponsdeck
             slot[0] = drawWeapon();
             slot[1] = drawWeapon();
             slot[2] = drawWeapon();

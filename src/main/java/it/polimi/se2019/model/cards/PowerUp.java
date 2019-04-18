@@ -1,6 +1,5 @@
 package it.polimi.se2019.model.cards;
-import it.polimi.se2019.model.game.Cubes;
-import javafx.scene.effect.Effect;
+
 
 public class PowerUp {
     private String type;

@@ -10,12 +10,12 @@ public class PlayerBoard {
     private Cubes ammoCubes;
 
     // show players tags
-    public void showTags(){
-
+    public ArrayList<Integer> getTags(){
+        return this.tags;
     }
     //show damage taken from all players
-    public void showDamage(){
-
+    public ArrayList<Integer> getDamage(){
+        return this.damage;
     }
     //show deaths of all players
     public int getDeaths(){
@@ -30,6 +30,8 @@ public class PlayerBoard {
         return this.ammoCubes;
     }
 
+    //it adds to ammoCubes an amount currentCubes
+    //each color cannot exceeds 3 (max 3 reds, 3 yellows, 3 blues)
     public void setAmmoCubes(Cubes currentCubes) {
         ammoCubes.setCubes(currentCubes);
     }

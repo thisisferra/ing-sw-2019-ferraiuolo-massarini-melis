@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Hand {
-    private ArrayList<Weapon> weapons = new ArrayList<Weapon>();
-    private ArrayList<PowerUp> powerUps = new ArrayList<PowerUp>();
+    private ArrayList<Weapon> weapons = new ArrayList<>();
+    private ArrayList<PowerUp> powerUps = new ArrayList<>();
 
     /*
       discard one card from the player hand,
@@ -28,7 +28,7 @@ public class Hand {
     public void discardWeapon(){
 
     }
-    public void discardPower(){
+    public void discardPowerUp(){
 
     }
 

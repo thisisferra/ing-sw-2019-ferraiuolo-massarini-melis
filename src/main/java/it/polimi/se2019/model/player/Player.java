@@ -25,17 +25,32 @@ public class Player {
         this.score = 0;
         this.firstPlayer = false;
         System.out.print(this.clientName + " has picked ");
-        if(this.color == "yellow") {
-            System.out.println(":D-struct-OR ...");
-        }else if(this.color.equals("purple")) {
-            System.out.println("Violet!" );
-        }else if(this.color.equals("grey")) {
-            System.out.println("Dozer!");
-        }else if(this.color.equals("green")) {
-            System.out.println("Sprog!");
-        }else if(this.color.equals("blue")) {
-            System.out.println("Banshee!");
-        } else System.out.println("something from the floor probably");
+        switch(this.getColor()){
+            case "yellow":{
+                System.out.println(":D-struct-OR ...");
+                break;
+            }
+            case "purple":{
+                System.out.println("Violet!" );
+                break;
+            }
+            case "grey":{
+                System.out.println("Dozer!");
+                break;
+            }
+            case "green":{
+                System.out.println("Sprog!");
+                break;
+            }
+            case "blue":{
+                System.out.println("Banshee!");
+                break;
+            }
+            default:{
+                System.out.println("something from the floor probably");
+                break;
+            }
+        }
 
         this.playerBoard = new PlayerBoard();
         this.playerHand = new Hand();
@@ -108,25 +123,33 @@ public class Player {
     public void tradeCube(){
         PowerUp powerUp = this.playerHand.chooseToDiscard();
         Cubes cubeObtained;
-        if(powerUp.getColor().equals("red"))  {
-            cubeObtained = new Cubes(1,0,0);
-            //powerup discarded goes into discardedPowerUps
-            this.match.getDiscardedPowerUps().add(powerUp);
-        }
-        else if(powerUp.getColor().equals("blue")) {
-            cubeObtained = new Cubes(0,0,1);
-            //powerup discarded goes into discardedPowerUps
-            this.match.getDiscardedPowerUps().add(powerUp);
-        }
-        else if (powerUp.getColor().equals("yellow")) {
-            cubeObtained = new Cubes(0,1,0);
-            this.match.getDiscardedPowerUps().add(powerUp);
-            //powerup discarded goes into discardedPowerUps
-        } else {
-            //if an error occurs, no cubes are returned and the powerup cards goes back
-            //in playerHand
-            cubeObtained  = null;
-            this.playerHand.addPowerUp(powerUp);
+        switch(powerUp.getColor()) {
+            case "red": {
+                cubeObtained = new Cubes(1, 0, 0);
+                //powerup discarded goes into discardedPowerUps
+                this.match.getDiscardedPowerUps().add(powerUp);
+                break;
+            }
+            case "blue": {
+                cubeObtained = new Cubes(1, 0, 1);
+                //powerup discarded goes into discardedPowerUps
+                this.match.getDiscardedPowerUps().add(powerUp);
+                break;
+
+            }
+            case "yellow": {
+                cubeObtained = new Cubes(0, 1, 0);
+                //powerup discarded goes into discardedPowerUps
+                this.match.getDiscardedPowerUps().add(powerUp);
+                break;
+            }
+            default: {
+                //if an error occurs, no cubes are returned and the powerup cards goes back
+                //in playerHand
+                cubeObtained = null;
+                this.playerHand.addPowerUp(powerUp);
+                break;
+            }
         }
         //the cube is added to ammoCubes field in playerBoard
         this.playerBoard.setAmmoCubes(cubeObtained);

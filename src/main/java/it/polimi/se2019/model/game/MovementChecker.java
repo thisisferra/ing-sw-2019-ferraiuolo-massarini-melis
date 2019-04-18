@@ -1,12 +1,11 @@
 package it.polimi.se2019.model.game;
-import it.polimi.se2019.model.map.Square;
 
-import java.sql.SQLOutput;
+import it.polimi.se2019.model.map.Square;
 import java.util.*;
 
 public class MovementChecker {
     private Square[] allSquares ;
-    private ArrayList<Square> reachableSquares = new ArrayList<Square>();
+    private ArrayList<Square> reachableSquares = new ArrayList<>();
     private int steps;
     private int index;
 
