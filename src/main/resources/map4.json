@@ -105,7 +105,7 @@
     "east": 11,
     "south": -1,
     "west": -1,
-    "color": "white",
+    "color": "yellow",
     "full": true,
     "spawnPoint": false
   },

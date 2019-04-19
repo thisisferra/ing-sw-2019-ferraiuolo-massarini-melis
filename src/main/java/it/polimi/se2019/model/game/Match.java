@@ -77,6 +77,7 @@ public class Match {
             System.out.println(e);
         }
         //prints all decks
+        /*
         if(!ammoStack.isEmpty()){
             for(Ammo ammo : ammoStack)
                 System.out.println(ammo.toString());
@@ -88,7 +89,7 @@ public class Match {
         if(!powerUpStack.isEmpty()){
             for(PowerUp powerup : powerUpStack)
                 System.out.println(powerup.toString());
-        }
+        }*/
     }
 
 
@@ -113,6 +114,10 @@ public class Match {
         //currentAmmo is the last ammo I've picked up
         discardedAmmos.add(currentAmmo);
 
+    }
+
+    public Map getMap(){
+        return this.map;
     }
     public ArrayList<PowerUp> getDiscardedPowerUps(){
         return this.discardedPowerUps;
