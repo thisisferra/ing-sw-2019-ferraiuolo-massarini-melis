@@ -5,8 +5,8 @@ import java.util.ArrayList;
 
 public class Controller {
     //references to the player who's performing actions and the match state
-    ArrayList<Player> player;
-    ArrayList <Match> match;
+    Player player;
+    Match match;
     //each player draws two cards in their first turn and discard one
     public void startingDraw(){
 

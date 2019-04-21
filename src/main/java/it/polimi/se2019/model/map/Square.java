@@ -14,8 +14,6 @@ public class Square {
     private boolean full;          //bool that indicates if square is full or not
     private boolean spawnPoint;      //bool that indicates if square is a spawn point or not
     private boolean visited;
-    private int[] visibleSquare;
-    private ArrayList<Square> roomSquares;
     private ArrayList<Square> hammingSquare;
     private ArrayList<Square> axialSquares;
     private ArrayList<Square> doors;
@@ -39,11 +37,6 @@ public class Square {
     public int getPosition(){
         return this.position;
     }
-    public void restock(){
-        if (!this.full && !this.spawnPoint) {
-            this.setFull(true);
-        }
-    }
     public int getNorth(){
         return this.north;
     }
@@ -55,6 +48,20 @@ public class Square {
     }
     public int getWest(){
         return this.west;
+    }
+    public void setStep(int step){
+        this.step=step;
+    }
+    public void setColor(String color){
+        this.color=color;
+    }
+    public void setFull(boolean full){
+        this.full=full;
+    }
+    public void restock(){
+        if (!this.full && !this.spawnPoint) {
+            this.setFull(true);
+        }
     }
     public void setPosition(int position){
         this.position=position;
@@ -71,18 +78,10 @@ public class Square {
     public void setWest(int west){
         this.west=west;
     }
-    public void setStep(int step){
-        this.step=step;
-    }
-    public void setColor(String color){
-        this.color=color;
-    }
-    public void setFull(boolean full){
-        this.full=full;
-    }
     public void setSpawnPoint(boolean spawnPoint){
         this.spawnPoint=spawnPoint;
     }
+
     public Square(Square square){
         this.spawnPoint=square.spawnPoint;
         this.position=square.position;
@@ -98,9 +97,6 @@ public class Square {
     }
     public int getStep(){
         return this.step;
-    }
-    public int[] getVisibleSquare() {
-        return this.visibleSquare;
     }
 
     @Override

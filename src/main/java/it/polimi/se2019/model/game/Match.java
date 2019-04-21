@@ -60,7 +60,7 @@ public class Match {
         Ammo[] aS;
         Weapon[]wS;
         PowerUp[]pUS;
-        //create the map fills it with squares from the json file, based on the idMap
+        //create the map filling it with squares from the json file, based on the idMap
         map = new Map(this.chosenMap);
         map.setAllSquare();
         Gson gson = new Gson();
