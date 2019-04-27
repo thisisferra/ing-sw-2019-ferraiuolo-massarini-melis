@@ -6,6 +6,10 @@ import it.polimi.se2019.model.game.Cubes;
 import it.polimi.se2019.model.game.Match;
 import it.polimi.se2019.model.map.Square;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
 public class Player {
     private String clientName;
     private String color;
@@ -16,6 +20,7 @@ public class Player {
     private Hand playerHand;
     private PlayerBoard playerBoard;
     private Match match;
+    private  ArrayList<EnemyDamage> enemyDamages = new ArrayList<>();
 
     public Player(String clientName, String color,Match match){
         this.clientName = clientName;
@@ -31,7 +36,7 @@ public class Player {
                 break;
             }
             case "purple":{
-                System.out.println("Violet!" );
+                System.out.println("Violet!");
                 break;
             }
             case "grey":{
@@ -59,9 +64,17 @@ public class Player {
 
     }
 
+    public ArrayList<EnemyDamage> getEnemyDamages(){
+        return this.enemyDamages;
+    }
+
     //return player name
     public String getClientName(){
         return this.clientName;
+    }
+
+    public void setClientName(String clientName){
+        this.clientName= clientName;
     }
 
     //return color figure,
@@ -86,10 +99,6 @@ public class Player {
 
     public boolean isSuspended() {
         return suspended;
-    }
-
-    public void setClientName(String clientName){
-        this.clientName= clientName;
     }
 
     public void pickUpAmmo(Square currentSquare, Match currentMatch) {
@@ -117,6 +126,10 @@ public class Player {
         else{
             System.out.println("You are in a spawn point, you can't pick up an ammo");
         }
+    }
+
+    public PlayerBoard getPlayerBoard(){
+        return this.playerBoard;
     }
 
     //trade the current powerup in a cube of the matching color as a Cubes object
@@ -154,5 +167,49 @@ public class Player {
         //the cube is added to ammoCubes field in playerBoard
         this.playerBoard.setAmmoCubes(cubeObtained);
     }
+
+    //Return true if the amount of damage is 11 or 12, false otherwise
+    public boolean checkDeath() {
+        if (this.playerBoard.getDamage().size() == 11 || this.playerBoard.getDamage().size() == 12) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    //Sort the enemyDamages ArrayList by damage amount in descendending order
+    public void sortAggressor() {
+        Collections.sort(enemyDamages, Comparator.comparingInt(EnemyDamage::getDamage).reversed());
+    }
+
+    //Gestisce l'assegnazione dei punteggi alla morte di un giocatore
+    public void setScore() {
+        int k = 0;
+        int maximumNumPoint = this.getPlayerBoard().getPointDeaths().size();
+        //Legge la struttura EnemyDamage
+        for(EnemyDamage enDam : enemyDamages){
+            //Per ogni giocatore che ha fatto danno al giocatore morto...
+            Player player = enDam.getAggressorPlayer();
+            //Incrementa lo score di ogni giocatore che ha colpito almeno una volta
+            //il giocatore morto con la quantità di punti corrispondente
+            if(k < maximumNumPoint) {
+                player.score = player.score + this.playerBoard.getSpecificPointDeaths(k);
+                k++;
+            }
+            else {
+                player.score += 1;
+            }
+            //Give 1 point to the first player that make damage
+            if(enDam.getFirstShot()) {
+                player.score += 1;
+            }
+        }
+        //Elimina il primo elemento di pointDeaths del giocatore morto
+        //per diminuire il massimo punteggio ottenibile alla pressima morte
+        this.playerBoard.deleteFirstPointDeaths();
+
+    }
+
 
 }
