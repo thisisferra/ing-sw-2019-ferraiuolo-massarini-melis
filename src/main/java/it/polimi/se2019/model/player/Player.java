@@ -80,6 +80,12 @@ public class Player {
         return this.position;
     }
 
+    public Hand getHand(){
+        return this.playerHand;
+    }
+    public PlayerBoard getPlayerBoard(){
+        return this.playerBoard;
+    }
     public boolean isFirstPlayer() {
         return firstPlayer;
     }
@@ -92,6 +98,9 @@ public class Player {
         this.clientName= clientName;
     }
 
+    public void setPosition(int position){
+        this.position = position;
+    }
     public void pickUpAmmo(Square currentSquare, Match currentMatch) {
         //Check if the player is in an ammo square
         if(!(currentSquare.isSpawnPoint())) {
