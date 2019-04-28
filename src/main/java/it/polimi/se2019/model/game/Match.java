@@ -24,7 +24,7 @@ public class Match {
     private ArrayList<Ammo> discardedAmmos;
     private int chosenMap;
     private Map map;
-    private ArrayList<Integer> killShotTrack;
+    private ArrayList<Player> killShotTrack;
     private ArrayList<WeaponSlot> arsenal;
 
     public Match(int chosenMap,int numberOfPlayers){
@@ -123,4 +123,7 @@ public class Match {
         return this.discardedPowerUps;
     }
 
+    public void addPlayerKillShot(Player dead){
+        killShotTrack.add(dead);
+    }
 }
