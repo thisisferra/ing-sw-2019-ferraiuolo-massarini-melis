@@ -11,8 +11,15 @@ public class EnemyDamage{
     }
 
     public void setDamage(int damage) {
-            this.damage = this.damage + damage;
+        if (this.getDamage() <= 11) {
+            if (this.getDamage() + damage <= 11) {
+                this.damage = this.damage + damage;
+            }
+            else {
+                this.damage = 11;
+            }
         }
+    }
 
     public void setFirstShot(boolean bool) {
         this.firstShot = bool;
