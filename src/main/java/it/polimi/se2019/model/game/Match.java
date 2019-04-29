@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Arrays;
+import java.util.Collections;
 
 
 public class Match {
@@ -46,6 +47,8 @@ public class Match {
         for(int i=0; i<this.numberOfPlayers;i++){
             players.add(new Player("Mattia","blue",this));
             players.add(new Player("Marco","grey",this));
+            players.add(new Player("Ferra","yellow",this));
+            players.add(new Player("Matteo","red",this));
         }
     }
 
@@ -72,6 +75,7 @@ public class Match {
             weaponStack = new ArrayList<>(Arrays.asList(wS));
             pUS = gson.fromJson(new FileReader("./src/main/resources/powerups.json"),PowerUp[].class);
             powerUpStack = new ArrayList<>(Arrays.asList(pUS));
+            Collections.shuffle(powerUpStack);
 
         } catch (FileNotFoundException e) {
             System.out.println(e);
@@ -92,6 +96,9 @@ public class Match {
         }*/
     }
 
+    public ArrayList<Player> getAllPlayers() {
+        return this.players;
+    }
 
     public void round(Player player){
 
@@ -101,6 +108,10 @@ public class Match {
     public Ammo pickUpAmmoStack() {
         int size = ammoStack.size();
         return ammoStack.remove(size-1);
+    }
+
+    public void tradeAmmoStack() {
+        Collections.shuffle(ammoStack);
     }
 
     //if the stack isn't empty, it return the powerup card from the last position (arraylist size -1)
@@ -119,6 +130,7 @@ public class Match {
     public Map getMap(){
         return this.map;
     }
+
     public ArrayList<PowerUp> getDiscardedPowerUps(){
         return this.discardedPowerUps;
     }

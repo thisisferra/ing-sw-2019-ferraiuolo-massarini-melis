@@ -18,9 +18,11 @@ public class Controller {
 
     //each player draws two cards in their first turn and discard one
     public void startingDraw(){
+        //TODO da togliere index
+        int index = 1;
         this.player.getHand().addPowerUp(match.pickUpPowerUp());
         this.player.getHand().addPowerUp(match.pickUpPowerUp());
-        PowerUp discarded = this.player.getHand().chooseToDiscard();
+        PowerUp discarded = this.player.getHand().chooseToDiscard(index);
         if(discarded.getColor().equals("red")) this.player.setPosition(4);
         else if (discarded.getColor().equals("yellow")) this.player.setPosition(11);
         else if (discarded.getColor().equals("blue")) this.player.setPosition(2);
@@ -59,8 +61,7 @@ public class Controller {
         //if new position is in availableSquares --> set new position
         for(Square object : availableSquares)
             if(object.getPosition() == player.getPosition()){
-                currentSquare = new Square(object);
-                player.pickUpAmmo(currentSquare,this.match);
+                player.pickUpAmmo(object,this.match);
                 //pickUpAmmo should be generalized to include weapons as well
             }
          //update view with movement, ammo tile or weapon changes

@@ -134,6 +134,7 @@ public class Player {
             }
         }
         else{
+            //TODO fare in modo di poter pescare un'arma
             System.out.println("You are in a spawn point, you can't pick up an ammo");
         }
     }
@@ -141,7 +142,8 @@ public class Player {
 
     //trade the current powerup in a cube of the matching color as a Cubes object
     public void tradeCube(){
-        PowerUp powerUp = this.playerHand.chooseToDiscard();
+        int index = this.playerHand.indexToDiscard();
+        PowerUp powerUp = this.playerHand.chooseToDiscard(index);
         Cubes cubeObtained;
         switch(powerUp.getColor()) {
             case "red": {

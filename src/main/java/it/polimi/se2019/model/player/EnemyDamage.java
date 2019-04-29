@@ -11,8 +11,12 @@ public class EnemyDamage{
     }
 
     public void setDamage(int damage) {
-            this.damage = damage;
+            this.damage = this.damage + damage;
         }
+
+    public void setFirstShot(boolean bool) {
+        this.firstShot = bool;
+    }
 
     public boolean getFirstShot(){
         return this.firstShot;
