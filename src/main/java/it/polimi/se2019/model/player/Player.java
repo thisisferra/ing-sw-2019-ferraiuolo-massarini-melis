@@ -60,9 +60,6 @@ public class Player {
         this.playerBoard = new PlayerBoard();
         this.playerHand = new Hand();
     }
-    public void initPlayer(){
-
-    }
 
     public ArrayList<EnemyDamage> getEnemyDamages(){
         return this.enemyDamages;

@@ -1,4 +1,4 @@
-package it.polimi.se2019.model;
+package it.polimi.se2019.model.player;
 
 import it.polimi.se2019.model.cards.PowerUp;
 import it.polimi.se2019.model.cards.Weapon;

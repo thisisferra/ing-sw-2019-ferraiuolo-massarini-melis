@@ -1,4 +1,4 @@
-package it.polimi.se2019.model;
+package it.polimi.se2019.model.player;
 
 import it.polimi.se2019.model.game.Match;
 import it.polimi.se2019.model.player.EnemyDamage;

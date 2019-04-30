@@ -1,26 +1,28 @@
 package it.polimi.se2019.model.player;
 
 import it.polimi.se2019.model.game.Cubes;
-import it.polimi.se2019.model.game.Match;
 
 import java.util.ArrayList;
+
 
 public class PlayerBoard {
     private ArrayList<Player> tags;
     private ArrayList<Player> damage;
     private int deaths;
-    private ArrayList<Integer> pointDeaths = new ArrayList<Integer>();
+    private ArrayList<Integer> pointDeaths = new ArrayList<>();
     private Cubes ammoCubes;
 
     //constructor of the class
     //set the ammoCubes to 1 red, 1 yellow and 1 blue
     public PlayerBoard(){
+        tags = new ArrayList<>();
+        damage = new ArrayList<>();
         this.ammoCubes = new Cubes(1,1,1);
         this.setPointDeaths();
     }
 
     // init pointDeath arrayList at the beginning of the match
-    public void setPointDeaths() {
+    private void setPointDeaths() {
         this.pointDeaths.add(8);
         this.pointDeaths.add(6);
         this.pointDeaths.add(4);
@@ -44,6 +46,15 @@ public class PlayerBoard {
         return deaths;
     }
 
+    public void setDeaths() {
+        if(this.getDeaths()<=5) {
+            this.deaths += 1;
+        }
+        else{
+            throw new IllegalStateException();
+
+        }
+    }
     public ArrayList<Integer> getPointDeaths() {
         return this.pointDeaths;
     }
@@ -55,8 +66,7 @@ public class PlayerBoard {
             return this.pointDeaths.get(index);
         }
         else {
-            System.out.println("You have digit an illegal index");
-            return -1;
+            throw new IndexOutOfBoundsException("You have digit an illegal index");
         }
     }
 
@@ -75,6 +85,12 @@ public class PlayerBoard {
     //remove the element at index 0 in ArrayList pointDeath
     //used when a player dies
     public void deleteFirstPointDeaths() {
-        pointDeaths.remove(0);
+        if (this.getPointDeaths().size() >= 1) {
+            pointDeaths.remove(0);
+        }
+        else{
+            System.out.println("Il giocatore è morto per sempre");
+
+        }
     }
 }

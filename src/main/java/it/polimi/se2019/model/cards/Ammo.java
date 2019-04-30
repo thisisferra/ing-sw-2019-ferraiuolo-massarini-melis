@@ -12,6 +12,12 @@ public class Ammo {
     private Cubes ammoCubes;
     private boolean powerUpCard;
 
+    //Constructor of Ammo object
+    public Ammo(Cubes ammoCubes,boolean powerUpCard){
+        this.ammoCubes = ammoCubes;
+        this.powerUpCard=powerUpCard;
+    }
+
     public Cubes getAmmoCubes(){
         return this.ammoCubes;
     }
@@ -20,10 +26,6 @@ public class Ammo {
         return this.powerUpCard;
     }
 
-    public Ammo(Cubes ammoCubes,boolean powerUpCard){
-        this.ammoCubes = ammoCubes;
-        this.powerUpCard=powerUpCard;
-    }
     public String toString(){
         return this.ammoCubes.toString() +" PUC: " + this.powerUpCard;
     }

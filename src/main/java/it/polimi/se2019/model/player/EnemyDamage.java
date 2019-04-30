@@ -4,7 +4,7 @@ package it.polimi.se2019.model.player;
 public class EnemyDamage{
     private Player aggressorPlayer;
     private int damage;
-    private boolean firstShot;
+    private boolean firstShot; //TODO da implementare
 
     public int getDamage() {
         return this.damage;
