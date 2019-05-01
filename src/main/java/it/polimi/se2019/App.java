@@ -1,5 +1,6 @@
 package it.polimi.se2019;
 import it.polimi.se2019.model.game.Match;
+import it.polimi.se2019.model.game.MovementChecker;
 import it.polimi.se2019.model.game.RoomChecker;
 import it.polimi.se2019.model.map.Map;
 import it.polimi.se2019.model.map.Square;
@@ -15,10 +16,15 @@ public class App {
     match.initGameField();
     match.initPlayers();
     Map map = match.getMap();
+
+    MovementChecker movement = new MovementChecker(map.getAllSquare(),3,7);
+    movement.check();
+        System.out.println(movement.getReachableSquares());
+
     map.setRoomSquare();
         System.out.println(map.getRoomSquare());
     Square[] squares = map.getAllSquare();
-    RoomChecker rooms = new RoomChecker(map,11);
+    RoomChecker rooms = new RoomChecker(map,1);
     rooms.setAccessibleRooms();
         System.out.println(rooms.getRoomsColor());
         System.out.println(rooms.getAccessibleRooms());

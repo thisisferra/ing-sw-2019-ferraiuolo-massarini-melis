@@ -31,12 +31,12 @@ public class Match {
     public Match(int chosenMap,int numberOfPlayers){
         this.chosenMap=chosenMap;
         this.numberOfPlayers = numberOfPlayers;
-        this.arsenal = new ArrayList<WeaponSlot>();
+        this.arsenal = new ArrayList<>();
         this.arsenal.add(new WeaponSlot("red"));
         this.arsenal.add(new WeaponSlot("blue"));
         this.arsenal.add(new WeaponSlot("yellow"));
-        this.discardedAmmos = new ArrayList<Ammo>();
-        this.discardedPowerUps = new ArrayList<PowerUp>();
+        this.discardedAmmos = new ArrayList<>();
+        this.discardedPowerUps = new ArrayList<>();
 
     }
 
@@ -131,6 +131,9 @@ public class Match {
         return this.map;
     }
 
+    public ArrayList<WeaponSlot> getArsenal(){
+        return this.arsenal;
+    }
     public ArrayList<PowerUp> getDiscardedPowerUps(){
         return this.discardedPowerUps;
     }

@@ -94,7 +94,12 @@ public class Controller {
 
     //it fills back weapon and ammo cards grabbed during the previous turn
     public void restoreMap(){
-
+        for(Square object : match.getMap().getAllSquare())
+                if(!object.isSpawnPoint())
+                    object.setFull(true);
+                else {
+                    //for all arsenal's slot, if there are empty cells, refill each cabinet
+                }
     }
     //the view is updated each time a change occurs.
     public void updateView(){

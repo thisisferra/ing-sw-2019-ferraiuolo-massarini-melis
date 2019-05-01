@@ -107,7 +107,6 @@ public class Player {
     public void setPosition(int position){
         this.position = position;
     }
-
     public void pickUpAmmo(Square currentSquare, Match currentMatch) {
         //Check if the player is in an ammo square
         if(!(currentSquare.isSpawnPoint())) {
@@ -131,7 +130,6 @@ public class Player {
             }
         }
         else{
-            //TODO fare in modo di poter pescare un'arma
             System.out.println("You are in a spawn point, you can't pick up an ammo");
         }
     }

@@ -39,7 +39,7 @@
       "south": -1,
       "west": -1,
       "color": "",
-      "full": false,
+      "full": true,
       "spawnPoint": false,
       "visibleSquare" : []
     },
