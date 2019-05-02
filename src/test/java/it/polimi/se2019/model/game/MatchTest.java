@@ -37,6 +37,14 @@ public class MatchTest {
         m5.initGameField();
         m6.initGameField();
         m7.initGameField();
+        m1.initCabinets();
+        m2.initCabinets();
+        m3.initCabinets();
+        m4.initCabinets();
+        m5.initCabinets();
+        m6.initCabinets();
+        m7.initCabinets();
+
 
     }
 
