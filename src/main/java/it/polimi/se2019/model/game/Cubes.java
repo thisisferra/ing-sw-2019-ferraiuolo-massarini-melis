@@ -29,10 +29,10 @@ public class Cubes {
         } else reds = 3;
 
         if (checkNumberYellowCubes(cube)) {
-            yellows = yellows + cube.getReds();
+            yellows = yellows + cube.getYellows();
         } else yellows = 3;
         if (checkNumberBlueCubes(cube)) {
-            blues = blues + cube.getReds();
+            blues = blues + cube.getBlues();
         } else blues = 3;
     }
 

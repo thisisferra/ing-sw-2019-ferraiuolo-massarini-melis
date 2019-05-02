@@ -32,9 +32,6 @@ public class Match {
         this.chosenMap=chosenMap;
         this.numberOfPlayers = numberOfPlayers;
         this.arsenal = new ArrayList<>();
-        this.arsenal.add(new WeaponSlot("red"));
-        this.arsenal.add(new WeaponSlot("blue"));
-        this.arsenal.add(new WeaponSlot("yellow"));
         this.discardedAmmos = new ArrayList<>();
         this.discardedPowerUps = new ArrayList<>();
 
@@ -44,11 +41,45 @@ public class Match {
     //each player should type in his name and his figure(color figure)
     public void initPlayers(){
         players = new ArrayList<>();
-        for(int i=0; i<this.numberOfPlayers;i++){
-            players.add(new Player("Mattia","blue",this));
-            players.add(new Player("Marco","grey",this));
-            players.add(new Player("Ferra","yellow",this));
-            players.add(new Player("Matteo","red",this));
+        switch(this.numberOfPlayers){
+            case 0: {
+                System.out.println("Not enough players.");
+                break;
+            }
+            case 1: {
+                System.out.println("Not enough players.");
+                break;
+            }
+            case 2: {
+                players.add(new Player("Mattia","blue",this));
+                players.add(new Player("Marco","grey",this));
+                break;
+            }
+            case 3: {
+                players.add(new Player("Mattia","blue",this));
+                players.add(new Player("Marco","grey",this));
+                players.add(new Player("Ferra","yellow",this));
+                break;
+            }
+            case 4: {
+                players.add(new Player("Mattia","blue",this));
+                players.add(new Player("Marco","grey",this));
+                players.add(new Player("Ferra","yellow",this));
+                players.add(new Player("Matteo","red",this));
+                break;
+            }
+            case 5: {
+                players.add(new Player("Mattia","blue",this));
+                players.add(new Player("Marco","grey",this));
+                players.add(new Player("Ferra","yellow",this));
+                players.add(new Player("Matteo","red",this));
+                players.add(new Player("Bruno", "green",this));
+                break;
+            }
+            default:{
+                System.out.println("Too many players!");
+                break;
+            }
         }
     }
 
@@ -96,6 +127,12 @@ public class Match {
         }*/
     }
 
+    public void initCabinets(){
+        this.arsenal.add(new WeaponSlot("red",this));
+        this.arsenal.add(new WeaponSlot("yellow",this));
+        this.arsenal.add(new WeaponSlot("blue",this));
+    }
+
     public ArrayList<Player> getAllPlayers() {
         return this.players;
     }
@@ -110,14 +147,13 @@ public class Match {
         return ammoStack.remove(size-1);
     }
 
-    public void tradeAmmoStack() {
-        Collections.shuffle(ammoStack);
-    }
-
     //if the stack isn't empty, it return the powerup card from the last position (arraylist size -1)
     public PowerUp pickUpPowerUp() {
-        int size = powerUpStack.size();
-        return powerUpStack.remove(size - 1);
+        return powerUpStack.remove(powerUpStack.size() - 1);
+    }
+
+    public Weapon pickUpWeapon(){
+        return weaponStack.remove(weaponStack.size()-1);
     }
 
     // currentAmmo is discarded and saved in discardedAmmos
@@ -134,11 +170,27 @@ public class Match {
     public ArrayList<WeaponSlot> getArsenal(){
         return this.arsenal;
     }
-    public ArrayList<PowerUp> getDiscardedPowerUps(){
-        return this.discardedPowerUps;
-    }
+
 
     public void addPlayerKillShot(Player dead){
         killShotTrack.add(dead);
+    }
+
+    public ArrayList<PowerUp> getPowerUpStack(){
+        return this.powerUpStack;
+    }
+
+    public ArrayList<Weapon> getWeaponStack(){
+        return this.weaponStack;
+    }
+    public ArrayList<Ammo> getAmmoStack(){
+        return this.ammoStack;
+    }
+
+    public ArrayList<Ammo> getDiscardedAmmos(){
+        return this.discardedAmmos;
+    }
+    public ArrayList<PowerUp> getDiscardedPowerUps(){
+        return this.discardedPowerUps;
     }
 }
