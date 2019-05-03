@@ -12,21 +12,19 @@ import it.polimi.se2019.model.map.Square;
 public class App {
     public static void main( String[] args ) {
 
-    Match match = new Match(1,1);
-    match.initGameField();
-    match.initPlayers();
-    Map map = match.getMap();
+        Match match = new Match(1, 1);
+        match.initGameField();
+        match.initPlayers();
+        Map map = match.getMap();
 
-    MovementChecker movement = new MovementChecker(map.getAllSquare(),3,7);
-    movement.check();
+        MovementChecker movement = new MovementChecker(map.getAllSquare(), 1, 9);
+        movement.check();
         System.out.println(movement.getReachableSquares());
 
-    map.setRoomSquare();
-        System.out.println(map.getRoomSquare());
-    Square[] squares = map.getAllSquare();
-    RoomChecker rooms = new RoomChecker(map,1);
-    rooms.setAccessibleRooms();
-        System.out.println(rooms.getRoomsColor());
-        System.out.println(rooms.getAccessibleRooms());
+        System.out.println( movement.getWalkableUpwardsSquares());
+        System.out.println(movement.getWalkableRightSquares());
+        System.out.println(movement.getWalkableDownwardsSquares());
+        System.out.println(movement.getWalkableLeftSquares());
+
     }
 }

@@ -2,6 +2,7 @@ package it.polimi.se2019.model.game;
 
 import it.polimi.se2019.model.map.Map;
 import it.polimi.se2019.model.map.Square;
+import it.polimi.se2019.model.player.Player;
 
 import java.util.*;
 
@@ -50,4 +51,22 @@ public class RoomChecker {
         return this.visibleRooms;
     }
 
+    public ArrayList<Player> getVisiblePlayers(Match match, Player owner){
+        ArrayList<Player> visiblePlayers = new ArrayList<>();
+        for(Square object: visibleRooms){
+            for(Player player: match.getAllPlayers()){
+                if(player.getPosition() == object.getPosition()){
+                    visiblePlayers.add(player);
+                }
+            }
+        }
+        return visiblePlayers;
+    }
+
+    //return the list of players you cannot see
+    public ArrayList<Player> getNonVisiblePlayers(Match match, Player owner){
+        ArrayList<Player> nonVisiblePlayers = getVisiblePlayers(match,owner);
+        nonVisiblePlayers.removeAll(match.getAllPlayers());
+        return nonVisiblePlayers;
+    }
 }

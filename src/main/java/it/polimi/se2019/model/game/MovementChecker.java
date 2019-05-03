@@ -62,5 +62,57 @@ public class MovementChecker {
         return this.reachableSquares;
     }
 
+    //return the list of squares from your position to the first right wall
+    public ArrayList<Square> getWalkableRightSquares(){
+        ArrayList<Square> rightHorizontalSquares = new ArrayList<>();
+        int next = allSquares[index].getEast();
+        int moves = 0;
+        while(next != -1 && moves<this.steps){
+            rightHorizontalSquares.add(allSquares[next]);
+            next = allSquares[next].getEast();
+            moves++;
+        }
+        return rightHorizontalSquares;
+    }
+
+    //return the list of squares from your position to the first left wall
+    public ArrayList<Square> getWalkableLeftSquares(){
+        ArrayList<Square> leftHorizontalSquares = new ArrayList<>();
+        int next = allSquares[index].getWest();
+        int moves = 0;
+        while(next != -1 && moves<this.steps){
+            leftHorizontalSquares.add(allSquares[next]);
+            next = allSquares[next].getWest();
+            moves++;
+        }
+        return leftHorizontalSquares;
+
+    }
+
+    //return the list of squares from your position to the first upwards wall
+    public ArrayList<Square> getWalkableUpwardsSquares(){
+        ArrayList<Square> upwardsSquares = new ArrayList<>();
+        int next = allSquares[index].getNorth();
+        int moves = 0;
+        while(next != -1 && moves<this.steps){
+            upwardsSquares.add(allSquares[next]);
+            next = allSquares[next].getNorth();
+            moves++;
+        }
+        return upwardsSquares;
+    }
+
+    //return the list of squares from your position to the first downwards wall
+    public ArrayList<Square> getWalkableDownwardsSquares(){
+        ArrayList<Square> downwardsSquares = new ArrayList<>();
+        int next = allSquares[index].getSouth();
+        int moves = 0;
+        while(next != -1 && moves<this.steps){
+            downwardsSquares.add(allSquares[next]);
+            next = allSquares[next].getSouth();
+            moves++;
+        }
+        return downwardsSquares;
+    }
 
 }
