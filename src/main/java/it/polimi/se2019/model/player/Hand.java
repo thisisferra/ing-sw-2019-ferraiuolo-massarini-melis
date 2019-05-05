@@ -36,10 +36,10 @@ public class Hand {
 
     public void addPowerUp(PowerUp currentPowerUp) {
         if (checkPowerUps()) {
-            this.powerUps.add(powerUps.size() - 1, currentPowerUp);
+            this.powerUps.add( currentPowerUp);
         }
         else{
-            this.powerUps.add(powerUps.size() - 1, currentPowerUp);
+            this.powerUps.add( currentPowerUp);
             System.out.println("You already have three PowerUp cards.");
             System.out.println("Choose one to discard!");
             int index = indexToDiscard();
