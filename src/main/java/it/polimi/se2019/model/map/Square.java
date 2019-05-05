@@ -9,6 +9,10 @@ public class Square {
     private int east = -1;
     private int south = -1;
     private int west = -1;
+    private int northWall = -1;
+    private int eastWall = -1;
+    private int southWall = -1;
+    private int westWall = -1;
     private int step=0;
     private String color;
     private boolean full;          //bool that indicates if square is full or not
@@ -49,6 +53,18 @@ public class Square {
     public int getWest(){
         return this.west;
     }
+    public int getNorthWall(){
+        return this.northWall;
+    }
+    public int getEastWall(){
+        return this.eastWall;
+    }
+    public int getSouthWall(){
+        return this.southWall;
+    }
+    public int getWestWall(){
+        return this.westWall;
+    }
     public void setStep(int step){
         this.step=step;
     }
@@ -78,6 +94,19 @@ public class Square {
     public void setWest(int west){
         this.west=west;
     }
+    public void setNorthWall(int northWall){
+        this.northWall=northWall;
+    }
+    public void setEastWall(int eastWall){
+        this.eastWall=eastWall;
+    }
+    public void setSouthWall(int southWall){
+        this.southWall=southWall;
+    }
+    public void setWestWall(int westWall){
+        this.westWall=westWall;
+    }
+
     public void setSpawnPoint(boolean spawnPoint){
         this.spawnPoint=spawnPoint;
     }
@@ -93,7 +122,10 @@ public class Square {
         this.south=square.south;
         this.west=square.west;
         this.full=square.full;
-
+        this.northWall = square.northWall;
+        this.eastWall = square.eastWall;
+        this.southWall = square.southWall;
+        this.westWall = square.westWall;
     }
     public int getStep(){
         return this.step;

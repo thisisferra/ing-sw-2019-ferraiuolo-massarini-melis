@@ -214,6 +214,9 @@ public class Player {
         this.playerBoard.deleteFirstPointDeaths();
 
     }
+    public String toString(){
+        return (this.clientName + " " + this.color + " " + this.getPosition());
+    }
 
 
 }

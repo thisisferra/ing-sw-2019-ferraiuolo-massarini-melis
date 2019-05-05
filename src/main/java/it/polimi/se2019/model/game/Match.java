@@ -97,6 +97,7 @@ public class Match {
         //create the map filling it with squares from the json file, based on the idMap
         map = new Map(this.chosenMap);
         map.setAllSquare();
+        map.setRoomSquare();
         Gson gson = new Gson();
 
         try {

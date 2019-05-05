@@ -115,4 +115,52 @@ public class MovementChecker {
         return downwardsSquares;
     }
 
+    public ArrayList<Square> getAllUpwardsSquares(){
+        ArrayList<Square> upwardsSquares = new ArrayList<>();
+        int next = allSquares[index].getNorthWall();
+        int moves = 0;
+        while(next != -1 && moves<this.steps){
+            upwardsSquares.add(allSquares[next]);
+            next = allSquares[next].getNorthWall();
+            moves++;
+        }
+        return upwardsSquares;
+    }
+
+    public ArrayList<Square> getAllRightSquares(){
+        ArrayList<Square> rightSquares = new ArrayList<>();
+        int next = allSquares[index].getEastWall();
+        int moves = 0;
+        while(next != -1 && moves<this.steps){
+            rightSquares.add(allSquares[next]);
+            next = allSquares[next].getEastWall();
+            moves++;
+        }
+        return rightSquares;
+    }
+
+    public ArrayList<Square> getAllDownwardsSquares(){
+        ArrayList<Square> downwardsSquares = new ArrayList<>();
+        int next = allSquares[index].getSouthWall();
+        int moves = 0;
+        while(next != -1 && moves<this.steps){
+            downwardsSquares.add(allSquares[next]);
+            next = allSquares[next].getSouthWall();
+            moves++;
+        }
+        return downwardsSquares;
+    }
+
+    public ArrayList<Square> getAllLeftSquares(){
+        ArrayList<Square> leftSquares = new ArrayList<>();
+        int next = allSquares[index].getWestWall();
+        int moves = 0;
+        while(next != -1 && moves<this.steps){
+            leftSquares.add(allSquares[next]);
+            next = allSquares[next].getWestWall();
+            moves++;
+        }
+        return leftSquares;
+    }
+
 }

@@ -20,7 +20,7 @@ public class MatchTest {
         m2 = new Match(2,5);
         m3 = new Match(3,1);
         m4 = new Match(4,0);
-        m5 = new Match(0,10);
+        m5 = new Match(1,10);
         m6 = new Match(2,2);
         m7 = new Match(4,4);
         m1.initPlayers();
@@ -63,10 +63,7 @@ public class MatchTest {
     }
     @Test
     public void testDeckSize(){
-        m1.initGameField();
-        m2.initGameField();
-        m3.initGameField();
-        m4.initGameField();
+
         Assert.assertEquals(36,m1.getAmmoStack().size());
         Assert.assertEquals(36,m2.getAmmoStack().size());
         Assert.assertEquals(36,m3.getAmmoStack().size());
@@ -111,7 +108,7 @@ public class MatchTest {
         Assert.assertEquals(2,m2.getMap().getMapID());
         Assert.assertEquals(3,m3.getMap().getMapID());
         Assert.assertEquals(4,m4.getMap().getMapID());
-        Assert.assertEquals(0,m5.getMap().getMapID());
+        Assert.assertEquals(1,m5.getMap().getMapID());
         Assert.assertEquals(2,m6.getMap().getMapID());
         Assert.assertEquals(4,m7.getMap().getMapID());
 

@@ -62,13 +62,19 @@ public class SquareTest {
         thisSquare.setSouth(3);
         thisSquare.setWest(4);
         thisSquare.setPosition(0);
+        thisSquare.setNorthWall(5);
+        thisSquare.setEastWall(6);
+        thisSquare.setSouthWall(7);
+        thisSquare.setWestWall(8);
         Assert.assertEquals(0,thisSquare.getPosition());
         Assert.assertEquals(1,thisSquare.getNorth());
         Assert.assertEquals(2,thisSquare.getEast());
         Assert.assertEquals(3,thisSquare.getSouth());
         Assert.assertEquals(4,thisSquare.getWest());
-
-
+        Assert.assertEquals(5,thisSquare.getNorthWall());
+        Assert.assertEquals(6,thisSquare.getEastWall());
+        Assert.assertEquals(7,thisSquare.getSouthWall());
+        Assert.assertEquals(8,thisSquare.getWestWall());
     }
     //testing if the spawnpoint are in the correct square
     @Test

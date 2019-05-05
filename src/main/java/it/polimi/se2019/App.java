@@ -4,6 +4,7 @@ import it.polimi.se2019.model.game.MovementChecker;
 import it.polimi.se2019.model.game.RoomChecker;
 import it.polimi.se2019.model.map.Map;
 import it.polimi.se2019.model.map.Square;
+import it.polimi.se2019.model.player.Player;
 
 /**
  * Hello world!
@@ -12,19 +13,25 @@ import it.polimi.se2019.model.map.Square;
 public class App {
     public static void main( String[] args ) {
 
-        Match match = new Match(1, 1);
+        Match match = new Match(1, 5);
         match.initGameField();
         match.initPlayers();
-        Map map = match.getMap();
-
-        MovementChecker movement = new MovementChecker(map.getAllSquare(), 1, 9);
+        for(Player object: match.getAllPlayers()){
+            object.setPosition(5);
+        }
+        RoomChecker roomchecker = new RoomChecker(match.getMap(),5);
+        roomchecker.setAccessibleRooms();
+        System.out.println(roomchecker.getVisiblePlayers(match,match.getAllPlayers().get(0)));
+        MovementChecker movement = new MovementChecker(match.getMap().getAllSquare(),3,6);
         movement.check();
-        System.out.println(movement.getReachableSquares());
-
-        System.out.println( movement.getWalkableUpwardsSquares());
-        System.out.println(movement.getWalkableRightSquares());
-        System.out.println(movement.getWalkableDownwardsSquares());
-        System.out.println(movement.getWalkableLeftSquares());
+        System.out.println("UP: " + movement.getWalkableUpwardsSquares());
+        System.out.println("UP: " + movement.getAllUpwardsSquares());
+        System.out.println("RIGHT: " + movement.getWalkableRightSquares());
+        System.out.println("RIGHT: "+ movement.getAllRightSquares());
+        System.out.println("DOWN: " + movement.getWalkableDownwardsSquares());
+        System.out.println("DOWN: "+ movement.getAllDownwardsSquares());
+        System.out.println("LEFT: " + movement.getWalkableLeftSquares());
+        System.out.println("LEFT: " + movement.getAllLeftSquares());
 
     }
 }

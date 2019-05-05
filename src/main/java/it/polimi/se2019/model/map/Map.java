@@ -85,7 +85,7 @@ public class Map {
 
     //return the number of different colors on the map
     public int colorCount(){
-        String color;
+
         Set <String> colorSet = new HashSet<>();
         for(Square object : this.allSquare){
             if(!object.getColor().equals(""))
