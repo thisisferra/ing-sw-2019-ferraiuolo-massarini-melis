@@ -9,6 +9,7 @@ import it.polimi.se2019.model.map.Square;
 import it.polimi.se2019.model.player.Player;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Scanner;
 
 public class Controller {
 
@@ -111,4 +112,95 @@ public class Controller {
 
     }
 
+    public Cubes askCubeToPay(Player player) {
+        Cubes cubeToPay;
+        Scanner input = new Scanner(System.in);
+        System.out.println("Enter the color of the cube you want to pay: \n1. red\n2. blue\n3. yellow");
+        String choice = input.nextLine();
+        System.out.println(choice);
+        if (choice.equals("red")) {
+            if (checkEnoughCubes(player, choice)) {
+                return cubeToPay = new Cubes(1, 0, 0);
+            }
+            else {
+                System.out.println("You don't have enough red cubes");
+                return null;
+            }
+        }
+        else if (choice.equals("blue")) {
+            if (checkEnoughCubes(player, choice)) {
+                return cubeToPay = new Cubes(0, 0, 1);
+            }
+            else {
+                System.out.println("You don't have enough blue cubes");
+                return null;
+            }
+        }
+        else if (choice.equals("yellow")) {
+            if (checkEnoughCubes(player, choice)) {
+                return cubeToPay = new Cubes(0, 1, 0);
+            }
+            else {
+                System.out.println("You don't have enough yellow cubes");
+                return null;
+            }
+        }
+        else {
+            System.out.println("You have digit an illegal color");
+            return null;
+        }
+    }
+
+    public boolean checkEnoughCubes(Player player, String choice) {
+        if (choice.equals("red")) {
+            if(player.getPlayerBoard().getAmmoCubes().getReds() > 0 ) return true;
+        }
+        if (choice.equals("blue")) {
+            if(player.getPlayerBoard().getAmmoCubes().getBlues() > 0 ) return true;
+        }
+        if (choice.equals("yellow")) {
+            if(player.getPlayerBoard().getAmmoCubes().getYellows() > 0 ) return true;
+        }
+        return false;
+    }
+
+    public PowerUp choosePowerUp(Player player) {
+        Scanner input = new Scanner(System.in);
+        System.out.println("Select which power-up to use: ");
+        for(int i = 0; i < player.getHand().getPowerUps().size(); i++) {
+            System.out.println(i + ". " + player.getHand().getPowerUps().get(i));
+        }
+        int powerUpChoosed = Integer.parseInt(input.nextLine());
+        return player.getHand().getPowerUps().get(powerUpChoosed);
+    }
+
+    public Player chooseTargetingPlayer() {
+        int i = 0;
+        Scanner input = new Scanner(System.in);
+        System.out.println("Insert the player you want to attack: \n");
+        for(Player samplePlayer : match.getAllPlayers()) {
+            System.out.println(i + ". " + samplePlayer.getClientName());
+        }
+        int numberPlayer = Integer.parseInt(input.nextLine());
+        return match.getAllPlayers().get(numberPlayer);
+    }
+
+    public int chooseNewPosition() {
+        int i = 0;
+        Scanner input = new Scanner(System.in);
+        System.out.println("Enter the index of the new position");
+        for (Square sampleSquare : match.getMap().getAllSquare()) {
+            System.out.println(i + ". " + sampleSquare.toString());
+            i++;
+        }
+        return match.getMap().getAllSquare()[Integer.parseInt(input.nextLine())].getPosition();
+    }
+
+    public void usePowerUpController(Player player) {
+        PowerUp powerUpToUse = choosePowerUp(player);
+        if (powerUpToUse.getType().equals("targeting scope")) {
+            Cubes colorCube = askCubeToPay(player);
+        }
+        player.usePowerUp(powerUpToUse);
+    }
 }
