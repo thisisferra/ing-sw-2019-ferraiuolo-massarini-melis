@@ -1,5 +1,6 @@
 package it.polimi.se2019.model.player;
 
+import it.polimi.se2019.controller.Controller;
 import it.polimi.se2019.model.cards.Ammo;
 import it.polimi.se2019.model.cards.PowerUp;
 import it.polimi.se2019.model.game.Cubes;
@@ -11,6 +12,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class Player {
+    private Controller controller;
     private String clientName;
     private String color;
     private int position;
@@ -93,9 +95,11 @@ public class Player {
     public Hand getHand(){
         return this.playerHand;
     }
+
     public PlayerBoard getPlayerBoard(){
         return this.playerBoard;
     }
+
     public boolean isFirstPlayer() {
         return firstPlayer;
     }
@@ -107,6 +111,7 @@ public class Player {
     public void setPosition(int position){
         this.position = position;
     }
+
     public void pickUpAmmo(Square currentSquare, Match currentMatch) {
         //Check if the player is in an ammo square
         if(!(currentSquare.isSpawnPoint())) {
@@ -133,7 +138,6 @@ public class Player {
             System.out.println("You are in a spawn point, you can't pick up an ammo");
         }
     }
-
 
     //trade the current powerup in a cube of the matching color as a Cubes object
     public void tradeCube(){
@@ -204,19 +208,41 @@ public class Player {
             else {
                 player.score += 1;
             }
-            //Give 1 point to the first player that make damage
-            if(enDam.getFirstShot()) {
-                player.score += 1;
-            }
+            //TODO da implementare l'assegnazione di un punto per il primo danno a un giocatore
         }
         //Elimina il primo elemento di pointDeaths del giocatore morto
         //per diminuire il massimo punteggio ottenibile alla pressima morte
         this.playerBoard.deleteFirstPointDeaths();
 
     }
+
     public String toString(){
         return (this.clientName + " " + this.color + " " + this.getPosition());
     }
 
 
+    //Check if one player had already make damage to a specific player.
+    public boolean checkDamage(Player damagingPlayer) {
+        for(EnemyDamage singleEnemyDamage : enemyDamages) {
+            if(damagingPlayer.equals(singleEnemyDamage.getAggressorPlayer()))
+                return true;
+        }
+        return false;
+    }
+
+//    public void usePowerUp(PowerUp powerUpToUse) {
+//        if (powerUpToUse.getType().equals("targeting scope")) {
+//            Player targetingPlayer = controller.chooseTargetingPlayer();
+//            powerUpToUse.effect(this, targetingPlayer);
+//        }
+//        if (powerUpToUse.getType().equals("newton")) {
+//        }
+//        if (powerUpToUse.getType().equals("tagback grenade")) {
+//
+//        }
+//        if (powerUpToUse.getType().equals("teleporter")) {
+//            int newPosition = controller.chooseNewPosition();
+//            powerUpToUse.effect(this , newPosition);
+//        }
+//    }
 }
