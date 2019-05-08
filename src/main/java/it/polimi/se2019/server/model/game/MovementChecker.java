@@ -1,6 +1,7 @@
-package it.polimi.se2019.model.game;
+package it.polimi.se2019.server.model.game;
 
-import it.polimi.se2019.model.map.Square;
+import it.polimi.se2019.server.model.map.Square;
+
 import java.util.*;
 
 public class MovementChecker {

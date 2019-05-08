@@ -1,5 +1,7 @@
-package it.polimi.se2019.model.map;
-import it.polimi.se2019.model.player.Player;
+package it.polimi.se2019.server.model.map;
+
+import it.polimi.se2019.server.model.player.Player;
+
 import java.util.ArrayList;
 
 public class Square {

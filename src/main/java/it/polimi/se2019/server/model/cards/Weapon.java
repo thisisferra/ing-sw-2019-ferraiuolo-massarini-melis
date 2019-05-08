@@ -1,5 +1,6 @@
-package it.polimi.se2019.model.cards;
-import it.polimi.se2019.model.game.Cubes;
+package it.polimi.se2019.server.model.cards;
+
+import it.polimi.se2019.server.model.game.Cubes;
 
 public class Weapon {
     private String type;

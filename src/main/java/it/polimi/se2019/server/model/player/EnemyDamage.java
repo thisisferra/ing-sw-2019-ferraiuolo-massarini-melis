@@ -1,4 +1,4 @@
-package it.polimi.se2019.model.player;
+package it.polimi.se2019.server.model.player;
 
 
 public class EnemyDamage{

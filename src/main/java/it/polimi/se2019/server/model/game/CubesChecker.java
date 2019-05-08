@@ -1,4 +1,4 @@
-package it.polimi.se2019.model.game;
+package it.polimi.se2019.server.model.game;
 
 public class CubesChecker {
 

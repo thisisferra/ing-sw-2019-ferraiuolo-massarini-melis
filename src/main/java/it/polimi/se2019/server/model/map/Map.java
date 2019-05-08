@@ -1,6 +1,7 @@
-package it.polimi.se2019.model.map;
+package it.polimi.se2019.server.model.map;
 
 import com.google.gson.Gson;
+
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.*;

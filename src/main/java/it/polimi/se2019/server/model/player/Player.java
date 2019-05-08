@@ -1,10 +1,10 @@
-package it.polimi.se2019.model.player;
+package it.polimi.se2019.server.model.player;
 
-import it.polimi.se2019.model.cards.Ammo;
-import it.polimi.se2019.model.cards.PowerUp;
-import it.polimi.se2019.model.game.Cubes;
-import it.polimi.se2019.model.game.Match;
-import it.polimi.se2019.model.map.Square;
+import it.polimi.se2019.server.model.cards.Ammo;
+import it.polimi.se2019.server.model.cards.PowerUp;
+import it.polimi.se2019.server.model.game.Cubes;
+import it.polimi.se2019.server.model.game.Match;
+import it.polimi.se2019.server.model.map.Square;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -204,10 +204,10 @@ public class Player {
             else {
                 player.score += 1;
             }
-            //Give 1 point to the first player that make damage
-            if(enDam.getFirstShot()) {
-                player.score += 1;
-            }
+            //Give 1 point to the first player that make damageif(enDam.getFirstShot()) {
+            //                player.score += 1;
+            //            }
+
         }
         //Elimina il primo elemento di pointDeaths del giocatore morto
         //per diminuire il massimo punteggio ottenibile alla pressima morte

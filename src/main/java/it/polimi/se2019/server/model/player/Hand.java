@@ -1,7 +1,7 @@
-package it.polimi.se2019.model.player;
+package it.polimi.se2019.server.model.player;
 
-import it.polimi.se2019.model.cards.Weapon;
-import it.polimi.se2019.model.cards.PowerUp;
+import it.polimi.se2019.server.model.cards.Weapon;
+import it.polimi.se2019.server.model.cards.PowerUp;
 
 import java.util.ArrayList;
 import java.util.Scanner;

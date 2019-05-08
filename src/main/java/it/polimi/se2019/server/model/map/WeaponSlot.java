@@ -1,7 +1,7 @@
-package it.polimi.se2019.model.map;
+package it.polimi.se2019.server.model.map;
 
-import it.polimi.se2019.model.cards.Weapon;
-import it.polimi.se2019.model.game.Match;
+import it.polimi.se2019.server.model.cards.Weapon;
+import it.polimi.se2019.server.model.game.Match;
 /*WeaponSlot represent one three slots array containing 3 weapons.
 * Each one of them has a color among red,blue or yellow*/
 

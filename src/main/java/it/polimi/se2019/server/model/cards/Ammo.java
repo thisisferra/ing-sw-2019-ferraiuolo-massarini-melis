@@ -1,6 +1,6 @@
-package it.polimi.se2019.model.cards;
+package it.polimi.se2019.server.model.cards;
 
-import it.polimi.se2019.model.game.Cubes;
+import it.polimi.se2019.server.model.game.Cubes;
 
 /*Ammo class represent the real counterpart ammo tile from the board game.
 * When a player picks it up from the terrain he receives some cubes and if the

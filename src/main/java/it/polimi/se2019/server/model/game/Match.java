@@ -1,12 +1,14 @@
-package it.polimi.se2019.model.game;
+package it.polimi.se2019.server.model.game;
 
 import com.google.gson.Gson;
-import it.polimi.se2019.model.cards.Ammo;
-import it.polimi.se2019.model.cards.PowerUp;
-import it.polimi.se2019.model.cards.Weapon;
-import it.polimi.se2019.model.map.Map;
-import it.polimi.se2019.model.map.WeaponSlot;
-import it.polimi.se2019.model.player.Player;
+
+import it.polimi.se2019.server.model.cards.Ammo;
+import it.polimi.se2019.server.model.cards.PowerUp;
+import it.polimi.se2019.server.model.cards.Weapon;
+import it.polimi.se2019.server.model.map.Map;
+import it.polimi.se2019.server.model.map.WeaponSlot;
+import it.polimi.se2019.server.model.player.Player;
+
 import java.util.ArrayList;
 import java.io.FileNotFoundException;
 import java.io.FileReader;

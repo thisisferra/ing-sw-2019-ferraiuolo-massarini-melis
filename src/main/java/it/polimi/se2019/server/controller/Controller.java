@@ -1,12 +1,14 @@
-package it.polimi.se2019.controller;
-import it.polimi.se2019.model.cards.PowerUp;
-import it.polimi.se2019.model.cards.Weapon;
-import it.polimi.se2019.model.game.Cubes;
-import it.polimi.se2019.model.game.CubesChecker;
-import it.polimi.se2019.model.game.Match;
-import it.polimi.se2019.model.game.MovementChecker;
-import it.polimi.se2019.model.map.Square;
-import it.polimi.se2019.model.player.Player;
+package it.polimi.se2019.server.controller;
+
+import it.polimi.se2019.server.model.cards.PowerUp;
+import it.polimi.se2019.server.model.cards.Weapon;
+import it.polimi.se2019.server.model.game.Cubes;
+import it.polimi.se2019.server.model.game.CubesChecker;
+import it.polimi.se2019.server.model.game.Match;
+import it.polimi.se2019.server.model.game.MovementChecker;
+import it.polimi.se2019.server.model.map.Square;
+import it.polimi.se2019.server.model.player.Player;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -201,6 +203,6 @@ public class Controller {
         if (powerUpToUse.getType().equals("targeting scope")) {
             Cubes colorCube = askCubeToPay(player);
         }
-        player.usePowerUp(powerUpToUse);
+        //player.usePowerUp(powerUpToUse);
     }
 }

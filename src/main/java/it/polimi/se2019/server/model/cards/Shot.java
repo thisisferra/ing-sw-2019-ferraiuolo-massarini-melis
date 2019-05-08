@@ -1,8 +1,9 @@
-package it.polimi.se2019.model.cards;
+package it.polimi.se2019.server.model.cards;
 
-import it.polimi.se2019.model.game.Cubes;
-import it.polimi.se2019.model.player.Player;
-import it.polimi.se2019.model.map.Square;
+import it.polimi.se2019.server.model.game.Cubes;
+import it.polimi.se2019.server.model.player.Player;
+import it.polimi.se2019.server.model.map.Square;
+
 import java.util.ArrayList;
 
 public class Shot {
