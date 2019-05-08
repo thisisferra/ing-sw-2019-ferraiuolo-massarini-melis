@@ -8,6 +8,7 @@ import it.polimi.se2019.server.model.game.Match;
 import it.polimi.se2019.server.model.game.MovementChecker;
 import it.polimi.se2019.server.model.map.Square;
 import it.polimi.se2019.server.model.player.Player;
+import it.polimi.se2019.client.view.View;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,7 +19,7 @@ public class Controller {
     //references to the player who's performing actions and the match state
     private Player player;
     private Match match;
-
+    private View view;
     //each player draws two cards in their first turn and discard one
     public void startingDraw(){
         //TODO da togliere index
@@ -31,6 +32,10 @@ public class Controller {
         else if (discarded.getColor().equals("blue")) this.player.setPosition(2);
         else System.out.println(discarded.getColor() + "is not a valid color for respawning!");
 
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 
     //it places the player figure back on the board by drawing a powerup card
@@ -198,11 +203,11 @@ public class Controller {
         return match.getMap().getAllSquare()[Integer.parseInt(input.nextLine())].getPosition();
     }
 
-    public void usePowerUpController(Player player) {
-        PowerUp powerUpToUse = choosePowerUp(player);
-        if (powerUpToUse.getType().equals("targeting scope")) {
-            Cubes colorCube = askCubeToPay(player);
-        }
-        //player.usePowerUp(powerUpToUse);
-    }
+//    public void usePowerUpController(Player player) {
+//        PowerUp powerUpToUse = choosePowerUp(player);
+//        if (powerUpToUse.getType().equals("targeting scope")) {
+//            Cubes colorCube = askCubeToPay(player);
+//        }
+//        player.usePowerUp(powerUpToUse);
+//    }
 }

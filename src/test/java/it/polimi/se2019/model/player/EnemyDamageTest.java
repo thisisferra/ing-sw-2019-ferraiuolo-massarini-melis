@@ -35,6 +35,7 @@ public class EnemyDamageTest {
 
     }
 
+<<<<<<< HEAD
     @Test
     public void testGetFirstShot() {
         m1.initPlayers();
@@ -44,4 +45,6 @@ public class EnemyDamageTest {
         Assert.assertFalse(en1.getFirstShot());*/
     }
 
+=======
+>>>>>>> 88fe0da59e3b944ffa61a1a94211535fee573cd6
 }

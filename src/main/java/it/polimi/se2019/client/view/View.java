@@ -1,6 +1,10 @@
-package it.polimi.se2019.view;
+package it.polimi.se2019.client.view;
+
+import it.polimi.se2019.server.controller.Controller;
+
 
 public class View {
+    Controller controller;
     //the number of point of the current player
     public void showPoints(){
 

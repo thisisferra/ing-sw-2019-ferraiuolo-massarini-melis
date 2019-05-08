@@ -11,13 +11,13 @@ public class Shot {
     private Cubes cost;
     private int damage;
     private int tags;
-    private boolean peekingRequired;
-    private int movesRequired;
-    private int movesGranted;
-    private boolean stepByStep;
-    private boolean cardinalDirectionRequired;
-    private int targetableEnemies;
-    private int shockDisplacement;
+    private boolean peekingRequired;                    //Se posso vedere un giocatore
+    private int movesRequired;                          //Distanza minima a cui deve essere il target
+    private int movesGranted;                           //Devi muoverti fino a un massimo di movesGranted quadrati
+    private boolean stepByStep;                         //2° effetto cyberguanto
+    private boolean cardinalDirectionRequired;          //Se l'arma spara in direzioni cardinali
+    private int targetableEnemies;                      //Numero massimo di nemici danneggaibili
+    private int shockDisplacement;                      //Spostamento dell'avversario, se positivo lo spingi, se negativo lo tiri
 
     public void getInfo(){
 
