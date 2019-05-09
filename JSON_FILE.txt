@@ -1,3 +1,3 @@
 For this project we used several json file in order to describe different aspects of the game like weapons, ammo, maps and powerups.
 The reason behind this choice is that all of those entities are meant to stay unchanged for the course of the entire game and to make the code skinnier and more readeable.
-The files are located in src/main/resources folder and they covers roughly 1400 lines total.
+The files are located in src/main/resources folder and they covers roughly 2300 lines total.
