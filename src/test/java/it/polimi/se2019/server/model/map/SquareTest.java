@@ -1,4 +1,4 @@
-package it.polimi.se2019.model.map;
+package it.polimi.se2019.server.model.map;
 
 import org.junit.Assert;
 import org.junit.Before;

@@ -36,13 +36,13 @@ public class Match {
         this.arsenal = new ArrayList<>();
         this.discardedAmmos = new ArrayList<>();
         this.discardedPowerUps = new ArrayList<>();
+        this.players = new ArrayList<>();
 
     }
 
     //generate instances of players
     //each player should type in his name and his figure(color figure)
     public void initPlayers(){
-        players = new ArrayList<>();
         switch(this.numberOfPlayers){
             case 0: {
                 System.out.println("Not enough players.");

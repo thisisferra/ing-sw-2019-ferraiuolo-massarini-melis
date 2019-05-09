@@ -1,9 +1,10 @@
-package it.polimi.se2019.model.player;
+package it.polimi.se2019.server.model.player;
 
-import it.polimi.se2019.model.cards.PowerUp;
-import it.polimi.se2019.model.cards.Weapon;
-import it.polimi.se2019.model.game.Match;
-import it.polimi.se2019.model.player.Hand;
+import it.polimi.se2019.server.model.cards.PowerUp;
+import it.polimi.se2019.server.model.cards.Weapon;
+import it.polimi.se2019.server.model.game.Match;
+import it.polimi.se2019.server.model.player.Hand;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;

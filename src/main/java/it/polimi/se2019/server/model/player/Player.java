@@ -24,7 +24,7 @@ public class Player {
     private Match match;
     private  ArrayList<EnemyDamage> enemyDamages = new ArrayList<>();
 
-    public Player(String clientName, String color,Match match){
+    public Player(String clientName, String color, Match match){
         this.clientName = clientName;
         this.color=color;
         this.match = match;

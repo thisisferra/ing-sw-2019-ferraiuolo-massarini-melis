@@ -1,10 +1,10 @@
 package it.polimi.se2019;
-import it.polimi.se2019.model.game.Match;
-import it.polimi.se2019.model.game.MovementChecker;
-import it.polimi.se2019.model.game.RoomChecker;
-import it.polimi.se2019.model.map.Map;
-import it.polimi.se2019.model.map.Square;
-import it.polimi.se2019.model.player.Player;
+
+import it.polimi.se2019.server.model.game.Match;
+import it.polimi.se2019.server.model.game.MovementChecker;
+import it.polimi.se2019.server.model.game.RoomChecker;
+import it.polimi.se2019.server.model.map.Map;
+import it.polimi.se2019.server.model.player.Player;
 
 /**
  * Hello world!

@@ -1,9 +1,10 @@
-package it.polimi.se2019.model.player;
+package it.polimi.se2019.server.model.player;
 
-import it.polimi.se2019.model.game.Cubes;
-import it.polimi.se2019.model.game.Match;
-import it.polimi.se2019.model.player.Player;
-import it.polimi.se2019.model.player.PlayerBoard;
+import it.polimi.se2019.server.model.game.Cubes;
+import it.polimi.se2019.server.model.game.Match;
+import it.polimi.se2019.server.model.player.Player;
+import it.polimi.se2019.server.model.player.PlayerBoard;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

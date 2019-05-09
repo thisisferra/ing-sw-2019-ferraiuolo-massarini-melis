@@ -1,7 +1,8 @@
-package it.polimi.se2019.model.cards;
+package it.polimi.se2019.server.model.cards;
 
-import it.polimi.se2019.model.cards.Ammo;
-import it.polimi.se2019.model.game.Cubes;
+import it.polimi.se2019.server.model.cards.Ammo;
+import it.polimi.se2019.server.model.game.Cubes;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
