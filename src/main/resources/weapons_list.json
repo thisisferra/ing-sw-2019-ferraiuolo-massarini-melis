@@ -7,11 +7,49 @@
        "yellows": 0 ,
        "blues" : 1
       },
-      "reloadCost": {
+     "reloadCost": {
         "reds": 0 ,
         "yellows": 0 ,
         "blues" : 2
-      }
+      },
+     "effect": [
+       {
+         "nameEffect": "BasicEffect",
+         "ExtraCost": {
+           "reds": 0,
+           "yellows": 0,
+           "blues": 0
+         },
+         "maxTarget": 1,
+         "peekingRequired": true,
+         "cardinalDirection": false,
+         "sameDamage": true,
+         "damage": [2],
+         "mark": 1,
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 0,
+         "maxDistanceTarget": -1
+       },
+       {
+         "nameEffect": "BasicEffect+Extra1",
+         "ExtraCost": {
+           "reds": 1,
+           "yellows": 0,
+           "blues": 0
+         },
+         "maxTarget":2,
+         "peekingRequired": true,
+         "cardinalDirection": false,
+         "sameDamage":false,
+         "damage": [2, 0],
+         "mark": [1, 1],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 0,
+         "maxDistanceTarget": -1
+       }
+     ]
    },
    {
      "type":"machine_gun",
@@ -25,7 +63,81 @@
        "reds": 1 ,
        "yellows": 0 ,
        "blues" : 1
-     }
+     },
+     "effect": [
+       {
+         "nameEffect": "BasicEffect",
+         "ExtraCost": {
+           "reds": 0,
+           "yellows": 0,
+           "blues": 0
+         },
+         "maxTarget": 2,
+         "peekingRequired": true,
+         "cardinalDirection": false,
+         "sameDamage": true,
+         "damage": [1],
+         "mark": [0],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 0,
+         "maxDistanceTarget": -1
+       },
+       {
+         "nameEffect": "BasicEffect+Extra1",
+         "ExtraCost": {
+           "reds": 0,
+           "yellows": 1,
+           "blues": 0
+         },
+         "maxTarget": 2,
+         "peekingRequired": true,
+         "cardinalDirection": false,
+         "sameDamage": false,
+         "damage": [2, 1],
+         "mark": [0, 0],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 0,
+         "maxDistanceTarget": -1
+       },
+       {
+         "nameEffect": "BasicEffect+Extra2",
+         "ExtraCost": {
+           "reds": 0,
+           "yellows": 0,
+           "blues": 1
+         },
+         "maxTarget": 3,
+         "peekingRequired": true,
+         "cardinalDirection": false,
+         "sameDamage": false,
+         "damage": [2, 1, 1],
+         "mark": [0, 0, 0],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 0,
+         "maxDistanceTarget": -1
+       },
+       {
+         "nameEffect": "BasciEffect+Extra1+Extra2",
+         "ExtraCost": {
+           "reds": 0,
+           "yellows": 1,
+           "blues": 1
+         },
+         "maxTarget": 3,
+         "peekingRequired": true,
+         "cardinalDirection": false,
+         "sameDamage": false,
+         "damage": [2, 2, 1],
+         "mark": [0, 0, 0],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 0,
+         "maxDistanceTarget": -1
+       }
+     ]
    },
    {
      "type":"thor",
@@ -39,7 +151,63 @@
        "reds": 1 ,
        "yellows": 0 ,
        "blues" : 1
-     }
+     },
+     "effect": [
+       {
+         "nameEffect": "BasicEffect",
+         "ExtraCost": {
+           "reds": 0,
+           "yellows": 0,
+           "blues": 0
+         },
+         "maxTarget": 1,
+         "peekingRequired": true,
+         "cardinalDirection": false,
+         "sameDamage": true,
+         "damage": [2],
+         "mark": [0],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 0,
+         "maxDistanceTarget": -1
+       },
+       {
+         "nameEffect": "BasicEffect+Extra1",
+         "ExtraCost": {
+           "reds": 0,
+           "yellows": 0,
+           "blues": 1
+         },
+         "maxTarget": 2,
+         "peekingRequired": true,
+         "cardinalDirection": false,
+         "sameDamage": false,
+         "damage": [2, 1],
+         "mark": [0, 0],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 0,
+         "maxDistanceTarget": -1
+       },
+       {
+         "nameEffect": "BasicEffect+Extra1+Extra2",
+         "ExtraCost": {
+           "reds": 0,
+           "yellows": 0,
+           "blues": 2
+         },
+         "maxTarget": 3,
+         "peekingRequired": true,
+         "cardinalDirection": false,
+         "sameDamage": false,
+         "damage": [2, 1, 2],
+         "mark": [0, 0, 0],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 0,
+         "maxDistanceTarget": -1
+       }
+     ]
    },
    {
      "type":"plasma_gun",
@@ -53,7 +221,81 @@
        "reds": 0 ,
        "yellows": 1 ,
        "blues" : 1
-     }
+     },
+     "effect": [
+       {
+         "nameEffect": "BasicEffect",
+         "ExtraCost": {
+           "reds": 0,
+           "yellows": 0,
+           "blues": 0
+         },
+         "maxTarget": 1,
+         "peekingRequired": true,
+         "cardinalDirection": false,
+         "sameDamage": true,
+         "damage": [2],
+         "mark": [0],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 0,
+         "maxDistanceTarget": -1
+       },
+       {
+         "nameEffect": "BasicEffect+Extra1",
+         "ExtraCost": {
+           "reds": 0,
+           "yellows": 0,
+           "blues": 1
+         },
+         "maxTarget": 1,
+         "peekingRequired": true,
+         "cardinalDirection": false,
+         "sameDamage": true,
+         "damage": [2],
+         "mark": [0],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 2,
+         "minDistanceTarget": 0,
+         "maxDistanceTarget": -1
+       },
+       {
+         "nameEffect": "BasicEffect+Extra2",
+         "ExtraCost": {
+           "reds": 0,
+           "yellows": 0,
+           "blues": 1
+         },
+         "maxTarget": 1,
+         "peekingRequired": true,
+         "cardinalDirection": false,
+         "sameDamage": true,
+         "damage": [3],
+         "mark": [0],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 0,
+         "maxDistanceTarget": -1
+       },
+       {
+         "nameEffect": "BasicEffect+Extra1+Extra2",
+         "ExtraCost": {
+           "reds": 0,
+           "yellows": 0,
+           "blues": 1
+         },
+         "maxTarget": 1,
+         "peekingRequired": true,
+         "cardinalDirection": false,
+         "sameDamage": true,
+         "damage": [3],
+         "mark": [0],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 2,
+         "minDistanceTarget": 0,
+         "maxDistanceTarget": -1
+       }
+     ]
    },
    {
      "type":"whisper",
@@ -67,7 +309,27 @@
        "reds": 0 ,
        "yellows": 1 ,
        "blues" : 2
-     }
+     },
+     "effect": [
+       {
+         "nameEffect": "BasicEffect",
+         "ExtraCost": {
+           "reds": 0,
+           "yellows": 0,
+           "blues": 0
+         },
+         "maxTarget": 1,
+         "peekingRequired": true,
+         "cardinalDirection": false,
+         "sameDamage": true,
+         "damage": [3],
+         "mark": [1],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 2,
+         "maxDistanceTarget": -1
+       }
+     ]
    },
    {
      "type":"electroscythe",
@@ -81,7 +343,45 @@
        "reds": 0 ,
        "yellows": 0 ,
        "blues" : 1
-     }
+     },
+     "effect": [
+       {
+         "nameEffect": "Optional1",
+         "ExtraCost": {
+           "reds": 0,
+           "yellows": 0,
+           "blues": 0
+         },
+         "maxTarget": 4,
+         "peekingRequired": true,
+         "cardinalDirection": false,
+         "sameDamage": true,
+         "damage": [1],
+         "mark": [0],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 0,
+         "maxDistanceTarget": 0
+       },
+       {
+         "nameEffect": "Optional2",
+         "ExtraCost": {
+           "reds": 1,
+           "yellows": 0,
+           "blues": 1
+         },
+         "maxTarget": 4,
+         "peekingRequired": true,
+         "cardinalDirection": false,
+         "sameDamage": true,
+         "damage": [2],
+         "mark": [0],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 0,
+         "maxDistanceTarget": 0
+       }
+     ]
    },
    {
      "type":"tractor_beam",
@@ -95,7 +395,45 @@
        "reds": 0 ,
        "yellows": 0 ,
        "blues" : 1
-     }
+     },
+     "effect": [
+       {
+         "nameEffect": "Optional1",
+         "ExtraCost": {
+           "reds": 0,
+           "yellows": 0,
+           "blues": 0
+         },
+         "maxTarget": 1,
+         "peekingRequired": true,
+         "cardinalDirection": false,
+         "sameDamage": true,
+         "damage": [1],
+         "mark": [0],
+         "maxMovementTarget": 2,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 0,
+         "maxDistanceTarget": -1
+       },
+       {
+         "nameEffect": "Optional2",
+         "ExtraCost": {
+           "reds": 1,
+           "yellows": 1,
+           "blues": 0
+         },
+         "maxTarget": 1,
+         "peekingRequired": true,
+         "cardinalDirection": false,
+         "sameDamage": true,
+         "damage": [3],
+         "mark": [0],
+         "maxMovementTarget": 2,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 0,
+         "maxDistanceTarget": 0
+       }
+     ]
    },
    {
      "type":"vortex_cannon",
@@ -109,7 +447,45 @@
        "reds": 1 ,
        "yellows": 0 ,
        "blues" : 1
-     }
+     },
+     "effect": [
+       {
+         "nameEffect": "BasicEffect",
+         "ExtraCost": {
+           "reds": 0,
+           "yellows": 0,
+           "blues": 0
+         },
+         "maxTarget": 2,
+         "peekingRequired": true,
+         "cardinalDirection": false,
+         "sameDamage": true,
+         "damage": [2],
+         "mark": [0],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 1,
+         "minDistanceTarget": 1,
+         "maxDistanceTarget": -1
+       },
+       {
+         "nameEffect": "BasicEffect+Extra1",
+         "ExtraCost": {
+           "reds": 1,
+           "yellows": 0,
+           "blues": 0
+         },
+         "maxTarget": 3,
+         "peekingRequired": true,
+         "cardinalDirection": false,
+         "sameDamage": false,
+         "damage": [2, 1, 1],
+         "mark": [0, 0, 0],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 1,
+         "minDistanceTarget": 1,
+         "maxDistanceTarget": -1
+       }
+     ]
    },
    {
      "type":"furnace",
@@ -123,7 +499,45 @@
        "reds": 1 ,
        "yellows": 0 ,
        "blues" : 1
-     }
+     },
+     "effect": [
+       {
+         "nameEffect": "Optional1",
+         "ExtraCost": {
+           "reds": 0,
+           "yellows": 0,
+           "blues": 0
+         },
+         "maxTarget": 4,
+         "peekingRequired": true,
+         "cardinalDirection": false,
+         "sameDamage": true,
+         "damage": [1],
+         "mark": [0],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 1,
+         "maxDistanceTarget": -1
+       },
+       {
+         "nameEffect": "Optional2",
+         "ExtraCost": {
+           "reds": 0,
+           "yellows": 0,
+           "blues": 0
+         },
+         "maxTarget": 4,
+         "peekingRequired": true,
+         "cardinalDirection": false,
+         "sameDamage": true,
+         "damage": [1],
+         "mark": [1],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 1,
+         "maxDistanceTarget": 1
+       }
+     ]
    },
    {
      "type":"heatseeker",
@@ -137,7 +551,27 @@
        "reds": 2 ,
        "yellows": 1 ,
        "blues" : 0
-     }
+     },
+     "effect": [
+       {
+         "nameEffect": "BasicEffect",
+         "ExtraCost": {
+           "reds": 0,
+           "yellows": 0,
+           "blues": 0
+         },
+         "maxTarget": 1,
+         "peekingRequired": false,
+         "cardinalDirection": false,
+         "sameDamage": true,
+         "damage": [3],
+         "mark": [0],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": -1,
+         "maxDistanceTarget": -1
+       }
+     ]
    },
    {
      "type":"hellion",
@@ -151,7 +585,45 @@
        "reds": 1 ,
        "yellows": 1 ,
        "blues" : 0
-     }
+     },
+     "effect": [
+       {
+         "nameEffect": "Optional1",
+         "ExtraCost": {
+           "reds": 0,
+           "yellows": 0,
+           "blues": 0
+         },
+         "maxTarget": 4,
+         "peekingRequired": true,
+         "cardinalDirection": false,
+         "sameDamage": false,
+         "damage": [1, 0, 0, 0],
+         "mark": [1, 1, 1, 1],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 1,
+         "maxDistanceTarget": -1
+       },
+       {
+         "nameEffect": "Optional2",
+         "ExtraCost": {
+           "reds": 1,
+           "yellows": 0,
+           "blues": 0
+         },
+         "maxTarget": 4,
+         "peekingRequired": true,
+         "cardinalDirection": false,
+         "sameDamage": true,
+         "damage": [1, 0, 0, 0],
+         "mark": [2, 2, 2, 2],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 1,
+         "maxDistanceTarget": -1
+       }
+     ]
    },
    {
      "type":"flamethrower",
@@ -165,7 +637,45 @@
        "reds": 1 ,
        "yellows": 0 ,
        "blues" : 0
-     }
+     },
+     "effect": [
+       {
+         "nameEffect": "BasicEffect",
+         "ExtraCost": {
+           "reds": 0,
+           "yellows": 0,
+           "blues": 0
+         },
+         "maxTarget": 2,
+         "peekingRequired": true,
+         "cardinalDirection": false,
+         "sameDamage": true,
+         "damage": [1],
+         "mark": [0],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 1,
+         "maxDistanceTarget": 2
+       },
+       {
+         "nameEffect": "BasicEffect+Extra1",
+         "ExtraCost": {
+           "reds": 0,
+           "yellows": 2,
+           "blues": 0
+         },
+         "maxTarget": 4,
+         "peekingRequired": true,
+         "cardinalDirection": false,
+         "sameDamage": false,
+         "damage": [2, 1],
+         "mark": [0, 0, 0, 0],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 1,
+         "maxDistanceTarget": 2
+       }
+     ]
    },
    {
      "type":"grenade_launcher",
@@ -179,7 +689,45 @@
        "reds": 1 ,
        "yellows": 0 ,
        "blues" : 0
-     }
+     },
+     "effect": [
+       {
+         "nameEffect": "BasicEffect",
+         "ExtraCost": {
+           "reds": 0,
+           "yellows": 0,
+           "blues": 0
+         },
+         "maxTarget": 1,
+         "peekingRequired": true,
+         "cardinalDirection": false,
+         "sameDamage": true,
+         "damage": [1],
+         "mark": [0],
+         "maxMovementTarget": 1,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 0,
+         "maxDistanceTarget": -1
+       },
+       {
+         "nameEffect": "BasicEffect+Extra1",
+         "ExtraCost": {
+           "reds": 1,
+           "yellows": 0,
+           "blues": 0
+         },
+         "maxTarget": 4,
+         "peekingRequired": true,
+         "cardinalDirection": false,
+         "sameDamage": false,
+         "damage": [1, 1, 1, 1],
+         "mark": [0, 0, 0, 0],
+         "maxMovementTarget": 1,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 0,
+         "maxDistanceTarget": -1
+       }
+     ]
    },
    {
      "type":"rocket_launcher",
@@ -193,7 +741,63 @@
        "reds": 2 ,
        "yellows": 0 ,
        "blues" : 0
-     }
+     },
+     "effect": [
+       {
+         "nameEffect": "BasicEffect",
+         "ExtraCost": {
+           "reds": 0,
+           "yellows": 0,
+           "blues": 0
+         },
+         "maxTarget": 1,
+         "peekingRequired": true,
+         "cardinalDirection": false,
+         "sameDamage": true,
+         "damage": [2],
+         "mark": [0],
+         "maxMovementTarget": 1,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 1,
+         "maxDistanceTarget": -1
+       },
+       {
+         "nameEffect": "BasicEffect+Extra1",
+         "ExtraCost": {
+           "reds": 0,
+           "yellows": 0,
+           "blues": 1
+         },
+         "maxTarget": 1,
+         "peekingRequired": true,
+         "cardinalDirection": false,
+         "sameDamage": true,
+         "damage": [2],
+         "mark": [0],
+         "maxMovementTarget": 1,
+         "maxMovementPlayer": 2,
+         "minDistanceTarget": 1,
+         "maxDistanceTarget": -1
+       },
+       {
+         "nameEffect": "BasicEffect+Extra2",
+         "ExtraCost": {
+           "reds": 0,
+           "yellows": 1,
+           "blues": 0
+         },
+         "maxTarget": 4,
+         "peekingRequired": true,
+         "cardinalDirection": false,
+         "sameDamage": false,
+         "damage": [2, 1, 1, 1],
+         "mark": [0, 0, 0, 0],
+         "maxMovementTarget": 1,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 1,
+         "maxDistanceTarget": -1
+       }
+     ]
    },
    {
      "type":"railgun",
@@ -207,7 +811,45 @@
        "reds": 0 ,
        "yellows": 2 ,
        "blues" : 1
-     }
+     },
+     "effect": [
+       {
+         "nameEffect": "Optional1",
+         "ExtraCost": {
+           "reds": 0,
+           "yellows": 0,
+           "blues": 0
+         },
+         "maxTarget": 1,
+         "peekingRequired": false,
+         "cardinalDirection": true,
+         "sameDamage": true,
+         "damage": [3],
+         "mark": [0],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 0,
+         "maxDistanceTarget": -1
+       },
+       {
+         "nameEffect": "Optional2",
+         "ExtraCost": {
+           "reds": 0,
+           "yellows": 0,
+           "blues": 0
+         },
+         "maxTarget": 2,
+         "peekingRequired": false,
+         "cardinalDirection": true,
+         "sameDamage": true,
+         "damage": [2],
+         "mark": [0],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 0,
+         "maxDistanceTarget": -1
+       }
+     ]
    },
    {
      "type":"cyberblade",
@@ -221,7 +863,81 @@
        "reds": 1,
        "yellows": 1 ,
        "blues" : 0
-     }
+     },
+     "effect": [
+       {
+         "nameEffect": "BasicEffect",
+         "ExtraCost": {
+           "reds": 0,
+           "yellows": 0,
+           "blues": 0
+         },
+         "maxTarget": 1,
+         "peekingRequired": true,
+         "cardinalDirection": false,
+         "sameDamage": true,
+         "damage": [2],
+         "mark": [0],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 0,
+         "maxDistanceTarget": 0
+       },
+       {
+         "nameEffect": "BasicEffect+Extra1",
+         "ExtraCost": {
+           "reds": 0,
+           "yellows": 0,
+           "blues": 0
+         },
+         "maxTarget": 1,
+         "peekingRequired": true,
+         "cardinalDirection": false,
+         "sameDamage": true,
+         "damage": [2],
+         "mark": [0],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 1,
+         "minDistanceTarget": 0,
+         "maxDistanceTarget": 0
+       },
+       {
+         "nameEffect": "BasicEffect+Extra2",
+         "ExtraCost": {
+           "reds": 0,
+           "yellows": 1,
+           "blues": 0
+         },
+         "maxTarget": 2,
+         "peekingRequired": true,
+         "cardinalDirection": false,
+         "sameDamage": true,
+         "damage": [2],
+         "mark": [0],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 0,
+         "maxDistanceTarget": 0
+       },
+       {
+         "nameEffect": "BasicEffect+Extra1+Extra2",
+         "ExtraCost": {
+           "reds": 0,
+           "yellows": 1,
+           "blues": 0
+         },
+         "maxTarget": 2,
+         "peekingRequired": true,
+         "cardinalDirection": false,
+         "sameDamage": true,
+         "damage": [2],
+         "mark": [0],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 1,
+         "minDistanceTarget": 0,
+         "maxDistanceTarget": 1
+       }
+     ]
    },
    {
      "type":"zx-2",
@@ -235,7 +951,45 @@
        "reds": 1 ,
        "yellows": 1 ,
        "blues" : 0
-     }
+     },
+     "effect": [
+       {
+         "nameEffect": "Optional1",
+         "ExtraCost": {
+           "reds": 0,
+           "yellows": 0,
+           "blues": 0
+         },
+         "maxTarget": 1,
+         "peekingRequired": true,
+         "cardinalDirection": false,
+         "sameDamage": true,
+         "damage": [1],
+         "mark": [2],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 0,
+         "maxDistanceTarget": -1
+       },
+       {
+         "nameEffect": "Optional2",
+         "ExtraCost": {
+           "reds": 0,
+           "yellows": 0,
+           "blues": 0
+         },
+         "maxTarget": 3,
+         "peekingRequired": true,
+         "cardinalDirection": false,
+         "sameDamage": true,
+         "damage": [0],
+         "mark": [1],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 0,
+         "maxDistanceTarget": -1
+       }
+     ]
    },
    {
      "type":"shotgun",
@@ -249,7 +1003,45 @@
        "reds": 0 ,
        "yellows": 2 ,
        "blues" : 0
-     }
+     },
+     "effect": [
+       {
+         "nameEffect": "Optional1",
+         "ExtraCost": {
+           "reds": 0,
+           "yellows": 0,
+           "blues": 0
+         },
+         "maxTarget": 1,
+         "peekingRequired": true,
+         "cardinalDirection": false,
+         "sameDamage": true,
+         "damage": [3],
+         "mark": [0],
+         "maxMovementTarget": 1,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 0,
+         "maxDistanceTarget": 0
+       },
+       {
+         "nameEffect": "Optional2",
+         "ExtraCost": {
+           "reds": 0,
+           "yellows": 0,
+           "blues": 0
+         },
+         "maxTarget": 1,
+         "peekingRequired": true,
+         "cardinalDirection": false,
+         "sameDamage": true,
+         "damage": [2],
+         "mark": [0],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 1,
+         "maxDistanceTarget": 1
+       }
+     ]
    },
    {
      "type":"power_glove",
@@ -263,7 +1055,45 @@
        "reds": 0 ,
        "yellows": 1 ,
        "blues" : 1
-     }
+     },
+     "effect": [
+       {
+         "nameEffect": "Optional1",
+         "ExtraCost": {
+           "reds": 0,
+           "yellows": 0,
+           "blues": 0
+         },
+         "maxTarget": 1,
+         "peekingRequired": true,
+         "cardinalDirection": false,
+         "sameDamage": true,
+         "damage": [1],
+         "mark": [2],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 1,
+         "minDistanceTarget": 1,
+         "maxDistanceTarget": 1
+       },
+       {
+         "nameEffect": "Optional2",
+         "ExtraCost": {
+           "reds": 0,
+           "yellows": 0,
+           "blues": 1
+         },
+         "maxTarget": 2,
+         "peekingRequired": true,
+         "cardinalDirection": false,
+         "sameDamage": true,
+         "damage": [2],
+         "mark": [0],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 2,
+         "minDistanceTarget": 1,
+         "maxDistanceTarget": 2
+       }
+     ]
    },
    {
      "type":"shockwave",
@@ -277,7 +1107,45 @@
        "reds": 0 ,
        "yellows": 1 ,
        "blues" : 0
-     }
+     },
+     "effect": [
+       {
+         "nameEffect": "Optional1",
+         "ExtraCost": {
+           "reds": 0,
+           "yellows": 0,
+           "blues": 0
+         },
+         "maxTarget": 3,
+         "peekingRequired": true,
+         "cardinalDirection": true,
+         "sameDamage": true,
+         "damage": [1],
+         "mark": [0],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 1,
+         "maxDistanceTarget": 1
+       },
+       {
+         "nameEffect": "Optional2",
+         "ExtraCost": {
+           "reds": 0,
+           "yellows": 1,
+           "blues": 0
+         },
+         "maxTarget": 4,
+         "peekingRequired": true,
+         "cardinalDirection": true,
+         "sameDamage": true,
+         "damage": [1],
+         "mark": [0],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 1,
+         "maxDistanceTarget": 1
+       }
+     ]
    },
    {
      "type":"sledgehammer",
@@ -291,6 +1159,44 @@
        "reds": 0 ,
        "yellows": 1 ,
        "blues" : 0
-     }
+     },
+     "effect": [
+       {
+         "nameEffect": "Optional1",
+         "ExtraCost": {
+           "reds": 0,
+           "yellows": 0,
+           "blues": 0
+         },
+         "maxTarget": 1,
+         "peekingRequired": true,
+         "cardinalDirection": false,
+         "sameDamage": true,
+         "damage": [2],
+         "mark": [0],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 0,
+         "maxDistanceTarget": 0
+       },
+       {
+         "nameEffect": "Optional2",
+         "ExtraCost": {
+           "reds": 1,
+           "yellows": 0,
+           "blues": 0
+         },
+         "maxTarget": 1,
+         "peekingRequired": true,
+         "cardinalDirection": false,
+         "sameDamage": true,
+         "damage": [3],
+         "mark": [0],
+         "maxMovementTarget": 2,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 0,
+         "maxDistanceTarget": 0
+       }
+     ]
    }
  ]
