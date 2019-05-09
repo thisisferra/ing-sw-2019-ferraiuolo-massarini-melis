@@ -1,8 +1,7 @@
-package it.polimi.se2019.server.model.player;
+package it.polimi.se2019.model.player;
 
 import it.polimi.se2019.server.model.game.Match;
 import it.polimi.se2019.server.model.player.EnemyDamage;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,4 +35,12 @@ public class EnemyDamageTest {
 
     }
 
+    @Test
+    public void testGetFirstShot() {
+        m1.initPlayers();
+        /*en1.setFirstShot(true);
+        Assert.assertTrue(en1.getFirstShot());
+        en1.setFirstShot(false);
+        Assert.assertFalse(en1.getFirstShot());*/
+    }
 }

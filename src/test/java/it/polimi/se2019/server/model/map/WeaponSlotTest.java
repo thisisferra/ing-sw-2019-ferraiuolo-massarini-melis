@@ -1,7 +1,7 @@
-package it.polimi.se2019.server.model.map;
+package it.polimi.se2019.model.map;
 
 import it.polimi.se2019.server.model.game.Match;
-
+import it.polimi.se2019.server.model.map.WeaponSlot;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

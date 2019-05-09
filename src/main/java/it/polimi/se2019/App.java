@@ -1,9 +1,9 @@
 package it.polimi.se2019;
 
+
 import it.polimi.se2019.server.model.game.Match;
 import it.polimi.se2019.server.model.game.MovementChecker;
 import it.polimi.se2019.server.model.game.RoomChecker;
-import it.polimi.se2019.server.model.map.Map;
 import it.polimi.se2019.server.model.player.Player;
 
 /**
@@ -16,22 +16,16 @@ public class App {
         Match match = new Match(1, 5);
         match.initGameField();
         match.initPlayers();
-        for(Player object: match.getAllPlayers()){
-            object.setPosition(5);
-        }
-        RoomChecker roomchecker = new RoomChecker(match.getMap(),5);
+        match.getAllPlayers().get(0).setPosition(6);
+        match.getAllPlayers().get(1).setPosition(11);
+        match.getAllPlayers().get(2).setPosition(11);
+        match.getAllPlayers().get(3).setPosition(11);
+        match.getAllPlayers().get(4).setPosition(11);
+
+        RoomChecker roomchecker = new RoomChecker(match.getMap(),6);
         roomchecker.setAccessibleRooms();
-        System.out.println(roomchecker.getVisiblePlayers(match,match.getAllPlayers().get(0)));
-        MovementChecker movement = new MovementChecker(match.getMap().getAllSquare(),3,6);
-        movement.check();
-        System.out.println("UP: " + movement.getWalkableUpwardsSquares());
-        System.out.println("UP: " + movement.getAllUpwardsSquares());
-        System.out.println("RIGHT: " + movement.getWalkableRightSquares());
-        System.out.println("RIGHT: "+ movement.getAllRightSquares());
-        System.out.println("DOWN: " + movement.getWalkableDownwardsSquares());
-        System.out.println("DOWN: "+ movement.getAllDownwardsSquares());
-        System.out.println("LEFT: " + movement.getWalkableLeftSquares());
-        System.out.println("LEFT: " + movement.getAllLeftSquares());
+        System.out.println(roomchecker.getFarAwayPlayers(match,match.getAllPlayers().get(0),2));
+
 
     }
 }

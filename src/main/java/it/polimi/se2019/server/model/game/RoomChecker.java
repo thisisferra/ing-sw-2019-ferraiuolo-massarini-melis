@@ -33,6 +33,7 @@ public class RoomChecker {
     public List<String> getRoomsColor(){
         return this.roomsColor;
     }
+
     //this method fills accessibleRooms array with all the squares whose color is found
     //in roomColor.
     //e.g. if roomColor = {red,blue}, accessibleRooms will contain all red and blue squares.
@@ -60,6 +61,7 @@ public class RoomChecker {
                 }
             }
         }
+        visiblePlayers.remove(owner);
         return visiblePlayers;
     }
 
@@ -69,4 +71,39 @@ public class RoomChecker {
         nonVisiblePlayers.removeAll(match.getAllPlayers());
         return nonVisiblePlayers;
     }
+
+
+    // return the list of players you can see, ignoring all players sitting in a square near you based on
+    // the distance parameter.
+    public ArrayList<Player> getFarAwayPlayers(Match match,Player owner,int distance){
+        ArrayList<Player> playerList = new ArrayList<>();
+        ArrayList<Square> legitSquares = new ArrayList<>();
+        ArrayList<Square> resultSquares = new ArrayList<>();
+
+        MovementChecker ignoredSquares = new MovementChecker(match.getMap().getAllSquare(),distance,owner.getPosition());
+        ignoredSquares.check();
+
+        System.out.println("ignored: " + ignoredSquares.getReachableSquares());
+        legitSquares.addAll(this.visibleRooms);
+        resultSquares.addAll(this.visibleRooms);
+        for(Square square1: legitSquares){
+            for(Square square2: ignoredSquares.getReachableSquares()){
+                if(square1.getPosition() == square2.getPosition())
+                    resultSquares.remove(square1);
+            }
+        }
+        System.out.println("legit: "+ legitSquares);
+        System.out.println("result: " + resultSquares);
+
+        for(Square object: resultSquares){
+            for(Player player: match.getAllPlayers()){
+                if(player.getPosition() == object.getPosition()){
+                    playerList.add(player);
+                }
+            }
+        }
+        playerList.remove(owner);
+        return playerList;
+    }
+
 }

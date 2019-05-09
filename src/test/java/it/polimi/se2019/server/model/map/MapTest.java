@@ -1,5 +1,7 @@
 package it.polimi.se2019.server.model.map;
 
+import it.polimi.se2019.server.model.map.Map;
+import it.polimi.se2019.server.model.map.Square;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

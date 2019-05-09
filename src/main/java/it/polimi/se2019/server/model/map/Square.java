@@ -135,7 +135,7 @@ public class Square {
 
     @Override
     public String toString(){
-        return "C: " + this.getPosition() + " SpawnPoint: " + this.isSpawnPoint() + " Color: " + this.color;
+        return "S: " + this.getPosition() + " Color: " + this.color;
     }
 
 }

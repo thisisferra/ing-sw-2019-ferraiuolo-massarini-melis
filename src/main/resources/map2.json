@@ -148,7 +148,7 @@
     "northWall" : 6,
     "eastWall": 11 ,
     "southWall": -1 ,
-    "westWall": -1 ,
+    "westWall": 9 ,
     "color": "white",
     "full": true,
     "spawnPoint": false

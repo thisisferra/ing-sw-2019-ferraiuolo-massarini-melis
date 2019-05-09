@@ -9,9 +9,17 @@ public class MovementChecker {
     private ArrayList<Square> reachableSquares = new ArrayList<>();
     private int steps;
     private int index;
+    private int validSquares;
 
     public MovementChecker(Square[] squareList,int steps,int index){
-        this.allSquares = Arrays.copyOf(squareList,squareList.length);
+        allSquares = new Square[squareList.length];
+        int validSquares =0;
+        for(int i=0; i<allSquares.length;i++){
+            allSquares[i] = new Square(squareList[i]);
+            if(!squareList[i].getColor().equals(""))
+                validSquares++;
+        }
+        this.validSquares = validSquares;
         this.steps=steps;
         this.index=index;
     }
@@ -22,8 +30,7 @@ public class MovementChecker {
         Square newSquare;
         reachableSquares.add(allSquares[index]);
 
-        while(reachableSquares.get(i).getStep()<this.steps){
-
+        while(reachableSquares.get(i).getStep()<this.steps && reachableSquares.size() < validSquares){
             if(reachableSquares.get(i).getNorth()>=0 && !allSquares[reachableSquares.get(i).getNorth()].getVisited()) {
                 newSquare = new Square(allSquares[reachableSquares.get(i).getNorth()]);
                 newSquare.setStep(reachableSquares.get(i).getStep()+1);
@@ -57,7 +64,10 @@ public class MovementChecker {
         }
         reachableSquares.sort(Comparator.comparing(Square::getPosition));
         //sort square list from the lowest position to the highest
-        for(Square object: reachableSquares) System.out.println(object.toString());
+        for(Square object: reachableSquares){
+            object.setStep(0);
+            object.setVisited(false);
+        }
     }
     public ArrayList<Square> getReachableSquares(){
         return this.reachableSquares;

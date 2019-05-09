@@ -14,15 +14,19 @@ public class CubesChecker {
     // has to pay
     // if the player can pay it return true, else it return false
     public boolean check(){
-        if(cubesStored.getYellows() >= cubesBeingPayed.getYellows() &&
-                cubesStored.getBlues() >= cubesBeingPayed.getBlues() &&
-                    cubesStored.getReds() >= cubesBeingPayed.getReds() )
+        if(cubesStored.getReds() >= cubesBeingPayed.getReds() &&
+                cubesStored.getYellows() >= cubesBeingPayed.getYellows() &&
+                    cubesStored.getBlues() >= cubesBeingPayed.getBlues() )
             return true;
         else return false;
     }
     public Cubes subtract(){
-        return new Cubes((this.cubesStored.getReds()-this.cubesBeingPayed.getReds()),
+        if(this.check()){
+            return new Cubes((this.cubesStored.getReds()-this.cubesBeingPayed.getReds()),
                     (cubesStored.getYellows()-cubesBeingPayed.getYellows()),
-                        (cubesStored.getBlues()-cubesBeingPayed.getBlues()));
+                    (cubesStored.getBlues()-cubesBeingPayed.getBlues()));
+        }
+        else return null;
+
     }
 }

@@ -67,14 +67,14 @@ public class Match {
                 players.add(new Player("Mattia","blue",this));
                 players.add(new Player("Marco","grey",this));
                 players.add(new Player("Ferra","yellow",this));
-                players.add(new Player("Matteo","red",this));
+                players.add(new Player("Matteo","purple",this));
                 break;
             }
             case 5: {
                 players.add(new Player("Mattia","blue",this));
                 players.add(new Player("Marco","grey",this));
                 players.add(new Player("Ferra","yellow",this));
-                players.add(new Player("Matteo","red",this));
+                players.add(new Player("Matteo","purple",this));
                 players.add(new Player("Bruno", "green",this));
                 break;
             }

@@ -1,5 +1,6 @@
 package it.polimi.se2019.server.model.game;
 
+import it.polimi.se2019.server.model.game.Match;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
