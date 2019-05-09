@@ -1,4 +1,4 @@
-package it.polimi.se2019.model.game;
+package it.polimi.se2019.server.model.game;
 
 import it.polimi.se2019.server.model.game.Match;
 import it.polimi.se2019.server.model.game.RoomChecker;
