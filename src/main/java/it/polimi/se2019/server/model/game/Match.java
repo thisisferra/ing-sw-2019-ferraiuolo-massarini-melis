@@ -107,6 +107,7 @@ public class Match {
             ammoStack = new ArrayList<>(Arrays.asList(aS));
             wS = gson.fromJson(new FileReader("./src/main/resources/weapons_list.json"),Weapon[].class);
             weaponStack = new ArrayList<>(Arrays.asList(wS));
+            Collections.shuffle(weaponStack);
             pUS = gson.fromJson(new FileReader("./src/main/resources/powerups.json"),PowerUp[].class);
             powerUpStack = new ArrayList<>(Arrays.asList(pUS));
             Collections.shuffle(powerUpStack);

@@ -7,7 +7,7 @@ import it.polimi.se2019.server.model.map.Square;
 import java.util.ArrayList;
 
 public class Shot {
-    private boolean notUsed;
+    /*private boolean notUsed;
     private Cubes cost;
     private int damage;
     private int tags;
@@ -17,9 +17,46 @@ public class Shot {
     private boolean stepByStep;                         //2° effetto cyberguanto
     private boolean cardinalDirectionRequired;          //Se l'arma spara in direzioni cardinali
     private int targetableEnemies;                      //Numero massimo di nemici danneggaibili
-    private int shockDisplacement;                      //Spostamento dell'avversario, se positivo lo spingi, se negativo lo tiri
+    private int shockDisplacement;                      //Spostamento dell'avversario, se positivo lo spingi, se negativo lo tiri*/
 
-    public void getInfo(){
+    private String nameEffect;
+    private Cubes extraCost;
+    private int maxTarget;
+    private boolean peekingRequired;
+    private boolean cardinalDirection;
+    private boolean sameDamage;
+    private int[] damage;
+    private int[] mark;
+    private int maxMovementTarget;
+    private int maxMovementPlayer;
+    private int minDistanceTarget;
+    private int maxDistanceTarget;
+
+    public Shot(Shot shot) {
+        this.nameEffect = shot.nameEffect;
+        this.extraCost = shot.extraCost;
+        this.maxTarget = shot.maxTarget;
+        this.peekingRequired = shot.peekingRequired;
+        this.cardinalDirection = shot.cardinalDirection;
+        this.sameDamage = shot.sameDamage;
+        this.damage = shot.damage;
+        this.mark = shot.mark;
+        this.maxMovementTarget = shot.maxMovementTarget;
+        this.maxMovementPlayer = shot.maxMovementPlayer;
+        this.minDistanceTarget = shot.minDistanceTarget;
+        this.maxDistanceTarget = shot.maxDistanceTarget;
+    }
+
+    public Cubes getExtraCost(){
+        return this.extraCost;
+    }
+
+    public String toString() {
+        return "Name: " + this.nameEffect + "\n" + "Extra cost: " + this.extraCost;
+    }
+
+
+    /*public void getInfo(){
 
     }
     //return the list of player approachable from a given square
@@ -73,5 +110,5 @@ public class Shot {
 
     public int getTargetableEnemies() {
         return targetableEnemies;
-    }
+    }*/
 }
