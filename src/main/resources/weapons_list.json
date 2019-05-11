@@ -15,7 +15,7 @@
      "effect": [
        {
          "nameEffect": "BasicEffect",
-         "ExtraCost": {
+         "extraCost": {
            "reds": 0,
            "yellows": 0,
            "blues": 0
@@ -25,7 +25,7 @@
          "cardinalDirection": false,
          "sameDamage": true,
          "damage": [2],
-         "mark": 1,
+         "mark": [1],
          "maxMovementTarget": 0,
          "maxMovementPlayer": 0,
          "minDistanceTarget": 0,
@@ -33,7 +33,7 @@
        },
        {
          "nameEffect": "BasicEffect+Extra1",
-         "ExtraCost": {
+         "extraCost": {
            "reds": 1,
            "yellows": 0,
            "blues": 0
@@ -67,7 +67,7 @@
      "effect": [
        {
          "nameEffect": "BasicEffect",
-         "ExtraCost": {
+         "extraCost": {
            "reds": 0,
            "yellows": 0,
            "blues": 0
@@ -85,7 +85,7 @@
        },
        {
          "nameEffect": "BasicEffect+Extra1",
-         "ExtraCost": {
+         "extraCost": {
            "reds": 0,
            "yellows": 1,
            "blues": 0
@@ -103,7 +103,7 @@
        },
        {
          "nameEffect": "BasicEffect+Extra2",
-         "ExtraCost": {
+         "extraCost": {
            "reds": 0,
            "yellows": 0,
            "blues": 1
@@ -121,7 +121,7 @@
        },
        {
          "nameEffect": "BasciEffect+Extra1+Extra2",
-         "ExtraCost": {
+         "extraCost": {
            "reds": 0,
            "yellows": 1,
            "blues": 1
@@ -155,7 +155,7 @@
      "effect": [
        {
          "nameEffect": "BasicEffect",
-         "ExtraCost": {
+         "extraCost": {
            "reds": 0,
            "yellows": 0,
            "blues": 0
@@ -173,7 +173,7 @@
        },
        {
          "nameEffect": "BasicEffect+Extra1",
-         "ExtraCost": {
+         "extraCost": {
            "reds": 0,
            "yellows": 0,
            "blues": 1
@@ -191,7 +191,7 @@
        },
        {
          "nameEffect": "BasicEffect+Extra1+Extra2",
-         "ExtraCost": {
+         "extraCost": {
            "reds": 0,
            "yellows": 0,
            "blues": 2
@@ -225,7 +225,7 @@
      "effect": [
        {
          "nameEffect": "BasicEffect",
-         "ExtraCost": {
+         "extraCost": {
            "reds": 0,
            "yellows": 0,
            "blues": 0
@@ -243,7 +243,7 @@
        },
        {
          "nameEffect": "BasicEffect+Extra1",
-         "ExtraCost": {
+         "extraCost": {
            "reds": 0,
            "yellows": 0,
            "blues": 1
@@ -261,7 +261,7 @@
        },
        {
          "nameEffect": "BasicEffect+Extra2",
-         "ExtraCost": {
+         "extraCost": {
            "reds": 0,
            "yellows": 0,
            "blues": 1
@@ -279,7 +279,7 @@
        },
        {
          "nameEffect": "BasicEffect+Extra1+Extra2",
-         "ExtraCost": {
+         "extraCost": {
            "reds": 0,
            "yellows": 0,
            "blues": 1
@@ -313,7 +313,7 @@
      "effect": [
        {
          "nameEffect": "BasicEffect",
-         "ExtraCost": {
+         "extraCost": {
            "reds": 0,
            "yellows": 0,
            "blues": 0
@@ -347,7 +347,7 @@
      "effect": [
        {
          "nameEffect": "Optional1",
-         "ExtraCost": {
+         "extraCost": {
            "reds": 0,
            "yellows": 0,
            "blues": 0
@@ -365,7 +365,7 @@
        },
        {
          "nameEffect": "Optional2",
-         "ExtraCost": {
+         "extraCost": {
            "reds": 1,
            "yellows": 0,
            "blues": 1
@@ -399,7 +399,7 @@
      "effect": [
        {
          "nameEffect": "Optional1",
-         "ExtraCost": {
+         "extraCost": {
            "reds": 0,
            "yellows": 0,
            "blues": 0
@@ -417,7 +417,7 @@
        },
        {
          "nameEffect": "Optional2",
-         "ExtraCost": {
+         "extraCost": {
            "reds": 1,
            "yellows": 1,
            "blues": 0
@@ -451,7 +451,7 @@
      "effect": [
        {
          "nameEffect": "BasicEffect",
-         "ExtraCost": {
+         "extraCost": {
            "reds": 0,
            "yellows": 0,
            "blues": 0
@@ -469,7 +469,7 @@
        },
        {
          "nameEffect": "BasicEffect+Extra1",
-         "ExtraCost": {
+         "extraCost": {
            "reds": 1,
            "yellows": 0,
            "blues": 0
@@ -503,7 +503,7 @@
      "effect": [
        {
          "nameEffect": "Optional1",
-         "ExtraCost": {
+         "extraCost": {
            "reds": 0,
            "yellows": 0,
            "blues": 0
@@ -521,7 +521,7 @@
        },
        {
          "nameEffect": "Optional2",
-         "ExtraCost": {
+         "extraCost": {
            "reds": 0,
            "yellows": 0,
            "blues": 0
@@ -555,7 +555,7 @@
      "effect": [
        {
          "nameEffect": "BasicEffect",
-         "ExtraCost": {
+         "extraCost": {
            "reds": 0,
            "yellows": 0,
            "blues": 0
@@ -589,7 +589,7 @@
      "effect": [
        {
          "nameEffect": "Optional1",
-         "ExtraCost": {
+         "extraCost": {
            "reds": 0,
            "yellows": 0,
            "blues": 0
@@ -607,7 +607,7 @@
        },
        {
          "nameEffect": "Optional2",
-         "ExtraCost": {
+         "extraCost": {
            "reds": 1,
            "yellows": 0,
            "blues": 0
@@ -641,7 +641,7 @@
      "effect": [
        {
          "nameEffect": "BasicEffect",
-         "ExtraCost": {
+         "extraCost": {
            "reds": 0,
            "yellows": 0,
            "blues": 0
@@ -659,7 +659,7 @@
        },
        {
          "nameEffect": "BasicEffect+Extra1",
-         "ExtraCost": {
+         "extraCost": {
            "reds": 0,
            "yellows": 2,
            "blues": 0
@@ -693,7 +693,7 @@
      "effect": [
        {
          "nameEffect": "BasicEffect",
-         "ExtraCost": {
+         "extraCost": {
            "reds": 0,
            "yellows": 0,
            "blues": 0
@@ -711,7 +711,7 @@
        },
        {
          "nameEffect": "BasicEffect+Extra1",
-         "ExtraCost": {
+         "extraCost": {
            "reds": 1,
            "yellows": 0,
            "blues": 0
@@ -745,7 +745,7 @@
      "effect": [
        {
          "nameEffect": "BasicEffect",
-         "ExtraCost": {
+         "extraCost": {
            "reds": 0,
            "yellows": 0,
            "blues": 0
@@ -763,7 +763,7 @@
        },
        {
          "nameEffect": "BasicEffect+Extra1",
-         "ExtraCost": {
+         "extraCost": {
            "reds": 0,
            "yellows": 0,
            "blues": 1
@@ -781,7 +781,7 @@
        },
        {
          "nameEffect": "BasicEffect+Extra2",
-         "ExtraCost": {
+         "extraCost": {
            "reds": 0,
            "yellows": 1,
            "blues": 0
@@ -815,7 +815,7 @@
      "effect": [
        {
          "nameEffect": "Optional1",
-         "ExtraCost": {
+         "extraCost": {
            "reds": 0,
            "yellows": 0,
            "blues": 0
@@ -833,7 +833,7 @@
        },
        {
          "nameEffect": "Optional2",
-         "ExtraCost": {
+         "extraCost": {
            "reds": 0,
            "yellows": 0,
            "blues": 0
@@ -867,7 +867,7 @@
      "effect": [
        {
          "nameEffect": "BasicEffect",
-         "ExtraCost": {
+         "extraCost": {
            "reds": 0,
            "yellows": 0,
            "blues": 0
@@ -885,7 +885,7 @@
        },
        {
          "nameEffect": "BasicEffect+Extra1",
-         "ExtraCost": {
+         "extraCost": {
            "reds": 0,
            "yellows": 0,
            "blues": 0
@@ -903,7 +903,7 @@
        },
        {
          "nameEffect": "BasicEffect+Extra2",
-         "ExtraCost": {
+         "extraCost": {
            "reds": 0,
            "yellows": 1,
            "blues": 0
@@ -921,7 +921,7 @@
        },
        {
          "nameEffect": "BasicEffect+Extra1+Extra2",
-         "ExtraCost": {
+         "extraCost": {
            "reds": 0,
            "yellows": 1,
            "blues": 0
@@ -955,7 +955,7 @@
      "effect": [
        {
          "nameEffect": "Optional1",
-         "ExtraCost": {
+         "extraCost": {
            "reds": 0,
            "yellows": 0,
            "blues": 0
@@ -973,7 +973,7 @@
        },
        {
          "nameEffect": "Optional2",
-         "ExtraCost": {
+         "extraCost": {
            "reds": 0,
            "yellows": 0,
            "blues": 0
@@ -1007,7 +1007,7 @@
      "effect": [
        {
          "nameEffect": "Optional1",
-         "ExtraCost": {
+         "extraCost": {
            "reds": 0,
            "yellows": 0,
            "blues": 0
@@ -1025,7 +1025,7 @@
        },
        {
          "nameEffect": "Optional2",
-         "ExtraCost": {
+         "extraCost": {
            "reds": 0,
            "yellows": 0,
            "blues": 0
@@ -1059,7 +1059,7 @@
      "effect": [
        {
          "nameEffect": "Optional1",
-         "ExtraCost": {
+         "extraCost": {
            "reds": 0,
            "yellows": 0,
            "blues": 0
@@ -1077,7 +1077,7 @@
        },
        {
          "nameEffect": "Optional2",
-         "ExtraCost": {
+         "extraCost": {
            "reds": 0,
            "yellows": 0,
            "blues": 1
@@ -1111,7 +1111,7 @@
      "effect": [
        {
          "nameEffect": "Optional1",
-         "ExtraCost": {
+         "extraCost": {
            "reds": 0,
            "yellows": 0,
            "blues": 0
@@ -1129,7 +1129,7 @@
        },
        {
          "nameEffect": "Optional2",
-         "ExtraCost": {
+         "extraCost": {
            "reds": 0,
            "yellows": 1,
            "blues": 0
@@ -1163,7 +1163,7 @@
      "effect": [
        {
          "nameEffect": "Optional1",
-         "ExtraCost": {
+         "extraCost": {
            "reds": 0,
            "yellows": 0,
            "blues": 0
@@ -1181,7 +1181,7 @@
        },
        {
          "nameEffect": "Optional2",
-         "ExtraCost": {
+         "extraCost": {
            "reds": 1,
            "yellows": 0,
            "blues": 0
