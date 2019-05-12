@@ -22,6 +22,7 @@ public class Shot {
     private String nameEffect;
     private Cubes extraCost;
     private int maxTarget;
+    private String typeVisibility;
     private boolean peekingRequired;
     private boolean cardinalDirection;
     private boolean sameDamage;
@@ -37,6 +38,7 @@ public class Shot {
         this.extraCost = shot.extraCost;
         this.maxTarget = shot.maxTarget;
         this.peekingRequired = shot.peekingRequired;
+        this.typeVisibility = shot.typeVisibility;
         this.cardinalDirection = shot.cardinalDirection;
         this.sameDamage = shot.sameDamage;
         this.damage = shot.damage;
@@ -49,6 +51,10 @@ public class Shot {
 
     public Cubes getExtraCost(){
         return this.extraCost;
+    }
+
+    public String getTypeVisibility() {
+        return this.typeVisibility;
     }
 
     public String toString() {
