@@ -57,6 +57,14 @@ public class Shot {
         return this.typeVisibility;
     }
 
+    public int getMinDistanceTarget(){
+        return this.minDistanceTarget;
+    }
+
+    public int getMaxDistanceTarget() {
+        return this.maxDistanceTarget;
+    }
+
     public String toString() {
         return "Name: " + this.nameEffect + "\n" + "Extra cost: " + this.extraCost;
     }
