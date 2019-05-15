@@ -119,7 +119,7 @@ public class ShotController {
                         }
                         else if(maxDistanceTarget == minDistanceTarget && maxDistanceTarget == 0) {
                             for (Player player : match.getAllPlayers()) {
-                                if (player.getPosition() == currentPlayer.getPosition() && player.getClientName() == currentPlayer.getClientName()) {
+                                if (player.getPosition() == currentPlayer.getPosition() && player.getClientName() != currentPlayer.getClientName()) {
                                     visiblePlayers.add(player);
                                 }
                             }
@@ -176,6 +176,7 @@ public class ShotController {
                         }
                         Set<Player> targetPlayer= new HashSet<>();
                         targetPlayer.addAll(visiblePlayers);
+                        targetPlayer.remove(currentPlayer);
                         visiblePlayers.clear();
                         visiblePlayers.addAll(targetPlayer);
                         if(visiblePlayers.isEmpty()) weapon.getEffect()[i] = null;
