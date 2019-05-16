@@ -1,0 +1,35 @@
+{
+     "type":"whisper",
+     "load": true,
+     "buyingCost": {
+       "reds": 0 ,
+       "yellows": 1 ,
+       "blues" : 1
+     },
+     "reloadCost": {
+       "reds": 0 ,
+       "yellows": 1 ,
+       "blues" : 2
+     },
+     "effect": [
+       {
+         "nameEffect": "BasicEffect",
+         "extraCost": {
+           "reds": 0,
+           "yellows": 0,
+           "blues": 0
+         },
+         "maxTarget": 1,
+         "peekingRequired": true,
+         "typeVisibility": "CanSeeDistance",
+         "cardinalDirection": false,
+         "sameDamage": true,
+         "damage": [3],
+         "mark": [1],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 2,
+         "maxDistanceTarget": -1
+       }
+     ]
+   }

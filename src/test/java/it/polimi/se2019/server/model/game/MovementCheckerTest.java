@@ -19,10 +19,10 @@ public class MovementCheckerTest {
         m2 = new Match(2, 3);
         m3 = new Match(3, 3);
         m4 = new Match(4, 3);
-        m1.initGameField();
-        m2.initGameField();
-        m3.initGameField();
-        m4.initGameField();
+        m1.initializeMatch();
+        m2.initializeMatch();
+        m3.initializeMatch();
+        m4.initializeMatch();
     }
 
     @Test
@@ -39,11 +39,6 @@ public class MovementCheckerTest {
                 mC2 = new MovementChecker(m1.getMap().getAllSquare(),2,i);
                 mC3 = new MovementChecker(m1.getMap().getAllSquare(),3,i);
                 mC4 = new MovementChecker(m1.getMap().getAllSquare(),4,i);
-
-                mC1.check();
-                mC2.check();
-                mC3.check();
-                mC4.check();
 
                 Assert.assertTrue(mC1.getReachableSquares().size()<= mC2.getReachableSquares().size());
                 Assert.assertTrue(mC1.getReachableSquares().size()<= mC3.getReachableSquares().size());
@@ -86,10 +81,6 @@ public class MovementCheckerTest {
                 mC3 = new MovementChecker(m2.getMap().getAllSquare(),3,i);
                 mC4 = new MovementChecker(m2.getMap().getAllSquare(),4,i);
 
-                mC1.check();
-                mC2.check();
-                mC3.check();
-                mC4.check();
 
                 Assert.assertTrue(mC1.getReachableSquares().size()<= mC2.getReachableSquares().size());
                 Assert.assertTrue(mC1.getReachableSquares().size()<= mC3.getReachableSquares().size());
@@ -130,10 +121,6 @@ public class MovementCheckerTest {
                 mC3 = new MovementChecker(m3.getMap().getAllSquare(),3,i);
                 mC4 = new MovementChecker(m3.getMap().getAllSquare(),4,i);
 
-                mC1.check();
-                mC2.check();
-                mC3.check();
-                mC4.check();
 
                 Assert.assertTrue(mC1.getReachableSquares().size()<= mC2.getReachableSquares().size());
                 Assert.assertTrue(mC1.getReachableSquares().size()<= mC3.getReachableSquares().size());
@@ -174,10 +161,6 @@ public class MovementCheckerTest {
                 mC3 = new MovementChecker(m4.getMap().getAllSquare(),3,i);
                 mC4 = new MovementChecker(m4.getMap().getAllSquare(),4,i);
 
-                mC1.check();
-                mC2.check();
-                mC3.check();
-                mC4.check();
 
                 Assert.assertTrue(mC1.getReachableSquares().size()<= mC2.getReachableSquares().size());
                 Assert.assertTrue(mC1.getReachableSquares().size()<= mC3.getReachableSquares().size());

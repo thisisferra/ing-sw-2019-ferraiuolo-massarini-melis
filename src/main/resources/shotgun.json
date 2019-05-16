@@ -1,0 +1,54 @@
+{
+     "type":"shotgun",
+     "load": true,
+     "buyingCost": {
+       "reds": 0 ,
+       "yellows": 1 ,
+       "blues" : 0
+     },
+     "reloadCost": {
+       "reds": 0 ,
+       "yellows": 2 ,
+       "blues" : 0
+     },
+     "effect": [
+       {
+         "nameEffect": "Optional1",
+         "extraCost": {
+           "reds": 0,
+           "yellows": 0,
+           "blues": 0
+         },
+         "maxTarget": 1,
+         "peekingRequired": true,
+         "typeVisibility": "CanSeeDistance",
+         "cardinalDirection": false,
+         "sameDamage": true,
+         "damage": [3],
+         "mark": [0],
+         "maxMovementTarget": 1,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 0,
+         "maxDistanceTarget": 0
+       },
+       {
+         "nameEffect": "Optional2",
+         "extraCost": {
+           "reds": 0,
+           "yellows": 0,
+           "blues": 0
+         },
+         "maxTarget": 1,
+         "peekingRequired": true,
+         "typeVisibility": "CanSeeDistance",
+         "cardinalDirection": false,
+         "sameDamage": true,
+         "damage": [2],
+         "mark": [0],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 1,
+         "maxDistanceTarget": 1
+       }
+     ]
+   }

@@ -22,10 +22,11 @@ public class MovementChecker {
         this.validSquares = validSquares;
         this.steps=steps;
         this.index=index;
+        this.check();
     }
 
 
-    public void check(){
+    private void check(){
         int i =0;
         Square newSquare;
         reachableSquares.add(allSquares[index]);

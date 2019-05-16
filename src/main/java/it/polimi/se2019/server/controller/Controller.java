@@ -51,7 +51,6 @@ public class Controller {
     public void movement(){
 
         MovementChecker movement = new MovementChecker(this.match.getMap().getAllSquare(),3,this.player.getPosition());
-        movement.check();
         ArrayList<Square> availableSquares = movement.getReachableSquares();
         //update view
         //receives an input from view about the new position
@@ -61,7 +60,6 @@ public class Controller {
     //player's movement&grab action, up to 1 tile and grabbing a weapon or ammo.
     public void moveGather(){
         MovementChecker movement = new MovementChecker((this.match.getMap().getAllSquare()),1,this.player.getPosition());
-        movement.check();
         ArrayList<Square> availableSquares = movement.getReachableSquares();
         Square currentSquare;
         //update view

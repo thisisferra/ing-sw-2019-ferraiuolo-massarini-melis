@@ -42,7 +42,7 @@ public class ShotController {
         ArrayList<Weapon> loadedWeapon = new ArrayList<>();
         for (Weapon currentWeapon : currentPlayer.getHand().getWeapons()) {
             if(currentWeapon.getLoad()) {
-                loadedWeapon.add(new Weapon(currentWeapon));
+                loadedWeapon.add(currentWeapon.weaponFactory(currentWeapon));
             }
         }
         return loadedWeapon;
@@ -73,7 +73,6 @@ public class ShotController {
                     case "CanSee": {
                         //Create a RoomChecker object
                         RoomChecker roomChecker = new RoomChecker(match.getMap(), currentPlayer.getPosition());
-                        roomChecker.setAccessibleRooms();
                         //ArrayList that contains all accessible square from my position
                         ArrayList<Square> accessibleSquare = roomChecker.getAccessibleRooms();
                         //Get all players who are on squares that I can view from my position
@@ -88,7 +87,6 @@ public class ShotController {
                     }
                     case "CantSee": {
                         RoomChecker roomChecker = new RoomChecker(match.getMap(), currentPlayer.getPosition());
-                        roomChecker.setAccessibleRooms();
                         visiblePlayers = roomChecker.getVisiblePlayers(match, currentPlayer);
                         notVisiblePlayers.addAll(match.getAllPlayers());
                         notVisiblePlayers.removeAll(visiblePlayers);
@@ -105,9 +103,7 @@ public class ShotController {
 
                         if (maxDistanceTarget == -1) {
                             RoomChecker roomChecker = new RoomChecker(match.getMap(), currentPlayer.getPosition());
-                            roomChecker.setAccessibleRooms();
                             MovementChecker movementChecker = new MovementChecker(match.getMap().getAllSquare(), weapon.getEffect()[i].getMinDistanceTarget() - 1, currentPlayer.getPosition());
-                            movementChecker.check();
                             visiblePlayers = roomChecker.getVisiblePlayers(match, currentPlayer);
                             for (Player player : match.getAllPlayers()) {
                                 for (Square square : movementChecker.getReachableSquares()) {
@@ -130,8 +126,6 @@ public class ShotController {
                             ArrayList<Square> cantShootSquare;
                             MovementChecker maxMovementChecker = new MovementChecker(match.getMap().getAllSquare(), maxDistanceTarget, currentPlayer.getPosition());
                             MovementChecker minMovementChecker = new MovementChecker(match.getMap().getAllSquare(), minDistanceTarget - 1, currentPlayer.getPosition());
-                            maxMovementChecker.check();
-                            minMovementChecker.check();
                             reacheableSquare = maxMovementChecker.getReachableSquares();
                             cantShootSquare = minMovementChecker.getReachableSquares();
                             reacheableSquare.removeAll(cantShootSquare);
@@ -162,11 +156,9 @@ public class ShotController {
                     case "DistanceFromAPosition": {
                         MovementChecker movementChecker;
                         RoomChecker roomChecker = new RoomChecker(match.getMap(), currentPlayer.getPosition());
-                        roomChecker.setAccessibleRooms();
                         ArrayList<Square> viewSquare = roomChecker.getAccessibleRooms();
                         for (Square square : viewSquare) {
                             movementChecker = new MovementChecker(match.getMap().getAllSquare(), 1, square.getPosition());
-                            movementChecker.check();
                             for(Square square1 : movementChecker.getReachableSquares()) {
                                 for (Player player : match.getAllPlayers()) {
                                     if (player.getPosition() == square1.getPosition())

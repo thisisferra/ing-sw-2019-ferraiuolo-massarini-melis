@@ -1,0 +1,54 @@
+{
+     "type":"tractor_beam",
+     "load": true,
+     "buyingCost": {
+       "reds": 0 ,
+       "yellows": 0 ,
+       "blues" : 0
+     },
+     "reloadCost": {
+       "reds": 0 ,
+       "yellows": 0 ,
+       "blues" : 1
+     },
+     "effect": [
+       {
+         "nameEffect": "Optional1",
+         "extraCost": {
+           "reds": 0,
+           "yellows": 0,
+           "blues": 0
+         },
+         "maxTarget": 1,
+         "peekingRequired": true,
+         "typeVisibility": "InitiallyCantSee",
+         "cardinalDirection": false,
+         "sameDamage": true,
+         "damage": [1],
+         "mark": [0],
+         "maxMovementTarget": 2,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 0,
+         "maxDistanceTarget": -1
+       },
+       {
+         "nameEffect": "Optional2",
+         "extraCost": {
+           "reds": 1,
+           "yellows": 1,
+           "blues": 0
+         },
+         "maxTarget": 1,
+         "peekingRequired": true,
+         "typeVisibility": "InitiallyCantSee",
+         "cardinalDirection": false,
+         "sameDamage": true,
+         "damage": [3],
+         "mark": [0],
+         "maxMovementTarget": 2,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 0,
+         "maxDistanceTarget": 0
+       }
+     ]
+   }

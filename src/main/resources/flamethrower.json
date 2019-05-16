@@ -1,0 +1,54 @@
+{
+     "type":"flamethrower",
+     "load": true,
+     "buyingCost": {
+       "reds": 0 ,
+       "yellows": 0 ,
+       "blues" : 0
+     },
+     "reloadCost": {
+       "reds": 1 ,
+       "yellows": 0 ,
+       "blues" : 0
+     },
+     "effect": [
+       {
+         "nameEffect": "BasicEffect",
+         "extraCost": {
+           "reds": 0,
+           "yellows": 0,
+           "blues": 0
+         },
+         "maxTarget": 2,
+         "peekingRequired": true,
+         "typeVisibility": "??????",
+         "cardinalDirection": false,
+         "sameDamage": true,
+         "damage": [1],
+         "mark": [0],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 1,
+         "maxDistanceTarget": 2
+       },
+       {
+         "nameEffect": "BasicEffect+Extra1",
+         "extraCost": {
+           "reds": 0,
+           "yellows": 2,
+           "blues": 0
+         },
+         "maxTarget": 4,
+         "peekingRequired": true,
+         "typeVisibility": "??????",
+         "cardinalDirection": false,
+         "sameDamage": false,
+         "damage": [2, 1],
+         "mark": [0, 0, 0, 0],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 1,
+         "maxDistanceTarget": 2
+       }
+     ]
+   }

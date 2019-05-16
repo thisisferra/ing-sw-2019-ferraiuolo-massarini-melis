@@ -1,0 +1,54 @@
+{
+     "type":"vortex_cannon",
+     "load": true,
+     "buyingCost": {
+       "reds": 0 ,
+       "yellows": 0 ,
+       "blues" : 1
+     },
+     "reloadCost": {
+       "reds": 1 ,
+       "yellows": 0 ,
+       "blues" : 1
+     },
+     "effect": [
+       {
+         "nameEffect": "BasicEffect",
+         "extraCost": {
+           "reds": 0,
+           "yellows": 0,
+           "blues": 0
+         },
+         "maxTarget": 2,
+         "peekingRequired": true,
+         "typeVisibility": "DistanceFromAPosition",
+         "cardinalDirection": false,
+         "sameDamage": true,
+         "damage": [2],
+         "mark": [0],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 1,
+         "minDistanceTarget": 1,
+         "maxDistanceTarget": -1
+       },
+       {
+         "nameEffect": "BasicEffect+Extra1",
+         "extraCost": {
+           "reds": 1,
+           "yellows": 0,
+           "blues": 0
+         },
+         "maxTarget": 3,
+         "peekingRequired": true,
+         "typeVisibility": "DistanceFromAPosition",
+         "cardinalDirection": false,
+         "sameDamage": false,
+         "damage": [2, 1, 1],
+         "mark": [0, 0, 0],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 1,
+         "minDistanceTarget": 1,
+         "maxDistanceTarget": -1
+       }
+     ]
+   }

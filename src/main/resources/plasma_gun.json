@@ -1,0 +1,92 @@
+{
+     "type":"plasma_gun",
+     "load": true,
+     "buyingCost": {
+       "reds": 0 ,
+       "yellows": 1 ,
+       "blues" : 0
+     },
+     "reloadCost": {
+       "reds": 0 ,
+       "yellows": 1 ,
+       "blues" : 1
+     },
+     "effect": [
+       {
+         "nameEffect": "BasicEffect",
+         "extraCost": {
+           "reds": 0,
+           "yellows": 0,
+           "blues": 0
+         },
+         "maxTarget": 1,
+         "peekingRequired": true,
+         "typeVisibility": "CanSee",
+         "cardinalDirection": false,
+         "sameDamage": true,
+         "damage": [2],
+         "mark": [0],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 0,
+         "maxDistanceTarget": -1
+       },
+       {
+         "nameEffect": "BasicEffect+Extra1",
+         "extraCost": {
+           "reds": 0,
+           "yellows": 0,
+           "blues": 1
+         },
+         "maxTarget": 1,
+         "peekingRequired": true,
+         "typeVisibility": "CanSee",
+         "cardinalDirection": false,
+         "sameDamage": true,
+         "damage": [2],
+         "mark": [0],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 2,
+         "minDistanceTarget": 0,
+         "maxDistanceTarget": -1
+       },
+       {
+         "nameEffect": "BasicEffect+Extra2",
+         "extraCost": {
+           "reds": 0,
+           "yellows": 0,
+           "blues": 1
+         },
+         "maxTarget": 1,
+         "peekingRequired": true,
+         "typeVisibility": "CanSee",
+         "cardinalDirection": false,
+         "sameDamage": true,
+         "damage": [3],
+         "mark": [0],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 0,
+         "maxDistanceTarget": -1
+       },
+       {
+         "nameEffect": "BasicEffect+Extra1+Extra2",
+         "extraCost": {
+           "reds": 0,
+           "yellows": 0,
+           "blues": 1
+         },
+         "maxTarget": 1,
+         "peekingRequired": true,
+         "typeVisibility": "CanSee",
+         "cardinalDirection": false,
+         "sameDamage": true,
+         "damage": [3],
+         "mark": [0],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 2,
+         "minDistanceTarget": 0,
+         "maxDistanceTarget": -1
+       }
+     ]
+   }

@@ -29,6 +29,7 @@ public class RoomChecker {
          set.addAll(roomsColor);
          roomsColor.clear();
          roomsColor.addAll(set);
+         this.setAccessibleRooms();
     }
     public List<String> getRoomsColor(){
         return this.roomsColor;
@@ -37,7 +38,7 @@ public class RoomChecker {
     //this method fills accessibleRooms array with all the squares whose color is found
     //in roomColor.
     //e.g. if roomColor = {red,blue}, accessibleRooms will contain all red and blue squares.
-    public void setAccessibleRooms(){
+    private void setAccessibleRooms(){
         ArrayList<ArrayList<Square>> roomSquares= map.getRoomSquare();
         for(ArrayList<Square> list: roomSquares){
             if(!list.isEmpty()){
@@ -81,7 +82,7 @@ public class RoomChecker {
         ArrayList<Square> resultSquares = new ArrayList<>();
 
         MovementChecker ignoredSquares = new MovementChecker(match.getMap().getAllSquare(),distance,owner.getPosition());
-        ignoredSquares.check();
+
 
         System.out.println("ignored: " + ignoredSquares.getReachableSquares());
         legitSquares.addAll(this.visibleRooms);

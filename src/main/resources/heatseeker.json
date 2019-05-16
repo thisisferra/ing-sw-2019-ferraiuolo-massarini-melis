@@ -1,0 +1,35 @@
+{
+     "type":"heatseeker",
+     "load": true,
+     "buyingCost": {
+       "reds": 1 ,
+       "yellows": 1 ,
+       "blues" : 0
+     },
+     "reloadCost": {
+       "reds": 2 ,
+       "yellows": 1 ,
+       "blues" : 0
+     },
+     "effect": [
+       {
+         "nameEffect": "BasicEffect",
+         "extraCost": {
+           "reds": 0,
+           "yellows": 0,
+           "blues": 0
+         },
+         "maxTarget": 1,
+         "peekingRequired": false,
+         "typeVisibility": "CantSee",
+         "cardinalDirection": false,
+         "sameDamage": true,
+         "damage": [3],
+         "mark": [0],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": -1,
+         "maxDistanceTarget": -1
+       }
+     ]
+   }

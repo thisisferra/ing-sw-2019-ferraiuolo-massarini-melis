@@ -1,5 +1,6 @@
 package it.polimi.se2019.model.player;
 
+import it.polimi.se2019.server.model.cards.Cyberblade;
 import it.polimi.se2019.server.model.cards.PowerUp;
 import it.polimi.se2019.server.model.cards.Weapon;
 import it.polimi.se2019.server.model.game.Match;
@@ -15,11 +16,11 @@ import java.util.Scanner;
 public class HandTest {
 
     Hand hand = new Hand();
-
+    Match m1;
     @Before
     public void setClass() {
-        Match m1 = new Match(1, 3);
-        m1.initGameField();
+        m1 = new Match(1, 3);
+        m1.initializeMatch();
         hand.getPowerUps().add(m1.pickUpPowerUp());
         hand.getPowerUps().add(m1.pickUpPowerUp());
         hand.getPowerUps().add(m1.pickUpPowerUp());
@@ -60,12 +61,5 @@ public class HandTest {
         Assert.assertEquals(hand.getPowerUps().size(), 4);
     }
 
-    @Test
-    public void testGetWeapons() {
-        Weapon w1 = new Weapon();
-        hand.getWeapons().add(w1);
-        Assert.assertEquals(w1, hand.getWeapons().get(0));
-        Assert.assertTrue(hand.getWeapons().size() <= 4);
-    }
 
 }

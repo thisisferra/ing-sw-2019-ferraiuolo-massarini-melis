@@ -1,0 +1,54 @@
+{
+     "type":"hellion",
+     "load": true,
+     "buyingCost": {
+       "reds": 0 ,
+       "yellows": 1 ,
+       "blues" : 0
+     },
+     "reloadCost": {
+       "reds": 1 ,
+       "yellows": 1 ,
+       "blues" : 0
+     },
+     "effect": [
+       {
+         "nameEffect": "Optional1",
+         "extraCost": {
+           "reds": 0,
+           "yellows": 0,
+           "blues": 0
+         },
+         "maxTarget": 4,
+         "peekingRequired": true,
+         "typeVisibility": "CanSeeDistance",
+         "cardinalDirection": false,
+         "sameDamage": false,
+         "damage": [1, 0, 0, 0],
+         "mark": [1, 1, 1, 1],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 1,
+         "maxDistanceTarget": -1
+       },
+       {
+         "nameEffect": "Optional2",
+         "extraCost": {
+           "reds": 1,
+           "yellows": 0,
+           "blues": 0
+         },
+         "maxTarget": 4,
+         "peekingRequired": true,
+         "typeVisibility": "CanSeeDistance",
+         "cardinalDirection": false,
+         "sameDamage": true,
+         "damage": [1, 0, 0, 0],
+         "mark": [2, 2, 2, 2],
+         "maxMovementTarget": 0,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 1,
+         "maxDistanceTarget": -1
+       }
+     ]
+   }

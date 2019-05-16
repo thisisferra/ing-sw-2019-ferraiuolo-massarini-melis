@@ -1,0 +1,73 @@
+{
+     "type":"rocket_launcher",
+     "load": true,
+     "buyingCost": {
+       "reds": 1 ,
+       "yellows": 0 ,
+       "blues" : 0
+     },
+     "reloadCost": {
+       "reds": 2 ,
+       "yellows": 0 ,
+       "blues" : 0
+     },
+     "effect": [
+       {
+         "nameEffect": "BasicEffect",
+         "extraCost": {
+           "reds": 0,
+           "yellows": 0,
+           "blues": 0
+         },
+         "maxTarget": 1,
+         "peekingRequired": true,
+         "typeVisibility": "CanSeeDistance",
+         "cardinalDirection": false,
+         "sameDamage": true,
+         "damage": [2],
+         "mark": [0],
+         "maxMovementTarget": 1,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 1,
+         "maxDistanceTarget": -1
+       },
+       {
+         "nameEffect": "BasicEffect+Extra1",
+         "extraCost": {
+           "reds": 0,
+           "yellows": 0,
+           "blues": 1
+         },
+         "maxTarget": 1,
+         "peekingRequired": true,
+         "typeVisibility": "CanSeeDistance",
+         "cardinalDirection": false,
+         "sameDamage": true,
+         "damage": [2],
+         "mark": [0],
+         "maxMovementTarget": 1,
+         "maxMovementPlayer": 2,
+         "minDistanceTarget": 1,
+         "maxDistanceTarget": -1
+       },
+       {
+         "nameEffect": "BasicEffect+Extra2",
+         "extraCost": {
+           "reds": 0,
+           "yellows": 1,
+           "blues": 0
+         },
+         "maxTarget": 4,
+         "peekingRequired": true,
+         "typeVisibility": "CanSeeDistance",
+         "cardinalDirection": false,
+         "sameDamage": false,
+         "damage": [2, 1, 1, 1],
+         "mark": [0, 0, 0, 0],
+         "maxMovementTarget": 1,
+         "maxMovementPlayer": 0,
+         "minDistanceTarget": 1,
+         "maxDistanceTarget": -1
+       }
+     ]
+   }

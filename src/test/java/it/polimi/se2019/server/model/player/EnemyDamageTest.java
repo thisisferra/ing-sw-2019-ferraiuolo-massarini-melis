@@ -29,7 +29,7 @@ public class EnemyDamageTest {
 
     @Test
     public void testSetAggressorPlayer(){
-        m1.initPlayers();
+        m1.initializeMatch();
         en1.setAggressorPlayer(m1.getAllPlayers().get(0));
         Assert.assertEquals(m1.getAllPlayers().get(0), en1.getAggressorPlayer());
 
@@ -37,7 +37,7 @@ public class EnemyDamageTest {
 
     @Test
     public void testGetFirstShot() {
-        m1.initPlayers();
+        m1.initializeMatch();
         /*en1.setFirstShot(true);
         Assert.assertTrue(en1.getFirstShot());
         en1.setFirstShot(false);

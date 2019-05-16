@@ -24,27 +24,14 @@ public class MatchTest {
         m5 = new Match(1,10);
         m6 = new Match(2,2);
         m7 = new Match(4,4);
-        m1.initPlayers();
-        m2.initPlayers();
-        m3.initPlayers();
-        m4.initPlayers();
-        m5.initPlayers();
-        m6.initPlayers();
-        m7.initPlayers();
-        m1.initGameField();
-        m2.initGameField();
-        m3.initGameField();
-        m4.initGameField();
-        m5.initGameField();
-        m6.initGameField();
-        m7.initGameField();
-        m1.initCabinets();
-        m2.initCabinets();
-        m3.initCabinets();
-        m4.initCabinets();
-        m5.initCabinets();
-        m6.initCabinets();
-        m7.initCabinets();
+        m1.initializeMatch();
+        m2.initializeMatch();
+        m3.initializeMatch();
+        m4.initializeMatch();
+        m5.initializeMatch();
+        m6.initializeMatch();
+        m7.initializeMatch();
+
 
 
     }
@@ -70,6 +57,7 @@ public class MatchTest {
         Assert.assertEquals(36,m3.getAmmoStack().size());
         Assert.assertEquals(36,m4.getAmmoStack().size());
 
+
         Assert.assertEquals(21,m1.getWeaponStack().size());
         Assert.assertEquals(21,m2.getWeaponStack().size());
         Assert.assertEquals(21,m3.getWeaponStack().size());
@@ -84,7 +72,7 @@ public class MatchTest {
 
     @Test
     public void testDiscardCard(){
-        m1.initGameField();
+        m1.initializeMatch();
         m1.getDiscardedPowerUps().add(m1.pickUpPowerUp());
         Assert.assertEquals(1,m1.getDiscardedPowerUps().size());
         Assert.assertEquals(23,m1.getPowerUpStack().size());

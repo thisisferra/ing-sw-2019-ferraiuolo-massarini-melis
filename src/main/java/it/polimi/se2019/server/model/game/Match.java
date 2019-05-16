@@ -2,9 +2,7 @@ package it.polimi.se2019.server.model.game;
 
 import com.google.gson.Gson;
 
-import it.polimi.se2019.server.model.cards.Ammo;
-import it.polimi.se2019.server.model.cards.PowerUp;
-import it.polimi.se2019.server.model.cards.Weapon;
+import it.polimi.se2019.server.model.cards.*;
 import it.polimi.se2019.server.model.map.Map;
 import it.polimi.se2019.server.model.map.WeaponSlot;
 import it.polimi.se2019.server.model.player.Player;
@@ -40,9 +38,15 @@ public class Match {
 
     }
 
+    public void initializeMatch(){
+        this.initGameField();
+        this.initPlayers();
+        this.initCabinets();
+    }
+
     //generate instances of players
     //each player should type in his name and his figure(color figure)
-    public void initPlayers(){
+    private void initPlayers(){
         switch(this.numberOfPlayers){
             case 0: {
                 System.out.println("Not enough players.");
@@ -89,12 +93,12 @@ public class Match {
     * -the map is generated starting from mapID (1,2,3 or 4)
     * -ammo tiles, weapon and powerup cards are created by reading the json files located in the
     *  Resources folder.*/
-    public void initGameField(){
-        /*aS, wS and pUS are required in order to parse the json file.
+    private void initGameField(){
+        /*aS and pUS are required in order to parse the json file.
         * Each json file define an array containing Ammo, Weapon and PowerUp instances respectively.
         * After parsing each file into three arrays, they are converted into ArrayLists*/
+        weaponStack = new ArrayList<>();
         Ammo[] aS;
-        Weapon[]wS;
         PowerUp[]pUS;
         //create the map filling it with squares from the json file, based on the idMap
         map = new Map(this.chosenMap);
@@ -105,8 +109,27 @@ public class Match {
         try {
             aS = gson.fromJson(new FileReader("./src/main/resources/ammo.json"), Ammo[].class);
             ammoStack = new ArrayList<>(Arrays.asList(aS));
-            wS = gson.fromJson(new FileReader("./src/main/resources/weapons_list.json"),Weapon[].class);
-            weaponStack = new ArrayList<>(Arrays.asList(wS));
+            weaponStack.add(gson.fromJson(new FileReader("./src/main/resources/machine_gun.json"), MachineGun.class));
+            weaponStack.add(gson.fromJson(new FileReader("./src/main/resources/plasma_gun.json"), PlasmaGun.class));
+            weaponStack.add(gson.fromJson(new FileReader("./src/main/resources/thor.json"), Thor.class));
+            weaponStack.add(gson.fromJson(new FileReader("./src/main/resources/electroscythe.json"), Electroscythe.class));
+            weaponStack.add(gson.fromJson(new FileReader("./src/main/resources/tractor_beam.json"), TractorBeam.class));
+            weaponStack.add(gson.fromJson(new FileReader("./src/main/resources/vortex_cannon.json"), VortexCannon.class));
+            weaponStack.add(gson.fromJson(new FileReader("./src/main/resources/furnace.json"), Furnace.class));
+            weaponStack.add(gson.fromJson(new FileReader("./src/main/resources/lock_rifle.json"), LockRifle.class));
+            weaponStack.add(gson.fromJson(new FileReader("./src/main/resources/heatseeker.json"), Heatseeker.class));
+            weaponStack.add(gson.fromJson(new FileReader("./src/main/resources/hellion.json"), Hellion.class));
+            weaponStack.add(gson.fromJson(new FileReader("./src/main/resources/whisper.json"), Whisper.class));
+            weaponStack.add(gson.fromJson(new FileReader("./src/main/resources/flamethrower.json"), Flamethrower.class));
+            weaponStack.add(gson.fromJson(new FileReader("./src/main/resources/zx-2.json"), ZX2.class));
+            weaponStack.add(gson.fromJson(new FileReader("./src/main/resources/grenade_launcher.json"), GrenadeLauncher.class));
+            weaponStack.add(gson.fromJson(new FileReader("./src/main/resources/rocket_launcher.json"), RocketLauncher.class));
+            weaponStack.add(gson.fromJson(new FileReader("./src/main/resources/shotgun.json"), Shotgun.class));
+            weaponStack.add(gson.fromJson(new FileReader("./src/main/resources/power_glove.json"), PowerGlove.class));
+            weaponStack.add(gson.fromJson(new FileReader("./src/main/resources/railgun.json"), Railgun.class));
+            weaponStack.add(gson.fromJson(new FileReader("./src/main/resources/shockwave.json"), Shockwave.class));
+            weaponStack.add(gson.fromJson(new FileReader("./src/main/resources/cyberblade.json"), Cyberblade.class));
+            weaponStack.add(gson.fromJson(new FileReader("./src/main/resources/sledgehammer.json"), Sledgehammer.class));
             Collections.shuffle(weaponStack);
             pUS = gson.fromJson(new FileReader("./src/main/resources/powerups.json"),PowerUp[].class);
             powerUpStack = new ArrayList<>(Arrays.asList(pUS));
@@ -131,7 +154,7 @@ public class Match {
         }*/
     }
 
-    public void initCabinets(){
+    private void initCabinets(){
         this.arsenal.add(new WeaponSlot("red",this));
         this.arsenal.add(new WeaponSlot("yellow",this));
         this.arsenal.add(new WeaponSlot("blue",this));

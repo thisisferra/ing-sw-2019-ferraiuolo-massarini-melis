@@ -30,10 +30,10 @@ public class RoomCheckerTest {
         m2 = new Match(2,5);
         m3 = new Match(3,5);
         m4 = new Match(4,5);
-        m1.initGameField();
-        m2.initGameField();
-        m3.initGameField();
-        m4.initGameField();
+        m1.initializeMatch();
+        m2.initializeMatch();
+        m3.initializeMatch();
+        m4.initializeMatch();
 
     }
 
@@ -49,7 +49,6 @@ public class RoomCheckerTest {
             if(i!=3){
 
                 rC1 = new RoomChecker(m1.getMap(),i);
-                rC1.setAccessibleRooms();
                 set = new LinkedHashSet<>();
                 for(Square object: rC1.getAccessibleRooms()){
                     set.add(object.getColor());
@@ -65,7 +64,6 @@ public class RoomCheckerTest {
             if(i!=3 && i!=8){
 
                 rC2 = new RoomChecker(m2.getMap(),i);
-                rC2.setAccessibleRooms();
                 set = new LinkedHashSet<>();
                 for(Square object: rC2.getAccessibleRooms()){
                     set.add(object.getColor());
@@ -80,7 +78,6 @@ public class RoomCheckerTest {
             if(i!=8){
 
                 rC3 = new RoomChecker(m3.getMap(),i);
-                rC3.setAccessibleRooms();
                 set = new LinkedHashSet<>();
                 for(Square object: rC3.getAccessibleRooms()){
                     set.add(object.getColor());
@@ -95,7 +92,6 @@ public class RoomCheckerTest {
         for(i =0;i<m4.getMap().getAllSquare().length;i++){
 
             rC4 = new RoomChecker(m4.getMap(),i);
-            rC4.setAccessibleRooms();
             set = new LinkedHashSet<>();
             for(Square object: rC4.getAccessibleRooms()){
                 set.add(object.getColor());
