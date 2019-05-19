@@ -34,7 +34,7 @@ public class AbstractWeapon implements Weapon {
     }
 
     public String toString(){
-        return this.type + " BC: " + this.buyingCost + " RC: " + this.reloadCost;
+        return this.type;
     }
 
     public Shot[] getEffect(){

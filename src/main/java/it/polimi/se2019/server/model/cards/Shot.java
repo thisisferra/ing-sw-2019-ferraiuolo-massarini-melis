@@ -17,7 +17,8 @@ public class Shot {
     private boolean stepByStep;                         //2° effetto cyberguanto
     private boolean cardinalDirectionRequired;          //Se l'arma spara in direzioni cardinali
     private int targetableEnemies;                      //Numero massimo di nemici danneggaibili
-    private int shockDisplacement;                      //Spostamento dell'avversario, se positivo lo spingi, se negativo lo tiri*/
+    private int shockDisplacement;                      //Spostamento dell'avversario, se positivo lo spingi, se negativo lo tiri
+    */
 
     private String nameEffect;
     private Cubes extraCost;
@@ -68,6 +69,7 @@ public class Shot {
     public String toString() {
         return "Name: " + this.nameEffect + "\n" + "Extra cost: " + this.extraCost;
     }
+
 
 
     /*public void getInfo(){
