@@ -1,11 +1,13 @@
 package it.polimi.se2019.server.model.cards;
 
+import it.polimi.se2019.server.controller.InfoShot;
 import it.polimi.se2019.server.model.game.Cubes;
+import it.polimi.se2019.server.model.player.EnemyDamage;
 import it.polimi.se2019.server.model.player.Player;
 
 import java.util.ArrayList;
 
-public class AbstractWeapon implements Weapon {
+public abstract class AbstractWeapon implements Weapon {
 
     protected String type;
     protected boolean load;
@@ -44,6 +46,7 @@ public class AbstractWeapon implements Weapon {
     public ArrayList<Player> getTargets(){
         return new ArrayList<>();
     }
+
     public void applyEffect(){
 
     }
