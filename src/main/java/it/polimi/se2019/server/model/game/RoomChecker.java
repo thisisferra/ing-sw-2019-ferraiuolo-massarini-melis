@@ -5,6 +5,7 @@ import it.polimi.se2019.server.model.map.Square;
 import it.polimi.se2019.server.model.player.Player;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class RoomChecker {
 
@@ -64,6 +65,19 @@ public class RoomChecker {
         }
         visiblePlayers.remove(owner);
         return visiblePlayers;
+    }
+
+    public ArrayList<Player> getOtherRoomsVisiblePlayers(Match match,Player owner) {
+        ArrayList<Square> visibleSquares = this.getAccessibleRooms();
+        ArrayList<Player> visiblePlayer = new ArrayList<>();
+        String squareColor = match.getMap().getSpecificSquare(owner.getPosition()).getColor();
+        visibleSquares = visibleSquares.stream().filter(x-> !x.getColor().equals(squareColor)).collect(Collectors.toCollection(ArrayList::new));
+        for (Square square : visibleSquares) {
+            for (Player player : match.getAllPlayers()) {
+                if (player.getPosition() == square.getPosition()) visiblePlayer.add(player);
+            }
+        }
+        return  visiblePlayer;
     }
 
     //return the list of players you cannot see

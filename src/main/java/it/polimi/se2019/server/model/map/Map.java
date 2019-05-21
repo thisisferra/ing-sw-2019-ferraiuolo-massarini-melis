@@ -84,6 +84,13 @@ public class Map {
         }
     }
 
+    public Square searchSquare(int position) {
+        for (Square square : allSquare) {
+            if (square.getPosition() == position) return square;
+        }
+        return null;
+    }
+
     //return the number of different colors on the map
     public int colorCount(){
 
