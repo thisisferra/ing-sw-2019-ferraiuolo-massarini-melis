@@ -1,6 +1,8 @@
 package it.polimi.se2019.server.model.cards;
 
+import it.polimi.se2019.server.controller.InfoShot;
 import it.polimi.se2019.server.model.game.Cubes;
+import it.polimi.se2019.server.model.player.EnemyDamage;
 import it.polimi.se2019.server.model.player.Player;
 
 import java.util.ArrayList;
@@ -9,7 +11,30 @@ public class MachineGun extends AbstractWeapon {
     public ArrayList<Player> getTargets(){
         return new ArrayList<>();
     }
-    public void applyEffect(){
+
+    public void applyEffect(InfoShot infoShot){
+        if (infoShot.getNameEffect().equals("BasicEffect")) {
+            infoShot.getTargetPlayer().get(0).getEnemyDamages().add(new EnemyDamage(infoShot.getDamagingPlayer(), 1));
+            infoShot.getTargetPlayer().get(1).getEnemyDamages().add(new EnemyDamage(infoShot.getDamagingPlayer(), 1));
+        }
+        else if(infoShot.getNameEffect().equals("BasicEffect+Extra1")) {
+            infoShot.getTargetPlayer().get(0).getEnemyDamages().add(new EnemyDamage(infoShot.getDamagingPlayer(), 1));
+            infoShot.getTargetPlayer().get(0).getEnemyDamages().add(new EnemyDamage(infoShot.getDamagingPlayer(), 1));
+            infoShot.getTargetPlayer().get(1).getEnemyDamages().add(new EnemyDamage(infoShot.getDamagingPlayer(), 1));
+        }
+        else if(infoShot.getNameEffect().equals("BasicEffect+Extra2")) {
+            infoShot.getTargetPlayer().get(0).getEnemyDamages().add(new EnemyDamage(infoShot.getDamagingPlayer(), 1));
+            infoShot.getTargetPlayer().get(0).getEnemyDamages().add(new EnemyDamage(infoShot.getDamagingPlayer(), 1));
+            infoShot.getTargetPlayer().get(1).getEnemyDamages().add(new EnemyDamage(infoShot.getDamagingPlayer(), 1));
+            infoShot.getTargetPlayer().get(2).getEnemyDamages().add(new EnemyDamage(infoShot.getDamagingPlayer(), 1));
+        }
+        else if(infoShot.getNameEffect().equals("BasicEffect+Extra1+Extra2")) {
+            infoShot.getTargetPlayer().get(0).getEnemyDamages().add(new EnemyDamage(infoShot.getDamagingPlayer(), 1));
+            infoShot.getTargetPlayer().get(0).getEnemyDamages().add(new EnemyDamage(infoShot.getDamagingPlayer(), 1));
+            infoShot.getTargetPlayer().get(1).getEnemyDamages().add(new EnemyDamage(infoShot.getDamagingPlayer(), 1));
+            infoShot.getTargetPlayer().get(1).getEnemyDamages().add(new EnemyDamage(infoShot.getDamagingPlayer(), 1));
+            infoShot.getTargetPlayer().get(2).getEnemyDamages().add(new EnemyDamage(infoShot.getDamagingPlayer(), 1));
+        }
         System.out.println("Machine Gun effect applied!");
     }
 
