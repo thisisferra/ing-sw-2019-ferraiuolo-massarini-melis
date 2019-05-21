@@ -23,6 +23,7 @@ public class Player {
     private PlayerBoard playerBoard;
     private Match match;
     private  ArrayList<EnemyDamage> enemyDamages = new ArrayList<>();
+    private  ArrayList<MarkDamage> markDamages = new ArrayList<>();
 
     public Player(String clientName, String color, Match match){
         this.clientName = clientName;
@@ -65,6 +66,10 @@ public class Player {
 
     public ArrayList<EnemyDamage> getEnemyDamages(){
         return this.enemyDamages;
+    }
+
+    public ArrayList<MarkDamage> getMarkDamages(){
+        return this.markDamages;
     }
 
     //return player name
