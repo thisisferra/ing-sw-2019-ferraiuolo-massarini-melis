@@ -28,11 +28,13 @@ public class GUI extends Application{
     private HBox blueBox = new HBox();
     private HBox yellowBox = new HBox();
     private HBox deathTrack = new HBox();
+    private VBox playerboards = new VBox();
     private HBox weaponHand = new HBox();
     private HBox powerUpHand = new HBox();
+    private VBox leftMenu = new VBox();
     private StackPane stack = new StackPane();
     private VBox rightPane = new VBox();
-    private HBox powerUpsDeck = new HBox();
+    private BorderPane borderPane = new BorderPane();
     private ArrayList<String> weaponsName = new ArrayList<>();
     private ArrayList<String> powerUpsName = new ArrayList<>();
     private TextArea textArea = new TextArea("Welcome to the game!\n");
@@ -51,17 +53,13 @@ public class GUI extends Application{
 
 
 
-        // grid image background
+        // map background
         image = new Image(new FileInputStream("src/main/resources/Images/Maps/Map4.png"));
         imageView = new ImageView(image);
         imageView.setFitHeight(700);
-
         imageView.setPreserveRatio(true);
 
-        /*
-        for(int i=0 ;i<9; i++)
-            deathTrack.getChildren().add(new Rectangle(37,55,Color.color(1,1,1,0.2)));
-         */
+        //deathtrack
         addDeathTrackDamage("blue");
         addDeathTrackDamage("purple");
         addDeathTrackDamage("yellow");
@@ -69,8 +67,9 @@ public class GUI extends Application{
         addDeathTrackDamage("green");
         addDeathTrackDamage("yellow");
         addDeathTrackDamage("grey");
+        deathTrack.setPickOnBounds(false);
 
-
+        //map grid
         for(int row = 0; row <3;row++){
             for(int col = 0; col <4;col++){
                 Rectangle box = new Rectangle(160, 160);
@@ -85,20 +84,50 @@ public class GUI extends Application{
             }
         }
 
+        grid.setTranslateX(149);
+        grid.setTranslateY(145);
+        grid.setGridLinesVisible(true);
+
+
+        //cabinets
         resetWeaponsName(weaponsName);
         setWeaponView(redBox,weaponsName);
         setWeaponView(yellowBox,weaponsName);
         setWeaponView(blueBox,weaponsName);
         setWeaponView(weaponHand,weaponsName);
+        //blue cabinet
+        blueBox.setTranslateX(490);
+        blueBox.setTranslateY(-10);
+        blueBox.setSpacing(10);
 
+        //red cabinet
+        redBox.setTranslateX(-125);
+        redBox.setTranslateY(-265);
+        redBox.setRotate(-90);
+        redBox.setSpacing(10);
+
+        //yellow cabinet
+        yellowBox.setSpacing(10);
+        yellowBox.setRotate(90);
+        yellowBox.setTranslateX(122);
+        yellowBox.setTranslateY(510);
+
+
+        //powerups
         resetPowerUpsName(powerUpsName);
         setPowerUpsView(powerUpHand,powerUpsName);
 
+        //playerboards
+        setPlayerboards();
+
+
+        //buttons
         Image iconImage = new Image(new FileInputStream("src/main/resources/Images/icons/grab_icon.png"));
         ImageView iconView = new ImageView(iconImage);
         iconView.setFitWidth(50);
         iconView.setPreserveRatio(true);
         Button grab_button = new Button("",iconView);
+        grab_button.setOnAction(e-> textArea.setText("Move and grab\n"+ textArea.getText()));
         grab_button.setStyle("-fx-background-color: #3c3c3c;-fx-text-fill: #999999");
 
         iconImage = new Image(new FileInputStream("src/main/resources/Images/icons/move_icon.png"));
@@ -106,6 +135,7 @@ public class GUI extends Application{
         iconView.setFitWidth(50);
         iconView.setPreserveRatio(true);
         Button move_button = new Button("",iconView);
+        move_button.setOnAction(e-> textArea.setText("Move\n"+ textArea.getText()));
         move_button.setStyle("-fx-background-color: #3c3c3c;-fx-text-fill: #999999");
 
         iconImage = new Image(new FileInputStream("src/main/resources/Images/icons/shoot_icon.png"));
@@ -113,6 +143,7 @@ public class GUI extends Application{
         iconView.setFitWidth(50);
         iconView.setPreserveRatio(true);
         Button shoot_button = new Button("", iconView);
+        shoot_button.setOnAction(e-> textArea.setText("Shoot\n"+ textArea.getText()));
         shoot_button.setStyle("-fx-background-color: #3c3c3c;-fx-text-fill: #999999");
 
         iconImage = new Image(new FileInputStream("src/main/resources/Images/icons/pass_icon.png"));
@@ -120,6 +151,7 @@ public class GUI extends Application{
         iconView.setFitWidth(50);
         iconView.setPreserveRatio(true);
         Button pass_button = new Button("",iconView);
+        pass_button.setOnAction(e-> textArea.setText("Pass turn and reload\n"+ textArea.getText()));
         pass_button.setStyle("-fx-background-color: #3c3c3c;-fx-text-fill: #999999");
 
         //-fx-border-color: #D219FF; -fx-border-width: 1px;
@@ -133,15 +165,37 @@ public class GUI extends Application{
             for(Node obj: powerUpHand.getChildren()){
 
                 ImageView copy = (ImageView) obj;
-                ImageView copiedView = new ImageView(copy.getImage());
-                copiedView.setPreserveRatio(true);
-                copiedView.setFitHeight(200);
-                box.getChildren().add(copiedView);
+                ImageView copiedPowerUp = new ImageView(copy.getImage());
+                copiedPowerUp.setPreserveRatio(true);
+                copiedPowerUp.setFitHeight(200);
+                box.getChildren().add(copiedPowerUp);
 
             }
             Hand.display(box,"Power ups");
         });
         powerUps.setStyle("-fx-background-color: #3c3c3c;-fx-text-fill: #999999;");
+
+
+        iconImage = new Image(new FileInputStream("src/main/resources/Images/icons/players_icon.png"));
+        iconView = new ImageView(iconImage);
+        iconView.setFitWidth(50);
+        iconView.setPreserveRatio(true);
+        Button players_button = new Button("",iconView);
+        players_button.setOnAction(e->{
+            VBox box = new VBox();
+            for(Node obj: playerboards.getChildren()){
+
+                ImageView copy = (ImageView) obj;
+                ImageView copiedPlayerboard = new ImageView(copy.getImage());
+                copiedPlayerboard.setPreserveRatio(true);
+                copiedPlayerboard.setFitHeight(100);
+                box.getChildren().add(copiedPlayerboard);
+
+            }
+            PlayerStatus.display(box,"Players");
+        });
+        players_button.setStyle("-fx-background-color: #3c3c3c;-fx-text-fill: #999999;");
+
 
         iconImage = new Image(new FileInputStream("src/main/resources/Images/icons/weapon_icon.png"));
         iconView = new ImageView(iconImage);
@@ -172,6 +226,8 @@ public class GUI extends Application{
             window.show();
         });
 
+
+        //ammos
         Image ammoBack = new Image(new FileInputStream("src/main/resources/Images/Ammo/ammoback.png"));
         Group ammoSet = new Group();
         ammoSet.getChildren().addAll(
@@ -227,7 +283,7 @@ public class GUI extends Application{
         StackPane cabinets = new StackPane();
         grid.setPickOnBounds(false);
         cabinets.setPickOnBounds(false);
-        deathTrack.setPickOnBounds(false);
+
         i1.setPickOnBounds(false);
         i2.setPickOnBounds(false);
         i3.setPickOnBounds(false);
@@ -236,43 +292,16 @@ public class GUI extends Application{
         i6.setPickOnBounds(false);
         i7.setPickOnBounds(false);
         cabinets.getChildren().addAll(redBox,blueBox,yellowBox);
-        stack.getChildren().addAll(imageView,deathTrack,cabinets,grid);
 
-        //caselle di movimento
-        grid.setTranslateX(149);
-        grid.setTranslateY(145);
-        grid.setGridLinesVisible(true);
 
-        //blue cabinet
-        blueBox.setTranslateX(490);
-        blueBox.setTranslateY(-10);
-        blueBox.setSpacing(10);
-
-        //red cabinet
-        redBox.setTranslateX(-125);
-        redBox.setTranslateY(-265);
-        redBox.setRotate(-90);
-        redBox.setSpacing(10);
-
-        //yellow cabinet
-        yellowBox.setSpacing(10);
-        yellowBox.setRotate(90);
-        yellowBox.setTranslateX(122);
-        yellowBox.setTranslateY(510);
 
         //deathtracker
         deathTrack.setTranslateX(65);
         deathTrack.setTranslateY(40);
         deathTrack.setSpacing(-2);
 
-        root = new Group(stack);
-        root.setTranslateY(-375);
-        root.setTranslateX(25);
-        BorderPane borderPane = new BorderPane();
-        borderPane.setStyle("-fx-background-color: #505050");
-        borderPane.setCenter(root);
-        VBox leftMenu = new VBox();
 
+        //cubes
         VBox cubeBox = new VBox();
         ImageView cubeImage = new ImageView(new Image(new FileInputStream("src/main/resources/Images/icons/redCube.png")));
         cubeImage.setFitWidth(20);
@@ -295,20 +324,33 @@ public class GUI extends Application{
         cubeBox.getChildren().addAll(redLabel,yellowLabel,blueLabel);
         cubeBox.setSpacing(5);
 
-        leftMenu.getChildren().addAll(move_button,grab_button,shoot_button,pass_button,weapons,powerUps,button,cubeBox);
-        borderPane.setLeft(leftMenu);
+        //left boarderpane
+        leftMenu.getChildren().addAll(move_button,grab_button,shoot_button,pass_button,weapons,powerUps,players_button,button,cubeBox);
 
+
+        //right borderpane
+
+        //textarea
         textArea.setPrefWidth(225);
         textArea.setPrefHeight(300);
         textArea.setTranslateX(-450);
         textArea.setTranslateY(10);
-
         textArea.setWrapText(true);
         textArea.setEditable(false);
         textArea.setStyle("-fx-control-inner-background:#717171;  -fx-highlight-fill: #f1f7eb; -fx-highlight-text-fill: #717171; -fx-text-fill: #f1f7eb; ");
+
         rightPane.getChildren().add(textArea);
-        borderPane.setRight(rightPane);
         rightPane.setSpacing(10);
+
+        stack.getChildren().addAll(imageView,deathTrack,cabinets,grid);
+        root = new Group(stack);
+        root.setTranslateY(-375);
+        root.setTranslateX(25);
+        borderPane.setStyle("-fx-background-color: #505050");
+        borderPane.setCenter(root);
+        borderPane.setRight(rightPane);
+        borderPane.setLeft(leftMenu);
+
         Scene scene = new Scene(borderPane,1300,700);
         window.setScene(scene);
         window.show();
@@ -450,5 +492,39 @@ public class GUI extends Application{
         tear.setSmooth(true);
         tear.setPreserveRatio(true);
         deathTrack.getChildren().add(tear);
+    }
+
+    public void setPlayerboards(){
+        playerboards = new VBox();
+        ImageView img;
+        Image image1 = null;
+        Image image2 = null;
+        Image image3 = null;
+        Image image4 = null;
+        Image image5 = null;
+        try{
+            image1 = new Image(new FileInputStream("src/main/resources/Images/Playerboards/Banshee.png"));
+            image2 = new Image(new FileInputStream("src/main/resources/Images/Playerboards/Dozer.png"));
+            image3 = new Image(new FileInputStream("src/main/resources/Images/Playerboards/Distructor.png"));
+            image4 = new Image(new FileInputStream("src/main/resources/Images/Playerboards/Violet.png"));
+            image5 = new Image(new FileInputStream("src/main/resources/Images/Playerboards/Sprog.png"));
+        }catch(FileNotFoundException e){
+            System.out.println("File non trovato");
+        }
+        img = new ImageView(image1);
+        playerboards.getChildren().add(img);
+        img = new ImageView(image2);
+        playerboards.getChildren().add(img);
+        img = new ImageView(image3);
+        playerboards.getChildren().add(img);
+        img = new ImageView(image4);
+        playerboards.getChildren().add(img);
+        img = new ImageView(image5);
+        playerboards.getChildren().add(img);
+        for(Node obj :playerboards.getChildren()){
+            ImageView object = (ImageView) obj;
+            object.setPreserveRatio(true);
+            object.setFitHeight(100);
+        }
     }
 }

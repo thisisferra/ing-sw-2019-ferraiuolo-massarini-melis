@@ -1,4 +1,5 @@
 package it.polimi.se2019.client.view;
+
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -15,19 +16,18 @@ import javafx.stage.Stage;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+public class PlayerStatus{
 
-public class Hand {
-
-    public static void display(HBox hand,String message){
+    public static void display(VBox playerboards,String message){
         Stage window = new Stage();
         ImageView img = null;
-        Label info = new Label("Your "+ message + " are:");
+        Label info = new Label("Current "+ message + " are:");
         info.setStyle("-fx-text-fill: #bdbdbd");
         //l'alert deve essere risolto prima di tornare alla finestra che l'ha chiamata
         window.initModality(Modality.APPLICATION_MODAL);
         window.setTitle(message);
-        window.setMinWidth(400);
-        window.setMinHeight(250);
+        window.setMinWidth(800);
+        window.setMinHeight(500);
 
         //creo un bottone che una volta premuto chiude la finestra
         try{
@@ -41,9 +41,9 @@ public class Hand {
         closeButton.setStyle("-fx-background-color: #505050;-fx-text-fill: #999999;");
         closeButton.setOnAction(e-> window.close());
 
-        HBox layout = new HBox();
+        VBox layout = new VBox();
         BorderPane borderPane = new BorderPane();
-        layout.getChildren().addAll(hand.getChildren());
+        layout.getChildren().addAll(playerboards.getChildren());
         layout.setAlignment(Pos.CENTER);
         layout.setSpacing(10);
         layout.setStyle("-fx-background-color: #3c3c3c");
@@ -52,7 +52,7 @@ public class Hand {
         borderPane.setStyle("-fx-background-color: #3c3c3c");
         borderPane.setTop(info);
         borderPane.setBottom(closeButton);
-        closeButton.setTranslateX(170);
+        closeButton.setTranslateX(350);
         Scene scene = new Scene(borderPane);
         window.setScene(scene);
         // una volta aperta la finestra, essa rimane aperta fino a quando non viene chiusa
