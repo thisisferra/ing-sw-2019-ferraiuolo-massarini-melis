@@ -27,7 +27,9 @@ public class GUI extends Application{
     private HBox redBox = new HBox();
     private HBox blueBox = new HBox();
     private HBox yellowBox = new HBox();
+    private StackPane cabinets = new StackPane();
     private HBox deathTrack = new HBox();
+    private StackPane ammoSet = new StackPane();
     private VBox playerboards = new VBox();
     private HBox weaponHand = new HBox();
     private HBox powerUpHand = new HBox();
@@ -50,7 +52,7 @@ public class GUI extends Application{
         window.setTitle("Adrenaline");
         window.setResizable(true);
         window.setFullScreen(false);
-
+        window.centerOnScreen();
 
 
         // map background
@@ -87,7 +89,7 @@ public class GUI extends Application{
         grid.setTranslateX(149);
         grid.setTranslateY(145);
         grid.setGridLinesVisible(true);
-
+        grid.setPickOnBounds(false);
 
         //cabinets
         resetWeaponsName(weaponsName);
@@ -112,6 +114,9 @@ public class GUI extends Application{
         yellowBox.setTranslateX(122);
         yellowBox.setTranslateY(510);
 
+
+        cabinets.setPickOnBounds(false);
+        cabinets.getChildren().addAll(redBox,blueBox,yellowBox);
 
         //powerups
         resetPowerUpsName(powerUpsName);
@@ -171,7 +176,7 @@ public class GUI extends Application{
                 box.getChildren().add(copiedPowerUp);
 
             }
-            Hand.display(box,"Power ups");
+            PlayerStatus.display(box,"Power ups");
         });
         powerUps.setStyle("-fx-background-color: #3c3c3c;-fx-text-fill: #999999;");
 
@@ -213,7 +218,7 @@ public class GUI extends Application{
                 box.getChildren().add(copiedView);
 
             }
-            Hand.display(box,"Weapons");
+            PlayerStatus.display(box,"Weapons");
         });
         weapons.setStyle("-fx-background-color: #3c3c3c;-fx-text-fill: #999999");
         Button button = new Button("x");
@@ -228,71 +233,6 @@ public class GUI extends Application{
 
 
         //ammos
-        Image ammoBack = new Image(new FileInputStream("src/main/resources/Images/Ammo/ammoback.png"));
-        Group ammoSet = new Group();
-        ammoSet.getChildren().addAll(
-                new ImageView(ammoBack),
-                new ImageView(ammoBack),
-                new ImageView(ammoBack),
-                new ImageView(ammoBack),
-                new ImageView(ammoBack),
-                new ImageView(ammoBack),
-                new ImageView(ammoBack)
-        );
-
-        for(Node img : ammoSet.getChildren()){
-            img.setScaleX(0.3);
-            img.setScaleY(0.3);
-        }
-        ammoSet.getChildren().get(0).setLayoutX(-70);
-        ammoSet.getChildren().get(0).setLayoutY(130);
-
-        ammoSet.getChildren().get(1).setLayoutX(90);
-        ammoSet.getChildren().get(1).setLayoutY(205);
-
-        ammoSet.getChildren().get(2).setLayoutX(75);
-        ammoSet.getChildren().get(2).setLayoutY(335);
-
-        ammoSet.getChildren().get(3).setLayoutX(275);
-        ammoSet.getChildren().get(3).setLayoutY(360);
-
-        ammoSet.getChildren().get(4).setLayoutX(505);
-        ammoSet.getChildren().get(4).setLayoutY(355);
-
-        ammoSet.getChildren().get(5).setLayoutX(100);
-        ammoSet.getChildren().get(5).setLayoutY(500);
-
-        ammoSet.getChildren().get(6).setLayoutX(500);
-        ammoSet.getChildren().get(6).setLayoutY(500);
-
-        ImageView i1,i2,i3,i4,i5,i6,i7;
-        i1 = new ImageView(ammoBack);
-        i2 = new ImageView(ammoBack);
-        i3 = new ImageView(ammoBack);
-        i4 = new ImageView(ammoBack);
-        i5 = new ImageView(ammoBack);
-        i6 = new ImageView(ammoBack);
-        i7 = new ImageView(ammoBack);
-
-        i1.setScaleX(0.3);
-        i1.setScaleY(0.3);
-        i1.setTranslateX(-280);
-        i1.setTranslateY(-170);
-
-
-        StackPane cabinets = new StackPane();
-        grid.setPickOnBounds(false);
-        cabinets.setPickOnBounds(false);
-
-        i1.setPickOnBounds(false);
-        i2.setPickOnBounds(false);
-        i3.setPickOnBounds(false);
-        i4.setPickOnBounds(false);
-        i5.setPickOnBounds(false);
-        i6.setPickOnBounds(false);
-        i7.setPickOnBounds(false);
-        cabinets.getChildren().addAll(redBox,blueBox,yellowBox);
-
 
 
         //deathtracker
@@ -342,7 +282,7 @@ public class GUI extends Application{
         rightPane.getChildren().add(textArea);
         rightPane.setSpacing(10);
 
-        stack.getChildren().addAll(imageView,deathTrack,cabinets,grid);
+        stack.getChildren().addAll(imageView,ammoSet,deathTrack,cabinets,grid);
         root = new Group(stack);
         root.setTranslateY(-375);
         root.setTranslateX(25);
@@ -525,6 +465,104 @@ public class GUI extends Application{
             ImageView object = (ImageView) obj;
             object.setPreserveRatio(true);
             object.setFitHeight(100);
+        }
+    }
+
+    public void setAmmo(int map){
+
+        Image ammoBack = null;
+
+        try {
+            ammoBack = new Image(new FileInputStream("src/main/resources/Images/Ammo/ammoback.png"));
+        } catch (FileNotFoundException e){
+            System.out.println("File non trovato");
+        }
+        ImageView img = new ImageView(ammoBack);
+
+
+
+
+        switch(map){
+            case 1 : {
+
+                ammoSet.getChildren().get(0).setTranslateX(-30);
+                ammoSet.getChildren().get(0).setTranslateY(-200);
+
+                ammoSet.getChildren().get(1).setTranslateX(-70);
+                ammoSet.getChildren().get(1).setTranslateY(130);
+
+                ammoSet.getChildren().get(2).setTranslateX(-70);
+                ammoSet.getChildren().get(2).setTranslateY(130);
+
+                ammoSet.getChildren().get(3).setTranslateX(-70);
+                ammoSet.getChildren().get(3).setTranslateY(130);
+
+                ammoSet.getChildren().get(4).setTranslateX(-70);
+                ammoSet.getChildren().get(4).setTranslateY(130);
+
+                ammoSet.getChildren().get(5).setTranslateX(-70);
+                ammoSet.getChildren().get(5).setTranslateY(130);
+
+                ammoSet.getChildren().get(6).setTranslateX(-70);
+                ammoSet.getChildren().get(6).setTranslateY(130);
+                break;
+            }
+            case 2 : {
+                ammoSet.getChildren().get(0).setTranslateX(-70);
+                ammoSet.getChildren().get(0).setTranslateY(130);
+
+                ammoSet.getChildren().get(1).setTranslateX(-70);
+                ammoSet.getChildren().get(1).setTranslateY(130);
+
+                ammoSet.getChildren().get(2).setTranslateX(-70);
+                ammoSet.getChildren().get(2).setTranslateY(130);
+
+                ammoSet.getChildren().get(3).setTranslateX(-70);
+                ammoSet.getChildren().get(3).setTranslateY(130);
+
+                ammoSet.getChildren().get(4).setTranslateX(-70);
+                ammoSet.getChildren().get(4).setTranslateY(130);
+
+                ammoSet.getChildren().get(5).setTranslateX(-70);
+                ammoSet.getChildren().get(5).setTranslateY(130);
+
+                ammoSet.getChildren().get(6).setTranslateX(-70);
+                ammoSet.getChildren().get(6).setTranslateY(130);
+                break;
+            }
+            case 3 : {
+                ammoSet.getChildren().get(0).setTranslateX(-70);
+                ammoSet.getChildren().get(0).setTranslateY(130);
+
+                ammoSet.getChildren().get(1).setTranslateX(-70);
+                ammoSet.getChildren().get(1).setTranslateY(130);
+
+                ammoSet.getChildren().get(2).setTranslateX(-70);
+                ammoSet.getChildren().get(2).setTranslateY(130);
+
+                ammoSet.getChildren().get(3).setTranslateX(-70);
+                ammoSet.getChildren().get(3).setTranslateY(130);
+
+                ammoSet.getChildren().get(4).setTranslateX(-70);
+                ammoSet.getChildren().get(4).setTranslateY(130);
+
+                ammoSet.getChildren().get(5).setTranslateX(-70);
+                ammoSet.getChildren().get(5).setTranslateY(130);
+
+                ammoSet.getChildren().get(6).setTranslateX(-70);
+                ammoSet.getChildren().get(6).setTranslateY(130);
+                break;
+            }
+            case 4 : {
+                ammoSet.getChildren().get(0).setTranslateX(-300);
+                ammoSet.getChildren().get(0).setTranslateY(100);
+
+                break;
+            }
+        }
+        for(Node obj : ammoSet.getChildren()){
+            obj.setScaleX(0.3);
+            obj.setScaleY(0.3);
         }
     }
 }
