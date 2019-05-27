@@ -40,6 +40,7 @@ public class GUI extends Application{
     private ArrayList<String> weaponsName = new ArrayList<>();
     private ArrayList<String> powerUpsName = new ArrayList<>();
     private TextArea textArea = new TextArea("Welcome to the game!\n");
+    private int mapNumber = 4;
 
 
     public static void main(String[] args){
@@ -56,10 +57,13 @@ public class GUI extends Application{
 
 
         // map background
-        image = new Image(new FileInputStream("src/main/resources/Images/Maps/Map4.png"));
+        image = new Image(new FileInputStream("src/main/resources/Images/Maps/Map"+mapNumber+".png"));
         imageView = new ImageView(image);
         imageView.setFitHeight(700);
         imageView.setPreserveRatio(true);
+
+        //ammos
+        setAmmo(mapNumber);
 
         //deathtrack
         addDeathTrackDamage("blue");
@@ -82,6 +86,8 @@ public class GUI extends Application{
             for(Node rect : grid.getChildren()){
                 rect.setOnMouseClicked( e -> {
                     textArea.setText("Square #: " + rect.getId()+"\n"+textArea.getText());
+                    ammoSet.getChildren().get(Integer.parseInt(rect.getId())).setTranslateX(500);
+                    ammoSet.getChildren().get(Integer.parseInt(rect.getId())).setTranslateY(500);
                 });
             }
         }
@@ -214,7 +220,7 @@ public class GUI extends Application{
                 ImageView copy = (ImageView) obj;
                 ImageView copiedView = new ImageView(copy.getImage());
                 copiedView.setPreserveRatio(true);
-                copiedView.setFitHeight(200);
+                copiedView.setFitHeight(300);
                 box.getChildren().add(copiedView);
 
             }
@@ -231,16 +237,18 @@ public class GUI extends Application{
             window.show();
         });
 
+        Button button2 = new Button("y");
+        button2.setStyle("-fx-background-color: #505050;-fx-text-fill: #999999;");
 
-        //ammos
-
+        button2.setOnAction(e -> {
+            setAmmo(mapNumber);
+        });
 
         //deathtracker
         deathTrack.setTranslateX(65);
         deathTrack.setTranslateY(40);
         deathTrack.setSpacing(-2);
-
-
+        
         //cubes
         VBox cubeBox = new VBox();
         ImageView cubeImage = new ImageView(new Image(new FileInputStream("src/main/resources/Images/icons/redCube.png")));
@@ -265,7 +273,7 @@ public class GUI extends Application{
         cubeBox.setSpacing(5);
 
         //left boarderpane
-        leftMenu.getChildren().addAll(move_button,grab_button,shoot_button,pass_button,weapons,powerUps,players_button,button,cubeBox);
+        leftMenu.getChildren().addAll(move_button,grab_button,shoot_button,pass_button,weapons,powerUps,players_button,button,button2,cubeBox);
 
 
         //right borderpane
@@ -477,85 +485,166 @@ public class GUI extends Application{
         } catch (FileNotFoundException e){
             System.out.println("File non trovato");
         }
-        ImageView img = new ImageView(ammoBack);
 
-
-
-
+        ammoSet.getChildren().clear();
+        for(int i = 0; i<12;i++){
+            ammoSet.getChildren().add(new ImageView(ammoBack));
+        }
+        for(Node obj : ammoSet.getChildren()){
+            obj.setTranslateX(500);
+            obj.setTranslateY(500);
+        }
         switch(map){
             case 1 : {
 
-                ammoSet.getChildren().get(0).setTranslateX(-30);
-                ammoSet.getChildren().get(0).setTranslateY(-200);
 
-                ammoSet.getChildren().get(1).setTranslateX(-70);
-                ammoSet.getChildren().get(1).setTranslateY(130);
 
-                ammoSet.getChildren().get(2).setTranslateX(-70);
-                ammoSet.getChildren().get(2).setTranslateY(130);
+                //square 0
+                ammoSet.getChildren().get(0).setTranslateX(-260);
+                ammoSet.getChildren().get(0).setTranslateY(-160);
 
-                ammoSet.getChildren().get(3).setTranslateX(-70);
-                ammoSet.getChildren().get(3).setTranslateY(130);
+                //square 1
+                ammoSet.getChildren().get(1).setTranslateX(-115);
+                ammoSet.getChildren().get(1).setTranslateY(-90);
 
-                ammoSet.getChildren().get(4).setTranslateX(-70);
-                ammoSet.getChildren().get(4).setTranslateY(130);
+                //square 5
+                ammoSet.getChildren().get(5).setTranslateX(-125);
+                ammoSet.getChildren().get(5).setTranslateY(30);
 
-                ammoSet.getChildren().get(5).setTranslateX(-70);
-                ammoSet.getChildren().get(5).setTranslateY(130);
+                //square 6
+                ammoSet.getChildren().get(6).setTranslateX(55);
+                ammoSet.getChildren().get(6).setTranslateY(50);
 
-                ammoSet.getChildren().get(6).setTranslateX(-70);
-                ammoSet.getChildren().get(6).setTranslateY(130);
+                //square 7
+                ammoSet.getChildren().get(7).setTranslateX(265);
+                ammoSet.getChildren().get(7).setTranslateY(55);
+
+                //square 9
+                ammoSet.getChildren().get(9).setTranslateX(-120);
+                ammoSet.getChildren().get(9).setTranslateY(210);
+
+                //square 10
+                ammoSet.getChildren().get(10).setTranslateX(35);
+                ammoSet.getChildren().get(10).setTranslateY(215);
+
+
                 break;
             }
             case 2 : {
-                ammoSet.getChildren().get(0).setTranslateX(-70);
-                ammoSet.getChildren().get(0).setTranslateY(130);
 
-                ammoSet.getChildren().get(1).setTranslateX(-70);
-                ammoSet.getChildren().get(1).setTranslateY(130);
 
-                ammoSet.getChildren().get(2).setTranslateX(-70);
-                ammoSet.getChildren().get(2).setTranslateY(130);
+                //square 0
+                ammoSet.getChildren().get(0).setTranslateX(-255);
+                ammoSet.getChildren().get(0).setTranslateY(-80);
 
-                ammoSet.getChildren().get(3).setTranslateX(-70);
-                ammoSet.getChildren().get(3).setTranslateY(130);
+                //square 1
+                ammoSet.getChildren().get(1).setTranslateX(-120);
+                ammoSet.getChildren().get(1).setTranslateY(-160);
 
-                ammoSet.getChildren().get(4).setTranslateX(-70);
-                ammoSet.getChildren().get(4).setTranslateY(130);
+                //square 5
+                ammoSet.getChildren().get(5).setTranslateX(-130);
+                ammoSet.getChildren().get(5).setTranslateY(40);
 
-                ammoSet.getChildren().get(5).setTranslateX(-70);
-                ammoSet.getChildren().get(5).setTranslateY(130);
+                //square 6
+                ammoSet.getChildren().get(6).setTranslateX(55);
+                ammoSet.getChildren().get(6).setTranslateY(50);
 
-                ammoSet.getChildren().get(6).setTranslateX(-70);
-                ammoSet.getChildren().get(6).setTranslateY(130);
+                //square 7
+                ammoSet.getChildren().get(7).setTranslateX(265);
+                ammoSet.getChildren().get(7).setTranslateY(55);
+
+                //square 8
+                ammoSet.getChildren().get(8).setTranslateX(-250);
+                ammoSet.getChildren().get(8).setTranslateY(210);
+
+                //square 9
+                ammoSet.getChildren().get(9).setTranslateX(-120);
+                ammoSet.getChildren().get(9).setTranslateY(210);
+
+                //square 10
+                ammoSet.getChildren().get(10).setTranslateX(35);
+                ammoSet.getChildren().get(10).setTranslateY(215);
+
+
+
                 break;
             }
             case 3 : {
-                ammoSet.getChildren().get(0).setTranslateX(-70);
-                ammoSet.getChildren().get(0).setTranslateY(130);
 
-                ammoSet.getChildren().get(1).setTranslateX(-70);
-                ammoSet.getChildren().get(1).setTranslateY(130);
 
-                ammoSet.getChildren().get(2).setTranslateX(-70);
-                ammoSet.getChildren().get(2).setTranslateY(130);
+                //square 0
+                ammoSet.getChildren().get(0).setTranslateX(-260);
+                ammoSet.getChildren().get(0).setTranslateY(-160);
 
-                ammoSet.getChildren().get(3).setTranslateX(-70);
-                ammoSet.getChildren().get(3).setTranslateY(130);
+                //square 1
+                ammoSet.getChildren().get(1).setTranslateX(-115);
+                ammoSet.getChildren().get(1).setTranslateY(-90);
 
-                ammoSet.getChildren().get(4).setTranslateX(-70);
-                ammoSet.getChildren().get(4).setTranslateY(130);
+                //square 3
+                ammoSet.getChildren().get(3).setTranslateX(265);
+                ammoSet.getChildren().get(3).setTranslateY(-90);
 
-                ammoSet.getChildren().get(5).setTranslateX(-70);
-                ammoSet.getChildren().get(5).setTranslateY(130);
+                //square 5
+                ammoSet.getChildren().get(5).setTranslateX(-125);
+                ammoSet.getChildren().get(5).setTranslateY(30);
 
-                ammoSet.getChildren().get(6).setTranslateX(-70);
-                ammoSet.getChildren().get(6).setTranslateY(130);
+                //square 6
+                ammoSet.getChildren().get(6).setTranslateX(50);
+                ammoSet.getChildren().get(6).setTranslateY(80);
+
+                //square 7
+                ammoSet.getChildren().get(7).setTranslateX(190);
+                ammoSet.getChildren().get(7).setTranslateY(80);
+
+                //square 9
+                ammoSet.getChildren().get(9).setTranslateX(-120);
+                ammoSet.getChildren().get(9).setTranslateY(210);
+
+                //square 10
+                ammoSet.getChildren().get(10).setTranslateX(60);
+                ammoSet.getChildren().get(10).setTranslateY(210);
+
                 break;
             }
             case 4 : {
-                ammoSet.getChildren().get(0).setTranslateX(-300);
-                ammoSet.getChildren().get(0).setTranslateY(100);
+
+                //square 0
+                ammoSet.getChildren().get(0).setTranslateX(-255);
+                ammoSet.getChildren().get(0).setTranslateY(-80);
+
+                //square 1
+                ammoSet.getChildren().get(1).setTranslateX(-120);
+                ammoSet.getChildren().get(1).setTranslateY(-160);
+
+                //square 3
+                ammoSet.getChildren().get(3).setTranslateX(265);
+                ammoSet.getChildren().get(3).setTranslateY(-90);
+
+
+                //square 5
+                ammoSet.getChildren().get(5).setTranslateX(-130);
+                ammoSet.getChildren().get(5).setTranslateY(40);
+
+                //square 6
+                ammoSet.getChildren().get(6).setTranslateX(50);
+                ammoSet.getChildren().get(6).setTranslateY(80);
+
+                //square 7
+                ammoSet.getChildren().get(7).setTranslateX(190);
+                ammoSet.getChildren().get(7).setTranslateY(80);
+
+                //square 8
+                ammoSet.getChildren().get(8).setTranslateX(-250);
+                ammoSet.getChildren().get(8).setTranslateY(210);
+
+                //square 9
+                ammoSet.getChildren().get(9).setTranslateX(-120);
+                ammoSet.getChildren().get(9).setTranslateY(210);
+
+                //square 10
+                ammoSet.getChildren().get(10).setTranslateX(60);
+                ammoSet.getChildren().get(10).setTranslateY(210);
+
 
                 break;
             }
