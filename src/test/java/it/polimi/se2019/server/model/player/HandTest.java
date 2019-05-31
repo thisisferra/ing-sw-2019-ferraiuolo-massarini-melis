@@ -1,16 +1,11 @@
 package it.polimi.se2019.model.player;
 
-import it.polimi.se2019.server.model.cards.Cyberblade;
 import it.polimi.se2019.server.model.cards.PowerUp;
-import it.polimi.se2019.server.model.cards.Weapon;
 import it.polimi.se2019.server.model.game.Match;
 import it.polimi.se2019.server.model.player.Hand;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-
-import java.util.Scanner;
 
 
 public class HandTest {

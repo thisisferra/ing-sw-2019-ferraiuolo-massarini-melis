@@ -1,5 +1,7 @@
-package it.polimi.se2019.server.model.cards;
+package it.polimi.se2019.server.model.cards.Weapons;
 
+import it.polimi.se2019.server.controller.InfoShot;
+import it.polimi.se2019.server.model.cards.Shot;
 import it.polimi.se2019.server.model.game.Cubes;
 import it.polimi.se2019.server.model.player.Player;
 
@@ -9,8 +11,18 @@ public class Furnace extends AbstractWeapon {
     public ArrayList<Player> getTargets(){
         return new ArrayList<>();
     }
-    public void applyEffect(){
-
+    public void applyEffect(InfoShot infoShot){
+        if(infoShot.getNameEffect().equals("Optional1")){
+            for(Player target : infoShot.getTargetPlayer()){
+                target.getPlayerBoard().dealDamage(infoShot.getDamagingPlayer(),1);
+            }
+        }
+        else if(infoShot.getNameEffect().equals("Optional2")){
+            for(Player target : infoShot.getTargetPlayer()){
+                target.getPlayerBoard().dealDamage(infoShot.getDamagingPlayer(),1);
+                target.getPlayerBoard().dealMark(infoShot.getDamagingPlayer(),1);
+            }
+        }
     }
     public  Furnace (Weapon weapon){
         this.type = weapon.getType();

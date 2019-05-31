@@ -48,7 +48,6 @@ public class PlayerStatus{
         borderPane.setBottom(closeButton);
         borderPane.setStyle("-fx-background-color: #3c3c3c");
         borderPane.setAlignment(closeButton,Pos.CENTER);
-        borderPane.setAlignment(layout,Pos.CENTER);
         Scene scene = new Scene(borderPane);
         window.setScene(scene);
         // una volta aperta la finestra, essa rimane aperta fino a quando non viene chiusa

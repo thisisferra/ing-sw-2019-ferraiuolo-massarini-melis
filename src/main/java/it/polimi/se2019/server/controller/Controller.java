@@ -1,7 +1,7 @@
 package it.polimi.se2019.server.controller;
 
 import it.polimi.se2019.server.model.cards.PowerUp;
-import it.polimi.se2019.server.model.cards.Weapon;
+import it.polimi.se2019.server.model.cards.Weapons.Weapon;
 import it.polimi.se2019.server.model.game.Cubes;
 import it.polimi.se2019.server.model.game.CubesChecker;
 import it.polimi.se2019.server.model.game.Match;
@@ -11,7 +11,6 @@ import it.polimi.se2019.server.model.player.Player;
 import it.polimi.se2019.client.view.View;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class Controller {

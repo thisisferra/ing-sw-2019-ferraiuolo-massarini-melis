@@ -1,13 +1,11 @@
 package it.polimi.se2019.server.controller;
 
-import it.polimi.se2019.server.model.cards.Shot;
-import it.polimi.se2019.server.model.cards.Weapon;
+import it.polimi.se2019.server.model.cards.Weapons.Weapon;
 import it.polimi.se2019.server.model.game.CubesChecker;
 import it.polimi.se2019.server.model.game.Match;
 import it.polimi.se2019.server.model.game.MovementChecker;
 import it.polimi.se2019.server.model.game.RoomChecker;
 import it.polimi.se2019.server.model.map.Square;
-import it.polimi.se2019.server.model.player.Hand;
 import it.polimi.se2019.server.model.player.Player;
 
 import java.util.ArrayList;

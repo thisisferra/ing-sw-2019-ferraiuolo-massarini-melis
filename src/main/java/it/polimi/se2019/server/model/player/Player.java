@@ -22,54 +22,16 @@ public class Player {
     private Hand playerHand;
     private PlayerBoard playerBoard;
     private Match match;
-    private  ArrayList<EnemyDamage> enemyDamages = new ArrayList<>();
-    private  ArrayList<MarkDamage> markDamages = new ArrayList<>();
 
-    public Player(String clientName, String color, Match match){
+    public Player(String clientName, String color, Match match) {
         this.clientName = clientName;
-        this.color=color;
+        this.color = color;
         this.match = match;
-        this.suspended=false;
+        this.suspended = false;
         this.score = 0;
         this.firstPlayer = false;
-        System.out.print(this.clientName + " has picked ");
-        switch(this.getColor()){
-            case "yellow":{
-                System.out.println(":D-struct-OR ...");
-                break;
-            }
-            case "purple":{
-                System.out.println("Violet!");
-                break;
-            }
-            case "grey":{
-                System.out.println("Dozer!");
-                break;
-            }
-            case "green":{
-                System.out.println("Sprog!");
-                break;
-            }
-            case "blue":{
-                System.out.println("Banshee!");
-                break;
-            }
-            default:{
-                System.out.println("something from the floor probably");
-                break;
-            }
-        }
-
-        this.playerBoard = new PlayerBoard();
+        this.playerBoard = new PlayerBoard(this);
         this.playerHand = new Hand();
-    }
-
-    public ArrayList<EnemyDamage> getEnemyDamages(){
-        return this.enemyDamages;
-    }
-
-    public ArrayList<MarkDamage> getMarkDamages(){
-        return this.markDamages;
     }
 
     //return player name
@@ -82,7 +44,6 @@ public class Player {
     }
 
     //return color figure,
-    //N.B. it can be used to differentiate players since each player has a different color
     public String getColor(){
         return this.color;
     }
@@ -192,50 +153,18 @@ public class Player {
     }
 
     //Sort the enemyDamages ArrayList by damage amount in descendending order
-    public void sortAggressor() {
-        Collections.sort(enemyDamages, Comparator.comparingInt(EnemyDamage::getDamage).reversed());
+
+
+    public void addPoints(int pointsGained){
+        this.score = this.score + pointsGained;
     }
-
-    //Gestisce l'assegnazione dei punteggi alla morte di un giocatore
-    public void setScore() {
-        int k = 0;
-        int maximumNumPoint = this.getPlayerBoard().getPointDeaths().size();
-        //Legge la struttura EnemyDamage
-        for(EnemyDamage enDam : enemyDamages){
-            //Per ogni giocatore che ha fatto danno al giocatore morto...
-            Player player = enDam.getAggressorPlayer();
-            //Incrementa lo score di ogni giocatore che ha colpito almeno una volta
-            //il giocatore morto con la quantità di punti corrispondente
-            if(k < maximumNumPoint) {
-                player.score = player.score + this.playerBoard.getSpecificPointDeaths(k);
-                k++;
-            }
-            else {
-                player.score += 1;
-            }
-
-            //TODO da implementare l'assegnazione di un punto per il primo danno a un giocatore
-        }
-        //Elimina il primo elemento di pointDeaths del giocatore morto
-        //per diminuire il massimo punteggio ottenibile alla pressima morte
-        this.playerBoard.deleteFirstPointDeaths();
-
-    }
-
     public String toString(){
         return (this.clientName + " " + this.color + " " + this.getPosition());
     }
 
-
-    //Check if one player had already make damage to a specific player.
-    public boolean checkDamage(Player damagingPlayer) {
-        for(EnemyDamage singleEnemyDamage : enemyDamages) {
-            if(damagingPlayer.equals(singleEnemyDamage.getAggressorPlayer()))
-                return true;
-        }
-        return false;
+    public Match getMatch() {
+        return match;
     }
-
 //    public void usePowerUp(PowerUp powerUpToUse) {
 //        if (powerUpToUse.getType().equals("targeting scope")) {
 //            Player targetingPlayer = controller.chooseTargetingPlayer();

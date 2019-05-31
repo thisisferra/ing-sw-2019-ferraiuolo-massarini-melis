@@ -1,7 +1,8 @@
-package it.polimi.se2019.model.player;
+package it.polimi.se2019.server.model.player;
 
 import it.polimi.se2019.server.model.game.Cubes;
 import it.polimi.se2019.server.model.game.Match;
+import it.polimi.se2019.server.model.player.EnemyDamage;
 import it.polimi.se2019.server.model.player.Player;
 import it.polimi.se2019.server.model.player.PlayerBoard;
 import org.junit.Assert;
@@ -11,11 +12,20 @@ import org.junit.Test;
 public class PlayerBoardTest {
 
     private PlayerBoard pl1;
+    private Match m1;
+    private Player p1,p2,p3,p4;
     Cubes cube1 = new Cubes(1, 1, 1);
 
     @Before
     public void initialize() {
-        pl1 = new PlayerBoard();
+
+        m1 = new Match(4, 4);
+        m1.initializeMatch();
+        p1 = new Player("Marco", "red", m1);
+        p2 = new Player("Mattia", "yellow", m1);
+        p3 = new Player("Ferra", "blue", m1);
+        p4 = new Player("Matteo", "green", m1);
+        pl1 = new PlayerBoard(p1);
     }
 
     @Test
@@ -71,15 +81,15 @@ public class PlayerBoardTest {
 
     @Test(expected = IndexOutOfBoundsException.class)
     public void testGetSpecificPointDeaths() {
-        Assert.assertEquals(8, pl1.getSpecificPointDeaths(0));
-        Assert.assertEquals(6, pl1.getSpecificPointDeaths(1));
-        Assert.assertEquals(4, pl1.getSpecificPointDeaths(2));
-        Assert.assertEquals(2, pl1.getSpecificPointDeaths(3));
-        Assert.assertEquals(1, pl1.getSpecificPointDeaths(4));
-        Assert.assertEquals(1, pl1.getSpecificPointDeaths(5));
-        pl1.getSpecificPointDeaths(10);
-        pl1.getPointDeaths().remove("8");
-        Assert.assertEquals(6, pl1.getSpecificPointDeaths(0));
+        Assert.assertEquals((Integer)8, pl1.getPointDeaths().get(0));
+        Assert.assertEquals((Integer)6, pl1.getPointDeaths().get(1));
+        Assert.assertEquals((Integer)4, pl1.getPointDeaths().get(2));
+        Assert.assertEquals((Integer)2, pl1.getPointDeaths().get(3));
+        Assert.assertEquals((Integer)1, pl1.getPointDeaths().get(4));
+        Assert.assertEquals((Integer)1, pl1.getPointDeaths().get(5));
+        pl1.getPointDeaths().get(10);
+        pl1.getPointDeaths().remove(new Integer(8));
+        Assert.assertEquals((Integer)6, pl1.getPointDeaths().get(0));
 
 
 
@@ -115,19 +125,38 @@ public class PlayerBoardTest {
 
     @Test
     public void testDeleteFirstPointDeaths(){
-        Assert.assertEquals(8, pl1.getSpecificPointDeaths(0));
+        Assert.assertEquals(new Integer(8), pl1.getPointDeaths().get(0));
         pl1.deleteFirstPointDeaths();
-        Assert.assertEquals(6, pl1.getSpecificPointDeaths(0));
+        Assert.assertEquals(new Integer(6), pl1.getPointDeaths().get(0));
         pl1.deleteFirstPointDeaths();
-        Assert.assertEquals(4, pl1.getSpecificPointDeaths(0));
+        Assert.assertEquals(new Integer(4), pl1.getPointDeaths().get(0));
         pl1.deleteFirstPointDeaths();
-        Assert.assertEquals(2, pl1.getSpecificPointDeaths(0));
+        Assert.assertEquals(new Integer(2), pl1.getPointDeaths().get(0));
         pl1.deleteFirstPointDeaths();
-        Assert.assertEquals(1, pl1.getSpecificPointDeaths(0));
+        Assert.assertEquals(new Integer(1), pl1.getPointDeaths().get(0));
         pl1.deleteFirstPointDeaths();
-        Assert.assertEquals(1, pl1.getSpecificPointDeaths(0));
+        Assert.assertEquals(new Integer(1), pl1.getPointDeaths().get(0));
         pl1.deleteFirstPointDeaths();
         pl1.deleteFirstPointDeaths();
 
+    }
+
+    @Test
+    public void testSortAggressor() {
+        EnemyDamage en1 = new EnemyDamage();
+        EnemyDamage en2 = new EnemyDamage();
+        EnemyDamage en3 = new EnemyDamage();
+        en1.setAggressorPlayer(p2);
+        en2.setAggressorPlayer(p3);
+        en3.setAggressorPlayer(p4);
+        en1.setDamage(4);
+        en2.setDamage(6);
+        en3.setDamage(1);
+        p1.getPlayerBoard().getEnemyDamages().add(0, en1);
+        p1.getPlayerBoard().getEnemyDamages().add(1, en2);
+        p1.getPlayerBoard().getEnemyDamages().add(2, en3);
+        p1.getPlayerBoard().sortAggressor();
+        Assert.assertEquals(p3, p1.getPlayerBoard().getEnemyDamages().get(0).getAggressorPlayer());
+        Assert.assertEquals(6, p1.getPlayerBoard().getEnemyDamages().get(0).getDamage());
     }
 }

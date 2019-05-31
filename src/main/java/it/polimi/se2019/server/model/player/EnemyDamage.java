@@ -9,7 +9,6 @@ public class EnemyDamage{
         this.aggressorPlayer = aggressorPlayer;
         this.damage = damage;
     }
-
     public EnemyDamage(){}
 
     public Player getAggressorPlayer() {
@@ -25,14 +24,13 @@ public class EnemyDamage{
     }
 
     public void setDamage(int damage) {
-        if (this.getDamage() <= 11) {
-            if (this.getDamage() + damage <= 11) {
-                this.damage = this.damage + damage;
-            }
-            else {
-                this.damage = 11;
-            }
-        }
+        this.damage = this.damage+damage;
+        if(this.damage > 12) this.damage = 12;
+    }
+
+    @Override
+    public String toString(){
+        return this.getAggressorPlayer()+ "" + " " + this.getDamage();
     }
 
 }

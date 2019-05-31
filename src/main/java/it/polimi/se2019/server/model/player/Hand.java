@@ -1,6 +1,6 @@
 package it.polimi.se2019.server.model.player;
 
-import it.polimi.se2019.server.model.cards.Weapon;
+import it.polimi.se2019.server.model.cards.Weapons.Weapon;
 import it.polimi.se2019.server.model.cards.PowerUp;
 
 import java.util.ArrayList;

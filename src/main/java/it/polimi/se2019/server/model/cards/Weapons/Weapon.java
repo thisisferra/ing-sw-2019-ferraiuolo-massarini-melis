@@ -1,5 +1,7 @@
-package it.polimi.se2019.server.model.cards;
+package it.polimi.se2019.server.model.cards.Weapons;
 
+import it.polimi.se2019.server.controller.InfoShot;
+import it.polimi.se2019.server.model.cards.Shot;
 import it.polimi.se2019.server.model.game.Cubes;
 import it.polimi.se2019.server.model.player.Player;
 
@@ -14,6 +16,6 @@ public interface Weapon {
     String getType();
     Shot[] getEffect();
     ArrayList<Player> getTargets();
-    void applyEffect();
+    void applyEffect(InfoShot infoShot);
     Weapon weaponFactory(Weapon weapon);
 }

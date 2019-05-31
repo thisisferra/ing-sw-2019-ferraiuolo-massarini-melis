@@ -30,18 +30,6 @@ public class PlayerTest {
 
     }
 
-    @Test
-    public void testGetEnemyDamages() {
-        Assert.assertEquals(0, p1.getEnemyDamages().size());
-        EnemyDamage newEnemyDamage = new EnemyDamage();
-        newEnemyDamage.setAggressorPlayer(p2);
-        newEnemyDamage.setDamage(5);
-        p1.getEnemyDamages().add(0, newEnemyDamage);
-        Assert.assertEquals(newEnemyDamage, p1.getEnemyDamages().get(0));
-        Assert.assertEquals(p2, p1.getEnemyDamages().get(0).getAggressorPlayer());
-        Assert.assertEquals(5, p1.getEnemyDamages().get(0).getDamage());
-
-    }
 
     @Test
     public void getClientName() {
@@ -93,23 +81,6 @@ public class PlayerTest {
 
     }
 
-    @Test
-    public void testSortAggressor() {
-        EnemyDamage en1 = new EnemyDamage();
-        EnemyDamage en2 = new EnemyDamage();
-        EnemyDamage en3 = new EnemyDamage();
-        en1.setAggressorPlayer(p2);
-        en2.setAggressorPlayer(p3);
-        en3.setAggressorPlayer(p4);
-        en1.setDamage(4);
-        en2.setDamage(6);
-        en3.setDamage(1);
-        p1.getEnemyDamages().add(0, en1);
-        p1.getEnemyDamages().add(1, en2);
-        p1.getEnemyDamages().add(2, en3);
-        p1.sortAggressor();
-        Assert.assertEquals(p3, p1.getEnemyDamages().get(0).getAggressorPlayer());
-        Assert.assertEquals(6, p1.getEnemyDamages().get(0).getDamage());
-    }
+
 
 }

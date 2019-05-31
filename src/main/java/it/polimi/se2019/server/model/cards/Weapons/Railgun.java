@@ -1,19 +1,29 @@
-package it.polimi.se2019.server.model.cards;
+package it.polimi.se2019.server.model.cards.Weapons;
 
+import it.polimi.se2019.server.controller.InfoShot;
+import it.polimi.se2019.server.model.cards.Shot;
 import it.polimi.se2019.server.model.game.Cubes;
 import it.polimi.se2019.server.model.player.Player;
 
 import java.util.ArrayList;
 
-public class GrenadeLauncher extends AbstractWeapon {
+public class Railgun extends AbstractWeapon {
     public ArrayList<Player> getTargets(){
         return new ArrayList<>();
     }
-    public void applyEffect(){
-
+    public void applyEffect(InfoShot infoShot){
+        //TODO
+        if(infoShot.getNameEffect().equals("Optional1")){
+            infoShot.getTargetPlayer().get(0).getPlayerBoard().dealDamage(infoShot.getDamagingPlayer(),3);
+        }
+        else if(infoShot.getNameEffect().equals("Optional2")){
+            for(Player target : infoShot.getTargetPlayer()){
+                target.getPlayerBoard().dealDamage(infoShot.getDamagingPlayer(),2);
+            }
+        }
     }
 
-    public  GrenadeLauncher (Weapon weapon){
+    public  Railgun (Weapon weapon){
         this.type = weapon.getType();
         this.load = weapon.getLoad();
         this.buyingCost = new Cubes(weapon.getBuyingCost().getReds(), weapon.getBuyingCost().getYellows(), weapon.getBuyingCost().getBlues());
