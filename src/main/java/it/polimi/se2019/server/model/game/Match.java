@@ -3,7 +3,7 @@ package it.polimi.se2019.server.model.game;
 import com.google.gson.Gson;
 
 import it.polimi.se2019.server.model.cards.*;
-import it.polimi.se2019.server.model.cards.Weapons.*;
+import it.polimi.se2019.server.model.cards.weapons.*;
 import it.polimi.se2019.server.model.map.Map;
 import it.polimi.se2019.server.model.map.WeaponSlot;
 import it.polimi.se2019.server.model.player.Player;

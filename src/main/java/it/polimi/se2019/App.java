@@ -1,8 +1,7 @@
 package it.polimi.se2019;
 
 import it.polimi.se2019.server.controller.InfoShot;
-import it.polimi.se2019.server.model.cards.Weapons.Shotgun;
-import it.polimi.se2019.server.model.cards.Weapons.Weapon;
+import it.polimi.se2019.server.model.cards.weapons.Weapon;
 import it.polimi.se2019.server.model.game.Match;
 import it.polimi.se2019.server.model.player.Player;
 

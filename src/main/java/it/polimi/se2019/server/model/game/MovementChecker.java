@@ -13,13 +13,13 @@ public class MovementChecker {
 
     public MovementChecker(Square[] squareList,int steps,int index){
         allSquares = new Square[squareList.length];
-        int validSquares =0;
+        int valid =0;
         for(int i=0; i<allSquares.length;i++){
             allSquares[i] = new Square(squareList[i]);
             if(!squareList[i].getColor().equals(""))
-                validSquares++;
+                valid++;
         }
-        this.validSquares = validSquares;
+        this.validSquares = valid;
         this.steps=steps;
         this.index=index;
         this.check();

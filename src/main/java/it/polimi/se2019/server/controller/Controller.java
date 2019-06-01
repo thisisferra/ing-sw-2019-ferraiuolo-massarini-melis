@@ -1,7 +1,7 @@
 package it.polimi.se2019.server.controller;
 
 import it.polimi.se2019.server.model.cards.PowerUp;
-import it.polimi.se2019.server.model.cards.Weapons.Weapon;
+import it.polimi.se2019.server.model.cards.weapons.Weapon;
 import it.polimi.se2019.server.model.game.Cubes;
 import it.polimi.se2019.server.model.game.CubesChecker;
 import it.polimi.se2019.server.model.game.Match;

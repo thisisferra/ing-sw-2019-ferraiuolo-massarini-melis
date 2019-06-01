@@ -118,12 +118,15 @@ public class PlayerBoard {
     public void dealDamage(Player attacker,int damage){
         EnemyDamage found = null;
         int additionalDamage = marksToDamage(attacker);
+
+
         if(this.getDamage().isEmpty()){
             attacker.addPoints(1);
         }
 
         for(int i = 0; i<damage + additionalDamage; i++)
-            this.damage.add(attacker);
+            if(this.damage.size()<12)
+                this.damage.add(attacker);
         for(EnemyDamage enemyDamage : this.enemyDamages){
             if(enemyDamage.getAggressorPlayer().equals(attacker))
                 found = enemyDamage;
@@ -162,8 +165,9 @@ public class PlayerBoard {
             if(mrk.getAggressorPlayer().equals(aggressor))
                 marked = mrk;
         }
-        if(marked != null)
+        if(marked != null){
             marked.setMarks(marks);
+        }
         else this.enemyMarks.add(new EnemyMark(aggressor,marks));
     }
 }

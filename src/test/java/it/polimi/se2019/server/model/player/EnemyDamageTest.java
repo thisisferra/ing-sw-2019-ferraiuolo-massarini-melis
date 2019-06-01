@@ -1,4 +1,4 @@
-package it.polimi.se2019.model.player;
+package it.polimi.se2019.server.model.player;
 
 import it.polimi.se2019.server.model.game.Match;
 import it.polimi.se2019.server.model.player.EnemyDamage;
@@ -18,13 +18,13 @@ public class EnemyDamageTest {
 
     @Test
     public void testSetDamage(){
-        Assert.assertEquals(en1.getDamage(), 0);
+        Assert.assertEquals(0,en1.getDamage());
         en1.setDamage(5);
-        Assert.assertEquals(en1.getDamage(), 5);
+        Assert.assertEquals(5,en1.getDamage());
         en1.setDamage(3);
-        Assert.assertEquals(en1.getDamage(), 8);
+        Assert.assertEquals(8,en1.getDamage());
         en1.setDamage(5);
-        Assert.assertEquals(en1.getDamage(), 11);
+        Assert.assertEquals(12,en1.getDamage());
     }
 
     @Test
@@ -33,14 +33,5 @@ public class EnemyDamageTest {
         en1.setAggressorPlayer(m1.getAllPlayers().get(0));
         Assert.assertEquals(m1.getAllPlayers().get(0), en1.getAggressorPlayer());
 
-    }
-
-    @Test
-    public void testGetFirstShot() {
-        m1.initializeMatch();
-        /*en1.setFirstShot(true);
-        Assert.assertTrue(en1.getFirstShot());
-        en1.setFirstShot(false);
-        Assert.assertFalse(en1.getFirstShot());*/
     }
 }

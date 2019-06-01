@@ -76,15 +76,6 @@ public class GUI extends Application{
         setAmmo(mapNumber);
 
         //deathtrack
-        /*
-        addDeathTrackDamage("blue");
-        addDeathTrackDamage("purple");
-        addDeathTrackDamage("yellow");
-        addDeathTrackDamage("grey");
-        addDeathTrackDamage("green");
-        addDeathTrackDamage("yellow");
-        addDeathTrackDamage("grey");
-         */
         setDeathTrackSkulls();
         deathTrack.setPickOnBounds(false);
 
@@ -645,9 +636,11 @@ public class GUI extends Application{
             System.out.println("File non trovato.");
         }
 
-        if(cubeImage != null)
+        if(cubeImage != null){
             cubeImage.setFitWidth(20);
             cubeImage.setPreserveRatio(true);
+        }
+
         Label redLabel = new Label(" " + getRedCubes()+"  ",cubeImage);
         redLabel.setStyle("-fx-text-fill: #ff0000; -fx-background-color: #404040");
 
@@ -656,8 +649,10 @@ public class GUI extends Application{
         }catch(FileNotFoundException e){
             System.out.println("File non trovato.");
         }
-        cubeImage.setFitWidth(20);
-        cubeImage.setPreserveRatio(true);
+        if(cubeImage != null){
+            cubeImage.setFitWidth(20);
+            cubeImage.setPreserveRatio(true);
+        }
         Label yellowLabel = new Label(" " + getYellowCubes()+ "  ",cubeImage);
         yellowLabel.setStyle("-fx-text-fill: #fff000; -fx-background-color: #404040");
 
@@ -666,8 +661,10 @@ public class GUI extends Application{
         }catch(FileNotFoundException e){
             System.out.println("File non trovato.");
         }
-        cubeImage.setFitWidth(20);
-        cubeImage.setPreserveRatio(true);
+        if(cubeImage != null){
+            cubeImage.setFitWidth(20);
+            cubeImage.setPreserveRatio(true);
+        }
         Label blueLabel = new Label(" " + getBlueCubes() + "  ",cubeImage);
         blueLabel.setStyle("-fx-text-fill: #0010ff; -fx-background-color: #404040;");
 
@@ -693,10 +690,10 @@ public class GUI extends Application{
         }catch (FileNotFoundException e){
             System.out.println("File non trovato.");
         }
-        ImageView iconView = new ImageView(iconImage);
-        iconView.setFitWidth(width);
-        iconView.setPreserveRatio(true);
-        Button newButton = new Button("",iconView);
+        ImageView iconView2 = new ImageView(iconImage);
+        iconView2.setFitWidth(width);
+        iconView2.setPreserveRatio(true);
+        Button newButton = new Button("",iconView2);
         newButton.setOnAction(e-> textArea.setText(text +"\n"+ textArea.getText()));
         newButton.setOnMouseEntered(e -> newButton.setStyle(HIGHLIGHT_BUTTON_STYLE));
         newButton.setOnMouseExited(e -> newButton.setStyle(BUTTON_STYLE));

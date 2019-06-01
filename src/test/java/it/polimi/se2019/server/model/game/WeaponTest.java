@@ -1,6 +1,6 @@
 package it.polimi.se2019.server.model.game;
 
-import it.polimi.se2019.server.model.cards.Weapons.Weapon;
+import it.polimi.se2019.server.model.cards.weapons.Weapon;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

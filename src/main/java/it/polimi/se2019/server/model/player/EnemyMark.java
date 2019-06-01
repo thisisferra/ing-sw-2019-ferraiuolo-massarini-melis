@@ -6,20 +6,16 @@ public class EnemyMark {
 
     public EnemyMark(Player aggressorPlayer, int marks) {
         this.aggressorPlayer = aggressorPlayer;
-        this.marks = marks;
+        setMarks(marks);
     }
 
     public Player getAggressorPlayer() {
         return aggressorPlayer;
     }
 
-    public void setAggressorPlayer(Player aggressorPlayer) {
-        this.aggressorPlayer = aggressorPlayer;
-    }
-
     //marks can't be more than 3 per player
     public void setMarks(int marks) {
-        this.marks = marks;
+        this.marks = this.marks + marks;
         if(this.marks >3)
             this.marks = 3;
     }

@@ -11,7 +11,7 @@ public class RoomChecker {
 
     private ArrayList<String> roomsColor = new ArrayList<>();
     private ArrayList<Square> visibleRooms = new ArrayList<>();
-    Map map;
+    private Map map;
 
     //roomColor is a list containing all the colors you can access from a square
     public RoomChecker(Map map, int index){
@@ -82,8 +82,9 @@ public class RoomChecker {
 
     //return the list of players you cannot see
     public ArrayList<Player> getNonVisiblePlayers(Match match, Player owner){
-        ArrayList<Player> nonVisiblePlayers = getVisiblePlayers(match,owner);
-        nonVisiblePlayers.removeAll(match.getAllPlayers());
+        ArrayList<Player> nonVisiblePlayers = match.getAllPlayers();
+        nonVisiblePlayers.removeAll(this.getVisiblePlayers(match,owner));
+        nonVisiblePlayers.remove(owner);
         return nonVisiblePlayers;
     }
 

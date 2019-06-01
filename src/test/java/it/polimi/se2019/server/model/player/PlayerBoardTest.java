@@ -50,6 +50,26 @@ public class PlayerBoardTest {
         Assert.assertEquals(p2, pl1.getTags().get(1));
     }
 
+
+    @Test
+    public void testDealDamage(){
+        p1.getPlayerBoard().dealDamage(p2,3);
+        Assert.assertEquals(3,p1.getPlayerBoard().getDamage().size());
+        Assert.assertEquals(3,p1.getPlayerBoard().getEnemyDamages().get(0).getDamage());
+        Assert.assertEquals(p2,p1.getPlayerBoard().getEnemyDamages().get(0).getAggressorPlayer());
+        p1.getPlayerBoard().dealDamage(p3,10);
+        Assert.assertEquals(12,p1.getPlayerBoard().getDamage().size());
+        Assert.assertEquals(3,p1.getPlayerBoard().getEnemyDamages().get(1).getDamage());
+        Assert.assertEquals(10,p1.getPlayerBoard().getEnemyDamages().get(0).getDamage());
+        p3.getPlayerBoard().dealMark(p2,2);
+        p3.getPlayerBoard().dealDamage(p1,2);
+        Assert.assertEquals(3,p3.getPlayerBoard().getEnemyDamages().get(0).getDamage());
+        Assert.assertEquals(2,p3.getPlayerBoard().getEnemyMarks().get(0).getMarks());
+        p3.getPlayerBoard().dealDamage(p2,2);
+        Assert.assertEquals(4,p3.getPlayerBoard().getEnemyDamages().get(0).getDamage());
+        Assert.assertTrue(p1.checkDeath());
+    }
+
     @Test
     public void testGetDamage() {
         Assert.assertEquals(0, pl1.getDamage().size());

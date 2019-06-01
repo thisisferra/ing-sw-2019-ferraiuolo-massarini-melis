@@ -1,6 +1,6 @@
 package it.polimi.se2019.server.controller;
 
-import it.polimi.se2019.server.model.cards.Weapons.Weapon;
+import it.polimi.se2019.server.model.cards.weapons.Weapon;
 import it.polimi.se2019.server.model.player.Player;
 
 import java.util.ArrayList;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class InfoShot {
 
     Weapon weapon;
-    String nameEffect;                                                 //Boolean that indicates if the player want to use basic ability of the weapon (always true)
+    String nameEffect;
     int indexAbility;
     private Player damagingPlayer;
     private ArrayList<Player> targetablePlayer = new ArrayList<>();      //Other players I can view from my position
