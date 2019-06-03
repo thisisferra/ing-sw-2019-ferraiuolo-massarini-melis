@@ -1,5 +1,7 @@
 package it.polimi.se2019.client.view;
 
+import it.polimi.se2019.server.controller.network.RMI.RMIServer;
+import it.polimi.se2019.server.controller.network.RMI.RMIServerInterface;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
@@ -18,9 +20,14 @@ import javafx.stage.Stage;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.util.*;
 
 public class GUI extends Application{
+
+    private Registry registry;
+    private RMIServerInterface stub;
 
     private Stage window;
     private Group root = new Group();
@@ -53,11 +60,19 @@ public class GUI extends Application{
 
 
     public static void main(String[] args){
+
         launch(args);
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception{
+        try {
+            registry = LocateRegistry.getRegistry(1099);
+            stub = (RMIServerInterface) registry.lookup("remServer");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println(stub.pickUpAmmo("ciao"));
         window = primaryStage;
         window.setScene(loginScene());
         window.setTitle("Adrenaline");

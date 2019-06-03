@@ -1,6 +1,7 @@
 package it.polimi.se2019.client.controller.network.RMI;
 
 import it.polimi.se2019.client.controller.Client;
+import it.polimi.se2019.client.view.GUI;
 import it.polimi.se2019.server.controller.network.RMI.RMIServerInterface;
 
 import java.rmi.registry.LocateRegistry;
@@ -37,7 +38,7 @@ public class RMIClient extends Client {
         }
     }
 
-    public RMIServerInterface getRMIStub() {
+    public RMIServerInterface getStub() {
         return rmiStub;
     }
 

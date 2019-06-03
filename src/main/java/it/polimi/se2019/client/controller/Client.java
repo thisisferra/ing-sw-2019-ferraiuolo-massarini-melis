@@ -15,7 +15,7 @@ public abstract class Client {
     private RMIServerInterface rmiStub;
 
     public Client() {
-        //Existence due to syntax purpose only
+
     }
 
     public Client (RMIServerInterface rmiStub) {
@@ -26,7 +26,7 @@ public abstract class Client {
         this.rmiPort = rmiPort;
         this.host = host;
         this.remObjName = remObjName;
-        rmiStub = new RMIClient(this.rmiPort, this.host, this.remObjName).getRMIStub();
+        rmiStub = new RMIClient(this.rmiPort, this.host, this.remObjName).getStub();
     }
 
     public RMIServerInterface getStub() {

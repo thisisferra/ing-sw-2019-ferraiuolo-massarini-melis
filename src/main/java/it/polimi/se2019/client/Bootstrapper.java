@@ -2,10 +2,14 @@ package it.polimi.se2019.client;
 
 import it.polimi.se2019.client.controller.Client;
 import it.polimi.se2019.client.controller.network.RMI.RMIClient;
+import it.polimi.se2019.client.view.GUI;
 import it.polimi.se2019.client.view.GUIController;
+import it.polimi.se2019.server.controller.network.RMI.RMIServerInterface;
+import javafx.application.Application;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 
 //ritorno
@@ -19,20 +23,17 @@ public class Bootstrapper {
 
     private Client client;
 
-    private GUIController guiController;
-
-    private String text = "Sopra la panca...";
+    private RMIServerInterface rmiStub;
 
     private String registeredPlayers = "";
+
+    private String[] ciccio;
 
     private Bootstrapper() {
 
         client = null;
         client = new RMIClient(rmiPort, host, remObjName);
-        guiController = new GUIController( ( (RMIClient) client).getRMIStub());
-        System.out.println(text);
-        text = guiController.pickUpAmmo(text);
-        System.out.println(text);
+        rmiStub = client.getStub();
 
         String username = "";
         BufferedReader in = new BufferedReader( new InputStreamReader(System.in) );
@@ -51,13 +52,13 @@ public class Bootstrapper {
         } while(!validChoice(username));
 
         try {
-            guiController.getStub().register(username);
+            //guiController.getStub().register(username);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         try {
-            System.out.println(guiController.getStub().getRegisteredPlayers());
+            //System.out.println(guiController.getStub().getRegisteredPlayers());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -66,6 +67,8 @@ public class Bootstrapper {
     public static void main (String args[]) {
 
         new Bootstrapper();
+        Application.launch(GUI.class, args);
+
 
     }
 
@@ -76,5 +79,9 @@ public class Bootstrapper {
             System.out.println("Not a valid choice, try again.");
             return false;
         }
+    }
+
+    public String[] getCiccio() {
+        return ciccio;
     }
 }
