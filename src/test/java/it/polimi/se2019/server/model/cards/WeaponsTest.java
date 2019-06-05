@@ -8,7 +8,6 @@ import it.polimi.se2019.server.model.player.Player;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -76,16 +75,16 @@ public class WeaponsTest {
         p2 = new Player("Marco","yellow",match);
         p3 = new Player("Alessandro","grey",match);
         p4 = new Player("Matteo","green",match);
+        p5 = new Player("Bruno","violet",match);
     }
 
     @Test
     public void testLockRifle(){
         enemyPlayers.add(p2);
         enemyPlayers.add(p3);
-        infoShot = new InfoShot(lockrifle,0);
+        infoShot = new InfoShot(lockrifle,"BasicEffect");
         infoShot.setTargetPlayers(enemyPlayers);       //p2,p3 get damaged
         infoShot.setDamagingPlayer(p1);                //p1 attacks
-        infoShot.setNameEffect("BasicEffect");
         lockrifle.applyEffect(infoShot);
         Assert.assertEquals(2,p2.getPlayerBoard().getEnemyDamages().get(0).getDamage());
         Assert.assertEquals(1,p2.getPlayerBoard().getEnemyMarks().get(0).getMarks());
@@ -99,10 +98,9 @@ public class WeaponsTest {
     public void testElectroscythe(){
         enemyPlayers.add(p2);
         enemyPlayers.add(p3);
-        infoShot = new InfoShot(electroscythe,0);
+        infoShot = new InfoShot(electroscythe,"Optional1");
         infoShot.setTargetPlayers(enemyPlayers);
         infoShot.setDamagingPlayer(p1);
-        infoShot.setNameEffect("Optional1");
         electroscythe.applyEffect(infoShot);
         Assert.assertEquals(1,p2.getPlayerBoard().getEnemyDamages().get(0).getDamage());
         Assert.assertEquals(1,p3.getPlayerBoard().getEnemyDamages().get(0).getDamage());
@@ -117,7 +115,7 @@ public class WeaponsTest {
     public void testMachineGun(){
         //basic effect
         enemyPlayers.add(p2);
-        infoShot = new InfoShot(machinegun,0);
+        infoShot = new InfoShot(machinegun,"BasicEffect");
         infoShot.setTargetPlayers(enemyPlayers);
         infoShot.setDamagingPlayer(p1);
         infoShot.setNameEffect("BasicEffect");
@@ -159,8 +157,7 @@ public class WeaponsTest {
     @Test
     public void testTractorBeam(){
         enemyPlayers.add(p2);
-        infoShot = new InfoShot(tractorBeam,0);
-        infoShot.setNameEffect("Optional1");
+        infoShot = new InfoShot(tractorBeam,"Optional1");
         infoShot.setTargetPlayers(enemyPlayers);
         infoShot.setDamagingPlayer(p1);
         infoShot.setNewPosition(5);
@@ -180,10 +177,34 @@ public class WeaponsTest {
 
 
     @Test
+    public void testHellion(){
+        enemyPlayers.add(p2);
+        enemyPlayers.add(p3);
+        enemyPlayers.add(p4);
+        enemyPlayers.add(p5);
+        infoShot = new InfoShot(hellion,"Optional1");
+        infoShot.setTargetPlayers(enemyPlayers);
+        infoShot.setDamagingPlayer(p1);
+        hellion.applyEffect(infoShot);  //p2 1 damage, p3,p4,p5 1 mark
+        Assert.assertEquals(1,p2.getPlayerBoard().getEnemyDamages().get(0).getDamage());
+        Assert.assertEquals(1,p3.getPlayerBoard().getEnemyMarks().get(0).getMarks());
+        Assert.assertEquals(1,p4.getPlayerBoard().getEnemyMarks().get(0).getMarks());
+        Assert.assertEquals(1,p5.getPlayerBoard().getEnemyMarks().get(0).getMarks());
+        infoShot.setNameEffect("Optional2");
+        hellion.applyEffect(infoShot);
+        Assert.assertEquals(3,p2.getPlayerBoard().getEnemyDamages().get(0).getDamage());
+        Assert.assertEquals(3,p3.getPlayerBoard().getEnemyMarks().get(0).getMarks());
+        Assert.assertEquals(3,p4.getPlayerBoard().getEnemyMarks().get(0).getMarks());
+        Assert.assertEquals(3,p5.getPlayerBoard().getEnemyMarks().get(0).getMarks());
+
+
+
+    }
+
+    @Test
     public void testVortexCannon(){
         enemyPlayers.add(p2);
-        infoShot = new InfoShot(vortexCannon,0);
-        infoShot.setNameEffect("BasicEffect");
+        infoShot = new InfoShot(vortexCannon,"BasicEffect");
         infoShot.setTargetPlayers(enemyPlayers);
         infoShot.setDamagingPlayer(p1);
         infoShot.setNewPosition(5);
@@ -208,7 +229,7 @@ public class WeaponsTest {
         enemyPlayers.add(p2);
         enemyPlayers.add(p3);
         enemyPlayers.add(p4);
-        infoShot = new InfoShot(furnace,0);
+        infoShot = new InfoShot(furnace,"Optional1");
         infoShot.setNameEffect("Optional1");
         infoShot.setTargetPlayers(enemyPlayers);
         infoShot.setDamagingPlayer(p1);
@@ -235,8 +256,7 @@ public class WeaponsTest {
     @Test
     public void testHeatseeker(){
         enemyPlayers.add(p2);
-        infoShot = new InfoShot(heatseeker,0);
-        infoShot.setNameEffect("BasicEffect");
+        infoShot = new InfoShot(heatseeker,"BasicEffect");
         infoShot.setDamagingPlayer(p1);
         infoShot.setTargetPlayers(enemyPlayers);
         heatseeker.applyEffect(infoShot);  //3 damage
@@ -246,8 +266,7 @@ public class WeaponsTest {
     @Test
     public void testWhisper(){
         enemyPlayers.add(p2);
-        infoShot = new InfoShot(whisper,0);
-        infoShot.setNameEffect("BasicEffect");
+        infoShot = new InfoShot(whisper,"BasicEffect");
         infoShot.setDamagingPlayer(p1);
         infoShot.setTargetPlayers(enemyPlayers);
         whisper.applyEffect(infoShot); // 3 damage 1 mark
@@ -263,8 +282,7 @@ public class WeaponsTest {
         p1.setPosition(5);
         enemyPlayers.add(p2);
         enemyPlayers.add(p3);
-        infoShot = new InfoShot(flamethrower,0);
-        infoShot.setNameEffect("Optional1");
+        infoShot = new InfoShot(flamethrower,"Optional1");
         infoShot.setDamagingPlayer(p1);
         infoShot.setTargetPlayers(enemyPlayers);
         flamethrower.applyEffect(infoShot); //p2, p3 1 damage
@@ -282,8 +300,7 @@ public class WeaponsTest {
     @Test
     public void testZX2(){
         enemyPlayers.add(p2);
-        infoShot = new InfoShot(zx2,0);
-        infoShot.setNameEffect("Optional1");
+        infoShot = new InfoShot(zx2,"Optional1");
         infoShot.setTargetPlayers(enemyPlayers);
         infoShot.setDamagingPlayer(p1);
         zx2.applyEffect(infoShot); //p2 1 damage 2 marks
@@ -309,7 +326,7 @@ public class WeaponsTest {
     @Test
     public void testShotgun(){
         enemyPlayers.add(p2);
-        infoShot = new InfoShot(shotgun,0);
+        infoShot = new InfoShot(shotgun,"Optional1");
         infoShot.setNameEffect("Optional1");
         infoShot.setTargetPlayers(enemyPlayers);
         infoShot.setDamagingPlayer(p1);
@@ -330,8 +347,7 @@ public class WeaponsTest {
     @Test
     public void testPowerGlove(){
         enemyPlayers.add(p2);
-        infoShot = new InfoShot(powerGlove,0);
-        infoShot.setNameEffect("Optional1");
+        infoShot = new InfoShot(powerGlove,"Optional1");
         infoShot.setTargetPlayers(enemyPlayers);
         infoShot.setDamagingPlayer(p1);
         powerGlove.applyEffect(infoShot); //p2 1 damage, 2 marks
@@ -351,8 +367,7 @@ public class WeaponsTest {
     @Test
     public void testRailgun(){
         enemyPlayers.add(p2);
-        infoShot = new InfoShot(railgun,0);
-        infoShot.setNameEffect("Optional1");
+        infoShot = new InfoShot(railgun,"Optional1");
         infoShot.setTargetPlayers(enemyPlayers);
         infoShot.setDamagingPlayer(p1);
         railgun.applyEffect(infoShot); //3 damages to p2
@@ -379,8 +394,7 @@ public class WeaponsTest {
     @Test
     public void testSledgehammer(){
         enemyPlayers.add(p2);
-        infoShot = new InfoShot(sledgehammer,0);
-        infoShot.setNameEffect("Optional1");
+        infoShot = new InfoShot(sledgehammer,"Optional1");
         infoShot.setTargetPlayers(enemyPlayers);
         infoShot.setDamagingPlayer(p1);
         sledgehammer.applyEffect(infoShot); //2 damages

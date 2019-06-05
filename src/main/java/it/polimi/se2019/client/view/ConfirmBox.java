@@ -10,37 +10,38 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import static it.polimi.se2019.client.view.GUI.BUTTON_STYLE;
+import static it.polimi.se2019.client.view.GUI.HIGHLIGHT_BUTTON_STYLE;
+
 public class ConfirmBox {
 
     static boolean answer;
 
     public static boolean display(String title,String message){
         Stage window = new Stage();
-        String style = "-fx-background-color: #3c3c3c;-fx-text-fill: #999999;-fx-border-color: #000000;-fx-border-radius: 30;-fx-background-radius: 30";
-        String highlightStyle = "-fx-background-color: #d0c6ce;-fx-text-fill: #999999;-fx-border-color: #000000;-fx-border-radius: 30;-fx-background-radius: 30";
         window.initModality(Modality.APPLICATION_MODAL);
         window.setTitle(title);
         window.setMinWidth(250);
         window.setMinHeight(150);
         Label label = new Label();
         label.setText(message);
-        label.setStyle(style);
+        label.setStyle("-fx-text-fill: #cecece");
 
         //create two buttons
         Button yesButton = new Button("Yes");
         Button noButton = new Button("No");
 
-        yesButton.setStyle(style);
-        yesButton.setOnMouseEntered(e -> yesButton.setStyle(highlightStyle));
-        yesButton.setOnMouseExited(e -> yesButton.setStyle(style));
+        yesButton.setStyle(BUTTON_STYLE);
+        yesButton.setOnMouseEntered(e -> yesButton.setStyle(HIGHLIGHT_BUTTON_STYLE));
+        yesButton.setOnMouseExited(e -> yesButton.setStyle(BUTTON_STYLE));
         yesButton.setOnAction(e-> {
             answer = true;
             window.close();
         });
 
-        noButton.setStyle(style);
-        noButton.setOnMouseEntered(e -> noButton.setStyle(highlightStyle));
-        noButton.setOnMouseExited(e -> noButton.setStyle(style));
+        noButton.setStyle(BUTTON_STYLE);
+        noButton.setOnMouseEntered(e -> noButton.setStyle(HIGHLIGHT_BUTTON_STYLE));
+        noButton.setOnMouseExited(e -> noButton.setStyle(BUTTON_STYLE));
         noButton.setOnAction(e-> {
             answer = false;
             window.close();
@@ -48,7 +49,7 @@ public class ConfirmBox {
 
         VBox layout = new VBox();
         layout.setSpacing(20);
-        layout.setStyle("-fx-background-color: #696969;-fx-text-fill: #999999");
+        layout.setStyle("-fx-background-color: #505050;-fx-text-fill: #999999");
         HBox hBox = new HBox();
         hBox.setSpacing(100);
         hBox.setAlignment(Pos.CENTER);

@@ -16,6 +16,10 @@ import javafx.stage.Stage;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+
+import static it.polimi.se2019.client.view.GUI.BUTTON_STYLE;
+import static it.polimi.se2019.client.view.GUI.HIGHLIGHT_BUTTON_STYLE;
+
 public class PlayerStatus{
 
     public static void display(Pane playerboards, String message){
@@ -40,13 +44,13 @@ public class PlayerStatus{
 
         if(layout != null){
             layout.getChildren().addAll(playerboards.getChildren());
-            layout.setStyle("-fx-background-color: #3c3c3c");
+            layout.setStyle("-fx-background-color: #505050");
         }
 
         borderPane.setTop(info);
         borderPane.setCenter(layout);
         borderPane.setBottom(closeButton);
-        borderPane.setStyle("-fx-background-color: #3c3c3c");
+        borderPane.setStyle("-fx-background-color: #505050");
         borderPane.setAlignment(closeButton,Pos.CENTER);
         Scene scene = new Scene(borderPane);
         window.setScene(scene);
@@ -69,7 +73,9 @@ public class PlayerStatus{
             img.setFitHeight(50);
         }
         Button closeButton = new Button("",img);
-        closeButton.setStyle("-fx-background-color: #505050;-fx-text-fill: #999999;");
+        closeButton.setStyle(BUTTON_STYLE);
+        closeButton.setOnMouseEntered(e -> closeButton.setStyle(HIGHLIGHT_BUTTON_STYLE));
+        closeButton.setOnMouseExited(e -> closeButton.setStyle(BUTTON_STYLE));
         closeButton.setOnAction(e-> window.close());
         return closeButton;
     }

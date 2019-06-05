@@ -26,10 +26,9 @@ public class App {
         p1.setPosition(5);  //posizione del ricevente
         players.add(p1);
         players.add(p2);
-        InfoShot infoShot = new InfoShot(lockRifle,1);
+        InfoShot infoShot = new InfoShot(lockRifle,"BasicEffect+Extra1");
         infoShot.setDamagingPlayer(p0);
         infoShot.setTargetablePlayer(players);
-        infoShot.setNameEffect("BasicEffect+Extra1");
         infoShot.setTargetPlayers(players);
         System.out.println();
         if(lockRifle!=null)

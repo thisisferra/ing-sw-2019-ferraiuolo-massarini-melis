@@ -4,13 +4,11 @@ import it.polimi.se2019.server.controller.network.RMI.RMIServer;
 import it.polimi.se2019.server.controller.network.RMI.RMIServerInterface;
 import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -55,8 +53,8 @@ public class GUI extends Application{
     private TextArea textArea = new TextArea("Welcome to the game!\n");
     private Image iconImage = null;
     private ImageView iconView=null;
-    static final String BUTTON_STYLE = "-fx-background-color: #3c3c3c;-fx-text-fill: #999999;-fx-border-color: #2b2b2b;";
-    static final String HIGHLIGHT_BUTTON_STYLE = "-fx-background-color: #bbbbbb;-fx-text-fill: #999999;-fx-border-color: #2b2b2b;";
+    static final String BUTTON_STYLE = "-fx-background-color: #3c3c3c;-fx-text-fill: #999999;";
+    static final String HIGHLIGHT_BUTTON_STYLE = "-fx-background-color: #bbbbbb;-fx-text-fill: #999999;";
     private int mapNumber = 4;
     private Scene scene,loginScene;
 
@@ -75,7 +73,7 @@ public class GUI extends Application{
             e.printStackTrace();
         }
         window = primaryStage;
-        window.setScene(loginScene());
+        window.setScene(setLoginScene());
         window.setTitle("Adrenaline");
         window.setResizable(true);
         window.setFullScreen(false);
@@ -752,35 +750,20 @@ public class GUI extends Application{
         return newButton;
     }
 
-    public Scene loginScene(){
-
-        //TODO implememtare scelta del colore per il giocatore
-            String username;
-            String password;
-            GridPane grid = new GridPane();
-            grid.setPadding(new Insets(50,75,50,75));
-            grid.setVgap(8);
-            grid.setHgap(10);
-
-            //Name label
-            Label nameLabel = new Label("Username: ");
-            GridPane.setConstraints(nameLabel, 0,0);
+    public Scene setLoginScene(){
+            GridPane layout = new GridPane();
+            layout.setPadding(new Insets(50,75,50,75));
+            layout.setVgap(10);
 
             //Name input
             TextField nameInput = new TextField();
-            //TextField nameInput = new TextField("Mattia");
             nameInput.setPromptText("Username");
             nameInput.setStyle("-fx-background-color: #726B72");
             GridPane.setConstraints(nameInput, 1,0);
 
-            //Password label
-            Label passLabel = new Label("Password");
-            GridPane.setConstraints(passLabel, 0,1);
-
             //Password input
-            //textfield = casella in cui scrivere
-            // setPromptText inserisce una frase in grigio in textfield
-            TextField passInput = new TextField();
+
+            PasswordField passInput = new PasswordField();
             passInput.setStyle("-fx-background-color: #726B72");
             passInput.setPromptText("Password");
             GridPane.setConstraints(passInput,1,1);
@@ -805,11 +788,13 @@ public class GUI extends Application{
                 }
                 window.setScene(scene);
             });
-            //grid.getChildren().addAll(nameLabel,nameInput,passLabel,passInput,loginButton);
-            grid.getChildren().addAll(nameInput,passInput,loginButton);
-
-            Scene scene = new Scene(grid,300,200);
-            grid.setStyle("-fx-background-color: #c4bb55");
+            loginButton.setStyle(BUTTON_STYLE);
+            loginButton.setOnMouseEntered(e -> loginButton.setStyle(HIGHLIGHT_BUTTON_STYLE));
+            loginButton.setOnMouseExited(e -> loginButton.setStyle(BUTTON_STYLE));
+            loginButton.setAlignment(Pos.CENTER);
+            layout.getChildren().addAll(nameInput,passInput,loginButton);
+            Scene scene = new Scene(layout,300,200);
+            layout.setStyle("-fx-background-color: #505050");
             return scene;
 
     }
