@@ -22,7 +22,7 @@ import static it.polimi.se2019.client.view.GUI.HIGHLIGHT_BUTTON_STYLE;
 
 public class PlayerStatus{
 
-    public static void display(Pane playerboards, String message){
+    public static void display(Pane pane, String message){
         Stage window = new Stage();
         ImageView img = null;
         Pane layout = null;
@@ -36,14 +36,14 @@ public class PlayerStatus{
         window.setTitle(message);
 
         Button closeButton = setHomeButton(window);
-        if(playerboards instanceof VBox){
+        if(pane instanceof VBox){
              layout = new VBox();
-        }else if(playerboards instanceof HBox){
+        }else if(pane instanceof HBox){
              layout = new HBox();
         }
 
         if(layout != null){
-            layout.getChildren().addAll(playerboards.getChildren());
+            layout.getChildren().addAll(pane.getChildren());
             layout.setStyle("-fx-background-color: #505050");
         }
 

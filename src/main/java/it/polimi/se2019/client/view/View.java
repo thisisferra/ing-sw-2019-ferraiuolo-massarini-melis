@@ -23,7 +23,7 @@ public class View {
     public View(String username) {
         this.username = username;
         this.deaths = 0;
-        this.position = 0;
+        this.position = 5;
         this.damage = 0;
     }
 
@@ -40,10 +40,8 @@ public class View {
         this.reacheableSquare = reacheableSquare;
     }
 
-    public void getReachableSquare() {
-        for (Square square: reacheableSquare) {
-            System.out.println(square.toString());
-        }
+    public ArrayList<Square> getReachableSquare() {
+        return reacheableSquare;
     }
 
     public boolean getCanMove() {

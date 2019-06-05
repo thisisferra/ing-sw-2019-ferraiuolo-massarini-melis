@@ -2,6 +2,7 @@ package it.polimi.se2019.client.view;
 
 import it.polimi.se2019.server.controller.network.RMI.RMIServer;
 import it.polimi.se2019.server.controller.network.RMI.RMIServerInterface;
+import it.polimi.se2019.server.model.map.Square;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -14,7 +15,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
+import org.w3c.dom.css.Rect;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -50,12 +53,12 @@ public class GUI extends Application{
     private BorderPane borderPane = new BorderPane();
     private ArrayList<String> weaponsName = new ArrayList<>();
     private ArrayList<String> powerUpsName = new ArrayList<>();
-    private TextArea textArea = new TextArea("Welcome to the game!\n");
+    private TextArea textArea = new TextArea("\nWelcome to the game!");
     private Image iconImage = null;
     private ImageView iconView=null;
     static final String BUTTON_STYLE = "-fx-background-color: #3c3c3c;-fx-text-fill: #999999;";
     static final String HIGHLIGHT_BUTTON_STYLE = "-fx-background-color: #bbbbbb;-fx-text-fill: #999999;";
-    private int mapNumber = 4;
+    private int mapNumber = 1;
     private Scene scene,loginScene;
 
 
@@ -106,11 +109,7 @@ public class GUI extends Application{
                 grid.add(box, col, row);
             }
             for(Node rect : grid.getChildren()){
-                rect.setOnMouseClicked( e -> {
-                    textArea.setText("Square #: " + rect.getId()+"\n"+textArea.getText());
-                    ammoSet.getChildren().get(Integer.parseInt(rect.getId())).setTranslateX(500);
-                    ammoSet.getChildren().get(Integer.parseInt(rect.getId())).setTranslateY(500);
-                });
+
             }
         }
 
@@ -166,13 +165,45 @@ public class GUI extends Application{
         Button powerUps = setButton("src/main/resources/Images/icons/powerup_icon.png",50,"");
         moveButton.setOnAction(e -> {
             try {
-                view.setCanMove(!view.getCanMove());
-                if (view.getCanMove()) {
+
+                if (!view.getCanMove()) {
+                    view.setCanMove(true);
                     view.setReachableSquare(stub.reacheableSquare(view.getPosition()));
-                    view.getReachableSquare();
+                    textArea.setText( "\n" + view.getReachableSquare() + "\n" + textArea.getText());
+                    for(int i=0; i<12;i++){
+                        Rectangle rectangle = (Rectangle) grid.getChildren().get(i);
+                        for(Square square : view.getReachableSquare()){
+                            if(rectangle.getId().equals(Integer.toString(square.getPosition()))){
+                                rectangle.setFill(Color.color(1,1,0,0.4));
+                                rectangle.setOnMouseClicked( o -> {
+                                    textArea.setText("\nSquare #: " + rectangle.getId()+"\n"+textArea.getText());
+                                    try{
+                                        stub.setNewPosition(view.getUsername(),Integer.parseInt(rectangle.getId()));
+                                        textArea.setText("\nNew position: "+  rectangle.getId()+ textArea.getText());
+                                        for(int j = 0; j<12;j++){
+                                            Rectangle rect = (Rectangle) grid.getChildren().get(j);
+                                            rect.setFill(Color.color(1,1,1,0.1));
+                                            rect.setOnMouseClicked(g -> {
+
+                                            });
+                                            view.setCanMove(false);
+
+                                        }
+                                    }catch(Exception exc){
+                                        exc.printStackTrace();
+                                    }
+                    /*
+                    ammoSet.getChildren().get(Integer.parseInt(rect.getId())).setTranslateX(500);
+                    ammoSet.getChildren().get(Integer.parseInt(rect.getId())).setTranslateY(500);
+                     */
+                                });
+                            }
+
+                        }
+                    }
                 }
                 else {
-                    System.out.println("You have already selected this option");
+                    textArea.setText("\nYou have already selected this option"+ textArea.getText());
                 }
                 //TODO in questo istante le celle raggiungibili sono salvate nella view locale al client, cambiare la mappa in modo che siano highlightateeee
                 //TODO Variabile che indica la nuova posizione scelta dal giocatore
@@ -313,7 +344,7 @@ public class GUI extends Application{
                 try {
                     imagePowerUp = new Image(new FileInputStream( path));
                 } catch (FileNotFoundException e){
-                    System.out.println("File non trovato.");
+                    e.printStackTrace();
                 }
                 ImageView powerUpView = new ImageView(imagePowerUp);
                 powerUpView.setFitWidth(90);
@@ -365,7 +396,7 @@ public class GUI extends Application{
                 try {
                     imageWeapon = new Image(new FileInputStream( weaponPath));
                 } catch (FileNotFoundException e){
-                    System.out.println("File non trovato.");
+                    e.printStackTrace();
                 }
                 ImageView weaponView = new ImageView(imageWeapon);
                 weaponView.setFitWidth(90);
@@ -434,7 +465,7 @@ public class GUI extends Application{
         try {
             skullImage = new Image(new FileInputStream("src/main/resources/Images/icons/skull_icon.png"));
         } catch (FileNotFoundException e){
-            System.out.println("File non trovato.");
+            e.printStackTrace();
         }
 
         for(int i=0; i<8;i++){
@@ -451,7 +482,7 @@ public class GUI extends Application{
         try {
             tearImage = new Image(new FileInputStream("src/main/resources/Images/icons/"+color+"_damage_icon.png"));
         } catch (FileNotFoundException e){
-            System.out.println("File non trovato.");
+            e.printStackTrace();
         }
         ImageView tear = new ImageView(tearImage);
         tear.setFitHeight(40);
@@ -464,34 +495,15 @@ public class GUI extends Application{
         playerboards = new VBox();
         ImageView img;
         Image image1 = null;
-        Image image2 = null;
-        Image image3 = null;
-        Image image4 = null;
-        Image image5 = null;
         try{
             image1 = new Image(new FileInputStream("src/main/resources/Images/Playerboards/Banshee.png"));
-            image2 = new Image(new FileInputStream("src/main/resources/Images/Playerboards/Dozer.png"));
-            image3 = new Image(new FileInputStream("src/main/resources/Images/Playerboards/Distructor.png"));
-            image4 = new Image(new FileInputStream("src/main/resources/Images/Playerboards/Violet.png"));
-            image5 = new Image(new FileInputStream("src/main/resources/Images/Playerboards/Sprog.png"));
         }catch(FileNotFoundException e){
-            System.out.println("File non trovato");
+            e.printStackTrace();
         }
         img = new ImageView(image1);
+        img.setPreserveRatio(true);
+        img.setFitWidth(400);
         playerboards.getChildren().add(img);
-        img = new ImageView(image2);
-        playerboards.getChildren().add(img);
-        img = new ImageView(image3);
-        playerboards.getChildren().add(img);
-        img = new ImageView(image4);
-        playerboards.getChildren().add(img);
-        img = new ImageView(image5);
-        playerboards.getChildren().add(img);
-        for(Node obj :playerboards.getChildren()){
-            ImageView object = (ImageView) obj;
-            object.setPreserveRatio(true);
-            object.setFitHeight(100);
-        }
     }
 
     public void setAmmo(int map){
@@ -501,7 +513,7 @@ public class GUI extends Application{
         try {
             ammoBack = new Image(new FileInputStream("src/main/resources/Images/Ammo/ammoback.png"));
         } catch (FileNotFoundException e){
-            System.out.println("File non trovato");
+            e.printStackTrace();
         }
 
         ammoSet.getChildren().clear();
@@ -513,7 +525,7 @@ public class GUI extends Application{
             obj.setTranslateY(500);
         }
         switch(map){
-            case 1 : {
+            case 2 : {
 
 
 
@@ -548,7 +560,7 @@ public class GUI extends Application{
 
                 break;
             }
-            case 2 : {
+            case 1 : {
 
 
                 //square 0
@@ -680,7 +692,7 @@ public class GUI extends Application{
         try{
             cubeImage = new ImageView(new Image(new FileInputStream("src/main/resources/Images/icons/redCube.png")));
         }catch(FileNotFoundException e){
-            System.out.println("File non trovato.");
+            e.printStackTrace();
         }
 
         if(cubeImage != null){
@@ -694,7 +706,7 @@ public class GUI extends Application{
         try{
             cubeImage = new ImageView(new Image(new FileInputStream("src/main/resources/Images/icons/yellowCube.png")));
         }catch(FileNotFoundException e){
-            System.out.println("File non trovato.");
+            e.printStackTrace();
         }
         if(cubeImage != null){
             cubeImage.setFitWidth(20);
@@ -706,7 +718,7 @@ public class GUI extends Application{
         try{
             cubeImage = new ImageView(new Image(new FileInputStream("src/main/resources/Images/icons/blueCube.png")));
         }catch(FileNotFoundException e){
-            System.out.println("File non trovato.");
+            e.printStackTrace();
         }
         if(cubeImage != null){
             cubeImage.setFitWidth(20);
@@ -735,7 +747,7 @@ public class GUI extends Application{
         try{
             iconImage = new Image(new FileInputStream(path));
         }catch (FileNotFoundException e){
-            System.out.println("File non trovato.");
+            e.printStackTrace();
         }
         ImageView iconView2 = new ImageView(iconImage);
         iconView2.setFitWidth(width);
