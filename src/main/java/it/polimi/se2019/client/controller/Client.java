@@ -26,14 +26,10 @@ public abstract class Client {
         this.rmiPort = rmiPort;
         this.host = host;
         this.remObjName = remObjName;
-        rmiStub = new RMIClient(this.rmiPort, this.host, this.remObjName).getStub();
+        //rmiStub = new RMIClient(this.rmiPort, this.host, this.remObjName).getStub();
     }
 
     public RMIServerInterface getStub() {
         return rmiStub;
     }
-
-    public abstract void register();
-
-    public abstract void login();
 }

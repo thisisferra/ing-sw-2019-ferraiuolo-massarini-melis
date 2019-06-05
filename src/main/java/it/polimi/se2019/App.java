@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class App {
     public static void main( String[] args ) {
-        Match m1  = new Match(1,5);
+        Match m1  = new Match(1);
         m1.initializeMatch();
         Player p0 = m1.getAllPlayers().get(0);  //attaccante
         Player p1 = m1.getAllPlayers().get(1);  //ricevente

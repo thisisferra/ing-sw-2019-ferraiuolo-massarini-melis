@@ -69,7 +69,7 @@ public class WeaponsTest {
         } catch (FileNotFoundException e){
             System.out.println("File non trovato");
         }
-        match = new Match(1,5);
+        match = new Match(1);
         match.initializeMatch();
         enemyPlayers = new ArrayList<Player>();
         p1 = new Player("Mattia","blue",match);

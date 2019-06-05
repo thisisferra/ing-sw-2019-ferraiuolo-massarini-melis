@@ -11,7 +11,7 @@ public class WeaponTest {
     Weapon createdWeapon;
     @Before
     public void setWeaponTest(){
-        m1 = new Match(1,5);
+        m1 = new Match(1);
         m1.initializeMatch();
 
     }

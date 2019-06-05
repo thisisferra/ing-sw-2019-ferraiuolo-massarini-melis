@@ -19,7 +19,7 @@ public class PlayerBoardTest {
     @Before
     public void initialize() {
 
-        m1 = new Match(4, 4);
+        m1 = new Match(4);
         m1.initializeMatch();
         p1 = new Player("Marco", "red", m1);
         p2 = new Player("Mattia", "yellow", m1);
@@ -40,7 +40,7 @@ public class PlayerBoardTest {
     @Test
     public void testGetTags(){
         Assert.assertEquals(0, pl1.getTags().size());
-        Match m1 = new Match(3, 2);
+        Match m1 = new Match(3);
         Player p1 = new Player("Marco", "red", m1);
         Player p2 = new Player("Mattia", "yellow", m1);
         pl1.getTags().add(p1);
@@ -73,7 +73,7 @@ public class PlayerBoardTest {
     @Test
     public void testGetDamage() {
         Assert.assertEquals(0, pl1.getDamage().size());
-        Match m1 = new Match(3, 2);
+        Match m1 = new Match(3);
         Player p1 = new Player("Marco", "red", m1);
         Player p2 = new Player("Mattia", "yellow", m1);
         pl1.getDamage().add(p1);

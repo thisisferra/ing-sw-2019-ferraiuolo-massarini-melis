@@ -15,10 +15,10 @@ public class MovementCheckerTest {
 
     @Before
     public void setMovementCheckerTest() {
-        m1 = new Match(1, 3);
-        m2 = new Match(2, 3);
-        m3 = new Match(3, 3);
-        m4 = new Match(4, 3);
+        m1 = new Match(1);
+        m2 = new Match(2);
+        m3 = new Match(3);
+        m4 = new Match(4);
         m1.initializeMatch();
         m2.initializeMatch();
         m3.initializeMatch();

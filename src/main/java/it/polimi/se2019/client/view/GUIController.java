@@ -11,15 +11,6 @@ public class GUIController {
         this.rmiStub = rmiStub;
     }
 
-    public String pickUpAmmo(String text) {
-        try {
-            return rmiStub.pickUpAmmo(text);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "Error as above";
-        }
-    }
-
     public RMIServerInterface getStub() {
         return rmiStub;
     }

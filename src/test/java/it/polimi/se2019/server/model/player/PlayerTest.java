@@ -20,7 +20,7 @@ public class PlayerTest {
     @Before
     public void initialize() {
 
-        m1 = new Match(4, 4);
+        m1 = new Match(4);
         m1.initializeMatch();
         p1 = new Player("Marco", "red", m1);
         p2 = new Player("Mattia", "yellow", m1);

@@ -8,6 +8,7 @@ import it.polimi.se2019.server.model.map.Map;
 import it.polimi.se2019.server.model.map.WeaponSlot;
 import it.polimi.se2019.server.model.player.Player;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -15,10 +16,10 @@ import java.util.Arrays;
 import java.util.Collections;
 
 
-public class Match {
+public class Match implements Serializable {
     private ArrayList<Player> players;
     private Player turn;
-    private int numberOfPlayers;
+    //private int numberOfPlayers;
     private ArrayList<PowerUp> powerUpStack;
     private ArrayList<Ammo> ammoStack;
     private ArrayList<Weapon> weaponStack;
@@ -29,9 +30,9 @@ public class Match {
     private ArrayList<Player> killShotTrack;
     private ArrayList<WeaponSlot> arsenal;
 
-    public Match(int chosenMap,int numberOfPlayers){
+    public Match(int chosenMap){
         this.chosenMap=chosenMap;
-        this.numberOfPlayers = numberOfPlayers;
+        //this.numberOfPlayers = numberOfPlayers;
         this.arsenal = new ArrayList<>();
         this.discardedAmmos = new ArrayList<>();
         this.discardedPowerUps = new ArrayList<>();
@@ -41,12 +42,13 @@ public class Match {
 
     public void initializeMatch(){
         this.initGameField();
-        this.initPlayers();
+        //this.initPlayers();
         this.initCabinets();
     }
 
     //generate instances of players
     //each player should type in his name and his figure(color figure)
+    /*
     private void initPlayers(){
         switch(this.numberOfPlayers){
             case 0: {
@@ -89,6 +91,7 @@ public class Match {
             }
         }
     }
+     */
 
     /*Generate the game field:
     * -the map is generated starting from mapID (1,2,3 or 4)
@@ -220,5 +223,14 @@ public class Match {
     }
     public ArrayList<PowerUp> getDiscardedPowerUps(){
         return this.discardedPowerUps;
+    }
+
+    public Player searchPlayerByClientName(String clientName) {
+        for (Player player : this.getAllPlayers()) {
+            if (player.getClientName().equals(clientName)) {
+                return player;
+            }
+        }
+        return null;
     }
 }

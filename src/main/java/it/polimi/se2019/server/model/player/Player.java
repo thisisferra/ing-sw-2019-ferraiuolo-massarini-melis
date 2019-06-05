@@ -11,6 +11,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+/**
+ * Represents the player game. Each player is identified by its clientName
+ * It has some attributes such as color, position, score...
+ * Each player has a reference to its playerboard, hand and match
+ */
+
+
 public class Player {
     private Controller controller;
     private String clientName;
@@ -34,51 +41,95 @@ public class Player {
         this.playerHand = new Hand();
     }
 
-    //return player name
+    /**
+     * Getter of the client name
+     * @return the client name
+     */
     public String getClientName(){
         return this.clientName;
     }
 
+    /**
+     * Setter of the client name. It's used in the constructor of the object
+     * @param clientName the nickname of the player
+     */
     public void setClientName(String clientName){
         this.clientName= clientName;
     }
 
-    //return color figure,
+    /**
+     * Getter of the color's player
+     * @return the color choosed by the player at the start of the game
+     */
     public String getColor(){
         return this.color;
     }
 
-    //return player score
-    //N.B. each score can be seen only by it's owner
+    /**
+     * getter of the score of the player
+     * @return the score of the player
+     */
     public int getScore(){
         return this.score;
     }
 
+    /**
+     * getter of the position of the player
+     * @return the position (integer) of the player
+     */
     public int getPosition(){
         return this.position;
     }
 
+    /**
+     * reference to {@link Hand} of this player
+     * @return the hand of this player
+     */
     public Hand getHand(){
         return this.playerHand;
     }
 
+    /**
+     * Reference to {@link PlayerBoard} of this player
+     * @return The playerboard of this player
+     */
     public PlayerBoard getPlayerBoard(){
         return this.playerBoard;
     }
 
+    /**
+     * Specify if the player is the first who has played in the match
+     * @return true if the player is the first who has played, false otherwise
+     */
     public boolean isFirstPlayer() {
         return firstPlayer;
     }
 
+    /**
+     * Specify if the player has disconnected from the match
+     * @return true if the player has disconnected, false otherwise
+     */
     public boolean isSuspended() {
         return suspended;
     }
 
+    /**
+     * Setter of the position of the player.
+     * It is used in the constructor of the object
+     * @param position the new position of the player
+     */
     public void setPosition(int position){
         this.position = position;
     }
 
+    /**
+     * Modify the {@link Hand} of the player adding cubes and, if necessary, a powerup.
+     * If the player already has got three power-up nothing happens.
+     * @param currentSquare the current square of the player
+     * @param currentMatch the match
+     */
     public void pickUpAmmo(Square currentSquare, Match currentMatch) {
+        System.out.println(playerHand.getPowerUps().size());
         //Check if the player is in an ammo square
         if(!(currentSquare.isSpawnPoint())) {
             //check if there is an ammo in the current square
@@ -98,6 +149,10 @@ public class Player {
                 Cubes currentCubes = currentAmmo.getAmmoCubes();
                 //Change the value of the cubes I own
                 playerBoard.setAmmoCubes(currentCubes);
+                System.out.println(playerHand.getPowerUps().size());
+            }
+            else {
+                System.out.println("You have already picked up this ammo");
             }
         }
         else{
@@ -105,7 +160,9 @@ public class Player {
         }
     }
 
-    //trade the current powerup in a cube of the matching color as a Cubes object
+    /**
+     * Switch a power-up with the cubes specified by the power-up
+     */
     public void tradeCube(){
         int index = this.playerHand.indexToDiscard();
         PowerUp powerUp = this.playerHand.chooseToDiscard(index);
@@ -142,7 +199,10 @@ public class Player {
         this.playerBoard.setAmmoCubes(cubeObtained);
     }
 
-    //Return true if the amount of damage is 11 or 12, false otherwise
+    /**
+     * Check how many damages a player has got. If it has 11 or 12 damages it is dead
+     * @return true if the player has got 11 or 12 damages, false otherwise.
+     */
     public boolean checkDeath() {
         if (this.playerBoard.getDamage().size() == 11 || this.playerBoard.getDamage().size() == 12) {
             return true;
@@ -152,18 +212,25 @@ public class Player {
         }
     }
 
-    //Sort the enemyDamages ArrayList by damage amount in descendending order
-
-
+    /**
+     * Set the new score of the player
+     * @param pointsGained is the score the player has gained
+     */
     public void addPoints(int pointsGained){
         this.score = this.score + pointsGained;
     }
+
+    @Override
     public String toString(){
         return (this.clientName + " " + this.color + " " + this.getPosition());
     }
 
+    /**
+     * getter of the match
+     * @return a reference to thc current match
+     */
     public Match getMatch() {
-        return match;
+        return this.match;
     }
 //    public void usePowerUp(PowerUp powerUpToUse) {
 //        if (powerUpToUse.getType().equals("targeting scope")) {

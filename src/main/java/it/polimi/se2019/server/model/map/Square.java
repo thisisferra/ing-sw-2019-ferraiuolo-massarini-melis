@@ -2,9 +2,10 @@ package it.polimi.se2019.server.model.map;
 
 import it.polimi.se2019.server.model.player.Player;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Square {
+public class Square implements Serializable {
     // position and the four cardinal direction indicates squares they're adjacent with, in the square array.
     private int position = -1;
     private int north = -1;

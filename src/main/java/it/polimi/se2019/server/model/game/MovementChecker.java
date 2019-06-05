@@ -2,9 +2,10 @@ package it.polimi.se2019.server.model.game;
 
 import it.polimi.se2019.server.model.map.Square;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class MovementChecker {
+public class MovementChecker implements Serializable {
     private Square[] allSquares ;
     private ArrayList<Square> reachableSquares = new ArrayList<>();
     private int steps;

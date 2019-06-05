@@ -6,6 +6,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+
+/**
+ * Playerboard class represent the playerboard of each player. It includes some info like the amount
+ * of cubes, tags, damage and deaths and some reference to external opbject
+ */
 public class PlayerBoard {
     //list of references of players who marked this player (max 3 references per player)
     private ArrayList<Player> tags;

@@ -10,7 +10,7 @@ public class EnemyMarkTest {
     Match match;
     @Before
     public void setEnemyMarkTest(){
-        match = new Match(1,3);
+        match = new Match(1);
         p1 = new Player("Mattia","blue",match);
         p2 = new Player("Marco","yellow",match);
         p3 = new Player("Alessandro","grey",match);

@@ -20,6 +20,7 @@ import javafx.stage.Stage;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.*;
@@ -28,6 +29,7 @@ public class GUI extends Application{
 
     private Registry registry;
     private RMIServerInterface stub;
+    private View view;
 
     private Stage window;
     private Group root = new Group();
@@ -72,7 +74,6 @@ public class GUI extends Application{
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println(stub.pickUpAmmo("ciao"));
         window = primaryStage;
         window.setScene(loginScene());
         window.setTitle("Adrenaline");
@@ -165,6 +166,24 @@ public class GUI extends Application{
         Button shootButton = setButton("src/main/resources/Images/icons/shoot_icon.png",50,"Shoot");
         Button passButton = setButton("src/main/resources/Images/icons/pass_icon.png",50,"Pass turn and reload");
         Button powerUps = setButton("src/main/resources/Images/icons/powerup_icon.png",50,"");
+        moveButton.setOnAction(e -> {
+            try {
+                view.setCanMove(!view.getCanMove());
+                if (view.getCanMove()) {
+                    view.setReachableSquare(stub.reacheableSquare(view.getPosition()));
+                    view.getReachableSquare();
+                }
+                else {
+                    System.out.println("You have already selected this option");
+                }
+                //TODO in questo istante le celle raggiungibili sono salvate nella view locale al client, cambiare la mappa in modo che siano highlightateeee
+                //TODO Variabile che indica la nuova posizione scelta dal giocatore
+                //stub.setNewPosition(view.username, newPosition);
+            }
+            catch (RemoteException e1) {
+                e1.printStackTrace();
+            }
+        });
         powerUps.setOnAction(e->{
             HBox box = new HBox();
             for(Node obj: powerUpHand.getChildren()){
@@ -219,6 +238,19 @@ public class GUI extends Application{
         Button button2 = new Button("y");
         grabButton.setOnMouseEntered(e -> grabButton.setStyle(HIGHLIGHT_BUTTON_STYLE));
         grabButton.setOnMouseExited(e -> grabButton.setStyle(BUTTON_STYLE));
+        grabButton.setOnAction(e -> {
+            try {
+                view.setReachableSquare(stub.reacheableSquare(view.getPosition()));
+                view.getReachableSquare();
+                //TODO cliccare sulla cella in cui voglio muovermi,
+                // Ci sarà qualcosa del tipo setPosition(int newPosition)
+                stub.pickUpAmmo(view.getUsername(), view.getPosition());
+            }
+            catch(Exception e1) {
+                e1.printStackTrace();
+            }
+        });
+
         button2.setStyle(BUTTON_STYLE);
 
         button2.setOnAction(e -> {
@@ -721,6 +753,8 @@ public class GUI extends Application{
     }
 
     public Scene loginScene(){
+
+        //TODO implememtare scelta del colore per il giocatore
             String username;
             String password;
             GridPane grid = new GridPane();
@@ -754,13 +788,28 @@ public class GUI extends Application{
             Button loginButton = new Button("Log in");
             GridPane.setConstraints(loginButton,1,2);
             loginButton.setOnAction(e-> {
+                try {
+                    boolean check = stub.register(nameInput.getText());
+                    if(!check) {
+                        //TODO implementare una finestra di errore:
+                        // username già presente e ripresentare la finestra di login
+                    }
+                    //TODO implementare una finestra di attesa, di durata definita (es. 20 s)
+                    // per aspettare che tutti i giocatori siano connessi
+                    else{
+                        view = new View(nameInput.getText());
+                    }
+                }
+                catch(Exception ex) {
+                    ex.printStackTrace();
+                }
                 window.setScene(scene);
             });
             //grid.getChildren().addAll(nameLabel,nameInput,passLabel,passInput,loginButton);
             grid.getChildren().addAll(nameInput,passInput,loginButton);
 
             Scene scene = new Scene(grid,300,200);
-            grid.setStyle("-fx-background-color: #74177B");
+            grid.setStyle("-fx-background-color: #c4bb55");
             return scene;
 
     }

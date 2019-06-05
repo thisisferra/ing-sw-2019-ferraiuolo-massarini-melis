@@ -14,7 +14,7 @@ public class HandTest {
     Match m1;
     @Before
     public void setClass() {
-        m1 = new Match(1, 3);
+        m1 = new Match(1);
         m1.initializeMatch();
         hand.getPowerUps().add(m1.pickUpPowerUp());
         hand.getPowerUps().add(m1.pickUpPowerUp());

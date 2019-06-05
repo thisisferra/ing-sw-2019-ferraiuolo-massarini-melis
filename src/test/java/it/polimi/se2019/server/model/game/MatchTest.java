@@ -17,13 +17,13 @@ public class MatchTest {
 
     @Before
     public void testSetMatch(){
-        m1 = new Match(1,3);
-        m2 = new Match(2,5);
-        m3 = new Match(3,1);
-        m4 = new Match(4,0);
-        m5 = new Match(1,10);
-        m6 = new Match(2,2);
-        m7 = new Match(4,4);
+        m1 = new Match(1);
+        m2 = new Match(2);
+        m3 = new Match(3);
+        m4 = new Match(4);
+        m5 = new Match(1);
+        m6 = new Match(2);
+        m7 = new Match(4);
         m1.initializeMatch();
         m2.initializeMatch();
         m3.initializeMatch();

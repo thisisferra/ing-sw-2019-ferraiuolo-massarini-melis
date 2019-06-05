@@ -11,7 +11,7 @@ public class WeaponSlotTest {
 
     @Before
     public void initWeaponSlotTest(){
-        m = new Match(1,3);
+        m = new Match(1);
         m.initializeMatch();
         m.getArsenal().get(0).initSlot();
         m.getArsenal().get(1).initSlot();

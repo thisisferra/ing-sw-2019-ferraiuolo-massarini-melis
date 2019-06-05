@@ -9,7 +9,7 @@ import org.junit.Test;
 public class EnemyDamageTest {
 
     EnemyDamage en1 = new EnemyDamage();
-    Match m1 = new Match(2, 4);
+    Match m1 = new Match(2);
 
     @Test
     public void testGetDamageEquals0(){
