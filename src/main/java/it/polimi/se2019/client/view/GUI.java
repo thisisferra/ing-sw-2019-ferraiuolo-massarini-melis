@@ -207,7 +207,6 @@ public class GUI extends Application{
                 }
                 //TODO in questo istante le celle raggiungibili sono salvate nella view locale al client, cambiare la mappa in modo che siano highlightateeee
                 //TODO Variabile che indica la nuova posizione scelta dal giocatore
-                //stub.setNewPosition(view.username, newPosition);
             }
             catch (RemoteException e1) {
                 e1.printStackTrace();

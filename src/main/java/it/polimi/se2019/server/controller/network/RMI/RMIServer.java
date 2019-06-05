@@ -86,6 +86,9 @@ public class RMIServer extends Server implements RMIServerInterface {
 
     public void setNewPosition(String username, int newPosition){
         Player currentPlayer = match.searchPlayerByClientName(username);
+        System.out.println(match.searchPlayerByClientName(username).getPosition());
         currentPlayer.setPosition(newPosition);
+        match.setChanged();
+        match.notifyObservers(match.searchPlayerByClientName(username).getPosition());
     }
 }

@@ -2,11 +2,13 @@ package it.polimi.se2019.server.model.game;
 
 import com.google.gson.Gson;
 
+import it.polimi.se2019.server.controller.VirtualView;
 import it.polimi.se2019.server.model.cards.*;
 import it.polimi.se2019.server.model.cards.weapons.*;
 import it.polimi.se2019.server.model.map.Map;
 import it.polimi.se2019.server.model.map.WeaponSlot;
 import it.polimi.se2019.server.model.player.Player;
+import it.polimi.se2019.utils.Observable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -16,7 +18,7 @@ import java.util.Arrays;
 import java.util.Collections;
 
 
-public class Match implements Serializable {
+public class Match extends Observable implements Serializable {
     private ArrayList<Player> players;
     private Player turn;
     //private int numberOfPlayers;
@@ -37,6 +39,7 @@ public class Match implements Serializable {
         this.discardedAmmos = new ArrayList<>();
         this.discardedPowerUps = new ArrayList<>();
         this.players = new ArrayList<>();
+        this.addObserver(new VirtualView());
 
     }
 
