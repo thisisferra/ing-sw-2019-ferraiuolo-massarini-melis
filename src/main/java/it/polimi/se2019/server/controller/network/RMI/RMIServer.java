@@ -76,12 +76,8 @@ public class RMIServer extends Server implements RMIServerInterface {
 
     public void pickUpAmmo(String username, int position) {
         Square square = match.getMap().searchSquare(position);
-        for (Player player : match.getAllPlayers()) {
-            if (player.getClientName().equals(username)) {
-                player.pickUpAmmo(square, match);
-            }
-        }
-
+        Player player = match.searchPlayerByClientName(username);
+        player.pickUpAmmo(square, match);
     }
 
     public void setNewPosition(String username, int newPosition){

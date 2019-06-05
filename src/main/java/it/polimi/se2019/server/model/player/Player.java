@@ -6,10 +6,8 @@ import it.polimi.se2019.server.model.cards.PowerUp;
 import it.polimi.se2019.server.model.game.Cubes;
 import it.polimi.se2019.server.model.game.Match;
 import it.polimi.se2019.server.model.map.Square;
+import it.polimi.se2019.server.model.map.WeaponSlot;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 /**
  * Represents the player game. Each player is identified by its clientName
@@ -161,6 +159,54 @@ public class Player {
     }
 
     /**
+     * Pick up a weapon in case i have less thean 3 weapon, it deletes from the right arsenal the weapon
+     * i choosed and add it to my hand. In the method I also pay the right amount of cubes to buy the weapon.
+     * @param indexToPickUp index of the weapon slot where I pick uop the weapon
+     * @return true if I can draw a weapon, false otherwise
+     */
+    public boolean pickUpWeapon(int indexToPickUp) {
+        //Check if the player is in a spawn point
+        Square currentSquare = match.getMap().searchSquare(this.getPosition());
+        if(currentSquare.isSpawnPoint()) {
+            //Retrieve the color of the square/weapon-slot from which I draw the weapon
+            String colorWeaponSlot = currentSquare.getColor();
+            //Search the right color weapon slot
+            for (WeaponSlot weaponSlot : match.getArsenal()) {
+                if (weaponSlot.getCabinetColor().equals(colorWeaponSlot)) {
+                    //Retrieve the cubes cost of the weapon I choosed
+                    Cubes cubesToPay = new Cubes(
+                            weaponSlot.getSlot()[indexToPickUp].getBuyingCost().getReds(),
+                            weaponSlot.getSlot()[indexToPickUp].getBuyingCost().getYellows(),
+                            weaponSlot.getSlot()[indexToPickUp].getBuyingCost().getBlues());
+                    //Check if I can pay the weapon I choosed
+                    if (
+                            cubesToPay.getReds() <= this.getPlayerBoard().getAmmoCubes().getReds() &&
+                            cubesToPay.getYellows() <= this.getPlayerBoard().getAmmoCubes().getYellows() &&
+                            cubesToPay.getBlues() <= this.getPlayerBoard().getAmmoCubes().getBlues()
+                    ) {
+                        //Add the weapon to my hand
+                        this.getHand().getWeapons().add(weaponSlot.getSlot()[indexToPickUp]);
+                        //Delete from the cabinet the weapon I choosed to draw
+                        weaponSlot.getSlot()[indexToPickUp] = null;
+                    }
+                    else {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+        //The player isn't in a spawn point and can't pick up a weapon
+        else {
+            return false;
+        }
+    }
+
+    //TODO nel caso in cui abbia già 3 armi
+    //TODO pickupWeapon()
+
+    /**
      * Switch a power-up with the cubes specified by the power-up
      */
     public void tradeCube(){
@@ -232,19 +278,4 @@ public class Player {
     public Match getMatch() {
         return this.match;
     }
-//    public void usePowerUp(PowerUp powerUpToUse) {
-//        if (powerUpToUse.getType().equals("targeting scope")) {
-//            Player targetingPlayer = controller.chooseTargetingPlayer();
-//            powerUpToUse.effect(this, targetingPlayer);
-//        }
-//        if (powerUpToUse.getType().equals("newton")) {
-//        }
-//        if (powerUpToUse.getType().equals("tagback grenade")) {
-//
-//        }
-//        if (powerUpToUse.getType().equals("teleporter")) {
-//            int newPosition = controller.chooseNewPosition();
-//            powerUpToUse.effect(this , newPosition);
-//        }
-//    }
 }
