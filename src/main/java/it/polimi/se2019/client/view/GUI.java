@@ -26,7 +26,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.*;
 
-public class GUI extends Application{
+public class GUI extends Application {
 
     private Registry registry;
     private RMIServerInterface stub;
@@ -36,7 +36,9 @@ public class GUI extends Application{
     private Group root = new Group();
     private Image image;
     private ImageView imageView = new ImageView();
+    private ToggleGroup mapSelector = new ToggleGroup();
     private GridPane grid = new GridPane();
+    private GridPane pawnsGrid = new GridPane();
     private HBox redBox = new HBox();
     private HBox blueBox = new HBox();
     private HBox yellowBox = new HBox();
@@ -55,20 +57,20 @@ public class GUI extends Application{
     private ArrayList<String> powerUpsName = new ArrayList<>();
     private TextArea textArea = new TextArea("\nWelcome to the game!");
     private Image iconImage = null;
-    private ImageView iconView=null;
+    private ImageView iconView = null;
     static final String BUTTON_STYLE = "-fx-background-color: #3c3c3c;-fx-text-fill: #999999;";
     static final String HIGHLIGHT_BUTTON_STYLE = "-fx-background-color: #bbbbbb;-fx-text-fill: #999999;";
     private int mapNumber = 1;
-    private Scene scene,loginScene;
+    private Scene scene, loginScene;
 
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
 
         launch(args);
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception {
         try {
             registry = LocateRegistry.getRegistry(1099);
             stub = (RMIServerInterface) registry.lookup("remServer");
@@ -81,14 +83,14 @@ public class GUI extends Application{
         window.setResizable(true);
         window.setFullScreen(false);
         window.alwaysOnTopProperty();
-        window.setOnCloseRequest(e->{
+        window.setOnCloseRequest(e -> {
             e.consume();
             closeProgram();
         });
 
 
         // map background
-        image = new Image(new FileInputStream("src/main/resources/Images/Maps/Map"+mapNumber+".png"));
+        image = new Image(new FileInputStream("src/main/resources/Images/Maps/Map" + mapNumber + ".png"));
         imageView = new ImageView(image);
         imageView.setFitHeight(700);
         imageView.setPreserveRatio(true);
@@ -100,16 +102,13 @@ public class GUI extends Application{
         setDeathTrackSkulls();
         deathTrack.setPickOnBounds(false);
 
-        //map grid
-        for(int row = 0; row <3;row++){
-            for(int col = 0; col <4;col++){
+        //map grid and pawnsgrid
+        for (int row = 0; row < 3; row++) {
+            for (int col = 0; col < 4; col++) {
                 Rectangle box = new Rectangle(160, 160);
-                box.setFill(Color.color(1,1,1,0.1));
-                box.setId(Integer.toString(row*4 + col));
+                box.setFill(Color.color(1, 1, 1, 0.1));
+                box.setId(Integer.toString(row * 4 + col));
                 grid.add(box, col, row);
-            }
-            for(Node rect : grid.getChildren()){
-
             }
         }
 
@@ -118,12 +117,17 @@ public class GUI extends Application{
         grid.setGridLinesVisible(true);
         grid.setPickOnBounds(false);
 
+        pawnsGrid.setTranslateX(149);
+        pawnsGrid.setTranslateY(145);
+        pawnsGrid.setGridLinesVisible(true);
+        pawnsGrid.setPickOnBounds(false);
+
         //cabinets
         resetWeaponsName(weaponsName);
-        setWeaponView(redBox,weaponsName);
-        setWeaponView(yellowBox,weaponsName);
-        setWeaponView(blueBox,weaponsName);
-        setWeaponView(weaponHand,weaponsName);
+        setWeaponView(redBox, weaponsName);
+        setWeaponView(yellowBox, weaponsName);
+        setWeaponView(blueBox, weaponsName);
+        setWeaponView(weaponHand, weaponsName);
         //blue cabinet
         blueBox.setTranslateX(490);
         blueBox.setTranslateY(-10);
@@ -143,11 +147,11 @@ public class GUI extends Application{
 
 
         cabinets.setPickOnBounds(false);
-        cabinets.getChildren().addAll(redBox,blueBox,yellowBox);
+        cabinets.getChildren().addAll(redBox, blueBox, yellowBox);
 
         //powerups
         resetPowerUpsName(powerUpsName);
-        setPowerUpsView(powerUpHand,powerUpsName);
+        setPowerUpsView(powerUpHand, powerUpsName);
 
         //playerboards
         setPlayerboards();
@@ -158,38 +162,39 @@ public class GUI extends Application{
 
 
         //buttons
-        Button moveButton = setButton("src/main/resources/Images/icons/move_icon.png",50,"Move");
-        Button grabButton = setButton("src/main/resources/Images/icons/grab_icon.png",50,"Move and grab");
-        Button shootButton = setButton("src/main/resources/Images/icons/shoot_icon.png",50,"Shoot");
-        Button passButton = setButton("src/main/resources/Images/icons/pass_icon.png",50,"Pass turn and reload");
-        Button powerUps = setButton("src/main/resources/Images/icons/powerup_icon.png",50,"");
+        Button moveButton = setButton("src/main/resources/Images/icons/move_icon.png", 50, "Move");
+        Button grabButton = setButton("src/main/resources/Images/icons/grab_icon.png", 50, "Move and grab");
+        Button shootButton = setButton("src/main/resources/Images/icons/shoot_icon.png", 50, "Shoot");
+        Button passButton = setButton("src/main/resources/Images/icons/pass_icon.png", 50, "Pass turn and reload");
+        Button powerUps = setButton("src/main/resources/Images/icons/powerup_icon.png", 50, "");
         moveButton.setOnAction(e -> {
             try {
 
                 if (!view.getCanMove()) {
                     view.setCanMove(true);
                     view.setReachableSquare(stub.reacheableSquare(view.getPosition()));
-                    textArea.setText( "\n" + view.getReachableSquare() + "\n" + textArea.getText());
-                    for(int i=0; i<12;i++){
+                    textArea.setText("\n" + view.getReachableSquare() + "\n" + textArea.getText());
+                    for (int i = 0; i < 12; i++) {
                         Rectangle rectangle = (Rectangle) grid.getChildren().get(i);
-                        for(Square square : view.getReachableSquare()){
-                            if(rectangle.getId().equals(Integer.toString(square.getPosition()))){
-                                rectangle.setFill(Color.color(1,1,0,0.4));
-                                rectangle.setOnMouseClicked( o -> {
-                                    textArea.setText("\nSquare #: " + rectangle.getId()+"\n"+textArea.getText());
-                                    try{
-                                        stub.setNewPosition(view.getUsername(),Integer.parseInt(rectangle.getId()));
-                                        textArea.setText("\nNew position: "+  rectangle.getId()+ textArea.getText());
-                                        for(int j = 0; j<12;j++){
+                        for (Square square : view.getReachableSquare()) {
+                            if (rectangle.getId().equals(Integer.toString(square.getPosition()))) {
+                                rectangle.setFill(Color.color(1, 1, 0, 0.4));
+                                rectangle.setOnMouseClicked(o -> {
+                                    textArea.setText("\nSquare #: " + rectangle.getId() + "\n" + textArea.getText());
+                                    try {
+                                        stub.setNewPosition(view.getUsername(), Integer.parseInt(rectangle.getId()));
+                                        textArea.setText("\nNew position: " + rectangle.getId() + textArea.getText());
+                                        setPawn("banshee",Integer.parseInt(rectangle.getId()));
+
+                                        for (int j = 0; j < 12; j++) {
                                             Rectangle rect = (Rectangle) grid.getChildren().get(j);
-                                            rect.setFill(Color.color(1,1,1,0.1));
+                                            rect.setFill(Color.color(1, 1, 1, 0.1));
                                             rect.setOnMouseClicked(g -> {
 
                                             });
                                             view.setCanMove(false);
-
                                         }
-                                    }catch(Exception exc){
+                                    } catch (Exception exc) {
                                         exc.printStackTrace();
                                     }
                     /*
@@ -201,20 +206,16 @@ public class GUI extends Application{
 
                         }
                     }
+                } else {
+                    textArea.setText("\nYou have already selected this option" + textArea.getText());
                 }
-                else {
-                    textArea.setText("\nYou have already selected this option"+ textArea.getText());
-                }
-                //TODO in questo istante le celle raggiungibili sono salvate nella view locale al client, cambiare la mappa in modo che siano highlightateeee
-                //TODO Variabile che indica la nuova posizione scelta dal giocatore
-            }
-            catch (RemoteException e1) {
+            } catch (RemoteException e1) {
                 e1.printStackTrace();
             }
         });
-        powerUps.setOnAction(e->{
+        powerUps.setOnAction(e -> {
             HBox box = new HBox();
-            for(Node obj: powerUpHand.getChildren()){
+            for (Node obj : powerUpHand.getChildren()) {
 
                 ImageView copy = (ImageView) obj;
                 ImageView copiedPowerUp = new ImageView(copy.getImage());
@@ -223,12 +224,12 @@ public class GUI extends Application{
                 box.getChildren().add(copiedPowerUp);
 
             }
-            PlayerStatus.display(box,"Power ups");
+            PlayerStatus.display(box, "Power ups");
         });
-        Button playersButton = setButton("src/main/resources/Images/icons/players_icon.png",50,"");
-        playersButton.setOnAction(e->{
+        Button playersButton = setButton("src/main/resources/Images/icons/players_icon.png", 50, "");
+        playersButton.setOnAction(e -> {
             VBox box = new VBox();
-            for(Node obj: playerboards.getChildren()){
+            for (Node obj : playerboards.getChildren()) {
 
                 ImageView copy = (ImageView) obj;
                 ImageView copiedPlayerboard = new ImageView(copy.getImage());
@@ -237,12 +238,12 @@ public class GUI extends Application{
                 box.getChildren().add(copiedPlayerboard);
 
             }
-            PlayerStatus.display(box,"Players");
+            PlayerStatus.display(box, "Players");
         });
-        Button weapons = setButton("src/main/resources/Images/icons/weapon_icon.png",50,"");
-        weapons.setOnAction(e->{
+        Button weapons = setButton("src/main/resources/Images/icons/weapon_icon.png", 50, "");
+        weapons.setOnAction(e -> {
             HBox box = new HBox();
-            for(Node obj: weaponHand.getChildren()){
+            for (Node obj : weaponHand.getChildren()) {
 
                 ImageView copy = (ImageView) obj;
                 ImageView copiedView = new ImageView(copy.getImage());
@@ -251,15 +252,15 @@ public class GUI extends Application{
                 box.getChildren().add(copiedView);
 
             }
-            PlayerStatus.display(box,"Weapons");
+            PlayerStatus.display(box, "Weapons");
         });
         Button button = new Button("x");
         button.setStyle(BUTTON_STYLE);
 
         button.setOnAction(e -> {
-            setWeaponView(redBox,weaponsName);
-            setWeaponView(blueBox,weaponsName);
-            setWeaponView(yellowBox,weaponsName);
+            setWeaponView(redBox, weaponsName);
+            setWeaponView(blueBox, weaponsName);
+            setWeaponView(yellowBox, weaponsName);
             window.show();
         });
 
@@ -270,11 +271,8 @@ public class GUI extends Application{
             try {
                 view.setReachableSquare(stub.reacheableSquare(view.getPosition()));
                 view.getReachableSquare();
-                //TODO cliccare sulla cella in cui voglio muovermi,
-                // Ci sarà qualcosa del tipo setPosition(int newPosition)
                 stub.pickUpAmmo(view.getUsername(), view.getPosition());
-            }
-            catch(Exception e1) {
+            } catch (Exception e1) {
                 e1.printStackTrace();
             }
         });
@@ -283,6 +281,7 @@ public class GUI extends Application{
 
         button2.setOnAction(e -> {
             setAmmo(mapNumber);
+            setPawn("banshee",view.getPosition());
         });
 
         //deathtracker
@@ -304,7 +303,7 @@ public class GUI extends Application{
         firstPlayer.setTranslateY(275);
 
         //left boarderpane
-        leftMenu.getChildren().addAll(moveButton,grabButton,shootButton,passButton,weapons,powerUps,playersButton,points,cubeBox,button,button2);
+        leftMenu.getChildren().addAll(moveButton, grabButton, shootButton, passButton, weapons, powerUps, playersButton, points, cubeBox, button, button2);
 
         //right borderpane
         //textarea
@@ -319,7 +318,7 @@ public class GUI extends Application{
         rightPane.getChildren().add(textArea);
         rightPane.setSpacing(10);
 
-        stack.getChildren().addAll(imageView,ammoSet,firstPlayer,deathTrack,cabinets,grid);
+        stack.getChildren().addAll(imageView, ammoSet, firstPlayer, deathTrack, cabinets,pawnsGrid,grid);
         root = new Group(stack);
         root.setTranslateY(-375);
         root.setTranslateX(25);
@@ -328,21 +327,21 @@ public class GUI extends Application{
         borderPane.setRight(rightPane);
         borderPane.setLeft(leftMenu);
 
-        scene = new Scene(borderPane,1300,700);
+        scene = new Scene(borderPane, 1300, 700);
         window.show();
     }
 
-    public void  setPowerUpsView(HBox deck,ArrayList<String> powerUpsName){
+    public void setPowerUpsView(HBox deck, ArrayList<String> powerUpsName) {
         deck.getChildren().clear();
-        if(powerUpsName.size()>2){
-            for(int i=0 ;i<3; i++){
+        if (powerUpsName.size() > 2) {
+            for (int i = 0; i < 3; i++) {
                 Collections.shuffle(powerUpsName);
                 String path;
                 path = powerUpsName.get(0);
                 Image imagePowerUp = null;
                 try {
-                    imagePowerUp = new Image(new FileInputStream( path));
-                } catch (FileNotFoundException e){
+                    imagePowerUp = new Image(new FileInputStream(path));
+                } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
                 ImageView powerUpView = new ImageView(imagePowerUp);
@@ -353,11 +352,10 @@ public class GUI extends Application{
                 Collections.shuffle(powerUpsName);
 
             }
-        }
-        else  resetWeaponsName(weaponsName);
+        } else resetWeaponsName(weaponsName);
     }
 
-    public void resetWeaponsName(ArrayList<String> weaponsName){
+    public void resetWeaponsName(ArrayList<String> weaponsName) {
         weaponsName.clear();
         weaponsName.add("src/main/resources/Images/Weapons/cyber_blade.png");
         weaponsName.add("src/main/resources/Images/Weapons/electroscythe.png");
@@ -384,17 +382,17 @@ public class GUI extends Application{
 
     }
 
-    public void  setWeaponView(HBox cabinet,ArrayList<String> weaponsName){
+    public void setWeaponView(HBox cabinet, ArrayList<String> weaponsName) {
         cabinet.getChildren().clear();
-        if(weaponsName.size()>2){
-            for(int i=0 ;i<3; i++){
+        if (weaponsName.size() > 2) {
+            for (int i = 0; i < 3; i++) {
                 Collections.shuffle(weaponsName);
                 String weaponPath;
                 weaponPath = weaponsName.get(0);
                 Image imageWeapon = null;
                 try {
-                    imageWeapon = new Image(new FileInputStream( weaponPath));
-                } catch (FileNotFoundException e){
+                    imageWeapon = new Image(new FileInputStream(weaponPath));
+                } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
                 ImageView weaponView = new ImageView(imageWeapon);
@@ -405,12 +403,12 @@ public class GUI extends Application{
                 Collections.shuffle(weaponsName);
 
             }
-            for(Node obj: cabinet.getChildren()){
+            for (Node obj : cabinet.getChildren()) {
                 VBox box = new VBox();
-                obj.setOnMouseEntered(e->{
+                obj.setOnMouseEntered(e -> {
                     box.getChildren().clear();
-                    if(rightPane.getChildren().size() >1)
-                        rightPane.getChildren().remove(rightPane.getChildren().size()-1);
+                    if (rightPane.getChildren().size() > 1)
+                        rightPane.getChildren().remove(rightPane.getChildren().size() - 1);
 
                     ImageView boxView = (ImageView) obj;
                     ImageView view = new ImageView(boxView.getImage());
@@ -420,15 +418,14 @@ public class GUI extends Application{
                     rightPane.getChildren().add(box);
                     box.setTranslateX(-450);
                 });
-                obj.setOnMouseExited( e-> {
+                obj.setOnMouseExited(e -> {
                     rightPane.getChildren().remove(box);
                 });
             }
-        }
-        else  resetWeaponsName(weaponsName);
+        } else resetWeaponsName(weaponsName);
     }
 
-    public void resetPowerUpsName(ArrayList<String> powerUpsName){
+    public void resetPowerUpsName(ArrayList<String> powerUpsName) {
         powerUpsName.clear();
         powerUpsName.add("src/main/resources/Images/PowerUps/blue_newton.png");
         powerUpsName.add("src/main/resources/Images/PowerUps/blue_tagback_grenade.png");
@@ -446,28 +443,28 @@ public class GUI extends Application{
 
     }
 
-    public String getRedCubes(){
+    public String getRedCubes() {
         return "2";
     }
 
-    public String getYellowCubes(){
+    public String getYellowCubes() {
         return "2";
     }
 
-    public String getBlueCubes(){
+    public String getBlueCubes() {
         return "3";
     }
 
-    public void setDeathTrackSkulls(){
+    public void setDeathTrackSkulls() {
         Image skullImage = null;
         ImageView skullView;
         try {
             skullImage = new Image(new FileInputStream("src/main/resources/Images/icons/skull_icon.png"));
-        } catch (FileNotFoundException e){
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
-        for(int i=0; i<8;i++){
+        for (int i = 0; i < 8; i++) {
             skullView = new ImageView(skullImage);
             skullView.setFitHeight(40);
             skullView.setSmooth(true);
@@ -476,11 +473,11 @@ public class GUI extends Application{
         }
     }
 
-    public void addDeathTrackDamage(String color){
+    public void addDeathTrackDamage(String color) {
         Image tearImage = null;
         try {
-            tearImage = new Image(new FileInputStream("src/main/resources/Images/icons/"+color+"_damage_icon.png"));
-        } catch (FileNotFoundException e){
+            tearImage = new Image(new FileInputStream("src/main/resources/Images/icons/" + color + "_damage_icon.png"));
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         ImageView tear = new ImageView(tearImage);
@@ -490,13 +487,13 @@ public class GUI extends Application{
         deathTrack.getChildren().add(tear);
     }
 
-    public void setPlayerboards(){
+    public void setPlayerboards() {
         playerboards = new VBox();
         ImageView img;
         Image image1 = null;
-        try{
+        try {
             image1 = new Image(new FileInputStream("src/main/resources/Images/Playerboards/Banshee.png"));
-        }catch(FileNotFoundException e){
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         img = new ImageView(image1);
@@ -505,27 +502,26 @@ public class GUI extends Application{
         playerboards.getChildren().add(img);
     }
 
-    public void setAmmo(int map){
+    public void setAmmo(int map) {
 
         Image ammoBack = null;
 
         try {
             ammoBack = new Image(new FileInputStream("src/main/resources/Images/Ammo/ammoback.png"));
-        } catch (FileNotFoundException e){
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
         ammoSet.getChildren().clear();
-        for(int i = 0; i<12;i++){
+        for (int i = 0; i < 12; i++) {
             ammoSet.getChildren().add(new ImageView(ammoBack));
         }
-        for(Node obj : ammoSet.getChildren()){
+        for (Node obj : ammoSet.getChildren()) {
             obj.setTranslateX(500);
             obj.setTranslateY(500);
         }
-        switch(map){
-            case 2 : {
-
+        switch (map) {
+            case 2: {
 
 
                 //square 0
@@ -559,7 +555,7 @@ public class GUI extends Application{
 
                 break;
             }
-            case 1 : {
+            case 1: {
 
 
                 //square 0
@@ -595,10 +591,9 @@ public class GUI extends Application{
                 ammoSet.getChildren().get(10).setTranslateY(215);
 
 
-
                 break;
             }
-            case 3 : {
+            case 3: {
 
 
                 //square 0
@@ -635,7 +630,7 @@ public class GUI extends Application{
 
                 break;
             }
-            case 4 : {
+            case 4: {
 
                 //square 0
                 ammoSet.getChildren().get(0).setTranslateX(-255);
@@ -677,60 +672,60 @@ public class GUI extends Application{
 
                 break;
             }
-            default :
+            default:
                 System.out.println("Error");
         }
-        for(Node obj : ammoSet.getChildren()){
+        for (Node obj : ammoSet.getChildren()) {
             obj.setScaleX(0.3);
             obj.setScaleY(0.3);
         }
     }
 
-    public void setCubes(){
+    public void setCubes() {
         ImageView cubeImage = null;
-        try{
+        try {
             cubeImage = new ImageView(new Image(new FileInputStream("src/main/resources/Images/icons/redCube.png")));
-        }catch(FileNotFoundException e){
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
-        if(cubeImage != null){
+        if (cubeImage != null) {
             cubeImage.setFitWidth(20);
             cubeImage.setPreserveRatio(true);
         }
 
-        Label redLabel = new Label(" " + getRedCubes()+"  ",cubeImage);
+        Label redLabel = new Label(" " + getRedCubes() + "  ", cubeImage);
         redLabel.setStyle("-fx-text-fill: #ff0000; -fx-background-color: #404040");
 
-        try{
+        try {
             cubeImage = new ImageView(new Image(new FileInputStream("src/main/resources/Images/icons/yellowCube.png")));
-        }catch(FileNotFoundException e){
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        if(cubeImage != null){
+        if (cubeImage != null) {
             cubeImage.setFitWidth(20);
             cubeImage.setPreserveRatio(true);
         }
-        Label yellowLabel = new Label(" " + getYellowCubes()+ "  ",cubeImage);
+        Label yellowLabel = new Label(" " + getYellowCubes() + "  ", cubeImage);
         yellowLabel.setStyle("-fx-text-fill: #fff000; -fx-background-color: #404040");
 
-        try{
+        try {
             cubeImage = new ImageView(new Image(new FileInputStream("src/main/resources/Images/icons/blueCube.png")));
-        }catch(FileNotFoundException e){
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        if(cubeImage != null){
+        if (cubeImage != null) {
             cubeImage.setFitWidth(20);
             cubeImage.setPreserveRatio(true);
         }
-        Label blueLabel = new Label(" " + getBlueCubes() + "  ",cubeImage);
+        Label blueLabel = new Label(" " + getBlueCubes() + "  ", cubeImage);
         blueLabel.setStyle("-fx-text-fill: #0010ff; -fx-background-color: #404040;");
 
-        cubeBox.getChildren().addAll(redLabel,yellowLabel,blueLabel);
+        cubeBox.getChildren().addAll(redLabel, yellowLabel, blueLabel);
         cubeBox.setSpacing(5);
     }
 
-    public int getPoints(){
+    public int getPoints() {
         return 43;
     }
 
@@ -741,18 +736,18 @@ public class GUI extends Application{
         }
     }
 
-    public Button setButton(String path,int width,String text){
+    public Button setButton(String path, int width, String text) {
         Image iconImage = null;
-        try{
+        try {
             iconImage = new Image(new FileInputStream(path));
-        }catch (FileNotFoundException e){
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         ImageView iconView2 = new ImageView(iconImage);
         iconView2.setFitWidth(width);
         iconView2.setPreserveRatio(true);
-        Button newButton = new Button("",iconView2);
-        newButton.setOnAction(e-> textArea.setText(text +"\n"+ textArea.getText()));
+        Button newButton = new Button("", iconView2);
+        newButton.setOnAction(e -> textArea.setText(text + "\n" + textArea.getText()));
         newButton.setOnMouseEntered(e -> newButton.setStyle(HIGHLIGHT_BUTTON_STYLE));
         newButton.setOnMouseExited(e -> newButton.setStyle(BUTTON_STYLE));
         newButton.setStyle(BUTTON_STYLE);
@@ -761,52 +756,147 @@ public class GUI extends Application{
         return newButton;
     }
 
-    public Scene setLoginScene(){
-            GridPane layout = new GridPane();
-            layout.setPadding(new Insets(50,75,50,75));
-            layout.setVgap(10);
+    public Scene setLoginScene() {
+        GridPane layout = new GridPane();
+        layout.setPadding(new Insets(50, 75, 50, 75));
+        layout.setVgap(10);
 
-            //Name input
-            TextField nameInput = new TextField();
-            nameInput.setPromptText("Username");
-            nameInput.setStyle("-fx-background-color: #726B72");
-            GridPane.setConstraints(nameInput, 1,0);
+        //Name input
+        TextField nameInput = new TextField();
+        nameInput.setPromptText("Username");
+        nameInput.setStyle("-fx-background-color: #726B72");
+        GridPane.setConstraints(nameInput, 1, 0);
 
-            //Password input
+        //Password input
+        PasswordField passInput = new PasswordField();
+        passInput.setStyle("-fx-background-color: #726B72");
+        passInput.setPromptText("Password");
+        GridPane.setConstraints(passInput, 1, 1);
 
-            PasswordField passInput = new PasswordField();
-            passInput.setStyle("-fx-background-color: #726B72");
-            passInput.setPromptText("Password");
-            GridPane.setConstraints(passInput,1,1);
-
-            Button loginButton = new Button("Log in");
-            GridPane.setConstraints(loginButton,1,2);
-            loginButton.setOnAction(e-> {
-                try {
-                    boolean check = stub.register(nameInput.getText());
-                    if(!check) {
-                        //TODO implementare una finestra di errore:
-                        // username già presente e ripresentare la finestra di login
-                    }
-                    //TODO implementare una finestra di attesa, di durata definita (es. 20 s)
-                    // per aspettare che tutti i giocatori siano connessi
-                    else{
-                        view = new View(nameInput.getText());
-                    }
+        //login button
+        Button loginButton = new Button("Log in");
+        GridPane.setConstraints(loginButton, 1, 2);
+        loginButton.setOnAction(e -> {
+            try {
+                boolean check = stub.register(nameInput.getText());
+                if (!check) {
+                    Label errorLabel = new Label("Selected name already taken, please retry.");
+                    errorLabel.setStyle("-fx-text-fill: #ff0000");
+                    Button exitButton = new Button("Back");
+                    exitButton.setStyle(BUTTON_STYLE);
+                    exitButton.setOnMouseExited(exit -> {
+                        exitButton.setStyle(BUTTON_STYLE);
+                    });
+                    exitButton.setOnMouseEntered(enter -> {
+                        exitButton.setStyle(HIGHLIGHT_BUTTON_STYLE);
+                    });
+                    exitButton.setOnAction(o -> {
+                        Scene backScene;
+                        backScene = setLoginScene();
+                        window.setScene(backScene);
+                    });
+                    VBox vBox = new VBox();
+                    vBox.getChildren().addAll(errorLabel, exitButton);
+                    vBox.setSpacing(20);
+                    vBox.setStyle("-fx-background-color: #505050");
+                    vBox.setAlignment(Pos.CENTER);
+                    exitButton.setAlignment(Pos.CENTER);
+                    errorLabel.setAlignment(Pos.CENTER);
+                    Scene errorScene = new Scene(vBox, 300, 200);
+                    window.setScene(errorScene);
                 }
-                catch(Exception ex) {
-                    ex.printStackTrace();
+                //TODO implementare una finestra di attesa, di durata definita (es. 20 s)
+                // per aspettare che tutti i giocatori siano connessi
+                else {
+                    view = new View(nameInput.getText());
+                    window.setScene(scene);
                 }
-                window.setScene(scene);
-            });
-            loginButton.setStyle(BUTTON_STYLE);
-            loginButton.setOnMouseEntered(e -> loginButton.setStyle(HIGHLIGHT_BUTTON_STYLE));
-            loginButton.setOnMouseExited(e -> loginButton.setStyle(BUTTON_STYLE));
-            loginButton.setAlignment(Pos.CENTER);
-            layout.getChildren().addAll(nameInput,passInput,loginButton);
-            Scene scene = new Scene(layout,300,200);
-            layout.setStyle("-fx-background-color: #505050");
-            return scene;
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
 
+        });
+
+        BorderPane pane = new BorderPane();
+        VBox sideBox = setMapSelector();
+        pane.setLeft(sideBox);
+        pane.setCenter(layout);
+        pane.setPadding(new Insets(10, 10, 10, 10));
+        loginButton.setStyle(BUTTON_STYLE);
+        loginButton.setOnMouseEntered(e -> loginButton.setStyle(HIGHLIGHT_BUTTON_STYLE));
+        loginButton.setOnMouseExited(e -> loginButton.setStyle(BUTTON_STYLE));
+        loginButton.setAlignment(Pos.CENTER);
+        layout.getChildren().addAll(nameInput, passInput, loginButton);
+        Scene scene = new Scene(pane, 400, 250);
+        pane.setStyle("-fx-background-color: #505050");
+        return scene;
+
+    }
+
+    public VBox setMapSelector() {
+        VBox sideBox = new VBox();
+        RadioButton button1 = new RadioButton("Map 1");
+        button1.setToggleGroup(mapSelector);
+        button1.setStyle("-fx-text-fill: #b0b0b0");
+        button1.setSelected(true);
+        RadioButton button2 = new RadioButton("Map 2");
+        button2.setStyle("-fx-text-fill: #b0b0b0");
+        button2.setToggleGroup(mapSelector);
+        RadioButton button3 = new RadioButton("Map 3");
+        button3.setStyle("-fx-text-fill: #b0b0b0");
+        button3.setToggleGroup(mapSelector);
+        RadioButton button4 = new RadioButton("Map 4");
+        button4.setStyle("-fx-text-fill: #b0b0b0");
+        button4.setToggleGroup(mapSelector);
+        Label selectMap = new Label("Select map: ");
+        selectMap.setStyle("-fx-text-fill: #b0b0b0");
+        sideBox.getChildren().addAll(selectMap, button1, button2, button3, button4);
+        sideBox.setSpacing(10);
+        sideBox.setAlignment(Pos.CENTER);
+        sideBox.setStyle(BUTTON_STYLE);
+        return sideBox;
+    }
+
+
+    public void setPawn(String character,int position){
+        FlowPane flowPane;
+        pawnsGrid.getChildren().clear();
+        for (int row = 0; row < 3; row++) {
+            for (int col = 0; col < 4; col++) {
+                if(row * 4 + col == position){
+                    flowPane = setGroup(character);
+                }
+                else {
+                    flowPane = new FlowPane();
+                }
+                flowPane.setPrefWidth(160);
+                flowPane.setPrefHeight(160);
+                flowPane.setId(Integer.toString(row * 4 + col));
+                pawnsGrid.add(flowPane,col,row);
+            }
+        }
+        /*
+        pawnsGrid.getChildren().clear();
+        pawnsGrid.add(flowPane,position%4,position/4);
+         */
+    }
+
+    public FlowPane setGroup(String character) {
+        Image img = null;
+        ImageView imageView = null;
+        try {
+            img = new Image(new FileInputStream("src/main/resources/Images/icons/" + character + "_icon.png"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        if (img != null) {
+            imageView = new ImageView(img);
+            imageView.setFitWidth(50);
+            imageView.setPreserveRatio(true);
+            imageView.setId(character);
+        }
+        FlowPane group = new FlowPane();
+        group.getChildren().addAll(imageView);
+        return group;
     }
 }
