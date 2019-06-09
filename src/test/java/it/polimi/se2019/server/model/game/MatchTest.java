@@ -37,6 +37,7 @@ public class MatchTest {
     }
 
 
+    /*
     @Test
     public void testNumberOfPlayers(){
         Assert.assertEquals(3,m1.getAllPlayers().size());
@@ -46,9 +47,11 @@ public class MatchTest {
         Assert.assertEquals(0,m5.getAllPlayers().size());
         Assert.assertEquals(2,m6.getAllPlayers().size());
         Assert.assertEquals(4,m7.getAllPlayers().size());
+        }
+     */
 
 
-    }
+
     @Test
     public void testDeckSize(){
 

@@ -254,6 +254,26 @@ public class GUI extends Application {
             }
             PlayerStatus.display(box, "Weapons");
         });
+
+        grabButton.setOnMouseEntered(e -> grabButton.setStyle(HIGHLIGHT_BUTTON_STYLE));
+        grabButton.setOnMouseExited(e -> grabButton.setStyle(BUTTON_STYLE));
+        grabButton.setOnAction(e -> {
+            try {
+                view.setReachableSquare(stub.reacheableSquare(view.getPosition()));
+                view.getReachableSquare();
+                stub.pickUpAmmo(view.getUsername(), view.getPosition());
+                for(Node node : ammoSet.getChildren()){
+                    ImageView imageView = (ImageView) node;
+                    if(view.getPosition() == Integer.parseInt(imageView.getId())){
+                        imageView.setX(500);
+                        imageView.setY(500);
+                    }
+                }
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        });
+
         Button button = new Button("x");
         button.setStyle(BUTTON_STYLE);
 
@@ -265,20 +285,7 @@ public class GUI extends Application {
         });
 
         Button button2 = new Button("y");
-        grabButton.setOnMouseEntered(e -> grabButton.setStyle(HIGHLIGHT_BUTTON_STYLE));
-        grabButton.setOnMouseExited(e -> grabButton.setStyle(BUTTON_STYLE));
-        grabButton.setOnAction(e -> {
-            try {
-                view.setReachableSquare(stub.reacheableSquare(view.getPosition()));
-                view.getReachableSquare();
-                stub.pickUpAmmo(view.getUsername(), view.getPosition());
-            } catch (Exception e1) {
-                e1.printStackTrace();
-            }
-        });
-
         button2.setStyle(BUTTON_STYLE);
-
         button2.setOnAction(e -> {
             setAmmo(mapNumber);
             setPawn("banshee",view.getPosition());
