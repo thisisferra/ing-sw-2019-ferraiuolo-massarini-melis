@@ -3,6 +3,7 @@ package it.polimi.se2019.server.controller;
 import it.polimi.se2019.client.view.GUIControllerInterface;
 import it.polimi.se2019.server.model.cards.PowerUp;
 import it.polimi.se2019.server.model.cards.weapons.Weapon;
+import it.polimi.se2019.server.model.game.Cubes;
 
 import javax.swing.*;
 import java.io.Serializable;
@@ -18,6 +19,7 @@ public class VirtualView implements Serializable {
     private int damage;
     private ArrayList<Weapon> weapons = new ArrayList<>();
     private ArrayList<PowerUp> powerUps = new ArrayList<>();
+    private Cubes cubes;
 
     //COSTRUTTORE
     public VirtualView(GUIControllerInterface clientReference) {
@@ -50,6 +52,10 @@ public class VirtualView implements Serializable {
         return this.powerUps;
     }
 
+    public Cubes getCubes(){
+        return this.cubes;
+    }
+
 
     //SETTER
 
@@ -71,6 +77,10 @@ public class VirtualView implements Serializable {
 
     public void setPowerUps(ArrayList<PowerUp> powerUps) {
         this.powerUps = powerUps;
+    }
+
+    public void setCubes(Cubes cubes) {
+        this.cubes = cubes;
     }
 
     //ALTRO

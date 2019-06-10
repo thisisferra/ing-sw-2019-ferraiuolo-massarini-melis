@@ -111,10 +111,13 @@ public class GUIController implements GUIControllerInterface {
         for (RemoteView remoteView : allViews) {
             out.println(remoteView.getUsername() + ":");
             out.println("Position: " + remoteView.getPosition());
+            out.println("Cubes: " + remoteView.getCubes());
             if (remoteView.getUsername().equals(this.username)){
                 out.println("Weapons: " + remoteView.getWeapons());
                 out.println("Power-up: " + remoteView.getPowerUp());
             }
+            out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            out.println();
         }
     }
 }

@@ -99,6 +99,10 @@ public class PlayerBoard {
         ammoCubes.setCubes(currentCubes);
     }
 
+    public void setDeltaAmmoCubes(Cubes currentCubes) {
+        ammoCubes.setDeltaCubes(currentCubes);
+    }
+
     //remove the element at index 0 in ArrayList pointDeath
     //used when a player dies
     public void deleteFirstPointDeaths() {

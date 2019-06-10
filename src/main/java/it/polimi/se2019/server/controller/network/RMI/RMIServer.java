@@ -81,6 +81,7 @@ public class RMIServer extends Server implements RMIServerInterface {
         virtualView.setUsername(player.getClientName());
         virtualView.setWeapons(player.getHand().getWeapons());
         virtualView.setPowerUps(player.getHand().getPowerUps());
+        virtualView.setCubes(player.getPlayerBoard().getAmmoCubes());
         this.printClientConnected();
         this.initAllClient(allVirtualViews);
 
@@ -178,6 +179,7 @@ public class RMIServer extends Server implements RMIServerInterface {
         Player currentPlayer = match.searchPlayerByClientName(username);
         currentPlayer.pickUpWeapon(indexToPickUp);
         getMyVirtualView(username).setWeapons(currentPlayer.getHand().getWeapons());
+        getMyVirtualView(username).setCubes(currentPlayer.getPlayerBoard().getAmmoCubes());
         updateAllClient(allVirtualViews);
 
 

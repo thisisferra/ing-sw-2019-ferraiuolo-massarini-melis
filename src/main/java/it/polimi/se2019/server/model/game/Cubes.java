@@ -64,6 +64,12 @@ public class Cubes implements Serializable {
         }
 
     }
+
+    public void setDeltaCubes(Cubes cubes) {
+        this.reds = cubes.getReds();
+        this.yellows = cubes.getYellows();
+        this.blues = cubes.getBlues();
+    }
     public String toString(){
         return "Reds: "+ this.getReds() + " Blues: " + this.getBlues() + " Yellows: " + this.getYellows();
     }

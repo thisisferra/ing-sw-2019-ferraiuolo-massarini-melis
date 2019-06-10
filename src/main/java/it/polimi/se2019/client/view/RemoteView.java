@@ -180,6 +180,7 @@ public class RemoteView {
         this.position = virtualView.getPosition();
         this.weapons = virtualView.getWeapons();
         this.powerUp = virtualView.getPowerUps();
+        this.cubes = virtualView.getCubes();
     }
 
     public RemoteView searchMyRemoteView(String username) {

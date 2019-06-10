@@ -198,6 +198,10 @@ public class Player {
                             this.getHand().getWeapons().add(weaponSlot.getSlot()[indexToPickUp]);
                             //Delete from the cabinet the weapon I choosed to draw
                             weaponSlot.getSlot()[indexToPickUp] = null;
+                            //Sub buying cubes from hand
+                            this.getPlayerBoard().setDeltaAmmoCubes(new Cubes(this.getPlayerBoard().getAmmoCubes().getReds()-cubesToPay.getReds(),
+                                    this.getPlayerBoard().getAmmoCubes().getYellows()-cubesToPay.getYellows(),
+                                    this.getPlayerBoard().getAmmoCubes().getBlues()-cubesToPay.getBlues()));
                         } else {
                             return false;
                         }

@@ -272,15 +272,12 @@ public class GUI extends Application {
         grabButton.setOnMouseEntered(e -> grabButton.setStyle(HIGHLIGHT_BUTTON_STYLE));
         grabButton.setOnMouseExited(e -> grabButton.setStyle(BUTTON_STYLE));
         grabButton.setOnAction(e -> {
-            try {
-                //INIZIO STAMPE DI CONTROLLO
-                System.out.println(myRemoteView.getUsername());
-                //FINE STAMPE DI CONTROLLO
+           try {
                 myRemoteView.setReachableSquare(guiController.getRmiStub().reacheableSquare(myRemoteView.getPosition()));
                 myRemoteView.getReachableSquare();
                 boolean isSpawn = guiController.getRmiStub().isSpawnPoint(myRemoteView.getPosition());
                 if (!isSpawn)
-                    myRemoteView.getStub().pickUpAmmo(myRemoteView.getUsername(), myRemoteView.getPosition());
+                    guiController.getRmiStub().pickUpAmmo(myRemoteView.getUsername(), myRemoteView.getPosition());
                 else {
                     //TODO to implement
                     //TODO indexToPickUp e indexToSwitch sono due input dell'utente
