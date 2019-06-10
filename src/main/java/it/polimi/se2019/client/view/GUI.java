@@ -1,6 +1,7 @@
 package it.polimi.se2019.client.view;
 
 import it.polimi.se2019.server.controller.network.RMI.RMIServerInterface;
+import it.polimi.se2019.server.model.cards.weapons.Weapon;
 import it.polimi.se2019.server.model.map.Square;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -9,8 +10,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.image.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -20,6 +20,7 @@ import org.w3c.dom.css.Rect;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FilenameFilter;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -167,7 +168,7 @@ public class GUI extends Application {
         Button powerUps = setButton("src/main/resources/Images/icons/powerup_icon.png", 50, "");
         moveButton.setOnAction(e -> {
             try {
-                if(!guiController.getMyRemoteView().getCanMove()){
+                if (!guiController.getMyRemoteView().getCanMove()) {
                     guiController.getMyRemoteView().setCanMove(true);
                     guiController.getMyRemoteView().setReachableSquare(guiController.getRmiStub().reacheableSquare(guiController.getMyRemoteView().getPosition()));
                     textArea.setText("\n" + guiController.getMyRemoteView().getReachableSquare() + "\n" + textArea.getText());
@@ -181,7 +182,7 @@ public class GUI extends Application {
                                     try {
                                         guiController.getRmiStub().setNewPosition(guiController.getMyRemoteView().getUsername(), Integer.parseInt(rectangle.getId()));
                                         textArea.setText("\nNew position: " + rectangle.getId() + textArea.getText());
-                                        setPawn("banshee",Integer.parseInt(rectangle.getId()));
+                                        setPawn("banshee", Integer.parseInt(rectangle.getId()));
 
                                         for (int j = 0; j < 12; j++) {
                                             Rectangle rect = (Rectangle) grid.getChildren().get(j);
@@ -191,8 +192,7 @@ public class GUI extends Application {
                                             });
                                             guiController.getMyRemoteView().setCanMove(false);
                                         }
-                                    }
-                                    catch (Exception exc) {
+                                    } catch (Exception exc) {
                                         exc.printStackTrace();
                                     }
                     /*
@@ -204,8 +204,7 @@ public class GUI extends Application {
 
                         }
                     }
-                }
-                else {
+                } else {
                     textArea.setText("\nYou have already selected this option" + textArea.getText());
                 }
             } catch (RemoteException e1) {
@@ -242,6 +241,7 @@ public class GUI extends Application {
         Button weapons = setButton("src/main/resources/Images/icons/weapon_icon.png", 50, "");
         weapons.setOnAction(e -> {
             HBox box = new HBox();
+            /*
             for (Node obj : weaponHand.getChildren()) {
 
                 ImageView copy = (ImageView) obj;
@@ -251,13 +251,29 @@ public class GUI extends Application {
                 box.getChildren().add(copiedView);
 
             }
+             */
+            ImageView imageView = null;
+            for (Weapon obj : myRemoteView.getWeapons()) {
+                try {
+                    imageView = null;
+                    Image image = new Image(new FileInputStream("src/main/resources/Images/Weapons/" + obj.getType() + ".png"));
+                    if(!obj.getLoad())
+                        image = toGrayScale(image);
+                    imageView = new ImageView(image);
+                    imageView.setPreserveRatio(true);
+                    imageView.setFitHeight(300);
+                } catch (FileNotFoundException o) {
+                    o.printStackTrace();
+                }
+                box.getChildren().add(imageView);
+            }
             PlayerStatus.display(box, "Weapons");
         });
         grabButton.setOnMouseEntered(e -> grabButton.setStyle(HIGHLIGHT_BUTTON_STYLE));
         grabButton.setOnMouseExited(e -> grabButton.setStyle(BUTTON_STYLE));
         grabButton.setOnAction(e -> {
-           try {
-               //INIZIO STAMPE DI CONTROLLO
+            try {
+                //INIZIO STAMPE DI CONTROLLO
                 System.out.println(myRemoteView.getUsername());
                 //FINE STAMPE DI CONTROLLO
                 myRemoteView.setReachableSquare(guiController.getRmiStub().reacheableSquare(myRemoteView.getPosition()));
@@ -272,11 +288,9 @@ public class GUI extends Application {
                     int indexToSwitch = 0;
                     if (myRemoteView.getWeapons().size() < 3) {
                         guiController.getRmiStub().pickUpWeapon(username, indexToPickUp);
-                    }
-                    else if(myRemoteView.getWeapons().size() == 3) {
+                    } else if (myRemoteView.getWeapons().size() == 3) {
 
-                    }
-                    else{
+                    } else {
                         throw new Exception("You have more than three weapons in your hand");
                     }
                 }
@@ -336,7 +350,7 @@ public class GUI extends Application {
         rightPane.getChildren().add(textArea);
         rightPane.setSpacing(10);
 
-        stack.getChildren().addAll(imageView, ammoSet, firstPlayer, deathTrack, cabinets,pawnsGrid,grid);
+        stack.getChildren().addAll(imageView, ammoSet, firstPlayer, deathTrack, cabinets, pawnsGrid, grid);
         root = new Group(stack);
         root.setTranslateY(-375);
         root.setTranslateX(25);
@@ -375,11 +389,11 @@ public class GUI extends Application {
 
     public void resetWeaponsName(ArrayList<String> weaponsName) {
         weaponsName.clear();
-        weaponsName.add("src/main/resources/Images/Weapons/cyber_blade.png");
+        weaponsName.add("src/main/resources/Images/Weapons/cyberblade.png");
         weaponsName.add("src/main/resources/Images/Weapons/electroscythe.png");
         weaponsName.add("src/main/resources/Images/Weapons/flamethrower.png");
         weaponsName.add("src/main/resources/Images/Weapons/furnace.png");
-        weaponsName.add("src/main/resources/Images/Weapons/granade_launcher.png");
+        weaponsName.add("src/main/resources/Images/Weapons/grenade_launcher.png");
         weaponsName.add("src/main/resources/Images/Weapons/heatseeker.png");
         weaponsName.add("src/main/resources/Images/Weapons/hellion.png");
         weaponsName.add("src/main/resources/Images/Weapons/lock_rifle.png");
@@ -394,7 +408,7 @@ public class GUI extends Application {
         weaponsName.add("src/main/resources/Images/Weapons/thor.png");
         weaponsName.add("src/main/resources/Images/Weapons/tractor_beam.png");
         weaponsName.add("src/main/resources/Images/Weapons/vortex_cannon.png");
-        weaponsName.add("src/main/resources/Images/Weapons/whisperer.png");
+        weaponsName.add("src/main/resources/Images/Weapons/whisper.png");
         weaponsName.add("src/main/resources/Images/Weapons/zx-2.png");
 
 
@@ -887,21 +901,20 @@ public class GUI extends Application {
     }
 
 
-    public void setPawn(String character,int position){
+    public void setPawn(String character, int position) {
         FlowPane flowPane;
         pawnsGrid.getChildren().clear();
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 4; col++) {
-                if(row * 4 + col == position){
+                if (row * 4 + col == position) {
                     flowPane = setGroup(character);
-                }
-                else {
+                } else {
                     flowPane = new FlowPane();
                 }
                 flowPane.setPrefWidth(160);
                 flowPane.setPrefHeight(160);
                 flowPane.setId(Integer.toString(row * 4 + col));
-                pawnsGrid.add(flowPane,col,row);
+                pawnsGrid.add(flowPane, col, row);
             }
         }
         /*
@@ -928,4 +941,47 @@ public class GUI extends Application {
         group.getChildren().addAll(imageView);
         return group;
     }
+
+    public static Image toGrayScale(Image sourceImage) {
+        PixelReader pixelReader = sourceImage.getPixelReader();
+
+        int width = (int) sourceImage.getWidth();
+        int height = (int) sourceImage.getHeight();
+
+        WritableImage grayImage = new WritableImage(width, height);
+        PixelWriter pixelWriter = grayImage.getPixelWriter();
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                int pixel = pixelReader.getArgb(x, y);
+
+                int red = ((pixel >> 16) & 0xff);
+                int green = ((pixel >> 8) & 0xff);
+                int blue = (pixel & 0xff);
+
+                int grayLevel = (int) (0.6162 * (double) red + 0.9152 * (double) green + 0.4722 * (double) blue) / 3;
+                grayLevel = 255 - grayLevel; // Inverted the grayLevel value here.
+                int gray = (grayLevel << 16) + (grayLevel << 8) + grayLevel;
+
+                pixelWriter.setArgb(x, y, -gray); // AMENDED TO -gray here.
+            }
+        }
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                int pixel = pixelReader.getArgb(x, y);
+
+                int red = ((pixel >> 16) & 0xff);
+                int green = ((pixel >> 8) & 0xff);
+                int blue = (pixel & 0xff);
+
+                int grayLevel = (int) (0.2162 * red + 0.7152 * green + 0.0722 * blue) / 3;
+                int gray = (grayLevel << 16) + (grayLevel << 8) + grayLevel;
+
+                grayImage.getPixelWriter().setArgb(x, y, gray);
+
+            }
+            return grayImage;
+        }
+        return grayImage;
+    }
 }
+
