@@ -253,17 +253,6 @@ public class GUI extends Application {
             }
             PlayerStatus.display(box, "Weapons");
         });
-        Button button = new Button("x");
-        button.setStyle(BUTTON_STYLE);
-
-        button.setOnAction(e -> {
-            setWeaponView(redBox, weaponsName);
-            setWeaponView(blueBox, weaponsName);
-            setWeaponView(yellowBox, weaponsName);
-            window.show();
-        });
-
-        Button button2 = new Button("y");
         grabButton.setOnMouseEntered(e -> grabButton.setStyle(HIGHLIGHT_BUTTON_STYLE));
         grabButton.setOnMouseExited(e -> grabButton.setStyle(BUTTON_STYLE));
         grabButton.setOnAction(e -> {
