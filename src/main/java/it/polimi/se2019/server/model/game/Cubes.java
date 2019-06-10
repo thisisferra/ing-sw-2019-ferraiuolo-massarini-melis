@@ -1,6 +1,8 @@
 package it.polimi.se2019.server.model.game;
 
-public class Cubes {
+import java.io.Serializable;
+
+public class Cubes implements Serializable {
     private int reds;
     private int yellows;
     private int blues;

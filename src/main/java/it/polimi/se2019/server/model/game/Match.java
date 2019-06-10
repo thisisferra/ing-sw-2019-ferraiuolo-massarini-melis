@@ -39,7 +39,6 @@ public class Match extends Observable implements Serializable {
         this.discardedAmmos = new ArrayList<>();
         this.discardedPowerUps = new ArrayList<>();
         this.players = new ArrayList<>();
-        this.addObserver(new VirtualView());
 
     }
 

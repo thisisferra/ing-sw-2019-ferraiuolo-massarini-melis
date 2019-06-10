@@ -1,6 +1,5 @@
 package it.polimi.se2019.client.view;
 
-import it.polimi.se2019.server.controller.network.RMI.RMIServer;
 import it.polimi.se2019.server.controller.network.RMI.RMIServerInterface;
 import it.polimi.se2019.server.model.map.Square;
 import javafx.application.Application;
@@ -21,16 +20,20 @@ import org.w3c.dom.css.Rect;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
 
 public class GUI extends Application {
 
-    private Registry registry;
-    private RMIServerInterface stub;
-    private View view;
+
+    String username;
+    private GUIController guiController = new GUIController();
+    private RemoteView myRemoteView;
+
 
     private Stage window;
     private Group root = new Group();
@@ -71,12 +74,7 @@ public class GUI extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        try {
-            registry = LocateRegistry.getRegistry(1099);
-            stub = (RMIServerInterface) registry.lookup("remServer");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
         window = primaryStage;
         window.setScene(setLoginScene());
         window.setTitle("Adrenaline");
@@ -169,20 +167,19 @@ public class GUI extends Application {
         Button powerUps = setButton("src/main/resources/Images/icons/powerup_icon.png", 50, "");
         moveButton.setOnAction(e -> {
             try {
-
-                if (!view.getCanMove()) {
-                    view.setCanMove(true);
-                    view.setReachableSquare(stub.reacheableSquare(view.getPosition()));
-                    textArea.setText("\n" + view.getReachableSquare() + "\n" + textArea.getText());
+                if(!guiController.getMyRemoteView().getCanMove()){
+                    guiController.getMyRemoteView().setCanMove(true);
+                    guiController.getMyRemoteView().setReachableSquare(guiController.getRmiStub().reacheableSquare(guiController.getMyRemoteView().getPosition()));
+                    textArea.setText("\n" + guiController.getMyRemoteView().getReachableSquare() + "\n" + textArea.getText());
                     for (int i = 0; i < 12; i++) {
                         Rectangle rectangle = (Rectangle) grid.getChildren().get(i);
-                        for (Square square : view.getReachableSquare()) {
+                        for (Square square : guiController.getMyRemoteView().getReachableSquare()) {
                             if (rectangle.getId().equals(Integer.toString(square.getPosition()))) {
                                 rectangle.setFill(Color.color(1, 1, 0, 0.4));
                                 rectangle.setOnMouseClicked(o -> {
                                     textArea.setText("\nSquare #: " + rectangle.getId() + "\n" + textArea.getText());
                                     try {
-                                        stub.setNewPosition(view.getUsername(), Integer.parseInt(rectangle.getId()));
+                                        guiController.getRmiStub().setNewPosition(guiController.getMyRemoteView().getUsername(), Integer.parseInt(rectangle.getId()));
                                         textArea.setText("\nNew position: " + rectangle.getId() + textArea.getText());
                                         setPawn("banshee",Integer.parseInt(rectangle.getId()));
 
@@ -192,9 +189,10 @@ public class GUI extends Application {
                                             rect.setOnMouseClicked(g -> {
 
                                             });
-                                            view.setCanMove(false);
+                                            guiController.getMyRemoteView().setCanMove(false);
                                         }
-                                    } catch (Exception exc) {
+                                    }
+                                    catch (Exception exc) {
                                         exc.printStackTrace();
                                     }
                     /*
@@ -206,7 +204,8 @@ public class GUI extends Application {
 
                         }
                     }
-                } else {
+                }
+                else {
                     textArea.setText("\nYou have already selected this option" + textArea.getText());
                 }
             } catch (RemoteException e1) {
@@ -254,19 +253,42 @@ public class GUI extends Application {
             }
             PlayerStatus.display(box, "Weapons");
         });
+        Button button = new Button("x");
+        button.setStyle(BUTTON_STYLE);
 
+        button.setOnAction(e -> {
+            setWeaponView(redBox, weaponsName);
+            setWeaponView(blueBox, weaponsName);
+            setWeaponView(yellowBox, weaponsName);
+            window.show();
+        });
+
+        Button button2 = new Button("y");
         grabButton.setOnMouseEntered(e -> grabButton.setStyle(HIGHLIGHT_BUTTON_STYLE));
         grabButton.setOnMouseExited(e -> grabButton.setStyle(BUTTON_STYLE));
         grabButton.setOnAction(e -> {
-            try {
-                view.setReachableSquare(stub.reacheableSquare(view.getPosition()));
-                view.getReachableSquare();
-                stub.pickUpAmmo(view.getUsername(), view.getPosition());
-                for(Node node : ammoSet.getChildren()){
-                    ImageView imageView = (ImageView) node;
-                    if(view.getPosition() == Integer.parseInt(imageView.getId())){
-                        imageView.setX(500);
-                        imageView.setY(500);
+           try {
+               //INIZIO STAMPE DI CONTROLLO
+                System.out.println(myRemoteView.getUsername());
+                //FINE STAMPE DI CONTROLLO
+                myRemoteView.setReachableSquare(guiController.getRmiStub().reacheableSquare(myRemoteView.getPosition()));
+                myRemoteView.getReachableSquare();
+                boolean isSpawn = guiController.getRmiStub().isSpawnPoint(myRemoteView.getPosition());
+                if (!isSpawn)
+                    myRemoteView.getStub().pickUpAmmo(myRemoteView.getUsername(), myRemoteView.getPosition());
+                else {
+                    //TODO to implement
+                    //TODO indexToPickUp e indexToSwitch sono due input dell'utente
+                    int indexToPickUp = 0;
+                    int indexToSwitch = 0;
+                    if (myRemoteView.getWeapons().size() < 3) {
+                        guiController.getRmiStub().pickUpWeapon(username, indexToPickUp);
+                    }
+                    else if(myRemoteView.getWeapons().size() == 3) {
+
+                    }
+                    else{
+                        throw new Exception("You have more than three weapons in your hand");
                     }
                 }
             } catch (Exception e1) {
@@ -288,7 +310,7 @@ public class GUI extends Application {
         button2.setStyle(BUTTON_STYLE);
         button2.setOnAction(e -> {
             setAmmo(mapNumber);
-            setPawn("banshee",view.getPosition());
+            setPawn("banshee", guiController.getMyRemoteView().getPosition());
         });
 
         //deathtracker
@@ -785,7 +807,8 @@ public class GUI extends Application {
         GridPane.setConstraints(loginButton, 1, 2);
         loginButton.setOnAction(e -> {
             try {
-                boolean check = stub.register(nameInput.getText());
+                String usernameTyped = nameInput.getText();
+                boolean check = guiController.getRmiStub().checkUsername(usernameTyped);
                 if (!check) {
                     Label errorLabel = new Label("Selected name already taken, please retry.");
                     errorLabel.setStyle("-fx-text-fill: #ff0000");
@@ -815,8 +838,18 @@ public class GUI extends Application {
                 //TODO implementare una finestra di attesa, di durata definita (es. 20 s)
                 // per aspettare che tutti i giocatori siano connessi
                 else {
-                    view = new View(nameInput.getText());
+                    guiController.getRmiStub().register(usernameTyped, guiController);
+                    guiController.setUsername(usernameTyped);
                     window.setScene(scene);
+                    this.username = usernameTyped;
+                    textArea.setText(usernameTyped + "\n" + textArea.getText());
+                    myRemoteView = guiController.getMyRemoteView();
+                /*
+                    for (RemoteView remoteView : guiController.getAllViews()) {
+                        textArea.setText(remoteView.getUsername() + "\n" + textArea.getText());
+                    }
+                */
+
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();

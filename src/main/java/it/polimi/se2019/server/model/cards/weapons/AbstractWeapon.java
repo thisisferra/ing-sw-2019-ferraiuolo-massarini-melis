@@ -4,9 +4,10 @@ import it.polimi.se2019.server.model.cards.*;
 import it.polimi.se2019.server.model.game.Cubes;
 import it.polimi.se2019.server.model.player.Player;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public abstract class AbstractWeapon implements Weapon {
+public abstract class AbstractWeapon implements Weapon, Serializable {
 
     protected String type;
     protected boolean load;

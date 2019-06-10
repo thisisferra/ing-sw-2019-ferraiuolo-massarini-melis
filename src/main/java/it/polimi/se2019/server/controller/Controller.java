@@ -8,7 +8,7 @@ import it.polimi.se2019.server.model.game.Match;
 import it.polimi.se2019.server.model.game.MovementChecker;
 import it.polimi.se2019.server.model.map.Square;
 import it.polimi.se2019.server.model.player.Player;
-import it.polimi.se2019.client.view.View;
+import it.polimi.se2019.client.view.RemoteView;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -18,7 +18,7 @@ public class Controller {
     //references to the player who's performing actions and the match state
     private Player player;
     private Match match;
-    private View view;
+    private RemoteView remoteView;
     //each player draws two cards in their first turn and discard one
     public void startingDraw(){
         //TODO da togliere index
@@ -51,8 +51,8 @@ public class Controller {
 
         MovementChecker movement = new MovementChecker(this.match.getMap().getAllSquare(),3,this.player.getPosition());
         ArrayList<Square> availableSquares = movement.getReachableSquares();
-        //update view
-        //receives an input from view about the new position
+        //update remoteView
+        //receives an input from remoteView about the new position
         //if new position is in availableSquares --> set new position
 
     }
@@ -61,15 +61,15 @@ public class Controller {
         MovementChecker movement = new MovementChecker((this.match.getMap().getAllSquare()),1,this.player.getPosition());
         ArrayList<Square> availableSquares = movement.getReachableSquares();
         Square currentSquare;
-        //update view
-        //receives an input from view about the new position
+        //update remoteView
+        //receives an input from remoteView about the new position
         //if new position is in availableSquares --> set new position
         for(Square object : availableSquares)
             if(object.getPosition() == player.getPosition()){
                 player.pickUpAmmo(object,this.match);
                 //pickUpAmmo should be generalized to include weapons as well
             }
-         //update view with movement, ammo tile or weapon changes
+         //update remoteView with movement, ammo tile or weapon changes
 
 
     }
@@ -106,7 +106,7 @@ public class Controller {
                     //for all arsenal's slot, if there are empty cells, refill each cabinet
                 }
     }
-    //the view is updated each time a change occurs.
+    //the remoteView is updated each time a change occurs.
     public void updateView(){
 
     }

@@ -1,7 +1,7 @@
 package it.polimi.se2019.server.controller.network.RMI;
 
-import it.polimi.se2019.client.view.View;
-import it.polimi.se2019.server.model.cards.Ammo;
+import it.polimi.se2019.client.view.GUIController;
+import it.polimi.se2019.client.view.GUIControllerInterface;
 import it.polimi.se2019.server.model.map.Square;
 
 import java.rmi.Remote;
@@ -12,14 +12,20 @@ import java.util.ArrayList;
 public interface RMIServerInterface extends Remote {
 
 
-    boolean register(String username) throws RemoteException;
+    boolean checkUsername(String username) throws Exception;
 
-    String getRegisteredPlayers() throws RemoteException;
+    void register(String username, GUIControllerInterface guiControllerInterface) throws RemoteException;
+
+    //Map<String, RemoteView> getRegisteredPlayers() throws RemoteException;
 
     ArrayList<Square> reacheableSquare(int position) throws RemoteException;
 
     void pickUpAmmo(String username, int position) throws RemoteException;
 
     void setNewPosition(String username, int newPosition) throws RemoteException;
+
+    boolean isSpawnPoint(int position) throws RemoteException;
+
+    void pickUpWeapon(String username, int indexToPickUp)throws RemoteException;
 
 }

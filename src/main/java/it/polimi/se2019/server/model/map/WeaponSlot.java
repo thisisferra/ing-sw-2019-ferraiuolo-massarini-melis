@@ -13,6 +13,7 @@ public class WeaponSlot {
     public WeaponSlot(String color,Match match){
             this.cabinetColor = color;
             this.match = match;
+            this.initSlot();
 
     }
     public void initSlot() {

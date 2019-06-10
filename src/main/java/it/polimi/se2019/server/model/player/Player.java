@@ -27,6 +27,7 @@ public class Player {
     private Hand playerHand;
     private PlayerBoard playerBoard;
     private Match match;
+    private int numberOfMoves = 2;
 
     public Player(String clientName, String color, Match match) {
         this.clientName = clientName;
@@ -120,6 +121,14 @@ public class Player {
         this.position = position;
     }
 
+    public int getNumberOfMoves() {
+        return this.numberOfMoves;
+    }
+
+    public void actionUsed() {
+        this.numberOfMoves = this.numberOfMoves - 1;
+    }
+
     /**
      * Modify the {@link Hand} of the player adding cubes and, if necessary, a powerup.
      * If the player already has got three power-up nothing happens.
@@ -159,48 +168,100 @@ public class Player {
     }
 
     /**
-     * Pick up a weapon in case i have less thean 3 weapon, it deletes from the right arsenal the weapon
-     * i choosed and add it to my hand. In the method I also pay the right amount of cubes to buy the weapon.
+     * Pick up a weapon in case i have less then 3 weapons, it deletes from the right arsenal the weapon
+     * I chose and add it to my hand. In the method I also pay the right amount of cubes to buy the weapon.
      * @param indexToPickUp index of the weapon slot where I pick uop the weapon
      * @return true if I can draw a weapon, false otherwise
      */
     public boolean pickUpWeapon(int indexToPickUp) {
-        //Check if the player is in a spawn point
-        Square currentSquare = match.getMap().searchSquare(this.getPosition());
-        if(currentSquare.isSpawnPoint()) {
-            //Retrieve the color of the square/weapon-slot from which I draw the weapon
-            String colorWeaponSlot = currentSquare.getColor();
-            //Search the right color weapon slot
-            for (WeaponSlot weaponSlot : match.getArsenal()) {
-                if (weaponSlot.getCabinetColor().equals(colorWeaponSlot)) {
-                    //Retrieve the cubes cost of the weapon I choosed
-                    Cubes cubesToPay = new Cubes(
-                            weaponSlot.getSlot()[indexToPickUp].getBuyingCost().getReds(),
-                            weaponSlot.getSlot()[indexToPickUp].getBuyingCost().getYellows(),
-                            weaponSlot.getSlot()[indexToPickUp].getBuyingCost().getBlues());
-                    //Check if I can pay the weapon I choosed
-                    if (
-                            cubesToPay.getReds() <= this.getPlayerBoard().getAmmoCubes().getReds() &&
-                            cubesToPay.getYellows() <= this.getPlayerBoard().getAmmoCubes().getYellows() &&
-                            cubesToPay.getBlues() <= this.getPlayerBoard().getAmmoCubes().getBlues()
-                    ) {
-                        //Add the weapon to my hand
-                        this.getHand().getWeapons().add(weaponSlot.getSlot()[indexToPickUp]);
-                        //Delete from the cabinet the weapon I choosed to draw
-                        weaponSlot.getSlot()[indexToPickUp] = null;
-                    }
-                    else {
-                        return false;
+        if (this.getHand().getWeapons().size() < 3) {
+            //Check if the player is in a spawn point
+            Square currentSquare = match.getMap().searchSquare(this.getPosition());
+            if (currentSquare.isSpawnPoint()) {
+                //Retrieve the color of the square/weapon-slot from which I draw the weapon
+                String colorWeaponSlot = currentSquare.getColor();
+                //Search the right color weapon slot
+                for (WeaponSlot weaponSlot : match.getArsenal()) {
+                    if (weaponSlot.getCabinetColor().equals(colorWeaponSlot)) {
+                        //Retrieve the cubes cost of the weapon I choosed
+                        Cubes cubesToPay = new Cubes(
+                                weaponSlot.getSlot()[indexToPickUp].getBuyingCost().getReds(),
+                                weaponSlot.getSlot()[indexToPickUp].getBuyingCost().getYellows(),
+                                weaponSlot.getSlot()[indexToPickUp].getBuyingCost().getBlues());
+                        //Check if I can pay the weapon I choosed
+                        if (
+                                cubesToPay.getReds() <= this.getPlayerBoard().getAmmoCubes().getReds() &&
+                                        cubesToPay.getYellows() <= this.getPlayerBoard().getAmmoCubes().getYellows() &&
+                                        cubesToPay.getBlues() <= this.getPlayerBoard().getAmmoCubes().getBlues()
+                        ) {
+                            //Add the weapon to my hand
+                            this.getHand().getWeapons().add(weaponSlot.getSlot()[indexToPickUp]);
+                            //Delete from the cabinet the weapon I choosed to draw
+                            weaponSlot.getSlot()[indexToPickUp] = null;
+                        } else {
+                            return false;
+                        }
                     }
                 }
-            }
 
-            return true;
+                return true;
+            }
+            //The player isn't in a spawn point and can't pick up a weapon
+            else {
+                return false;
+            }
         }
-        //The player isn't in a spawn point and can't pick up a weapon
         else {
             return false;
         }
+    }
+
+    public boolean pickUpWeapon(int indexToPickUp, int indexToSwitch) {
+        //Check if the player has already three weapons in his hand
+        if (this.getHand().getWeapons().size() == 3) {
+            //Retrieve the square of the player
+            Square currentSquare = match.getMap().getSpecificSquare(this.getPosition());
+            //Check if the player square is a spawn point
+            if (currentSquare.isSpawnPoint()) {
+                //Retrieve the color of the square/weapon-slot from which I draw the weapon
+                String colorWeaponSlot = currentSquare.getColor();
+                //Search the right color weapon slot
+                for (WeaponSlot weaponSlot : match.getArsenal()) {
+                    if (weaponSlot.getCabinetColor().equals(colorWeaponSlot)) {
+                        //Retrieve the cubes cost of the weapon I chose
+                        Cubes cubesToPay = new Cubes (
+                                weaponSlot.getSlot()[indexToPickUp].getBuyingCost().getReds(),
+                                weaponSlot.getSlot()[indexToPickUp].getBuyingCost().getYellows(),
+                                weaponSlot.getSlot()[indexToPickUp].getBuyingCost().getBlues());
+                        //Check if I can pay the weapon I chose
+                        if (
+                                cubesToPay.getReds() <= this.getPlayerBoard().getAmmoCubes().getReds() &&
+                                        cubesToPay.getYellows() <= this.getPlayerBoard().getAmmoCubes().getYellows() &&
+                                        cubesToPay.getBlues() <= this.getPlayerBoard().getAmmoCubes().getBlues()
+                        ) {
+                            //Load the weapon i want to switch
+                            this.getHand().getWeapons().get(indexToSwitch).setLoad(true);
+                            //Add to my hand the weapon i chose to pick up
+                            this.getHand().getWeapons().add(weaponSlot.getSlot()[indexToPickUp]);
+                            //Set the slot where i picked uop the weapon with the weapon I want to switch
+                            weaponSlot.getSlot()[indexToPickUp] = this.getHand().getWeapons().get(indexToSwitch);
+                            //Delete the weapon i switched from my hand
+                            this.getHand().getWeapons().remove(indexToSwitch);
+                        }
+                        else {
+                            return false;
+                        }
+                    }
+                }
+            }
+            else {
+                return false;
+            }
+        }
+        else {
+            return false;
+        }
+        return true;
     }
 
     //TODO nel caso in cui abbia già 3 armi

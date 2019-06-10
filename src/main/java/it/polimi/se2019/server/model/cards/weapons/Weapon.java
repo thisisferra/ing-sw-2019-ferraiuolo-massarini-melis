@@ -5,6 +5,7 @@ import it.polimi.se2019.server.model.cards.Shot;
 import it.polimi.se2019.server.model.game.Cubes;
 import it.polimi.se2019.server.model.player.Player;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public interface Weapon {

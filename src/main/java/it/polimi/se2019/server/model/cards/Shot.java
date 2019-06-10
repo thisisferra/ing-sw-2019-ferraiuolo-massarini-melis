@@ -4,9 +4,10 @@ import it.polimi.se2019.server.model.game.Cubes;
 import it.polimi.se2019.server.model.player.Player;
 import it.polimi.se2019.server.model.map.Square;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Shot {
+public class Shot implements Serializable {
     /*private boolean notUsed;
     private Cubes cost;
     private int damage;
