@@ -12,6 +12,12 @@ import it.polimi.se2019.server.model.player.Player;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
 
+/**
+ * RemoteView gathers and manages the data set of the game
+ * that the GUI uses to show to the user.<br>
+ *
+ * INSTANTIATED BY: GUIController
+ */
 
 public class RemoteView {
 
@@ -25,23 +31,37 @@ public class RemoteView {
     private ArrayList<Player> damagePlayerBoard = new ArrayList<>();    //Info useful for Player-board GUI
     private int deathsPlayerBoard;                                      //Info useful for Player-board GUI
     private ArrayList<Weapon> weapons = new ArrayList<>();
-    private ArrayList<PowerUp> powerUp = new ArrayList<PowerUp>();
+    private ArrayList<PowerUp> powerUp = new ArrayList<>();
     private boolean canMove = false;
     private Cubes cubes;
     private ArrayList<Square> reachableSquare = new ArrayList<>();
-    private int numberOfMoves = 2;
+    private int numberOfActions = 2;
     private WeaponSlot cabinetRed;
     private WeaponSlot cabinetYellow;
     private WeaponSlot cabinetBlue;
 
-    private Registry registry;
-    private RMIServerInterface stub;
+    /**
+     * Constructor of the class.
+     *
+     * @param username: will later be the key to retrieve the
+     *                  data set of a particular client.
+     */
 
     public RemoteView(String username) {
         this.username = username;
     }
 
-    //GETTER
+
+
+    /* * *   GETTERS   * * */
+
+    /**
+     * Retrieves the username that links a particular remote view
+     * with its user.
+     *
+     * @return the name chosen by the user, registered in this
+     * class's object.
+     */
 
     public String getUsername() {
         return this.username;
@@ -51,64 +71,174 @@ public class RemoteView {
         return  this.character;
     }
 
+
+    /**
+     * Retrieves the position of the user's pawn in the map.
+     *
+     * @return an int that represents the square in which the user is.
+     */
+
     public int getPosition() {
         return this.position;
     }
 
-    public void updatePosition(int newPosition) {
-        this.position = newPosition;
-    }
+
+    /**
+     * Retrieves the amount of points this user has scored up
+     * to now.
+     *
+     * @return an int that represents the points scored.
+     */
 
     public int getPoints() {
         return this.points;
     }
 
+
+    /**
+     * Retrieves the info useful to manage what actions a client can do.<br>
+     * 0: normal abilities;<br>
+     * 1: "move & grab" with 2 moves granted;<br>
+     * 2: "shot" with a previous move granted along with the unlocked
+     *    action from the 1.
+     *
+     * @return an int that represents the abilities a client may perform.
+     */
+
     public int getPhaseAction() {
         return this.phaseAction;
     }
+
+
+    /**
+     * Retrieves a boolean that tells us whether we are in the game
+     * finale or not. Necessary to represent the correct player board
+     * with the GUI, but mostly to enable the proper client actions.
+     *
+     * @return a boolean that represents in which phase the game is.
+     */
 
     public boolean getFinalFrenzy() {
         return this.finalFrenzy;
     }
 
+
+    /**
+     * Retrieves an ArrayList of Player objects that gives us
+     * the info on the amount and also the order of the marks
+     * taken from enemies by this user in particular.
+     *
+     * @return the ordered list of the marks given from other
+     *         users to this user.
+     */
+
     public ArrayList<Player> getMarkPlayerBoard() {
         return this.markPlayerBoard;
     }
+
+
+    /**
+     * Retrieves an ArrayList of Player objects that gives us
+     * the info on the amount and also the order of the damage
+     * taken from enemies by this user in particular.
+     *
+     * @return the ordered list of the blood damage given from
+     *         other users to this user.
+     */
 
     public ArrayList<Player> getDamagePlayerBoard() {
         return this.damagePlayerBoard;
     }
 
+
+    /**
+     * Retrieves the number of times this particular user
+     * died in the game. This info is needed to manage in
+     * the proper way the diminishing value of points the
+     * enemies get when this user gets horribly killed.
+     *
+     * @return the amount of times this user got killed.
+     */
+
     public int getDeathsPlayerBoard() {
         return this.deathsPlayerBoard;
     }
+
+
+    /**
+     * Retrieves an ArrayList of Weapon objects currently
+     * in the hand of this user.
+     *
+     * @return a list of the weapons owned by the user.
+     */
 
     public ArrayList<Weapon> getWeapons() {
         return this.weapons;
     }
 
+
+    /**
+     * Retrieves an ArrayList of PowerUp objects currently
+     * in the hand of this user.
+     *
+     * @return a list of the power ups owned by the user.
+     */
+
     public ArrayList<PowerUp> getPowerUp() {
         return this.powerUp;
     }
+
+
+    /**
+     * Retrieves the status of the move action started by the user:<br>
+     * false: the user didn't press on move button yet;<br>
+     * true: otherwise.
+     *
+     * @return a boolean that tells if the user asked to move or not.
+     */
 
     public boolean getCanMove() {
         return this.canMove;
     }
 
+
+    /**
+     * Retrieves a Cubes object, a triplet of int values
+     * that represents the valuables of this game associated
+     * with this user.
+     *
+     * @return the amount of red, yellow and blue cubes the user
+     *         own.
+     */
+
     public Cubes getCubes() {
         return this.cubes;
     }
+
+
+    /**
+     * Retrieves an ArrayList of Square objects that gives us
+     * the info on which squares are reachable from the currently
+     * position in the map of the user's pawn by the user's pawn
+     * itself.
+     *
+     * @return a list of squares reachable by the user from its
+     *         position.
+     */
 
     public ArrayList<Square> getReachableSquare() {
         return this.reachableSquare;
     }
 
-    public int getNumberOfMoves() {
-        return numberOfMoves;
-    }
 
-    public RMIServerInterface getStub() {
-        return this.stub;
+    /**
+     * Retrieves the amount of actions left to this user in this turn.
+     *
+     * @return the number of actions remained.
+     */
+
+    public int getNumberOfActions() {
+        return numberOfActions;
     }
 
     public WeaponSlot getCabinetRed() {
@@ -124,18 +254,23 @@ public class RemoteView {
     }
 
 
-    //SETTER
 
-    public void setUsername(String username) {
-        this.username = username;
+    /* * *   SETTERS   * * */
+
+    /**
+     * Sets in this remote view the updated position of the
+     * user's pawn in the map.
+     *
+     * @param position: an int that represents the up-to-date
+     *                  square in which the user is.
+     */
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 
     public void setCharacter(String character) {
         this.character = character;
-    }
-
-    public void setPosition(int position) {
-        this.position = position;
     }
 
     private void setPoints(int points) {
@@ -146,7 +281,7 @@ public class RemoteView {
         this.phaseAction = phaseAction;
     }
 
-    private void finalFrenzy(boolean finalFrenzy) {
+    private void setFinalFrenzy(boolean finalFrenzy) {
         this.finalFrenzy = finalFrenzy;
     }
 
@@ -162,6 +297,16 @@ public class RemoteView {
         this.deathsPlayerBoard = deathsPlayerBoard;
     }
 
+
+    /**
+     * Sets the status of the move action:<br>
+     * false: at the end of the move action;<br>
+     * true: whenever the user clicks on the move button.
+     *
+     * @param canMove: a boolean that represents the will
+     *                 of the user about his desire to move.
+     */
+
     public void setCanMove(boolean canMove) {
         this.canMove = canMove;
     }
@@ -170,13 +315,22 @@ public class RemoteView {
         this.cubes = cubes;
     }
 
-    public void setReachableSquare(ArrayList<Square> reacheableSquare) {
+
+    /**
+     * Sets a list of Square objects that are the positions on the
+     * map reachable by the user's pawn from its currently position.
+     *
+     * @param reachableSquare: list of squares reachable by the user
+     *                         from its position.
+     */
+
+    public void setReachableSquare(ArrayList<Square> reachableSquare) {
         this.reachableSquare.clear();
-        this.reachableSquare = reacheableSquare;
+        this.reachableSquare = reachableSquare;
     }
 
-    public void setNumberOfMoves(int numberOfMoves) {
-        this.numberOfMoves = numberOfMoves;
+    public void setNumberOfMoves(int numberOfActions) {
+        this.numberOfActions = numberOfActions;
     }
 
     public void setCabinetRed(WeaponSlot cabinetRed) {
@@ -191,11 +345,26 @@ public class RemoteView {
         this.cabinetBlue = cabinetBlue;
     }
 
-    //ALTRO
+
+
+    /* * *   OTHER   * * */
 
     public void notifyNewClient(String newClient) {
 
     }
+
+
+    /**
+     * Updates the status of this class object attributes with
+     * the up-to-date values. The data is retrieved by the
+     * SERVER side to the CLIENT side through RMI: here virtualview
+     * is obtained in {@see GUIController} class in {@see update}
+     * method.
+     *
+     * @param virtualView: a VirtualView object, in short the
+     *                     SERVER counterpart of the RemoteView
+     *                     class.
+     */
 
     public void updateRemoteView(VirtualView virtualView) {
         this.username = virtualView.getUsername();

@@ -30,7 +30,7 @@ public class GUI extends Application {
 
 
     String username;
-    private GUIController guiController = new GUIController();
+    private GUIController guiController = new GUIController(this);
     private RemoteView myRemoteView;
 
 

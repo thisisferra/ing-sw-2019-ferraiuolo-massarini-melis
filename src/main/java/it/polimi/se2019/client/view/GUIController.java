@@ -22,8 +22,6 @@ public class GUIController implements GUIControllerInterface {
 
     private ArrayList<RemoteView> allViews = new ArrayList<>();
 
-    private GUI gui;
-
     public GUIController() {
         try {
             Registry registry = LocateRegistry.getRegistry(1099);
@@ -135,7 +133,7 @@ public class GUIController implements GUIControllerInterface {
                 }
             }
             out.println("]");
-            if (remoteView.getUsername().equals(this.username)){
+            if (remoteView.getUsername().equals(this.username)) {
                 out.println("Weapons: " + remoteView.getWeapons());
                 out.println("Power-up: " + remoteView.getPowerUp());
             }
