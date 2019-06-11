@@ -20,7 +20,7 @@ public interface RMIServerInterface extends Remote {
 
     ArrayList<Square> reacheableSquare(int position) throws RemoteException;
 
-    void pickUpAmmo(String username, int position) throws RemoteException;
+    void pickUpAmmo(String username) throws RemoteException;
 
     void setNewPosition(String username, int newPosition) throws RemoteException;
 

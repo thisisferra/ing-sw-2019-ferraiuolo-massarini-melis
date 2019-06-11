@@ -4,6 +4,7 @@ import it.polimi.se2019.client.view.GUIControllerInterface;
 import it.polimi.se2019.server.model.cards.PowerUp;
 import it.polimi.se2019.server.model.cards.weapons.Weapon;
 import it.polimi.se2019.server.model.game.Cubes;
+import it.polimi.se2019.server.model.map.WeaponSlot;
 
 import javax.swing.*;
 import java.io.Serializable;
@@ -20,6 +21,9 @@ public class VirtualView implements Serializable {
     private ArrayList<Weapon> weapons = new ArrayList<>();
     private ArrayList<PowerUp> powerUps = new ArrayList<>();
     private Cubes cubes;
+    private WeaponSlot cabinetRed;
+    private WeaponSlot cabinetYellow;
+    private WeaponSlot cabinetBlue;
 
     //COSTRUTTORE
     public VirtualView(GUIControllerInterface clientReference) {
@@ -56,6 +60,18 @@ public class VirtualView implements Serializable {
         return this.cubes;
     }
 
+    public WeaponSlot getCabinetRed() {
+        return this.cabinetRed;
+    }
+
+    public WeaponSlot getCabinetYellow() {
+        return this.cabinetYellow;
+    }
+
+    public WeaponSlot getCabinetBlue() {
+        return this.cabinetBlue;
+    }
+
 
     //SETTER
 
@@ -81,6 +97,18 @@ public class VirtualView implements Serializable {
 
     public void setCubes(Cubes cubes) {
         this.cubes = cubes;
+    }
+
+    public void setCabinetRed(WeaponSlot cabinetRed) {
+        this.cabinetRed = cabinetRed;
+    }
+
+    public void setCabinetYellow(WeaponSlot cabinetYellow) {
+        this.cabinetYellow = cabinetYellow;
+    }
+
+    public void setCabinetBlue(WeaponSlot cabinetBlue) {
+        this.cabinetBlue = cabinetBlue;
     }
 
     //ALTRO

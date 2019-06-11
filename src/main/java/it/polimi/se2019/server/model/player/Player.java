@@ -8,6 +8,8 @@ import it.polimi.se2019.server.model.game.Match;
 import it.polimi.se2019.server.model.map.Square;
 import it.polimi.se2019.server.model.map.WeaponSlot;
 
+import java.io.Serializable;
+
 
 /**
  * Represents the player game. Each player is identified by its clientName
@@ -16,7 +18,7 @@ import it.polimi.se2019.server.model.map.WeaponSlot;
  */
 
 
-public class Player {
+public class Player implements Serializable {
     private Controller controller;
     private String clientName;
     private String color;
@@ -136,7 +138,6 @@ public class Player {
      * @param currentMatch the match
      */
     public void pickUpAmmo(Square currentSquare, Match currentMatch) {
-        System.out.println(playerHand.getPowerUps().size());
         //Check if the player is in an ammo square
         if(!(currentSquare.isSpawnPoint())) {
             //check if there is an ammo in the current square
@@ -149,14 +150,15 @@ public class Player {
                 currentMatch.discardAmmo(currentAmmo);
                 //If the ammo I've picked up has a power up -> pick a power up card from ArrayList
                 if(currentAmmo.getPowerUpCard()) {
-                    //Add a power up to player's hand
-                    playerHand.addPowerUp(currentMatch.pickUpPowerUp());
+                    if (this.playerHand.getPowerUps().size() < 3) {
+                        //Add a power up to player's hand
+                        playerHand.addPowerUp(currentMatch.pickUpPowerUp());
+                    }
                 }
                 //Create an object cubes that contains the cubes in the ammo that I've picked up
                 Cubes currentCubes = currentAmmo.getAmmoCubes();
                 //Change the value of the cubes I own
                 playerBoard.setAmmoCubes(currentCubes);
-                System.out.println(playerHand.getPowerUps().size());
             }
             else {
                 System.out.println("You have already picked up this ammo");

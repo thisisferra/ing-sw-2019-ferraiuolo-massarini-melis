@@ -72,16 +72,19 @@ public class RMIServer extends Server implements RMIServerInterface {
         //Creo una virtual View
         VirtualView virtualView = new VirtualView((guiController));
         allVirtualViews.add(virtualView);
-        //Aggiungo riferimento al client appena connesso
-        //registeredPlayers.put(username, guiController);
         //Aggiungo un nuovo giocatore al model
         Player player = new Player(username, "color", match);
         match.getAllPlayers().add(player);
         //Imposto lo username, preso dal model, nella virtualView appena creata
+
         virtualView.setUsername(player.getClientName());
         virtualView.setWeapons(player.getHand().getWeapons());
         virtualView.setPowerUps(player.getHand().getPowerUps());
         virtualView.setCubes(player.getPlayerBoard().getAmmoCubes());
+        virtualView.setCabinetRed(match.getArsenal().get(0));
+        virtualView.setCabinetYellow(match.getArsenal().get(1));
+        virtualView.setCabinetBlue(match.getArsenal().get(2));
+
         this.printClientConnected();
         this.initAllClient(allVirtualViews);
 
@@ -117,10 +120,11 @@ public class RMIServer extends Server implements RMIServerInterface {
         return movementChecker.getReachableSquares();
     }
 
-    public void pickUpAmmo(String username, int position) {
-        Square square = match.getMap().searchSquare(position);
+    public void pickUpAmmo(String username) throws RemoteException{
         Player player = match.searchPlayerByClientName(username);
+        Square square = match.getMap().searchSquare(player.getPosition());
         player.pickUpAmmo(square, match);
+        this.updateAllClient(allVirtualViews);
     }
 
     public void setNewPosition(String username, int newPosition){
@@ -140,7 +144,7 @@ public class RMIServer extends Server implements RMIServerInterface {
         out.println(allVirtualViews.get(size - 1).getUsername() + "---" + allVirtualViews.get(allVirtualViews.size() - 1).getClientReference());
     }
 
-    //Create all remotes view
+    //Call to each client to create all remotes view
     public void initAllClient(ArrayList<VirtualView> allVirtualViews) throws RemoteException{
         for (VirtualView virtualView : allVirtualViews) {
             GUIControllerInterface clientRef = virtualView.getClientReference();

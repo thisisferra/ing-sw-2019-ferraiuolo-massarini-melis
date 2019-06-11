@@ -2,6 +2,7 @@ package it.polimi.se2019.server.model.player;
 
 import it.polimi.se2019.server.model.game.Cubes;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -11,7 +12,7 @@ import java.util.Comparator;
  * Playerboard class represent the playerboard of each player. It includes some info like the amount
  * of cubes, tags, damage and deaths and some reference to external opbject
  */
-public class PlayerBoard {
+public class PlayerBoard implements Serializable {
     //list of references of players who marked this player (max 3 references per player)
     private ArrayList<Player> tags;
     //list of references of players who damaged this player

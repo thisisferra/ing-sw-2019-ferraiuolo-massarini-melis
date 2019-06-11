@@ -2,10 +2,12 @@ package it.polimi.se2019.server.model.map;
 
 import it.polimi.se2019.server.model.cards.weapons.Weapon;
 import it.polimi.se2019.server.model.game.Match;
+
+import java.io.Serializable;
 /*WeaponSlot represent one three slots array containing 3 weapons.
 * Each one of them has a color among red,blue or yellow*/
 
-public class WeaponSlot {
+public class WeaponSlot implements Serializable {
     private Weapon[] slot;
     private String cabinetColor;
     private Match match;

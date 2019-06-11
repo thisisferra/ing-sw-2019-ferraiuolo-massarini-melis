@@ -4,7 +4,9 @@ package it.polimi.se2019.server.model.cards;
 import it.polimi.se2019.server.model.player.EnemyDamage;
 import it.polimi.se2019.server.model.player.Player;
 
-public class PowerUp {
+import java.io.Serializable;
+
+public class PowerUp implements Serializable {
     private String type;
     private String color;
     private Shot effect;
