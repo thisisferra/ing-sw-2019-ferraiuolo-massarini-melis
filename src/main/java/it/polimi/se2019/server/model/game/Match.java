@@ -31,6 +31,7 @@ public class Match extends Observable implements Serializable {
     private Map map;
     private ArrayList<Player> killShotTrack;
     private ArrayList<WeaponSlot> arsenal;
+    private ArrayList<String> characterAvailable = new ArrayList<>();
 
     public Match(int chosenMap){
         this.chosenMap=chosenMap;
@@ -46,8 +47,16 @@ public class Match extends Observable implements Serializable {
         this.initGameField();
         //this.initPlayers();
         this.initCabinets();
+        this.initializeCharacterAvailable();
     }
 
+    public void initializeCharacterAvailable() {
+        this.characterAvailable.add("distructor");
+        this.characterAvailable.add("banshee");
+        this.characterAvailable.add("dozer");
+        this.characterAvailable.add("sprog");
+        this.characterAvailable.add("violet");
+    }
     //generate instances of players
     //each player should type in his name and his figure(color figure)
     /*
@@ -234,5 +243,9 @@ public class Match extends Observable implements Serializable {
             }
         }
         return null;
+    }
+
+    public ArrayList<String> getCharacterAvailable() {
+        return this.characterAvailable;
     }
 }

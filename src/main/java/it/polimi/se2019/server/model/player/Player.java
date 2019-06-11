@@ -19,7 +19,7 @@ import java.io.Serializable;
 
 
 public class Player implements Serializable {
-    private Controller controller;
+    private String character;
     private String clientName;
     private String color;
     private int position;
@@ -31,15 +31,19 @@ public class Player implements Serializable {
     private Match match;
     private int numberOfMoves = 2;
 
-    public Player(String clientName, String color, Match match) {
+    public Player(String clientName, Match match) {
         this.clientName = clientName;
-        this.color = color;
         this.match = match;
+        this.character = chooseCharacter();
         this.suspended = false;
         this.score = 0;
         this.firstPlayer = false;
         this.playerBoard = new PlayerBoard(this);
         this.playerHand = new Hand();
+    }
+
+    public String getCharacter() {
+        return this.character;
     }
 
     /**
@@ -344,5 +348,12 @@ public class Player implements Serializable {
      */
     public Match getMatch() {
         return this.match;
+    }
+
+    public String chooseCharacter() {
+        System.out.println(this.getMatch().getCharacterAvailable().size());
+        int randomCharacter = (int) Math.random() * this.getMatch().getCharacterAvailable().size();
+        return this.match.getCharacterAvailable().remove(randomCharacter);
+
     }
 }

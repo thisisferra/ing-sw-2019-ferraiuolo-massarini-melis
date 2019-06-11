@@ -71,11 +71,11 @@ public class WeaponsTest {
         match = new Match(1);
         match.initializeMatch();
         enemyPlayers = new ArrayList<Player>();
-        p1 = new Player("Mattia","blue",match);
-        p2 = new Player("Marco","yellow",match);
-        p3 = new Player("Alessandro","grey",match);
-        p4 = new Player("Matteo","green",match);
-        p5 = new Player("Bruno","violet",match);
+        p1 = new Player("Mattia",match);
+        p2 = new Player("Marco",match);
+        p3 = new Player("Alessandro",match);
+        p4 = new Player("Matteo",match);
+        p5 = new Player("Bruno",match);
     }
 
     @Test

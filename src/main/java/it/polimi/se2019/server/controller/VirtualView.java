@@ -16,6 +16,7 @@ public class VirtualView implements Serializable {
 
     //
     private String username;
+    private String character;
     private int position;
     private int damage;
     private ArrayList<Weapon> weapons = new ArrayList<>();
@@ -38,6 +39,10 @@ public class VirtualView implements Serializable {
 
     public String getUsername() {
         return this.username;
+    }
+
+    public String getCharacter() {
+        return this.character;
     }
 
     public int getPosition() {
@@ -77,6 +82,10 @@ public class VirtualView implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public void setCharacter(String character) {
+        this.character = character;
     }
 
     public void setPosition(int position) {

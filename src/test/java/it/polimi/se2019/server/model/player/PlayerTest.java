@@ -22,10 +22,10 @@ public class PlayerTest {
 
         m1 = new Match(4);
         m1.initializeMatch();
-        p1 = new Player("Marco", "red", m1);
-        p2 = new Player("Mattia", "yellow", m1);
-        p3 = new Player("Ferra", "blue", m1);
-        p4 = new Player("Matteo", "green", m1);
+        p1 = new Player("Marco", m1);
+        p2 = new Player("Mattia", m1);
+        p3 = new Player("Ferra", m1);
+        p4 = new Player("Matteo", m1);
 
 
     }

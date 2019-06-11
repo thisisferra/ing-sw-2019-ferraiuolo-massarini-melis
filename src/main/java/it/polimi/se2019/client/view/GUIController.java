@@ -111,7 +111,7 @@ public class GUIController implements GUIControllerInterface {
         out.flush();
         out.println("Informazioni di gioco:");
         for (RemoteView remoteView : allViews) {
-            out.println(remoteView.getUsername() + ":");
+            out.println(remoteView.getUsername() + " (" + remoteView.getCharacter() + ")");
             out.println("Position: " + remoteView.getPosition());
             out.println("Cubes: " + remoteView.getCubes());
             out.print("Cabinet red: [");

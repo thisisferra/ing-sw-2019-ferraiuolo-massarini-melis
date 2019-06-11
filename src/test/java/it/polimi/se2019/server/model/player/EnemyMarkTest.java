@@ -11,9 +11,9 @@ public class EnemyMarkTest {
     @Before
     public void setEnemyMarkTest(){
         match = new Match(1);
-        p1 = new Player("Mattia","blue",match);
-        p2 = new Player("Marco","yellow",match);
-        p3 = new Player("Alessandro","grey",match);
+        p1 = new Player("Mattia", match);
+        p2 = new Player("Marco", match);
+        p3 = new Player("Alessandro",match);
     }
 
     //checking marks mechanics

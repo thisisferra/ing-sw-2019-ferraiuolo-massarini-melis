@@ -21,10 +21,10 @@ public class PlayerBoardTest {
 
         m1 = new Match(4);
         m1.initializeMatch();
-        p1 = new Player("Marco", "red", m1);
-        p2 = new Player("Mattia", "yellow", m1);
-        p3 = new Player("Ferra", "blue", m1);
-        p4 = new Player("Matteo", "green", m1);
+        p1 = new Player("Marco", m1);
+        p2 = new Player("Mattia", m1);
+        p3 = new Player("Ferra", m1);
+        p4 = new Player("Matteo", m1);
         pl1 = new PlayerBoard(p1);
     }
 
@@ -41,8 +41,8 @@ public class PlayerBoardTest {
     public void testGetTags(){
         Assert.assertEquals(0, pl1.getTags().size());
         Match m1 = new Match(3);
-        Player p1 = new Player("Marco", "red", m1);
-        Player p2 = new Player("Mattia", "yellow", m1);
+        Player p1 = new Player("Marco", m1);
+        Player p2 = new Player("Mattia", m1);
         pl1.getTags().add(p1);
         pl1.getTags().add(p2);
         Assert.assertEquals(2, pl1.getTags().size());
@@ -74,8 +74,8 @@ public class PlayerBoardTest {
     public void testGetDamage() {
         Assert.assertEquals(0, pl1.getDamage().size());
         Match m1 = new Match(3);
-        Player p1 = new Player("Marco", "red", m1);
-        Player p2 = new Player("Mattia", "yellow", m1);
+        Player p1 = new Player("Marco", m1);
+        Player p2 = new Player("Mattia", m1);
         pl1.getDamage().add(p1);
         pl1.getDamage().add(p2);
         Assert.assertEquals(2, pl1.getDamage().size());

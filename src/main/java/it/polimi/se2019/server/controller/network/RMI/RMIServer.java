@@ -73,11 +73,12 @@ public class RMIServer extends Server implements RMIServerInterface {
         VirtualView virtualView = new VirtualView((guiController));
         allVirtualViews.add(virtualView);
         //Aggiungo un nuovo giocatore al model
-        Player player = new Player(username, "color", match);
+        Player player = new Player(username, match);
         match.getAllPlayers().add(player);
         //Imposto lo username, preso dal model, nella virtualView appena creata
 
         virtualView.setUsername(player.getClientName());
+        virtualView.setCharacter(player.getCharacter());
         virtualView.setWeapons(player.getHand().getWeapons());
         virtualView.setPowerUps(player.getHand().getPowerUps());
         virtualView.setCubes(player.getPlayerBoard().getAmmoCubes());

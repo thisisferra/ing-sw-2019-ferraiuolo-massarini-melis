@@ -16,6 +16,7 @@ import java.util.ArrayList;
 public class RemoteView {
 
     private String username;
+    private String character;
     private int position;
     private int points;
     private int phaseAction;        /*useful to know if the player has enhanced action*/
@@ -44,6 +45,10 @@ public class RemoteView {
 
     public String getUsername() {
         return this.username;
+    }
+
+    public String getCharacter() {
+        return  this.character;
     }
 
     public int getPosition() {
@@ -125,6 +130,10 @@ public class RemoteView {
         this.username = username;
     }
 
+    public void setCharacter(String character) {
+        this.character = character;
+    }
+
     public void setPosition(int position) {
         this.position = position;
     }
@@ -190,6 +199,7 @@ public class RemoteView {
 
     public void updateRemoteView(VirtualView virtualView) {
         this.username = virtualView.getUsername();
+        this.character = virtualView.getCharacter();
         this.position = virtualView.getPosition();
         this.weapons = virtualView.getWeapons();
         this.powerUp = virtualView.getPowerUps();
