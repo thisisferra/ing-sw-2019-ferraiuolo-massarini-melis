@@ -115,8 +115,8 @@ public class RMIServer extends Server implements RMIServerInterface {
         return true;
     }
 
-    public ArrayList<Square> reacheableSquare(int position){
-        MovementChecker movementChecker = new MovementChecker(match.getMap().getAllSquare(), 3, position);
+    public ArrayList<Square> reacheableSquare(int position,int steps){
+        MovementChecker movementChecker = new MovementChecker(match.getMap().getAllSquare(), steps, position);
         return movementChecker.getReachableSquares();
     }
 

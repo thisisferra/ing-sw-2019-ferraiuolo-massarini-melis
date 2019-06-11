@@ -18,7 +18,7 @@ public interface RMIServerInterface extends Remote {
 
     //Map<String, RemoteView> getRegisteredPlayers() throws RemoteException;
 
-    ArrayList<Square> reacheableSquare(int position) throws RemoteException;
+    ArrayList<Square> reacheableSquare(int position,int steps) throws RemoteException;
 
     void pickUpAmmo(String username) throws RemoteException;
 

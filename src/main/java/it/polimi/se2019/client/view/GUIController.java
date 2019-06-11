@@ -22,6 +22,8 @@ public class GUIController implements GUIControllerInterface {
 
     private ArrayList<RemoteView> allViews = new ArrayList<>();
 
+    private GUI gui;
+
     public GUIController() {
         try {
             Registry registry = LocateRegistry.getRegistry(1099);
