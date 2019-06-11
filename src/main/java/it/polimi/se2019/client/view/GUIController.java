@@ -2,6 +2,7 @@ package it.polimi.se2019.client.view;
 
 import it.polimi.se2019.server.controller.VirtualView;
 import it.polimi.se2019.server.controller.network.RMI.RMIServerInterface;
+import it.polimi.se2019.server.model.cards.weapons.Weapon;
 
 import java.io.PrintStream;
 import java.rmi.RemoteException;
@@ -67,7 +68,7 @@ public class GUIController implements GUIControllerInterface {
 
 
     //Create remote view if it hasn't already created
-    @Override
+    //Call to "update" that update all remotes view
     public void initRemoteView(ArrayList<VirtualView> allVirtualView) throws RemoteException {
         boolean alreadyCreated = false;
         out.println("Remote view locali: ");
@@ -90,14 +91,13 @@ public class GUIController implements GUIControllerInterface {
 
     }
 
+    //Find the corrispondence between VirtualView and RemoteView and update its data
     @Override
     public void update(ArrayList<VirtualView> allVirtualView) throws RemoteException {
         for (VirtualView virtualView : allVirtualView) {
             String virtualUsername = virtualView.getUsername();
             for (RemoteView remoteView : allViews) {
                 if (remoteView.getUsername().equals(virtualUsername)) {
-                    //Set the position
-                    //remoteView.setPosition(virtualView.getPosition());
                     remoteView.updateRemoteView(virtualView);
                 }
             }
@@ -112,6 +112,27 @@ public class GUIController implements GUIControllerInterface {
             out.println(remoteView.getUsername() + ":");
             out.println("Position: " + remoteView.getPosition());
             out.println("Cubes: " + remoteView.getCubes());
+            out.print("Cabinet red: [");
+            for (int i = 0; i < 3; i++) {
+                if (remoteView.getCabinetRed().getSlot()[i] != null) {
+                    out.print(remoteView.getCabinetRed().getSlot()[i] + "  ");
+                }
+            }
+            out.println("]");
+            out.print("Cabinet yellow: [");
+            for (int i = 0; i < 3; i++) {
+                if (remoteView.getCabinetYellow().getSlot()[i] != null) {
+                    out.print(remoteView.getCabinetYellow().getSlot()[i] + "  ");
+                }
+            }
+            out.println("]");
+            out.print("Cabinet blue: [");
+            for (int i = 0; i < 3; i++) {
+                if (remoteView.getCabinetBlue().getSlot()[i] != null) {
+                    out.print(remoteView.getCabinetBlue().getSlot()[i] + "  ");
+                }
+            }
+            out.println("]");
             if (remoteView.getUsername().equals(this.username)){
                 out.println("Weapons: " + remoteView.getWeapons());
                 out.println("Power-up: " + remoteView.getPowerUp());

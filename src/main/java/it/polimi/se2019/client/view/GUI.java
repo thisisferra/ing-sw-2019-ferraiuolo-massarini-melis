@@ -277,7 +277,7 @@ public class GUI extends Application {
                 myRemoteView.getReachableSquare();
                 boolean isSpawn = guiController.getRmiStub().isSpawnPoint(myRemoteView.getPosition());
                 if (!isSpawn)
-                    guiController.getRmiStub().pickUpAmmo(myRemoteView.getUsername(), myRemoteView.getPosition());
+                    guiController.getRmiStub().pickUpAmmo(myRemoteView.getUsername());
                 else {
                     //TODO to implement
                     //TODO indexToPickUp e indexToSwitch sono due input dell'utente
@@ -285,7 +285,9 @@ public class GUI extends Application {
                     int indexToSwitch = 0;
                     if (myRemoteView.getWeapons().size() < 3) {
                         guiController.getRmiStub().pickUpWeapon(username, indexToPickUp);
+                        textArea.setText("You have picked up: " + myRemoteView.getWeapons().get(myRemoteView.getWeapons().size() - 1) + "\n" + textArea.getText());
                     } else if (myRemoteView.getWeapons().size() == 3) {
+                        textArea.setText("You already have three weapons in you hand.\nChoose one to discard..." + "\n" + textArea.getText());
 
                     } else {
                         throw new Exception("You have more than three weapons in your hand");
@@ -474,14 +476,17 @@ public class GUI extends Application {
 
     public String getRedCubes() {
         return "2";
+        //return Integer.toString(myRemoteView.getCubes().getReds());
     }
 
     public String getYellowCubes() {
         return "2";
+        //return Integer.toString(myRemoteView.getCubes().getYellows());
     }
 
     public String getBlueCubes() {
-        return "3";
+        return "2";
+        //return Integer.toString(myRemoteView.getCubes().getBlues());
     }
 
     public void setDeathTrackSkulls() {
@@ -838,12 +843,12 @@ public class GUI extends Application {
                 //TODO implementare una finestra di attesa, di durata definita (es. 20 s)
                 // per aspettare che tutti i giocatori siano connessi
                 else {
-                    guiController.getRmiStub().register(usernameTyped, guiController);
                     guiController.setUsername(usernameTyped);
-                    window.setScene(scene);
                     this.username = usernameTyped;
-                    textArea.setText(usernameTyped + "\n" + textArea.getText());
+                    guiController.getRmiStub().register(usernameTyped, guiController);
                     myRemoteView = guiController.getMyRemoteView();
+                    window.setScene(scene);
+                    textArea.setText(usernameTyped + "\n" + textArea.getText());
                 /*
                     for (RemoteView remoteView : guiController.getAllViews()) {
                         textArea.setText(remoteView.getUsername() + "\n" + textArea.getText());

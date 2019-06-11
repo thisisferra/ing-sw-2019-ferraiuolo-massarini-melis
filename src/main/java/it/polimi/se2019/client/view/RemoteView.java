@@ -6,6 +6,7 @@ import it.polimi.se2019.server.model.cards.PowerUp;
 import it.polimi.se2019.server.model.cards.weapons.Weapon;
 import it.polimi.se2019.server.model.game.Cubes;
 import it.polimi.se2019.server.model.map.Square;
+import it.polimi.se2019.server.model.map.WeaponSlot;
 import it.polimi.se2019.server.model.player.Player;
 
 import java.rmi.registry.Registry;
@@ -14,7 +15,6 @@ import java.util.ArrayList;
 
 public class RemoteView {
 
-    private ArrayList<RemoteView> allViews= new ArrayList<>();
     private String username;
     private int position;
     private int points;
@@ -29,6 +29,9 @@ public class RemoteView {
     private Cubes cubes;
     private ArrayList<Square> reachableSquare = new ArrayList<>();
     private int numberOfMoves = 2;
+    private WeaponSlot cabinetRed;
+    private WeaponSlot cabinetYellow;
+    private WeaponSlot cabinetBlue;
 
     private Registry registry;
     private RMIServerInterface stub;
@@ -38,10 +41,6 @@ public class RemoteView {
     }
 
     //GETTER
-
-    public ArrayList<RemoteView> getAllViews() {
-        return this.allViews;
-    }
 
     public String getUsername() {
         return this.username;
@@ -107,6 +106,18 @@ public class RemoteView {
         return this.stub;
     }
 
+    public WeaponSlot getCabinetRed() {
+        return this.cabinetRed;
+    }
+
+    public WeaponSlot getCabinetYellow() {
+        return this.cabinetYellow;
+    }
+
+    public WeaponSlot getCabinetBlue() {
+        return this.cabinetBlue;
+    }
+
 
     //SETTER
 
@@ -159,20 +170,22 @@ public class RemoteView {
         this.numberOfMoves = numberOfMoves;
     }
 
+    public void setCabinetRed(WeaponSlot cabinetRed) {
+        this.cabinetRed = cabinetRed;
+    }
+
+    public void setCabinetYellow(WeaponSlot cabinetYellow) {
+        this.cabinetYellow = cabinetYellow;
+    }
+
+    public void setCabinetBlue(WeaponSlot cabinetBlue) {
+        this.cabinetBlue = cabinetBlue;
+    }
+
     //ALTRO
 
     public void notifyNewClient(String newClient) {
 
-    }
-
-    public void createRemotesView(ArrayList<VirtualView> allVirtualView) {
-        int size = allVirtualView.size();
-        for (int i = 0; i < size; i++) {
-            allViews.add(new RemoteView(allVirtualView.get(i).getUsername()));
-        }
-        for (RemoteView remoteView : allViews) {
-            remoteView.getUsername();
-        }
     }
 
     public void updateRemoteView(VirtualView virtualView) {
@@ -181,14 +194,8 @@ public class RemoteView {
         this.weapons = virtualView.getWeapons();
         this.powerUp = virtualView.getPowerUps();
         this.cubes = virtualView.getCubes();
-    }
-
-    public RemoteView searchMyRemoteView(String username) {
-        for (RemoteView remoteView : allViews) {
-            if (remoteView.getUsername().equals(username)) {
-                return remoteView;
-            }
-        }
-        return null;
+        this.cabinetRed = virtualView.getCabinetRed();
+        this.cabinetYellow = virtualView.getCabinetYellow();
+        this.cabinetBlue = virtualView.getCabinetBlue();
     }
 }
