@@ -5,9 +5,11 @@ import it.polimi.se2019.client.view.GUIControllerInterface;
 import it.polimi.se2019.server.OneAboveAll;
 import it.polimi.se2019.server.controller.VirtualView;
 import it.polimi.se2019.server.controller.network.Server;
+import it.polimi.se2019.server.model.cards.weapons.Weapon;
 import it.polimi.se2019.server.model.game.Match;
 import it.polimi.se2019.server.model.game.MovementChecker;
 import it.polimi.se2019.server.model.map.Square;
+import it.polimi.se2019.server.model.map.WeaponSlot;
 import it.polimi.se2019.server.model.player.Player;
 
 import java.io.PrintStream;
@@ -29,6 +31,8 @@ public class RMIServer extends Server implements RMIServerInterface {
     PrintStream out = new PrintStream(System.out);
 
     private Match match;
+
+    private int mapId = 0;
 
     private final int port;
 
@@ -103,15 +107,16 @@ public class RMIServer extends Server implements RMIServerInterface {
     }
 
     public synchronized boolean checkUsername(String username) throws Exception {
-        if (match.getAllPlayers().size() < 5) {
-            for (Player player : match.getAllPlayers()) {
-                if (player.getClientName().equals(username)) {
-                    return false;
+        if (match != null) {
+            if (match.getAllPlayers().size() < 5) {
+                for (Player player : match.getAllPlayers()) {
+                    if (player.getClientName().equals(username)) {
+                        return false;
+                    }
                 }
+            } else {
+                throw new Exception("Already 5 players");
             }
-        }
-        else{
-            throw new Exception("Already 5 players");
         }
         return true;
     }
@@ -189,4 +194,81 @@ public class RMIServer extends Server implements RMIServerInterface {
 
 
     }
+
+    @Override
+    public void restoreMap(){
+        restoreTile();
+        restoreWeaponSlot();
+    }
+
+    private void restoreTile() {
+        for(Square square : match.getMap().getAllSquare()) {
+            if (!square.isSpawnPoint()) {
+                square.setFull(true);
+            }
+        }
+    }
+
+    private void restoreWeaponSlot() {
+        for (WeaponSlot weaponSlot : match.getArsenal()) {
+            for (int i = 0; i < 3; i++) {
+                if (weaponSlot.getSlot()[i] == null) {
+                    Weapon newWeapon = match.pickUpWeapon();
+                    weaponSlot.getSlot()[i] = newWeapon;
+                }
+            }
+        }
+    }
+
+    private boolean mapAlreadySelected() {
+        if (mapId==0)
+            return false;
+        else
+            return true;
+
+    }
+
+    private void createMatch(int mapId) {
+        match = new Match(1);
+        match.initializeMatch();
+        out.println("Match created");
+    }
+
+    private void initializeVirtualView(Player player, GUIControllerInterface guiController) {
+        VirtualView virtualView = new VirtualView((guiController));
+        allVirtualViews.add(virtualView);
+        virtualView.setUsername(player.getClientName());
+        virtualView.setCharacter(player.getCharacter());
+        virtualView.setWeapons(player.getHand().getWeapons());
+        virtualView.setPowerUps(player.getHand().getPowerUps());
+        virtualView.setCubes(player.getPlayerBoard().getAmmoCubes());
+        virtualView.setCabinetRed(match.getArsenal().get(0));
+        virtualView.setCabinetYellow(match.getArsenal().get(1));
+        virtualView.setCabinetBlue(match.getArsenal().get(2));
+
+    }
+
+    private void createVirtualView(GUIControllerInterface guiController){
+        VirtualView virtualView = new VirtualView(guiController);
+        allVirtualViews.add(virtualView);
+    }
+
+    private Player createPlayer(String username) {
+        Player player = new Player(username, match);
+        this.match.getAllPlayers().add(player);
+        return player;
+
+    }
+
+    /*
+    if (!mapAlreadySelected()) {
+            this.createMatch(1);
+        }
+        out.println("Client connessi: ");
+        this.createVirtualView(guiController);
+        Player player = this.createPlayer(username);
+        this.initializeVirtualView(player, guiController);
+        this.printClientConnected();
+        this.initAllClient(allVirtualViews);
+     */
 }

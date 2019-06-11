@@ -161,6 +161,8 @@ public class GUI extends Application {
         Button shootButton = setButton("src/main/resources/Images/icons/shoot_icon.png", 50, "Shoot");
         Button passButton = setButton("src/main/resources/Images/icons/pass_icon.png", 50, "Pass turn and reload");
         Button powerUps = setButton("src/main/resources/Images/icons/powerup_icon.png", 50, "");
+        Button playersButton = setButton("src/main/resources/Images/icons/players_icon.png", 50, "");
+        Button weapons = setButton("src/main/resources/Images/icons/weapon_icon.png", 50, "");
         moveButton.setOnAction(e -> {
             try {
                 if (!guiController.getMyRemoteView().getCanMove()) {
@@ -215,7 +217,6 @@ public class GUI extends Application {
             }
             PlayerStatus.display(box, "Power ups");
         });
-        Button playersButton = setButton("src/main/resources/Images/icons/players_icon.png", 50, "");
         playersButton.setOnAction(e -> {
             VBox box = new VBox();
             for (Node obj : playerBoards.getChildren()) {
@@ -229,7 +230,6 @@ public class GUI extends Application {
             }
             PlayerStatus.display(box, "Players");
         });
-        Button weapons = setButton("src/main/resources/Images/icons/weapon_icon.png", 50, "");
         weapons.setOnAction(e -> {
             HBox box = new HBox();
             ImageView imageView = null;
@@ -311,10 +311,19 @@ public class GUI extends Application {
                 e1.printStackTrace();
             }
         });
+        passButton.setOnAction(e -> {
+            //TODO maschere per loadare un'arma
+            try {
+                guiController.getRmiStub().restoreMap();
+                setAmmo(mapNumber);
+            }
+            catch(Exception exc) {
+                exc.printStackTrace();
+            }
+        });
 
         Button button = new Button("x");
         button.setStyle(BUTTON_STYLE);
-
         button.setOnAction(e -> {
             setWeaponView(redBox, myRemoteView.getCabinetRed().getSlot());
             setWeaponView(blueBox, myRemoteView.getCabinetBlue().getSlot());

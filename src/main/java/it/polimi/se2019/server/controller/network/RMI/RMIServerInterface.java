@@ -16,7 +16,6 @@ public interface RMIServerInterface extends Remote {
 
     void register(String username, GUIControllerInterface guiControllerInterface) throws RemoteException;
 
-    //Map<String, RemoteView> getRegisteredPlayers() throws RemoteException;
 
     ArrayList<Square> reacheableSquare(int position,int steps) throws RemoteException;
 
@@ -27,5 +26,7 @@ public interface RMIServerInterface extends Remote {
     boolean isSpawnPoint(int position) throws RemoteException;
 
     void pickUpWeapon(String username, int indexToPickUp)throws RemoteException;
+
+    void restoreMap() throws RemoteException;
 
 }
