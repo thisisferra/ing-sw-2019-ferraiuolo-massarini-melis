@@ -838,11 +838,18 @@ public class GUI extends Application {
         passInput.setPromptText("Password");
         GridPane.setConstraints(passInput, 1, 1);
 
+        //IP input
+        TextField IPInput = new TextField();
+        IPInput.setPromptText("Server IP");
+        IPInput.setStyle("-fx-background-color: #726B72");
+        GridPane.setConstraints(IPInput, 1, 2);
+
         //login button
         Button loginButton = new Button("Log in");
-        GridPane.setConstraints(loginButton, 1, 2);
+        GridPane.setConstraints(loginButton, 1, 3);
         loginButton.setOnAction(e -> {
             try {
+                //guiController = new GUIController();
                 String usernameTyped = nameInput.getText();
                 boolean check = guiController.getRmiStub().checkUsername(usernameTyped);
                 if (!check) {
@@ -879,6 +886,7 @@ public class GUI extends Application {
                     guiController.getRmiStub().register(usernameTyped, guiController);
                     myRemoteView = guiController.getMyRemoteView();
                     window.setScene(scene);
+                    window.setFullScreen(true);         //Enlarge to fullscreen the game window
                     textArea.setText(usernameTyped + "\n" + textArea.getText());
                 /*
                     for (RemoteView remoteView : guiController.getAllViews()) {
@@ -902,7 +910,7 @@ public class GUI extends Application {
         loginButton.setOnMouseEntered(e -> loginButton.setStyle(HIGHLIGHT_BUTTON_STYLE));
         loginButton.setOnMouseExited(e -> loginButton.setStyle(BUTTON_STYLE));
         loginButton.setAlignment(Pos.CENTER);
-        layout.getChildren().addAll(nameInput, passInput, loginButton);
+        layout.getChildren().addAll(nameInput, passInput, IPInput, loginButton);
         Scene scene = new Scene(pane, 400, 250);
         pane.setStyle("-fx-background-color: #505050");
         return scene;

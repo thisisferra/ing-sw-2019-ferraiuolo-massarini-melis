@@ -22,7 +22,7 @@ public class GUIController implements GUIControllerInterface {
 
     private ArrayList<RemoteView> allViews = new ArrayList<>();
 
-    public GUIController() {
+    public GUIController(/*String IPAddress*/) {
         try {
             Registry registry = LocateRegistry.getRegistry("192.168.1.151", 1099);
             rmiStub = (RMIServerInterface) registry.lookup("remServer");

@@ -67,6 +67,15 @@ public class RemoteView {
         return this.username;
     }
 
+
+    /**
+     * Retrieves the character, i.e. the name of the game's pawn,
+     * associated with a particular remote view, and so with a
+     * particular user.
+     *
+     * @return the name of the character associated with a user.
+     */
+
     public String getCharacter() {
         return  this.character;
     }
@@ -304,12 +313,20 @@ public class RemoteView {
      * true: whenever the user clicks on the move button.
      *
      * @param canMove: a boolean that represents the will
-     *                 of the user about his desire to move.
+     *                 of the user to move or not.
      */
 
     public void setCanMove(boolean canMove) {
         this.canMove = canMove;
     }
+
+
+    /**
+     * Sets the triplet of int values inside the Cubes object attribute
+     * of this class object that represents the up-to-date valuables
+     * of the game associated with this user.
+     * @param cubes:
+     */
 
     private void setCubes(Cubes cubes) {
         this.cubes = cubes;
@@ -329,7 +346,16 @@ public class RemoteView {
         this.reachableSquare = reachableSquare;
     }
 
-    public void setNumberOfMoves(int numberOfActions) {
+
+    /**
+     * Sets the amount of actions remained to the user
+     * in the current turn.
+     *
+     * @param numberOfActions: number of turn moves left
+     *                         to the user.
+     */
+
+    public void setNumberOfActions(int numberOfActions) {
         this.numberOfActions = numberOfActions;
     }
 
@@ -356,9 +382,9 @@ public class RemoteView {
 
     /**
      * Updates the status of this class object attributes with
-     * the up-to-date values. The data is retrieved by the
+     * the up-to-date values. The data is retrieved from the
      * SERVER side to the CLIENT side through RMI: here virtualview
-     * is obtained in {@see GUIController} class in {@see update}
+     * is obtained in {@see GUIController} class with the {@see update}
      * method.
      *
      * @param virtualView: a VirtualView object, in short the
