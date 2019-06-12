@@ -19,6 +19,7 @@ public class VirtualView implements Serializable {
     private String character;
     private int position;
     private int damage;
+    private int numberOfAction;
     private ArrayList<Weapon> weapons = new ArrayList<>();
     private ArrayList<PowerUp> powerUps = new ArrayList<>();
     private Cubes cubes;
@@ -51,6 +52,10 @@ public class VirtualView implements Serializable {
 
     public int getDamage() {
         return this.damage;
+    }
+
+    public int getNumberOfAction() {
+        return this.numberOfAction;
     }
 
     public ArrayList<Weapon> getWeapons(){
@@ -94,6 +99,10 @@ public class VirtualView implements Serializable {
 
     public void setDamage(int damage) {
         this.damage = damage;
+    }
+
+    public void setNumberOfAction(int numberOfAction) {
+        this.numberOfAction = numberOfAction;
     }
 
     public void setWeapons(ArrayList<Weapon> weapons) {

@@ -13,6 +13,8 @@ import it.polimi.se2019.server.model.map.WeaponSlot;
 import it.polimi.se2019.server.model.player.Player;
 
 import java.io.PrintStream;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -30,9 +32,13 @@ public class RMIServer extends Server implements RMIServerInterface {
 
     PrintStream out = new PrintStream(System.out);
 
+    Player activePlayer;
+
     private Match match;
 
     private int mapId = 0;
+
+    private String ipAddress;
 
     private final int port;
 
@@ -47,7 +53,14 @@ public class RMIServer extends Server implements RMIServerInterface {
 
     public RMIServer(OneAboveAll oneAboveAll, int port, String remObjName) {
         super(oneAboveAll);
+        try {
+            this.ipAddress = InetAddress.getLocalHost().getHostAddress().trim();
+        }
+        catch(UnknownHostException unknownHost) {
+            System.err.println("Unknown host");
+        }
         this.port = port;
+        System.out.println("IP address: " + ipAddress + ":" + this.port);
         this.remObjName = remObjName;
     }
 
@@ -57,11 +70,11 @@ public class RMIServer extends Server implements RMIServerInterface {
             rmiRegistry = LocateRegistry.createRegistry(port);
             UnicastRemoteObject.exportObject(this, port);
             rmiRegistry.bind(remObjName, this);
-            System.out.println("Registry created and object exported");
+            System.out.println("Registry created and object exported");/*
             match = new Match(1);
             match.initializeMatch();
             System.out.println("Match created");
-            System.out.println("Client connessi: ");
+            System.out.println("Client connessi: ");*/
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -73,25 +86,17 @@ public class RMIServer extends Server implements RMIServerInterface {
     }
 
     public synchronized void register(String username, GUIControllerInterface guiController) throws RemoteException{
-        //Creo una virtual View
-        VirtualView virtualView = new VirtualView((guiController));
-        allVirtualViews.add(virtualView);
-        //Aggiungo un nuovo giocatore al model
-        Player player = new Player(username, match);
-        match.getAllPlayers().add(player);
-        //Imposto lo username, preso dal model, nella virtualView appena creata
-
-        virtualView.setUsername(player.getClientName());
-        virtualView.setCharacter(player.getCharacter());
-        virtualView.setWeapons(player.getHand().getWeapons());
-        virtualView.setPowerUps(player.getHand().getPowerUps());
-        virtualView.setCubes(player.getPlayerBoard().getAmmoCubes());
-        virtualView.setCabinetRed(match.getArsenal().get(0));
-        virtualView.setCabinetYellow(match.getArsenal().get(1));
-        virtualView.setCabinetBlue(match.getArsenal().get(2));
-
+        if (!mapAlreadySelected()) {
+            this.createMatch(1);
+        }
+        VirtualView virtualView = createVirtualView(guiController);
+        Player player = createPlayer(username);
+        initializeVirtualView(player, guiController, virtualView);
         this.printClientConnected();
         this.initAllClient(allVirtualViews);
+        if (activePlayer == null) {
+            activePlayer = match.getAllPlayers().get(0);
+        }
 
         /*
         for (VirtualView virtualView : allVirtualViews) {
@@ -230,15 +235,15 @@ public class RMIServer extends Server implements RMIServerInterface {
 
     private void createMatch(int mapId) {
         match = new Match(1);
+        this.mapId = 1;
         match.initializeMatch();
         out.println("Match created");
     }
 
-    private void initializeVirtualView(Player player, GUIControllerInterface guiController) {
-        VirtualView virtualView = new VirtualView((guiController));
-        allVirtualViews.add(virtualView);
+    private void initializeVirtualView(Player player, GUIControllerInterface guiController, VirtualView virtualView) {
         virtualView.setUsername(player.getClientName());
         virtualView.setCharacter(player.getCharacter());
+        virtualView.setNumberOfAction(player.getNumberOfAction());
         virtualView.setWeapons(player.getHand().getWeapons());
         virtualView.setPowerUps(player.getHand().getPowerUps());
         virtualView.setCubes(player.getPlayerBoard().getAmmoCubes());
@@ -248,9 +253,10 @@ public class RMIServer extends Server implements RMIServerInterface {
 
     }
 
-    private void createVirtualView(GUIControllerInterface guiController){
+    private VirtualView createVirtualView(GUIControllerInterface guiController){
         VirtualView virtualView = new VirtualView(guiController);
         allVirtualViews.add(virtualView);
+        return virtualView;
     }
 
     private Player createPlayer(String username) {
@@ -260,15 +266,45 @@ public class RMIServer extends Server implements RMIServerInterface {
 
     }
 
-    /*
-    if (!mapAlreadySelected()) {
-            this.createMatch(1);
+    public Match getMatch() {
+        return this.match;
+    }
+
+    public boolean checkNumberAction(String username) {
+        Player currentPlayer = this.match.searchPlayerByClientName(username);
+        if (currentPlayer.getNumberOfAction() > 0) {
+            return true;
         }
-        out.println("Client connessi: ");
-        this.createVirtualView(guiController);
-        Player player = this.createPlayer(username);
-        this.initializeVirtualView(player, guiController);
-        this.printClientConnected();
-        this.initAllClient(allVirtualViews);
-     */
+        return false;
+    }
+
+    public void useAction(String username) {
+        Player currentPlayer = match.searchPlayerByClientName(username);
+        currentPlayer.setNumberOfAction();
+    }
+
+    public void setActivePlayer(String usernameLastPlayer) {
+        Player lastPlayer = match.searchPlayerByClientName(usernameLastPlayer);
+        int size = match.getAllPlayers().size();
+        int index = 0;
+        while(!usernameLastPlayer.equals(match.getAllPlayers().get(index).getClientName())) {
+            index++;
+        }
+        if (index == size - 1) {
+            activePlayer = match.getAllPlayers().get(0);
+        }
+        else {
+            activePlayer = match.getAllPlayers().get(index + 1);
+        }
+        System.out.println("Next player is: " + activePlayer.getClientName());
+    }
+
+    public String getActivePlayer() {
+        return this.activePlayer.getClientName();
+    }
+
+    public void resetActionNumber(String username) {
+        Player currentPlayer = this.match.searchPlayerByClientName(username);
+        currentPlayer.resetNumberOfAction();
+    }
 }

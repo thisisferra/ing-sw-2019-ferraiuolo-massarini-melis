@@ -24,7 +24,7 @@ public class GUIController implements GUIControllerInterface {
 
     public GUIController() {
         try {
-            Registry registry = LocateRegistry.getRegistry(1099);
+            Registry registry = LocateRegistry.getRegistry("192.168.1.151", 1099);
             rmiStub = (RMIServerInterface) registry.lookup("remServer");
             UnicastRemoteObject.exportObject(this, 0);
         }
@@ -110,6 +110,7 @@ public class GUIController implements GUIControllerInterface {
         out.println("Informazioni di gioco:");
         for (RemoteView remoteView : allViews) {
             out.println(remoteView.getUsername() + " (" + remoteView.getCharacter() + ")");
+            out.println("# action available: " + remoteView.getNumberOfActions());
             out.println("Position: " + remoteView.getPosition());
             out.println("Cubes: " + remoteView.getCubes());
             out.print("Cabinet red: [");

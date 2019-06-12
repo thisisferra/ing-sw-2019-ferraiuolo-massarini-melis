@@ -29,7 +29,7 @@ public class Player implements Serializable {
     private Hand playerHand;
     private PlayerBoard playerBoard;
     private Match match;
-    private int numberOfMoves = 2;
+    private int numberOfAction = 2;
 
     public Player(String clientName, Match match) {
         this.clientName = clientName;
@@ -127,12 +127,16 @@ public class Player implements Serializable {
         this.position = position;
     }
 
-    public int getNumberOfMoves() {
-        return this.numberOfMoves;
+    public int getNumberOfAction() {
+        return this.numberOfAction;
     }
 
-    public void actionUsed() {
-        this.numberOfMoves = this.numberOfMoves - 1;
+    public void setNumberOfAction() {
+        this.numberOfAction = this.numberOfAction - 1;
+    }
+
+    public void resetNumberOfAction() {
+        this.numberOfAction = 2;
     }
 
     /**
@@ -351,9 +355,8 @@ public class Player implements Serializable {
     }
 
     public String chooseCharacter() {
-        System.out.println(this.getMatch().getCharacterAvailable().size());
-        int randomCharacter = (int) Math.random() * this.getMatch().getCharacterAvailable().size();
-        return this.match.getCharacterAvailable().remove(randomCharacter);
-
+        double randomNumber = (int) (Math.random() * this.getMatch().getCharacterAvailable().size());
+        int intRandomNumber = (int) randomNumber;
+        return this.match.getCharacterAvailable().remove(intRandomNumber);
     }
 }
