@@ -24,7 +24,7 @@ public class GUIController implements GUIControllerInterface {
 
     public GUIController(/*String IPAddress*/) {
         try {
-            Registry registry = LocateRegistry.getRegistry("192.168.1.151", 1099);
+            Registry registry = LocateRegistry.getRegistry(1099);
             rmiStub = (RMIServerInterface) registry.lookup("remServer");
             UnicastRemoteObject.exportObject(this, 0);
         }
@@ -71,7 +71,7 @@ public class GUIController implements GUIControllerInterface {
     //Call to "update" that update all remotes view
     public void initRemoteView(ArrayList<VirtualView> allVirtualView) throws RemoteException {
         boolean alreadyCreated = false;
-        out.println("Remote view locali: ");
+        //out.println("Remote view locali: ");
         for (VirtualView virtualView : allVirtualView) {
             String username = virtualView.getUsername();
             for (RemoteView remoteView : allViews) {
@@ -84,9 +84,9 @@ public class GUIController implements GUIControllerInterface {
             }
             alreadyCreated = false;
         }
-        for (RemoteView remoteView : allViews) {
-            out.println(remoteView.getUsername());
-        }
+        //for (RemoteView remoteView : allViews) {
+        //    out.println(remoteView.getUsername());
+        //}
         update(allVirtualView);
 
     }
@@ -109,9 +109,13 @@ public class GUIController implements GUIControllerInterface {
         out.flush();
         out.println("Informazioni di gioco:");
         for (RemoteView remoteView : allViews) {
-            out.println(remoteView.getUsername() + " (" + remoteView.getCharacter() + ")");
-            out.println("# action available: " + remoteView.getNumberOfActions());
+            out.println("Username: " + remoteView.getUsername() + " (" + remoteView.getCharacter() + ")");
             out.println("Position: " + remoteView.getPosition());
+            if (remoteView.getUsername().equals(this.username)) {
+                out.println("# action available: " + remoteView.getNumberOfActions());
+                out.println("Weapons: " + remoteView.getWeapons());
+                out.println("Power-up: " + remoteView.getPowerUp());
+            }
             out.println("Cubes: " + remoteView.getCubes());
             out.print("Cabinet red: [");
             for (int i = 0; i < 3; i++) {
@@ -134,10 +138,6 @@ public class GUIController implements GUIControllerInterface {
                 }
             }
             out.println("]");
-            if (remoteView.getUsername().equals(this.username)) {
-                out.println("Weapons: " + remoteView.getWeapons());
-                out.println("Power-up: " + remoteView.getPowerUp());
-            }
             out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
             out.println();
         }

@@ -91,9 +91,9 @@ public class RMIServer extends Server implements RMIServerInterface {
         }
         VirtualView virtualView = createVirtualView(guiController);
         Player player = createPlayer(username);
-        initializeVirtualView(player, guiController, virtualView);
+        virtualView.initializeVirtualView(player, match);
         this.printClientConnected();
-        this.initAllClient(allVirtualViews);
+        this.initAllClient();
         if (activePlayer == null) {
             activePlayer = match.getAllPlayers().get(0);
         }
@@ -135,7 +135,7 @@ public class RMIServer extends Server implements RMIServerInterface {
         Player player = match.searchPlayerByClientName(username);
         Square square = match.getMap().searchSquare(player.getPosition());
         player.pickUpAmmo(square, match);
-        this.updateAllClient(allVirtualViews);
+        this.updateAllClient();
     }
 
     public void setNewPosition(String username, int newPosition){
@@ -143,7 +143,8 @@ public class RMIServer extends Server implements RMIServerInterface {
         currentPlayer.setPosition(newPosition);
         try {
             getMyVirtualView(username).setPosition(currentPlayer.getPosition());
-            updateAllClient(allVirtualViews);
+            getMyVirtualView(username).setNumberOfAction(currentPlayer.getNumberOfAction());
+            updateAllClient();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -156,7 +157,7 @@ public class RMIServer extends Server implements RMIServerInterface {
     }
 
     //Call to each client to create all remotes view
-    public void initAllClient(ArrayList<VirtualView> allVirtualViews) throws RemoteException{
+    public void initAllClient() throws RemoteException{
         for (VirtualView virtualView : allVirtualViews) {
             GUIControllerInterface clientRef = virtualView.getClientReference();
             clientRef.initRemoteView(allVirtualViews);
@@ -173,7 +174,7 @@ public class RMIServer extends Server implements RMIServerInterface {
         return null;
     }
 
-    public void updateAllClient(ArrayList<VirtualView> allVirtualView) throws RemoteException{
+    public void updateAllClient() throws RemoteException{
         for (VirtualView virtualView : allVirtualViews) {
             GUIControllerInterface clientRef = virtualView.getClientReference();
             clientRef.update(allVirtualViews);
@@ -195,7 +196,7 @@ public class RMIServer extends Server implements RMIServerInterface {
         currentPlayer.pickUpWeapon(indexToPickUp);
         getMyVirtualView(username).setWeapons(currentPlayer.getHand().getWeapons());
         getMyVirtualView(username).setCubes(currentPlayer.getPlayerBoard().getAmmoCubes());
-        updateAllClient(allVirtualViews);
+        updateAllClient();
 
 
     }
@@ -238,19 +239,6 @@ public class RMIServer extends Server implements RMIServerInterface {
         this.mapId = 1;
         match.initializeMatch();
         out.println("Match created");
-    }
-
-    private void initializeVirtualView(Player player, GUIControllerInterface guiController, VirtualView virtualView) {
-        virtualView.setUsername(player.getClientName());
-        virtualView.setCharacter(player.getCharacter());
-        virtualView.setNumberOfAction(player.getNumberOfAction());
-        virtualView.setWeapons(player.getHand().getWeapons());
-        virtualView.setPowerUps(player.getHand().getPowerUps());
-        virtualView.setCubes(player.getPlayerBoard().getAmmoCubes());
-        virtualView.setCabinetRed(match.getArsenal().get(0));
-        virtualView.setCabinetYellow(match.getArsenal().get(1));
-        virtualView.setCabinetBlue(match.getArsenal().get(2));
-
     }
 
     private VirtualView createVirtualView(GUIControllerInterface guiController){

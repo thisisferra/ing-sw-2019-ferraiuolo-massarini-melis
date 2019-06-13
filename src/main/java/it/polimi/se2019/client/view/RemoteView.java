@@ -396,12 +396,15 @@ public class RemoteView {
         this.username = virtualView.getUsername();
         this.character = virtualView.getCharacter();
         this.position = virtualView.getPosition();
-        this.numberOfActions = virtualView.getNumberOfAction();
-        this.weapons = virtualView.getWeapons();
-        this.powerUp = virtualView.getPowerUps();
         this.cubes = virtualView.getCubes();
         this.cabinetRed = virtualView.getCabinetRed();
         this.cabinetYellow = virtualView.getCabinetYellow();
         this.cabinetBlue = virtualView.getCabinetBlue();
+        if (this.username.equals(virtualView.getUsername())) {
+            this.numberOfActions = virtualView.getNumberOfAction();
+            this.weapons = virtualView.getWeapons();
+            this.powerUp = virtualView.getPowerUps();
+
+        }
     }
 }

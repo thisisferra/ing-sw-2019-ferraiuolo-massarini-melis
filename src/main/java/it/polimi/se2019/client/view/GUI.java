@@ -171,17 +171,17 @@ public class GUI extends Application {
                         if (!guiController.getMyRemoteView().getCanMove()) {
                             guiController.getMyRemoteView().setCanMove(true);
                             guiController.getMyRemoteView().setReachableSquare(guiController.getRmiStub().reacheableSquare(guiController.getMyRemoteView().getPosition(), 3));
-                            textArea.setText("\n" + guiController.getMyRemoteView().getReachableSquare() + "\n" + textArea.getText());
+                            //textArea.setText("\n" + guiController.getMyRemoteView().getReachableSquare() + "\n" + textArea.getText());
                             for (int i = 0; i < 12; i++) {
                                 Rectangle rectangle = (Rectangle) grid.getChildren().get(i);
                                 for (Square square : guiController.getMyRemoteView().getReachableSquare()) {
                                     if (rectangle.getId().equals(Integer.toString(square.getPosition()))) {
                                         rectangle.setFill(Color.color(1, 1, 0, 0.4));
                                         rectangle.setOnMouseClicked(o -> {
-                                            textArea.setText("\nSquare #: " + rectangle.getId() + "\n" + textArea.getText());
+                                            //textArea.setText("\nSquare #: " + rectangle.getId() + "\n" + textArea.getText());
                                             try {
                                                 guiController.getRmiStub().setNewPosition(guiController.getMyRemoteView().getUsername(), Integer.parseInt(rectangle.getId()));
-                                                textArea.setText("\nNew position: " + rectangle.getId() + textArea.getText());
+                                                textArea.setText("New position: " + rectangle.getId() + "\n" + textArea.getText());
                                                 setFigures();
                                                 for (int j = 0; j < 12; j++) {
                                                     Rectangle rect = (Rectangle) grid.getChildren().get(j);
@@ -206,7 +206,7 @@ public class GUI extends Application {
                     }
                 }
                 else {
-                    textArea.setText("It's not your round!!!\n" + textArea.getText());
+                    textArea.setText("It's not your round!\n" + textArea.getText());
                 }
             } catch (RemoteException e1) {
                 e1.printStackTrace();
@@ -263,23 +263,23 @@ public class GUI extends Application {
         grabButton.setOnAction(e -> {
             //boolean itsMyRound = guiController.getRmiStub().isTurn(String username);
             try {
-                //if(guiController.getRmiStub().checkActivePlayer(username) {
+                if (guiController.getRmiStub().getActivePlayer().equals(this.username)) {
                     if (guiController.getRmiStub().checkNumberAction(username)) {
                         guiController.getRmiStub().useAction(this.username);
                         if (!guiController.getMyRemoteView().getCanMove()) {
                             guiController.getMyRemoteView().setCanMove(true);
                             guiController.getMyRemoteView().setReachableSquare(guiController.getRmiStub().reacheableSquare(guiController.getMyRemoteView().getPosition(), 1));
-                            textArea.setText("\n" + guiController.getMyRemoteView().getReachableSquare() + "\n" + textArea.getText());
+                            //textArea.setText("\n" + guiController.getMyRemoteView().getReachableSquare() + "\n" + textArea.getText());
                             for (int i = 0; i < 12; i++) {
                                 Rectangle rectangle = (Rectangle) grid.getChildren().get(i);
                                 for (Square square : guiController.getMyRemoteView().getReachableSquare()) {
                                     if (rectangle.getId().equals(Integer.toString(square.getPosition()))) {
                                         rectangle.setFill(Color.color(0, 0.2, 1, 0.4));
                                         rectangle.setOnMouseClicked(o -> {
-                                            textArea.setText("\nSquare #: " + rectangle.getId() + "\n" + textArea.getText());
+                                            //textArea.setText("\nSquare #: " + rectangle.getId() + "\n" + textArea.getText());
                                             try {
                                                 guiController.getRmiStub().setNewPosition(guiController.getMyRemoteView().getUsername(), Integer.parseInt(rectangle.getId()));
-                                                textArea.setText("\nNew position: " + rectangle.getId() + textArea.getText());
+                                                textArea.setText("New position: " + rectangle.getId() + "\n" + textArea.getText());
                                                 setFigures();
                                                 ammoSet.getChildren().get(Integer.parseInt(rectangle.getId())).setTranslateX(500);
                                                 ammoSet.getChildren().get(Integer.parseInt(rectangle.getId())).setTranslateY(500);
@@ -290,8 +290,10 @@ public class GUI extends Application {
                                                     });
                                                 }
                                                 boolean isSpawn = guiController.getRmiStub().isSpawnPoint(myRemoteView.getPosition());
-                                                if (!isSpawn)
+                                                if (!isSpawn) {
                                                     guiController.getRmiStub().pickUpAmmo(myRemoteView.getUsername());
+                                                    textArea.setText("You have picked up an ammo\n" + textArea.getText());
+                                                }
                                                 else {
                                                     //TODO to implement
                                                     //TODO indexToPickUp e indexToSwitch sono due input dell'utente
@@ -299,16 +301,15 @@ public class GUI extends Application {
                                                     int indexToSwitch = 0;
                                                     if (myRemoteView.getWeapons().size() < 3) {
                                                         guiController.getRmiStub().pickUpWeapon(username, indexToPickUp);
-                                                        textArea.setText("You have picked up: " + myRemoteView.getWeapons().get(myRemoteView.getWeapons().size() - 1) + "\n" + textArea.getText());
+                                                        textArea.setText("You have picked a weapon: " + myRemoteView.getWeapons().get(myRemoteView.getWeapons().size() - 1) + "\n" + textArea.getText());
                                                     } else if (myRemoteView.getWeapons().size() == 3) {
                                                         textArea.setText("You already have three weapons in you hand.\nChoose one to discard..." + "\n" + textArea.getText());
                                                     } else {
-                                                        throw new Exception("You have more than three weapons in your hand");
+                                                        throw new Exception("You have more than three weapons in your hand\n");
                                                     }
                                                 }
                                                 guiController.getMyRemoteView().setCanMove(false);
-                                            }
-                                            catch (Exception exc) {
+                                            } catch (Exception exc) {
                                                 exc.printStackTrace();
                                             }
                                         });
@@ -316,10 +317,13 @@ public class GUI extends Application {
                                 }
                             }
                         }
+                    } else {
+                        textArea.setText("You have already used two actions. Pass your turn\n" + textArea.getText());
                     }
-                    else {
-                       textArea.setText("You have already used two actions. Pass your turn" + textArea.getText());
-                    }
+                }
+                else {
+                    textArea.setText("It's not your round!\n" + textArea.getText());
+                }
             } catch (Exception e1) {
                     e1.printStackTrace();
                 }

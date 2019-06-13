@@ -4,7 +4,9 @@ import it.polimi.se2019.client.view.GUIControllerInterface;
 import it.polimi.se2019.server.model.cards.PowerUp;
 import it.polimi.se2019.server.model.cards.weapons.Weapon;
 import it.polimi.se2019.server.model.game.Cubes;
+import it.polimi.se2019.server.model.game.Match;
 import it.polimi.se2019.server.model.map.WeaponSlot;
+import it.polimi.se2019.server.model.player.Player;
 
 import javax.swing.*;
 import java.io.Serializable;
@@ -130,6 +132,18 @@ public class VirtualView implements Serializable {
     }
 
     //ALTRO
+
+    public void initializeVirtualView(Player player, Match match) {
+        this.setUsername(player.getClientName());
+        this.setCharacter(player.getCharacter());
+        this.setNumberOfAction(player.getNumberOfAction());
+        this.setWeapons(player.getHand().getWeapons());
+        this.setPowerUps(player.getHand().getPowerUps());
+        this.setCubes(player.getPlayerBoard().getAmmoCubes());
+        this.setCabinetRed(match.getArsenal().get(0));
+        this.setCabinetYellow(match.getArsenal().get(1));
+        this.setCabinetBlue(match.getArsenal().get(2));
+    }
 
     /*
     public void updateClient(VirtualView virtualView) throws RemoteException {
