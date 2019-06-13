@@ -6,8 +6,6 @@ import it.polimi.se2019.server.model.map.Square;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -18,26 +16,20 @@ import javafx.scene.image.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.rmi.RemoteException;
-import java.util.*;
 
 public class GUI extends Application {
 
-
-    String username;
+    private String username;
     private GUIController guiController = new GUIController();
     private RemoteView myRemoteView;
-
-
     private Stage window;
-    private Group root = new Group();
-    private Image image;
-    private ImageView imageView = new ImageView();
     private ToggleGroup mapSelector = new ToggleGroup();
     private GridPane grid = new GridPane();
     private GridPane pawnsGrid = new GridPane();
@@ -48,22 +40,18 @@ public class GUI extends Application {
     private HBox deathTrack = new HBox();
     private VBox cubeBox = new VBox();
     private StackPane ammoSet = new StackPane();
-    private VBox playerBoards = new VBox();
-    private HBox weaponHand = new HBox();
-    private HBox powerUpHand = new HBox();
     private VBox leftMenu = new VBox();
     private StackPane stack = new StackPane();
     private VBox rightPane = new VBox();
     private BorderPane borderPane = new BorderPane();
-    private ArrayList<String> weaponsName = new ArrayList<>();
-    private ArrayList<String> powerUpsName = new ArrayList<>();
-    private TextArea textArea = new TextArea("\nWelcome to the game!");
-    private Image iconImage = null;
-    private ImageView iconView = null;
+    private TextArea textArea = new TextArea("Welcome to Adrenaline!");
     static final String BUTTON_STYLE = "-fx-background-color: #3c3c3c;-fx-text-fill: #999999;";
+    static final String LABEL_STYLE = "-fx-text-fill: #cecece";
+    static final String BACKGROUND_STYLE = "-fx-background-color: #505050";
     static final String HIGHLIGHT_BUTTON_STYLE = "-fx-background-color: #bbbbbb;-fx-text-fill: #999999;";
+    static final String TEXT_AREA_STYLE = "-fx-control-inner-background:#717171;  -fx-highlight-fill: #f1f7eb; -fx-highlight-text-fill: #717171; -fx-text-fill: #f1f7eb;-fx-border-color: #ffffff ";
     private int mapNumber = 1;
-    private Scene scene, loginScene;
+    private Scene scene;
 
 
     public static void main(String[] args) {
@@ -72,105 +60,36 @@ public class GUI extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage){
 
-        Timeline fiveSecondsWonder = new Timeline(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
+        setStage(primaryStage);
 
-            @Override
-            public void handle(ActionEvent event) {
-                if(myRemoteView != null){
-                    setFigures();
-                    setWeaponView(redBox, myRemoteView.getCabinetRed().getSlot());
-                    setWeaponView(yellowBox, myRemoteView.getCabinetYellow().getSlot());
-                    setWeaponView(blueBox, myRemoteView.getCabinetBlue().getSlot());
-                    setCubes();
-                }
-            }
-        }));
-        fiveSecondsWonder.setCycleCount(Timeline.INDEFINITE);
-        fiveSecondsWonder.play();
-
-        window = primaryStage;
-        window.setScene(setLoginScene());
-        window.setTitle("Adrenaline");
-        window.setResizable(true);
-        window.setFullScreen(false);
-        window.alwaysOnTopProperty();
-        window.setOnCloseRequest(e -> {
-            e.consume();
-            closeProgram();
-        });
-
-
-        // map background
-        image = new Image(new FileInputStream("src/main/resources/Images/Maps/Map" + mapNumber + ".png"));
-        imageView = new ImageView(image);
-        imageView.setFitHeight(700);
-        imageView.setPreserveRatio(true);
-
-        //ammos
         setAmmo(mapNumber);
 
-        //deathtrack
         setDeathTrackSkulls();
 
-        //map grid and pawnsgrid
         setMapGrid();
 
-        //cabinets
-        if(myRemoteView != null){
-            setWeaponView(redBox, myRemoteView.getCabinetRed().getSlot());
-            setWeaponView(yellowBox, myRemoteView.getCabinetYellow().getSlot());
-            setWeaponView(blueBox, myRemoteView.getCabinetBlue().getSlot());
-        }
+        setCabinets();
 
-        //blue cabinet
-        blueBox.setTranslateX(490);
-        blueBox.setTranslateY(-10);
-        blueBox.setSpacing(10);
+        Label points = setPoints();
 
-        //red cabinet
-        redBox.setTranslateX(-125);
-        redBox.setTranslateY(-265);
-        redBox.setRotate(-90);
-        redBox.setSpacing(10);
+        Button moveButton = setButton("src/main/resources/Images/icons/move_icon.png", "Move");
+        Button grabButton = setButton("src/main/resources/Images/icons/grab_icon.png", "Move and grab");
+        Button shootButton = setButton("src/main/resources/Images/icons/shoot_icon.png", "Shoot");
+        Button passButton = setButton("src/main/resources/Images/icons/pass_icon.png", "Pass turn and reload");
+        Button powerUps = setButton("src/main/resources/Images/icons/powerup_icon.png", "");
+        Button playersButton = setButton("src/main/resources/Images/icons/players_icon.png", "");
+        Button weapons = setButton("src/main/resources/Images/icons/weapon_icon.png", "");
 
-        //yellow cabinet
-        yellowBox.setSpacing(10);
-        yellowBox.setRotate(90);
-        yellowBox.setTranslateX(122);
-        yellowBox.setTranslateY(510);
-
-
-        cabinets.setPickOnBounds(false);
-        cabinets.getChildren().addAll(redBox, blueBox, yellowBox);
-
-        //powerups
-
-        //playerBoards
-        setPlayerboards();
-
-        //points
-        Label points = new Label("Points: " + getMyPoints());
-        points.setStyle("-fx-background-color: #404040; -fx-text-fill: #aaaaaa");
-
-
-        //buttons
-        Button moveButton = setButton("src/main/resources/Images/icons/move_icon.png", 50, "Move");
-        Button grabButton = setButton("src/main/resources/Images/icons/grab_icon.png", 50, "Move and grab");
-        Button shootButton = setButton("src/main/resources/Images/icons/shoot_icon.png", 50, "Shoot");
-        Button passButton = setButton("src/main/resources/Images/icons/pass_icon.png", 50, "Pass turn and reload");
-        Button powerUps = setButton("src/main/resources/Images/icons/powerup_icon.png", 50, "");
-        Button playersButton = setButton("src/main/resources/Images/icons/players_icon.png", 50, "");
-        Button weapons = setButton("src/main/resources/Images/icons/weapon_icon.png", 50, "");
         moveButton.setOnAction(e -> {
             try {
-                if (guiController.getRmiStub().getActivePlayer().equals(this.username)) {
-                    if (guiController.getRmiStub().checkNumberAction(username)) {
+                if(guiController.getRmiStub().getActivePlayer().equals(this.username)){
+                    if(guiController.getRmiStub().checkNumberAction(username)){
                         guiController.getRmiStub().useAction(username);
                         if (!guiController.getMyRemoteView().getCanMove()) {
                             guiController.getMyRemoteView().setCanMove(true);
-                            guiController.getMyRemoteView().setReachableSquare(guiController.getRmiStub().reacheableSquare(guiController.getMyRemoteView().getPosition(), 3));
+                            guiController.getMyRemoteView().setReachableSquare(guiController.getRmiStub().reacheableSquare(guiController.getMyRemoteView().getPosition(),3));
                             //textArea.setText("\n" + guiController.getMyRemoteView().getReachableSquare() + "\n" + textArea.getText());
                             for (int i = 0; i < 12; i++) {
                                 Rectangle rectangle = (Rectangle) grid.getChildren().get(i);
@@ -181,8 +100,9 @@ public class GUI extends Application {
                                             //textArea.setText("\nSquare #: " + rectangle.getId() + "\n" + textArea.getText());
                                             try {
                                                 guiController.getRmiStub().setNewPosition(guiController.getMyRemoteView().getUsername(), Integer.parseInt(rectangle.getId()));
-                                                textArea.setText("New position: " + rectangle.getId() + "\n" + textArea.getText());
+                                                textArea.setText("\nNew position: " + rectangle.getId() + textArea.getText());
                                                 setFigures();
+
                                                 for (int j = 0; j < 12; j++) {
                                                     Rectangle rect = (Rectangle) grid.getChildren().get(j);
                                                     rect.setFill(Color.color(1, 1, 1, 0.1));
@@ -212,64 +132,15 @@ public class GUI extends Application {
                 e1.printStackTrace();
             }
         });
-        powerUps.setOnAction(e -> {
-            HBox box = new HBox();
-            setPowerUpHand();
-            for (Node obj : powerUpHand.getChildren()) {
-
-                ImageView copy = (ImageView) obj;
-                ImageView copiedPowerUp = new ImageView(copy.getImage());
-                copiedPowerUp.setPreserveRatio(true);
-                copiedPowerUp.setFitHeight(200);
-                box.getChildren().add(copiedPowerUp);
-
-            }
-            PlayerStatus.display(box, "Power ups");
-        });
-        playersButton.setOnAction(e -> {
-            VBox box = new VBox();
-            for (Node obj : playerBoards.getChildren()) {
-
-                ImageView copy = (ImageView) obj;
-                ImageView copiedPlayerboard = new ImageView(copy.getImage());
-                copiedPlayerboard.setPreserveRatio(true);
-                copiedPlayerboard.setFitHeight(100);
-                box.getChildren().add(copiedPlayerboard);
-
-            }
-            PlayerStatus.display(box, "Players");
-        });
-        weapons.setOnAction(e -> {
-            HBox box = new HBox();
-            ImageView imageView = null;
-            for (Weapon obj : myRemoteView.getWeapons()) {
-                try {
-                    imageView = null;
-                    Image image = new Image(new FileInputStream("src/main/resources/Images/Weapons/" + obj.getType() + ".png"));
-                    if(!obj.getLoad())
-                        image = toGrayScale(image);
-                    imageView = new ImageView(image);
-                    imageView.setPreserveRatio(true);
-                    imageView.setFitHeight(300);
-                } catch (FileNotFoundException o) {
-                    o.printStackTrace();
-                }
-                box.getChildren().add(imageView);
-            }
-            PlayerStatus.display(box, "Weapons");
-        });
-        grabButton.setOnMouseEntered(e -> grabButton.setStyle(HIGHLIGHT_BUTTON_STYLE));
-        grabButton.setOnMouseExited(e -> grabButton.setStyle(BUTTON_STYLE));
         grabButton.setOnAction(e -> {
-            //boolean itsMyRound = guiController.getRmiStub().isTurn(String username);
             try {
-                if (guiController.getRmiStub().getActivePlayer().equals(this.username)) {
-                    if (guiController.getRmiStub().checkNumberAction(username)) {
+                if(guiController.getRmiStub().getActivePlayer().equals(username)){
+                    if(guiController.getRmiStub().checkNumberAction(username)){
                         guiController.getRmiStub().useAction(this.username);
                         if (!guiController.getMyRemoteView().getCanMove()) {
                             guiController.getMyRemoteView().setCanMove(true);
-                            guiController.getMyRemoteView().setReachableSquare(guiController.getRmiStub().reacheableSquare(guiController.getMyRemoteView().getPosition(), 1));
-                            //textArea.setText("\n" + guiController.getMyRemoteView().getReachableSquare() + "\n" + textArea.getText());
+                            guiController.getMyRemoteView().setReachableSquare(guiController.getRmiStub().reacheableSquare(guiController.getMyRemoteView().getPosition(),1));
+                            textArea.setText("\n" + guiController.getMyRemoteView().getReachableSquare() + "\n" + textArea.getText());
                             for (int i = 0; i < 12; i++) {
                                 Rectangle rectangle = (Rectangle) grid.getChildren().get(i);
                                 for (Square square : guiController.getMyRemoteView().getReachableSquare()) {
@@ -359,70 +230,76 @@ public class GUI extends Application {
                 exc.printStackTrace();
             }
         });
+        powerUps.setOnAction(e -> {
+            HBox box = new HBox();
+            ImageView powerUpView = null;
+            for (PowerUp powerUp: myRemoteView.getPowerUp()) {
 
-        Button button = new Button("x");
-        button.setStyle(BUTTON_STYLE);
-        button.setOnAction(e -> {
-            setWeaponView(redBox, myRemoteView.getCabinetRed().getSlot());
-            setWeaponView(blueBox, myRemoteView.getCabinetBlue().getSlot());
-            setWeaponView(yellowBox, myRemoteView.getCabinetYellow().getSlot());
-            window.show();
+                powerUpView = new ImageView(createImage("src/main/resources/Images/PowerUps/" + powerUp.getColor() +"_"+ powerUp.getType() + ".png"));
+                powerUpView.setPreserveRatio(true);
+                powerUpView.setFitHeight(200);
+                box.getChildren().add(powerUpView);
+
+            }
+            display(box, "Power ups");
+        });
+        playersButton.setOnAction(e -> {
+            displayPlayers();
+        });
+        weapons.setOnAction(e -> {
+            HBox box = new HBox();
+            ImageView weaponView;
+            Image weaponImage;
+            for (Weapon obj : myRemoteView.getWeapons()) {
+                weaponImage = createImage("src/main/resources/Images/Weapons/" + obj.getType() + ".png");
+                if(!obj.getLoad())
+                    weaponImage = toGrayScale(weaponImage);
+                weaponView = new ImageView(weaponImage);
+                weaponView.setPreserveRatio(true);
+                weaponView.setFitHeight(300);
+                box.getChildren().add(weaponView);
+
+            }
+            display(box, "Weapons");
         });
 
-        Button button2 = new Button("y");
-        button2.setStyle(BUTTON_STYLE);
-        button2.setOnAction(e -> {
-            setAmmo(mapNumber);
-        });
-
-        //deathtracker
-        deathTrack.setTranslateX(65);
-        deathTrack.setTranslateY(40);
-        deathTrack.setSpacing(-2);
-
-        //cubes
         setCubes();
 
-        //first player
-        //add this imageview if the current player is the first player
-        iconImage = new Image(new FileInputStream("src/main/resources/Images/Playerboards/FirstPlayer.png"));
-        iconView = new ImageView(iconImage);
-        ImageView firstPlayer = iconView;
-        firstPlayer.setFitHeight(100);
-        firstPlayer.setPreserveRatio(true);
-        firstPlayer.setTranslateX(-400);
-        firstPlayer.setTranslateY(275);
+        ImageView firstPlayer = setFirstPlayer();
 
-        //left boarderpane
-        leftMenu.getChildren().addAll(moveButton, grabButton, shootButton, passButton, weapons, powerUps, playersButton, points, cubeBox, button, button2);
+        leftMenu.getChildren().addAll(moveButton, grabButton, shootButton, passButton, weapons, powerUps, playersButton, points, cubeBox);
 
-        //right borderpane
-        //textarea
-        textArea.setPrefWidth(225);
-        textArea.setPrefHeight(300);
-        textArea.setTranslateX(-450);
-        textArea.setTranslateY(10);
-        textArea.setWrapText(true);
-        textArea.setEditable(false);
-        textArea.setStyle("-fx-control-inner-background:#717171;  -fx-highlight-fill: #f1f7eb; -fx-highlight-text-fill: #717171; -fx-text-fill: #f1f7eb;-fx-border-color: #ffffff ");
+        setTextArea();
 
         rightPane.getChildren().add(textArea);
         rightPane.setSpacing(10);
 
-        stack.getChildren().addAll(imageView, ammoSet, firstPlayer, deathTrack, cabinets, pawnsGrid, grid);
-        root = new Group(stack);
+        stack.getChildren().addAll(setMap(), ammoSet, firstPlayer, deathTrack, cabinets, grid, pawnsGrid);
+        Group root = new Group(stack);
         root.setTranslateY(-375);
         root.setTranslateX(25);
-        borderPane.setStyle("-fx-background-color: #505050");
+        borderPane.setStyle(BACKGROUND_STYLE);
         borderPane.setCenter(root);
         borderPane.setRight(rightPane);
         borderPane.setLeft(leftMenu);
         scene = new Scene(borderPane, 1300, 700);
-
         window.show();
+
+        Timeline fiveSecondsWonder = new Timeline(new KeyFrame(Duration.seconds(1), e-> {
+
+            if(myRemoteView != null){
+                setCubes();
+                setFigures();
+                setWeaponView(redBox, myRemoteView.getCabinetRed().getSlot());
+                setWeaponView(yellowBox, myRemoteView.getCabinetYellow().getSlot());
+                setWeaponView(blueBox, myRemoteView.getCabinetBlue().getSlot());
+            }
+        }));
+        fiveSecondsWonder.setCycleCount(Timeline.INDEFINITE);
+        fiveSecondsWonder.play();
     }
 
-    public void setMapGrid(){
+    private void setMapGrid(){
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 4; col++) {
                 Rectangle box = new Rectangle(160, 160);
@@ -437,22 +314,12 @@ public class GUI extends Application {
         grid.setPickOnBounds(false);
     }
 
-    public void setWeaponView(HBox cabinet, Weapon[] weaponsArray) {
+    private void setWeaponView(HBox cabinet, Weapon[] weaponsArray) {
         cabinet.getChildren().clear();
-        String weaponPath = null;
             for (int i = 0; i < 3; i++) {
-
-                Image imageWeapon = null;
                 ImageView weaponView = null;
                 if(weaponsArray[i] != null){
-                    weaponPath = "src/main/resources/Images/Weapons/" + weaponsArray[i].getType() + ".png";
-
-                    try {
-                        imageWeapon = new Image(new FileInputStream(weaponPath));
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                    weaponView = new ImageView(imageWeapon);
+                    weaponView = new ImageView(createImage("src/main/resources/Images/Weapons/" + weaponsArray[i].getType() + ".png"));
                 }
                 else
                     weaponView = new ImageView();
@@ -477,36 +344,16 @@ public class GUI extends Application {
                     rightPane.getChildren().add(box);
                     box.setTranslateX(-450);
                 });
-                obj.setOnMouseExited(e -> {
-                    rightPane.getChildren().remove(box);
-                });
+                obj.setOnMouseExited(e ->
+                    rightPane.getChildren().remove(box)
+                );
             }
     }
 
-    public void setPowerUpHand(){
-        powerUpHand.getChildren().clear();
-        Image image = null;
-        ImageView imageView = null;
-        String path;
-        for(PowerUp powerUp : myRemoteView.getPowerUp()){
-            try{
-                image = new Image(new FileInputStream("src/main/resources/Images/PowerUps/" + powerUp.getColor() +"_"+ powerUp.getType() + ".png"));
-                imageView = new ImageView(image);
-                powerUpHand.getChildren().add(imageView);
-            }catch (FileNotFoundException exc){
-                exc.printStackTrace();
-            }
-        }
-    }
+    private void setDeathTrackSkulls() {
 
-    public void setDeathTrackSkulls() {
-        Image skullImage = null;
+        Image skullImage = createImage("src/main/resources/Images/icons/skull_icon.png");
         ImageView skullView;
-        try {
-            skullImage = new Image(new FileInputStream("src/main/resources/Images/icons/skull_icon.png"));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
 
         for (int i = 0; i < 8; i++) {
             skullView = new ImageView(skullImage);
@@ -515,51 +362,76 @@ public class GUI extends Application {
             skullView.setPreserveRatio(true);
             deathTrack.getChildren().add(skullView);
         }
+        deathTrack.setTranslateX(66);
+        deathTrack.setTranslateY(40);
+        deathTrack.setSpacing(8);
         deathTrack.setPickOnBounds(false);
     }
 
-    public void addDeathTrackDamage(String color) {
-        Image tearImage = null;
-        try {
-            tearImage = new Image(new FileInputStream("src/main/resources/Images/icons/" + color + "_damage_icon.png"));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        ImageView tear = new ImageView(tearImage);
-        tear.setFitHeight(40);
-        tear.setSmooth(true);
-        tear.setPreserveRatio(true);
-        deathTrack.getChildren().add(tear);
-    }
-
-    public void setPlayerboards() {
-        playerBoards = new VBox();
+    private VBox setPlayerBoardsStack(){
+        VBox players = new VBox();
+        HBox damageBar;
+        HBox deathBar;
+        HBox markBar;
+        StackPane playerStack;
         ImageView img;
+        ImageView iconImg;
         Image image = null;
-        for(RemoteView view : guiController.getAllViews()){
-            try {
-                image = new Image(new FileInputStream("src/main/resources/Images/Playerboards/" + ".png"));
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-            img = new ImageView(image);
-            img.setPreserveRatio(true);
-            img.setFitWidth(400);
-            playerBoards.getChildren().add(img);
-        }
+        Image icon = null;
 
+        for(RemoteView view : guiController.getAllViews()){
+            image = createImage("src/main/resources/Images/Playerboards/" + view.getCharacter()+ ".png");
+            img = new ImageView(image);
+            img.setFitHeight(120);
+            img.setPreserveRatio(true);
+
+            playerStack = new StackPane();
+            damageBar = new HBox();
+            deathBar = new HBox();
+            markBar = new HBox();
+            for(int i = 0; i<12; i++){
+                icon = createImage("src/main/resources/Images/icons/blue_damage_icon.png");
+                iconImg = new ImageView(icon);
+                iconImg.setPreserveRatio(true);
+                iconImg.setFitWidth(28);
+                damageBar.getChildren().add(iconImg);
+            }
+            for(int i = 0 ; i<5;i++){
+                icon = createImage("src/main/resources/Images/icons/skull_icon.png");
+                iconImg = new ImageView(icon);
+                iconImg.setPreserveRatio(true);
+                iconImg.setFitWidth(27);
+                deathBar.getChildren().add(iconImg);
+
+            }
+            for(int i = 0; i<4; i++){
+                icon = createImage("src/main/resources/Images/icons/blue_damage_icon.png");
+                iconImg = new ImageView(icon);
+                iconImg.setPreserveRatio(true);
+                iconImg.setFitWidth(32);
+                markBar.getChildren().add(iconImg);
+            }
+
+            playerStack.getChildren().addAll(img,damageBar,deathBar,markBar);
+
+            damageBar.setTranslateY(45);
+            damageBar.setTranslateX(40);
+
+            deathBar.setTranslateY(85);
+            deathBar.setTranslateX(100);
+
+            markBar.setTranslateX(230);
+
+            players.getChildren().add(playerStack);
+            players.setSpacing(5);
+        }
+        return players;
     }
 
-    public void setAmmo(int map) {
+    private void setAmmo(int map) {
 
-        Image ammoBack = null;
-
-        try {
-            ammoBack = new Image(new FileInputStream("src/main/resources/Images/Ammo/ammoback.png"));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
+        Image ammoBack;
+        ammoBack = createImage("src/main/resources/Images/Ammo/ammoback.png");
         ammoSet.getChildren().clear();
         for (int i = 0; i < 12; i++) {
             ammoSet.getChildren().add(new ImageView(ammoBack));
@@ -569,155 +441,21 @@ public class GUI extends Application {
             obj.setTranslateY(500);
         }
         switch (map) {
-            case 2: {
 
-
-                //square 0
-                ammoSet.getChildren().get(0).setTranslateX(-260);
-                ammoSet.getChildren().get(0).setTranslateY(-160);
-
-                //square 1
-                ammoSet.getChildren().get(1).setTranslateX(-115);
-                ammoSet.getChildren().get(1).setTranslateY(-90);
-
-                //square 5
-                ammoSet.getChildren().get(5).setTranslateX(-125);
-                ammoSet.getChildren().get(5).setTranslateY(30);
-
-                //square 6
-                ammoSet.getChildren().get(6).setTranslateX(55);
-                ammoSet.getChildren().get(6).setTranslateY(50);
-
-                //square 7
-                ammoSet.getChildren().get(7).setTranslateX(265);
-                ammoSet.getChildren().get(7).setTranslateY(55);
-
-                //square 9
-                ammoSet.getChildren().get(9).setTranslateX(-120);
-                ammoSet.getChildren().get(9).setTranslateY(210);
-
-                //square 10
-                ammoSet.getChildren().get(10).setTranslateX(35);
-                ammoSet.getChildren().get(10).setTranslateY(215);
-
-
+            case 1: {
+                setAmmoConfiguration1();
                 break;
             }
-            case 1: {
-
-
-                //square 0
-                ammoSet.getChildren().get(0).setTranslateX(-255);
-                ammoSet.getChildren().get(0).setTranslateY(-80);
-
-                //square 1
-                ammoSet.getChildren().get(1).setTranslateX(-120);
-                ammoSet.getChildren().get(1).setTranslateY(-160);
-
-                //square 5
-                ammoSet.getChildren().get(5).setTranslateX(-130);
-                ammoSet.getChildren().get(5).setTranslateY(40);
-
-                //square 6
-                ammoSet.getChildren().get(6).setTranslateX(55);
-                ammoSet.getChildren().get(6).setTranslateY(50);
-
-                //square 7
-                ammoSet.getChildren().get(7).setTranslateX(265);
-                ammoSet.getChildren().get(7).setTranslateY(55);
-
-                //square 8
-                ammoSet.getChildren().get(8).setTranslateX(-250);
-                ammoSet.getChildren().get(8).setTranslateY(210);
-
-                //square 9
-                ammoSet.getChildren().get(9).setTranslateX(-120);
-                ammoSet.getChildren().get(9).setTranslateY(210);
-
-                //square 10
-                ammoSet.getChildren().get(10).setTranslateX(35);
-                ammoSet.getChildren().get(10).setTranslateY(215);
-
-
+            case 2: {
+                setAmmoConfiguration2();
                 break;
             }
             case 3: {
-
-
-                //square 0
-                ammoSet.getChildren().get(0).setTranslateX(-260);
-                ammoSet.getChildren().get(0).setTranslateY(-160);
-
-                //square 1
-                ammoSet.getChildren().get(1).setTranslateX(-115);
-                ammoSet.getChildren().get(1).setTranslateY(-90);
-
-                //square 3
-                ammoSet.getChildren().get(3).setTranslateX(265);
-                ammoSet.getChildren().get(3).setTranslateY(-90);
-
-                //square 5
-                ammoSet.getChildren().get(5).setTranslateX(-125);
-                ammoSet.getChildren().get(5).setTranslateY(30);
-
-                //square 6
-                ammoSet.getChildren().get(6).setTranslateX(50);
-                ammoSet.getChildren().get(6).setTranslateY(80);
-
-                //square 7
-                ammoSet.getChildren().get(7).setTranslateX(190);
-                ammoSet.getChildren().get(7).setTranslateY(80);
-
-                //square 9
-                ammoSet.getChildren().get(9).setTranslateX(-120);
-                ammoSet.getChildren().get(9).setTranslateY(210);
-
-                //square 10
-                ammoSet.getChildren().get(10).setTranslateX(60);
-                ammoSet.getChildren().get(10).setTranslateY(210);
-
+                setAmmoConfiguration3();
                 break;
             }
             case 4: {
-
-                //square 0
-                ammoSet.getChildren().get(0).setTranslateX(-255);
-                ammoSet.getChildren().get(0).setTranslateY(-80);
-
-                //square 1
-                ammoSet.getChildren().get(1).setTranslateX(-120);
-                ammoSet.getChildren().get(1).setTranslateY(-160);
-
-                //square 3
-                ammoSet.getChildren().get(3).setTranslateX(265);
-                ammoSet.getChildren().get(3).setTranslateY(-90);
-
-
-                //square 5
-                ammoSet.getChildren().get(5).setTranslateX(-130);
-                ammoSet.getChildren().get(5).setTranslateY(40);
-
-                //square 6
-                ammoSet.getChildren().get(6).setTranslateX(50);
-                ammoSet.getChildren().get(6).setTranslateY(80);
-
-                //square 7
-                ammoSet.getChildren().get(7).setTranslateX(190);
-                ammoSet.getChildren().get(7).setTranslateY(80);
-
-                //square 8
-                ammoSet.getChildren().get(8).setTranslateX(-250);
-                ammoSet.getChildren().get(8).setTranslateY(210);
-
-                //square 9
-                ammoSet.getChildren().get(9).setTranslateX(-120);
-                ammoSet.getChildren().get(9).setTranslateY(210);
-
-                //square 10
-                ammoSet.getChildren().get(10).setTranslateX(60);
-                ammoSet.getChildren().get(10).setTranslateY(210);
-
-
+                setAmmoConfiguration4();
                 break;
             }
             default:
@@ -729,44 +467,24 @@ public class GUI extends Application {
         }
     }
 
-    public void setCubes() {
+    private void setCubes() {
         cubeBox.getChildren().clear();
-        ImageView cubeImage = null;
-        try {
-            cubeImage = new ImageView(new Image(new FileInputStream("src/main/resources/Images/icons/redCube.png")));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        if (cubeImage != null) {
-            cubeImage.setFitWidth(20);
-            cubeImage.setPreserveRatio(true);
-        }
-
+        ImageView cubeImage;
+        cubeImage = new ImageView(createImage("src/main/resources/Images/icons/redCube.png"));
+        cubeImage.setFitWidth(20);
+        cubeImage.setPreserveRatio(true);
         Label redLabel = new Label(" " + getMyReds() + "  ", cubeImage);
         redLabel.setStyle("-fx-text-fill: #ff0000; -fx-background-color: #404040");
 
-        try {
-            cubeImage = new ImageView(new Image(new FileInputStream("src/main/resources/Images/icons/yellowCube.png")));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        if (cubeImage != null) {
-            cubeImage.setFitWidth(20);
-            cubeImage.setPreserveRatio(true);
-        }
+        cubeImage = new ImageView(createImage("src/main/resources/Images/icons/yellowCube.png"));
+        cubeImage.setFitWidth(20);
+        cubeImage.setPreserveRatio(true);
         Label yellowLabel = new Label(" "  + getMyYellows() + "  ", cubeImage);
         yellowLabel.setStyle("-fx-text-fill: #fff000; -fx-background-color: #404040");
 
-        try {
-            cubeImage = new ImageView(new Image(new FileInputStream("src/main/resources/Images/icons/blueCube.png")));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        if (cubeImage != null) {
-            cubeImage.setFitWidth(20);
-            cubeImage.setPreserveRatio(true);
-        }
+        cubeImage = new ImageView(createImage("src/main/resources/Images/icons/blueCube.png"));
+        cubeImage.setFitWidth(20);
+        cubeImage.setPreserveRatio(true);
         Label blueLabel = new Label(" " + getMyBlues()+"  ", cubeImage);
         blueLabel.setStyle("-fx-text-fill: #0010ff; -fx-background-color: #404040;");
 
@@ -774,48 +492,42 @@ public class GUI extends Application {
         cubeBox.setSpacing(5);
     }
 
-    public int getMyPoints() {
+    private int getMyPoints() {
         if(myRemoteView!= null)
             return myRemoteView.getPoints();
         else return 0;
     }
 
-    public int getMyReds(){
+    private int getMyReds(){
         if(myRemoteView != null)
             return myRemoteView.getCubes().getReds();
         else return 1;
     }
 
-    public int getMyYellows(){
+    private int getMyYellows(){
         if(myRemoteView != null)
             return myRemoteView.getCubes().getYellows();
         else return 1;
     }
 
-    public int getMyBlues(){
+    private int getMyBlues(){
         if(myRemoteView != null)
             return myRemoteView.getCubes().getBlues();
         else return 1;
     }
 
     private void closeProgram() {
-        Boolean answer = ConfirmBox.display("Exit Adrenaline", "Are you sure?");
+        boolean answer = ConfirmBox.display("Exit Adrenaline", "Are you sure?");
         if (answer) {
             window.close();
         }
     }
 
-    public Button setButton(String path, int width, String text) {
-        Image iconImage = null;
-        try {
-            iconImage = new Image(new FileInputStream(path));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        ImageView iconView2 = new ImageView(iconImage);
-        iconView2.setFitWidth(width);
-        iconView2.setPreserveRatio(true);
-        Button newButton = new Button("", iconView2);
+    private Button setButton(String path, String text) {
+        ImageView buttonView = new ImageView(createImage(path));
+        buttonView.setFitWidth(50);
+        buttonView.setPreserveRatio(true);
+        Button newButton = new Button("", buttonView);
         newButton.setOnAction(e -> textArea.setText(text + "\n" + textArea.getText()));
         newButton.setOnMouseEntered(e -> newButton.setStyle(HIGHLIGHT_BUTTON_STYLE));
         newButton.setOnMouseExited(e -> newButton.setStyle(BUTTON_STYLE));
@@ -825,7 +537,7 @@ public class GUI extends Application {
         return newButton;
     }
 
-    public Scene setLoginScene() {
+    private Scene setLoginScene() {
         GridPane layout = new GridPane();
         layout.setPadding(new Insets(50, 75, 50, 75));
         layout.setVgap(10);
@@ -861,12 +573,12 @@ public class GUI extends Application {
                     errorLabel.setStyle("-fx-text-fill: #ff0000");
                     Button exitButton = new Button("Back");
                     exitButton.setStyle(BUTTON_STYLE);
-                    exitButton.setOnMouseExited(exit -> {
-                        exitButton.setStyle(BUTTON_STYLE);
-                    });
-                    exitButton.setOnMouseEntered(enter -> {
-                        exitButton.setStyle(HIGHLIGHT_BUTTON_STYLE);
-                    });
+                    exitButton.setOnMouseExited(exit ->
+                        exitButton.setStyle(BUTTON_STYLE)
+                    );
+                    exitButton.setOnMouseEntered(enter ->
+                        exitButton.setStyle(HIGHLIGHT_BUTTON_STYLE)
+                    );
                     exitButton.setOnAction(o -> {
                         Scene backScene;
                         backScene = setLoginScene();
@@ -875,36 +587,26 @@ public class GUI extends Application {
                     VBox vBox = new VBox();
                     vBox.getChildren().addAll(errorLabel, exitButton);
                     vBox.setSpacing(20);
-                    vBox.setStyle("-fx-background-color: #505050");
+                    vBox.setStyle(BACKGROUND_STYLE);
                     vBox.setAlignment(Pos.CENTER);
                     exitButton.setAlignment(Pos.CENTER);
                     errorLabel.setAlignment(Pos.CENTER);
                     Scene errorScene = new Scene(vBox, 300, 200);
                     window.setScene(errorScene);
                 }
-                //TODO implementare una finestra di attesa, di durata definita (es. 20 s)
-                // per aspettare che tutti i giocatori siano connessi
                 else {
                     guiController.setUsername(usernameTyped);
                     this.username = usernameTyped;
                     guiController.getRmiStub().register(usernameTyped, guiController);
                     myRemoteView = guiController.getMyRemoteView();
-                    window.setScene(scene);
-                    window.setFullScreen(true);         //Enlarge to fullscreen the game window
+                    setWaitScene();
                     textArea.setText(usernameTyped + "\n" + textArea.getText());
-                /*
-                    for (RemoteView remoteView : guiController.getAllViews()) {
-                        textArea.setText(remoteView.getUsername() + "\n" + textArea.getText());
-                    }
-                */
-
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
 
         });
-
         BorderPane pane = new BorderPane();
         VBox sideBox = setMapSelector();
         pane.setLeft(sideBox);
@@ -915,29 +617,49 @@ public class GUI extends Application {
         loginButton.setOnMouseExited(e -> loginButton.setStyle(BUTTON_STYLE));
         loginButton.setAlignment(Pos.CENTER);
         layout.getChildren().addAll(nameInput, passInput, IPInput, loginButton);
-        Scene scene = new Scene(pane, 400, 250);
-        pane.setStyle("-fx-background-color: #505050");
-        return scene;
+        Scene newScene = new Scene(pane, 400, 250);
+        pane.setStyle(BACKGROUND_STYLE);
+        return newScene;
 
     }
 
-    public VBox setMapSelector() {
+    private void setWaitScene(){
+        Label waitLabel = new Label("Please wait.");
+        waitLabel.setStyle(LABEL_STYLE);
+        BorderPane pane = new BorderPane();
+        pane.setStyle(BACKGROUND_STYLE);
+        pane.setCenter(waitLabel);
+        waitLabel.setAlignment(Pos.CENTER);
+        Scene waitScene = new Scene(pane,300,200);
+        window.setScene(waitScene);
+
+        if(false){
+            Timeline wait = new Timeline(new KeyFrame(Duration.seconds(10), e->
+                window.setScene(scene)
+            ));
+            wait.setCycleCount(Timeline.INDEFINITE);
+            wait.play();
+        }else window.setScene(scene);
+
+    }
+
+    private VBox setMapSelector() {
         VBox sideBox = new VBox();
         RadioButton button1 = new RadioButton("Map 1");
         button1.setToggleGroup(mapSelector);
-        button1.setStyle("-fx-text-fill: #b0b0b0");
+        button1.setStyle(LABEL_STYLE);
         button1.setSelected(true);
         RadioButton button2 = new RadioButton("Map 2");
-        button2.setStyle("-fx-text-fill: #b0b0b0");
+        button2.setStyle(LABEL_STYLE);
         button2.setToggleGroup(mapSelector);
         RadioButton button3 = new RadioButton("Map 3");
-        button3.setStyle("-fx-text-fill: #b0b0b0");
+        button3.setStyle(LABEL_STYLE);
         button3.setToggleGroup(mapSelector);
         RadioButton button4 = new RadioButton("Map 4");
-        button4.setStyle("-fx-text-fill: #b0b0b0");
+        button4.setStyle(LABEL_STYLE);
         button4.setToggleGroup(mapSelector);
         Label selectMap = new Label("Select map: ");
-        selectMap.setStyle("-fx-text-fill: #b0b0b0");
+        selectMap.setStyle(LABEL_STYLE);
         sideBox.getChildren().addAll(selectMap, button1, button2, button3, button4);
         sideBox.setSpacing(10);
         sideBox.setAlignment(Pos.CENTER);
@@ -945,11 +667,18 @@ public class GUI extends Application {
         return sideBox;
     }
 
+    private void setTextArea(){
+        textArea.setPrefWidth(225);
+        textArea.setPrefHeight(300);
+        textArea.setTranslateX(-450);
+        textArea.setTranslateY(10);
+        textArea.setWrapText(true);
+        textArea.setEditable(false);
+        textArea.setStyle(TEXT_AREA_STYLE);
+    }
 
-    public void setFigures() {
+    private void setFigures() {
         FlowPane flowPane;
-        String[] colors = {"banshee","dozer","violet","distructor","sprog"};
-        int i = 0;
         pawnsGrid.getChildren().clear();
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 4; col++) {
@@ -957,8 +686,7 @@ public class GUI extends Application {
                 //for every player, if there are players in this square fills the flowpane with them
                 for(RemoteView view : guiController.getAllViews()){
                     if(view.getPosition() == row * 4 + col){
-                        flowPane.getChildren().add(setCharacterImage(colors[i]));
-                        i++;
+                        flowPane.getChildren().add(setCharacterImage(view.getCharacter()));
                     }
                 }
                 flowPane.setPrefWidth(160);
@@ -971,26 +699,20 @@ public class GUI extends Application {
         pawnsGrid.setTranslateY(145);
         pawnsGrid.setGridLinesVisible(true);
         pawnsGrid.setPickOnBounds(false);
+        pawnsGrid.setMouseTransparent(true);
     }
 
     private ImageView setCharacterImage(String character) {
-        Image img = null;
-        ImageView imageView = null;
-        try {
-            img = new Image(new FileInputStream("src/main/resources/Images/icons/" + character + "_icon.png"));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        if (img != null) {
-            imageView = new ImageView(img);
-            imageView.setFitWidth(50);
-            imageView.setPreserveRatio(true);
-            imageView.setId(character);
-        }
+
+        ImageView imageView = new ImageView(createImage("src/main/resources/Images/icons/" + character + "_icon.png"));
+        imageView.setFitWidth(50);
+        imageView.setPreserveRatio(true);
+        imageView.setId(character);
+
         return imageView;
     }
 
-    public static Image toGrayScale(Image sourceImage) {
+    private static Image toGrayScale(Image sourceImage) {
         PixelReader pixelReader = sourceImage.getPixelReader();
 
         int width = (int) sourceImage.getWidth();
@@ -1030,6 +752,280 @@ public class GUI extends Application {
             return grayImage;
         }
         return grayImage;
+    }
+
+    private void displayPlayers(){
+
+        Stage playersWindow = new Stage();
+        VBox layout = setPlayerBoardsStack();
+        Label info = new Label("Current players are:");
+        BorderPane playersPane = new BorderPane();
+        info.setStyle(LABEL_STYLE);
+        playersWindow.initModality(Modality.APPLICATION_MODAL);
+        playersWindow.setTitle("Players");
+
+        Button closeButton = setHomeButton(playersWindow);
+        playersPane.setTop(info);
+        playersPane.setCenter(layout);
+        playersPane.setBottom(closeButton);
+        playersPane.setStyle(BACKGROUND_STYLE);
+        playersPane.setAlignment(closeButton,Pos.CENTER);
+        Scene playersScene = new Scene(playersPane);
+        playersWindow.setScene(playersScene);
+        playersWindow.setWidth(500);
+        playersWindow.showAndWait();
+    }
+
+    private void display(Pane pane, String message){
+        Stage window = new Stage();
+        Pane layout = null;
+        Label info = new Label("Current "+ message + " are:");
+        BorderPane borderPane = new BorderPane();
+
+        info.setStyle("-fx-text-fill: #bdbdbd");
+        window.initModality(Modality.APPLICATION_MODAL);
+        window.setTitle(message);
+
+        Button closeButton = setHomeButton(window);
+        if(pane instanceof VBox){
+            layout = new VBox();
+        }else if(pane instanceof HBox){
+            layout = new HBox();
+        }
+
+        if(layout != null){
+            layout.getChildren().addAll(pane.getChildren());
+            layout.setStyle(BACKGROUND_STYLE);
+        }
+
+        borderPane.setTop(info);
+        borderPane.setCenter(layout);
+        borderPane.setBottom(closeButton);
+        borderPane.setStyle(BACKGROUND_STYLE);
+        borderPane.setAlignment(closeButton,Pos.CENTER);
+        Scene scene = new Scene(borderPane);
+        window.setScene(scene);
+        window.showAndWait();
+    }
+
+    private Button setHomeButton(Stage window){
+        ImageView img = new ImageView(createImage("src/main/resources/Images/icons/home.png"));
+        img.setPreserveRatio(true);
+        img.setFitHeight(50);
+        Button closeButton = new Button("",img);
+        closeButton.setStyle(BUTTON_STYLE);
+        closeButton.setOnMouseEntered(e -> closeButton.setStyle(HIGHLIGHT_BUTTON_STYLE));
+        closeButton.setOnMouseExited(e -> closeButton.setStyle(BUTTON_STYLE));
+        closeButton.setOnAction(e-> window.close());
+        return closeButton;
+    }
+
+    private Image createImage(String path){
+        Image image = null;
+
+        try{
+            image = new Image(new FileInputStream(path));
+        }catch(FileNotFoundException e){
+            e.printStackTrace();
+        }
+        return image;
+    }
+
+    private void setStage(Stage primaryStage){
+        window = primaryStage;
+        window.setScene(setLoginScene());
+        window.setTitle("Adrenaline");
+        window.setResizable(true);
+        window.setFullScreen(false);
+        window.alwaysOnTopProperty();
+        window.setOnCloseRequest(e -> {
+            e.consume();
+            closeProgram();
+        });
+    }
+
+    private ImageView setMap(){
+        ImageView imageView = new ImageView(createImage("src/main/resources/Images/Maps/Map" + mapNumber + ".png"));
+        imageView.setFitHeight(700);
+        imageView.setPreserveRatio(true);
+        return imageView;
+    }
+
+    private void setCabinets(){
+        if(myRemoteView != null){
+            setWeaponView(redBox, myRemoteView.getCabinetRed().getSlot());
+            setWeaponView(yellowBox, myRemoteView.getCabinetYellow().getSlot());
+            setWeaponView(blueBox, myRemoteView.getCabinetBlue().getSlot());
+        }
+
+        //blue cabinet
+        blueBox.setTranslateX(490);
+        blueBox.setTranslateY(-10);
+        blueBox.setSpacing(10);
+
+        //red cabinet
+        redBox.setTranslateX(-125);
+        redBox.setTranslateY(-265);
+        redBox.setRotate(-90);
+        redBox.setSpacing(10);
+
+        //yellow cabinet
+        yellowBox.setSpacing(10);
+        yellowBox.setRotate(90);
+        yellowBox.setTranslateX(122);
+        yellowBox.setTranslateY(510);
+
+        cabinets.setPickOnBounds(false);
+        cabinets.getChildren().addAll(redBox, blueBox, yellowBox);
+    }
+
+    private Label setPoints(){
+        Label points = new Label("Points: " + getMyPoints());
+        points.setStyle("-fx-background-color: #404040; -fx-text-fill: #aaaaaa");
+        return points;
+    }
+
+    private ImageView setFirstPlayer(){
+        ImageView firstPlayer = new ImageView(createImage("src/main/resources/Images/Playerboards/first_player.png"));
+        firstPlayer.setFitHeight(100);
+        firstPlayer.setPreserveRatio(true);
+        firstPlayer.setTranslateX(-400);
+        firstPlayer.setTranslateY(275);
+        return firstPlayer;
+    }
+
+    private void setAmmoConfiguration1(){
+        //square 0
+        ammoSet.getChildren().get(0).setTranslateX(-255);
+        ammoSet.getChildren().get(0).setTranslateY(-80);
+
+        //square 1
+        ammoSet.getChildren().get(1).setTranslateX(-120);
+        ammoSet.getChildren().get(1).setTranslateY(-160);
+
+        //square 5
+        ammoSet.getChildren().get(5).setTranslateX(-130);
+        ammoSet.getChildren().get(5).setTranslateY(40);
+
+        //square 6
+        ammoSet.getChildren().get(6).setTranslateX(55);
+        ammoSet.getChildren().get(6).setTranslateY(50);
+
+        //square 7
+        ammoSet.getChildren().get(7).setTranslateX(265);
+        ammoSet.getChildren().get(7).setTranslateY(55);
+
+        //square 8
+        ammoSet.getChildren().get(8).setTranslateX(-250);
+        ammoSet.getChildren().get(8).setTranslateY(210);
+
+        //square 9
+        ammoSet.getChildren().get(9).setTranslateX(-120);
+        ammoSet.getChildren().get(9).setTranslateY(210);
+
+        //square 10
+        ammoSet.getChildren().get(10).setTranslateX(35);
+        ammoSet.getChildren().get(10).setTranslateY(215);
+    }
+    private void setAmmoConfiguration2(){
+        //square 0
+        ammoSet.getChildren().get(0).setTranslateX(-260);
+        ammoSet.getChildren().get(0).setTranslateY(-160);
+
+        //square 1
+        ammoSet.getChildren().get(1).setTranslateX(-115);
+        ammoSet.getChildren().get(1).setTranslateY(-90);
+
+        //square 5
+        ammoSet.getChildren().get(5).setTranslateX(-125);
+        ammoSet.getChildren().get(5).setTranslateY(30);
+
+        //square 6
+        ammoSet.getChildren().get(6).setTranslateX(55);
+        ammoSet.getChildren().get(6).setTranslateY(50);
+
+        //square 7
+        ammoSet.getChildren().get(7).setTranslateX(265);
+        ammoSet.getChildren().get(7).setTranslateY(55);
+
+        //square 9
+        ammoSet.getChildren().get(9).setTranslateX(-120);
+        ammoSet.getChildren().get(9).setTranslateY(210);
+
+        //square 10
+        ammoSet.getChildren().get(10).setTranslateX(35);
+        ammoSet.getChildren().get(10).setTranslateY(215);
+    }
+    private void setAmmoConfiguration3(){
+        //square 0
+        ammoSet.getChildren().get(0).setTranslateX(-260);
+        ammoSet.getChildren().get(0).setTranslateY(-160);
+
+        //square 1
+        ammoSet.getChildren().get(1).setTranslateX(-115);
+        ammoSet.getChildren().get(1).setTranslateY(-90);
+
+        //square 3
+        ammoSet.getChildren().get(3).setTranslateX(265);
+        ammoSet.getChildren().get(3).setTranslateY(-90);
+
+        //square 5
+        ammoSet.getChildren().get(5).setTranslateX(-125);
+        ammoSet.getChildren().get(5).setTranslateY(30);
+
+        //square 6
+        ammoSet.getChildren().get(6).setTranslateX(50);
+        ammoSet.getChildren().get(6).setTranslateY(80);
+
+        //square 7
+        ammoSet.getChildren().get(7).setTranslateX(190);
+        ammoSet.getChildren().get(7).setTranslateY(80);
+
+        //square 9
+        ammoSet.getChildren().get(9).setTranslateX(-120);
+        ammoSet.getChildren().get(9).setTranslateY(210);
+
+        //square 10
+        ammoSet.getChildren().get(10).setTranslateX(60);
+        ammoSet.getChildren().get(10).setTranslateY(210);
+    }
+    private void setAmmoConfiguration4(){
+        //square 0
+        ammoSet.getChildren().get(0).setTranslateX(-255);
+        ammoSet.getChildren().get(0).setTranslateY(-80);
+
+        //square 1
+        ammoSet.getChildren().get(1).setTranslateX(-120);
+        ammoSet.getChildren().get(1).setTranslateY(-160);
+
+        //square 3
+        ammoSet.getChildren().get(3).setTranslateX(265);
+        ammoSet.getChildren().get(3).setTranslateY(-90);
+
+
+        //square 5
+        ammoSet.getChildren().get(5).setTranslateX(-130);
+        ammoSet.getChildren().get(5).setTranslateY(40);
+
+        //square 6
+        ammoSet.getChildren().get(6).setTranslateX(50);
+        ammoSet.getChildren().get(6).setTranslateY(80);
+
+        //square 7
+        ammoSet.getChildren().get(7).setTranslateX(190);
+        ammoSet.getChildren().get(7).setTranslateY(80);
+
+        //square 8
+        ammoSet.getChildren().get(8).setTranslateX(-250);
+        ammoSet.getChildren().get(8).setTranslateY(210);
+
+        //square 9
+        ammoSet.getChildren().get(9).setTranslateX(-120);
+        ammoSet.getChildren().get(9).setTranslateY(210);
+
+        //square 10
+        ammoSet.getChildren().get(10).setTranslateX(60);
+        ammoSet.getChildren().get(10).setTranslateY(210);
     }
 }
 

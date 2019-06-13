@@ -48,7 +48,6 @@ public class RMIServer extends Server implements RMIServerInterface {
 
     private ArrayList<VirtualView> allVirtualViews = new ArrayList<>();
 
-
     //Metodi
 
     public RMIServer(OneAboveAll oneAboveAll, int port, String remObjName) {
