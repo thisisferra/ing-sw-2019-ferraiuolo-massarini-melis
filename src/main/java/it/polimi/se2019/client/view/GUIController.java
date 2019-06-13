@@ -5,6 +5,7 @@ import it.polimi.se2019.server.controller.network.RMI.RMIServerInterface;
 import it.polimi.se2019.server.model.cards.weapons.Weapon;
 
 import java.io.PrintStream;
+import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -24,7 +25,7 @@ public class GUIController implements GUIControllerInterface {
 
     public GUIController(/*String IPAddress*/) {
         try {
-            Registry registry = LocateRegistry.getRegistry(1099);
+            Registry registry = LocateRegistry.getRegistry("192.168.1.208",0);
             rmiStub = (RMIServerInterface) registry.lookup("remServer");
             UnicastRemoteObject.exportObject(this, 0);
         }
@@ -33,7 +34,6 @@ public class GUIController implements GUIControllerInterface {
         }
         out = new PrintStream(System.out);
     }
-
 
     //GETTER
 

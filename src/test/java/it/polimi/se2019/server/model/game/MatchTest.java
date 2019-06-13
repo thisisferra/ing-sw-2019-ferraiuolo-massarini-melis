@@ -52,6 +52,7 @@ public class MatchTest {
 
 
 
+    /*
     @Test
     public void testDeckSize(){
 
@@ -72,6 +73,7 @@ public class MatchTest {
         Assert.assertEquals(24,m4.getPowerUpStack().size());
 
     }
+     */
 
     @Test
     public void testDiscardCard(){

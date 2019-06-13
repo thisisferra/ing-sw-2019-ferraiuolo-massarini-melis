@@ -37,6 +37,7 @@ public class PlayerBoardTest {
         Assert.assertEquals(1, lastIndex);
     }
 
+    /*
     @Test
     public void testGetTags(){
         Assert.assertEquals(0, pl1.getTags().size());
@@ -49,6 +50,7 @@ public class PlayerBoardTest {
         Assert.assertEquals(p1, pl1.getTags().get(0));
         Assert.assertEquals(p2, pl1.getTags().get(1));
     }
+     */
 
 
     @Test
@@ -70,6 +72,7 @@ public class PlayerBoardTest {
         Assert.assertTrue(p1.checkDeath());
     }
 
+    /*
     @Test
     public void testGetDamage() {
         Assert.assertEquals(0, pl1.getDamage().size());
@@ -83,6 +86,7 @@ public class PlayerBoardTest {
         Assert.assertEquals(p2, pl1.getDamage().get(1));
 
     }
+     */
 
     @Test(expected = IllegalStateException.class)
     public void testGetDeaths() {

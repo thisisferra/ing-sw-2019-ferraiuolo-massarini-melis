@@ -48,6 +48,7 @@ public class GUI extends Application {
     static final String BUTTON_STYLE = "-fx-background-color: #3c3c3c;-fx-text-fill: #999999;";
     static final String LABEL_STYLE = "-fx-text-fill: #cecece";
     static final String BACKGROUND_STYLE = "-fx-background-color: #505050";
+    static final String TEXT_FIELD_STYLE = "-fx-background-color: #726B72";
     static final String HIGHLIGHT_BUTTON_STYLE = "-fx-background-color: #bbbbbb;-fx-text-fill: #999999;";
     static final String TEXT_AREA_STYLE = "-fx-control-inner-background:#717171;  -fx-highlight-fill: #f1f7eb; -fx-highlight-text-fill: #717171; -fx-text-fill: #f1f7eb;-fx-border-color: #ffffff ";
     private int mapNumber = 1;
@@ -82,123 +83,12 @@ public class GUI extends Application {
         Button playersButton = setButton("src/main/resources/Images/icons/players_icon.png", "");
         Button weapons = setButton("src/main/resources/Images/icons/weapon_icon.png", "");
 
-        moveButton.setOnAction(e -> {
-            try {
-                if(guiController.getRmiStub().getActivePlayer().equals(this.username)){
-                    if(guiController.getRmiStub().checkNumberAction(username)){
-                        guiController.getRmiStub().useAction(username);
-                        if (!guiController.getMyRemoteView().getCanMove()) {
-                            guiController.getMyRemoteView().setCanMove(true);
-                            guiController.getMyRemoteView().setReachableSquare(guiController.getRmiStub().reacheableSquare(guiController.getMyRemoteView().getPosition(),3));
-                            //textArea.setText("\n" + guiController.getMyRemoteView().getReachableSquare() + "\n" + textArea.getText());
-                            for (int i = 0; i < 12; i++) {
-                                Rectangle rectangle = (Rectangle) grid.getChildren().get(i);
-                                for (Square square : guiController.getMyRemoteView().getReachableSquare()) {
-                                    if (rectangle.getId().equals(Integer.toString(square.getPosition()))) {
-                                        rectangle.setFill(Color.color(1, 1, 0, 0.4));
-                                        rectangle.setOnMouseClicked(o -> {
-                                            //textArea.setText("\nSquare #: " + rectangle.getId() + "\n" + textArea.getText());
-                                            try {
-                                                guiController.getRmiStub().setNewPosition(guiController.getMyRemoteView().getUsername(), Integer.parseInt(rectangle.getId()));
-                                                textArea.setText("\nNew position: " + rectangle.getId() + textArea.getText());
-                                                setFigures();
-
-                                                for (int j = 0; j < 12; j++) {
-                                                    Rectangle rect = (Rectangle) grid.getChildren().get(j);
-                                                    rect.setFill(Color.color(1, 1, 1, 0.1));
-                                                    rect.setOnMouseClicked(g -> {
-
-                                                    });
-                                                    guiController.getMyRemoteView().setCanMove(false);
-                                                }
-                                            } catch (Exception exc) {
-                                                exc.printStackTrace();
-                                            }
-                                        });
-                                    }
-                                }
-                            }
-                        } else {
-                            textArea.setText("\nYou have already selected this option" + textArea.getText());
-                        }
-                    } else {
-                        textArea.setText("You have already used two actions. Pass the turn.\n" + textArea.getText());
-                    }
-                }
-                else {
-                    textArea.setText("It's not your round!\n" + textArea.getText());
-                }
-            } catch (RemoteException e1) {
-                e1.printStackTrace();
-            }
-        });
-        grabButton.setOnAction(e -> {
-            try {
-                if(guiController.getRmiStub().getActivePlayer().equals(username)){
-                    if(guiController.getRmiStub().checkNumberAction(username)){
-                        guiController.getRmiStub().useAction(this.username);
-                        if (!guiController.getMyRemoteView().getCanMove()) {
-                            guiController.getMyRemoteView().setCanMove(true);
-                            guiController.getMyRemoteView().setReachableSquare(guiController.getRmiStub().reacheableSquare(guiController.getMyRemoteView().getPosition(),1));
-                            textArea.setText("\n" + guiController.getMyRemoteView().getReachableSquare() + "\n" + textArea.getText());
-                            for (int i = 0; i < 12; i++) {
-                                Rectangle rectangle = (Rectangle) grid.getChildren().get(i);
-                                for (Square square : guiController.getMyRemoteView().getReachableSquare()) {
-                                    if (rectangle.getId().equals(Integer.toString(square.getPosition()))) {
-                                        rectangle.setFill(Color.color(0, 0.2, 1, 0.4));
-                                        rectangle.setOnMouseClicked(o -> {
-                                            //textArea.setText("\nSquare #: " + rectangle.getId() + "\n" + textArea.getText());
-                                            try {
-                                                guiController.getRmiStub().setNewPosition(guiController.getMyRemoteView().getUsername(), Integer.parseInt(rectangle.getId()));
-                                                textArea.setText("New position: " + rectangle.getId() + "\n" + textArea.getText());
-                                                setFigures();
-                                                ammoSet.getChildren().get(Integer.parseInt(rectangle.getId())).setTranslateX(500);
-                                                ammoSet.getChildren().get(Integer.parseInt(rectangle.getId())).setTranslateY(500);
-                                                for (int j = 0; j < 12; j++) {
-                                                    Rectangle rect = (Rectangle) grid.getChildren().get(j);
-                                                    rect.setFill(Color.color(1, 1, 1, 0.1));
-                                                    rect.setOnMouseClicked(g -> {
-                                                    });
-                                                }
-                                                boolean isSpawn = guiController.getRmiStub().isSpawnPoint(myRemoteView.getPosition());
-                                                if (!isSpawn) {
-                                                    guiController.getRmiStub().pickUpAmmo(myRemoteView.getUsername());
-                                                    textArea.setText("You have picked up an ammo\n" + textArea.getText());
-                                                }
-                                                else {
-                                                    //TODO to implement
-                                                    //TODO indexToPickUp e indexToSwitch sono due input dell'utente
-                                                    int indexToPickUp = 0;
-                                                    int indexToSwitch = 0;
-                                                    if (myRemoteView.getWeapons().size() < 3) {
-                                                        guiController.getRmiStub().pickUpWeapon(username, indexToPickUp);
-                                                        textArea.setText("You have picked a weapon: " + myRemoteView.getWeapons().get(myRemoteView.getWeapons().size() - 1) + "\n" + textArea.getText());
-                                                    } else if (myRemoteView.getWeapons().size() == 3) {
-                                                        textArea.setText("You already have three weapons in you hand.\nChoose one to discard..." + "\n" + textArea.getText());
-                                                    } else {
-                                                        throw new Exception("You have more than three weapons in your hand\n");
-                                                    }
-                                                }
-                                                guiController.getMyRemoteView().setCanMove(false);
-                                            } catch (Exception exc) {
-                                                exc.printStackTrace();
-                                            }
-                                        });
-                                    }
-                                }
-                            }
-                        }
-                    } else {
-                        textArea.setText("You have already used two actions. Pass your turn\n" + textArea.getText());
-                    }
-                }
-                else {
-                    textArea.setText("It's not your round!\n" + textArea.getText());
-                }
-            } catch (Exception e1) {
-                    e1.printStackTrace();
-                }
-        });
+        moveButton.setOnAction(e ->
+                    moveAction(3)
+                );
+        grabButton.setOnAction(e ->
+                moveGrabAction(1)
+                );
         shootButton.setOnAction(e -> {
             try {
                 if (guiController.getRmiStub().checkNumberAction(username)) {
@@ -243,9 +133,9 @@ public class GUI extends Application {
             }
             display(box, "Power ups");
         });
-        playersButton.setOnAction(e -> {
-            displayPlayers();
-        });
+        playersButton.setOnAction(e ->
+            displayPlayers()
+        );
         weapons.setOnAction(e -> {
             HBox box = new HBox();
             ImageView weaponView;
@@ -437,25 +327,29 @@ public class GUI extends Application {
             ammoSet.getChildren().add(new ImageView(ammoBack));
         }
         for (Node obj : ammoSet.getChildren()) {
-            obj.setTranslateX(500);
-            obj.setTranslateY(500);
+            obj.setTranslateX(-350);
+            obj.setTranslateY(250);
         }
         switch (map) {
 
             case 1: {
-                setAmmoConfiguration1();
+                setAmmoA1();
+                setAmmoA2();
                 break;
             }
             case 2: {
-                setAmmoConfiguration2();
+                setAmmoB1();
+                setAmmoA2();
                 break;
             }
             case 3: {
-                setAmmoConfiguration3();
+                setAmmoB1();
+                setAmmoB2();
                 break;
             }
             case 4: {
-                setAmmoConfiguration4();
+                setAmmoA1();
+                setAmmoB2();
                 break;
             }
             default:
@@ -545,19 +439,19 @@ public class GUI extends Application {
         //Name input
         TextField nameInput = new TextField();
         nameInput.setPromptText("Username");
-        nameInput.setStyle("-fx-background-color: #726B72");
+        nameInput.setStyle(TEXT_FIELD_STYLE);
         GridPane.setConstraints(nameInput, 1, 0);
 
         //Password input
         PasswordField passInput = new PasswordField();
-        passInput.setStyle("-fx-background-color: #726B72");
+        passInput.setStyle(TEXT_FIELD_STYLE);
         passInput.setPromptText("Password");
         GridPane.setConstraints(passInput, 1, 1);
 
         //IP input
         TextField IPInput = new TextField();
         IPInput.setPromptText("Server IP");
-        IPInput.setStyle("-fx-background-color: #726B72");
+        IPInput.setStyle(TEXT_FIELD_STYLE);
         GridPane.setConstraints(IPInput, 1, 2);
 
         //login button
@@ -595,6 +489,9 @@ public class GUI extends Application {
                     window.setScene(errorScene);
                 }
                 else {
+                    //TODO save this value on the server before starting the match.
+                    RadioButton mapChoice = (RadioButton) mapSelector.getSelectedToggle();
+                    System.out.println("Selected map #: "+ mapChoice.getText() );
                     guiController.setUsername(usernameTyped);
                     this.username = usernameTyped;
                     guiController.getRmiStub().register(usernameTyped, guiController);
@@ -633,29 +530,28 @@ public class GUI extends Application {
         Scene waitScene = new Scene(pane,300,200);
         window.setScene(waitScene);
 
-        if(false){
-            Timeline wait = new Timeline(new KeyFrame(Duration.seconds(10), e->
+            Timeline wait = new Timeline(new KeyFrame(Duration.seconds(1), e->
                 window.setScene(scene)
             ));
             wait.setCycleCount(Timeline.INDEFINITE);
             wait.play();
-        }else window.setScene(scene);
+
 
     }
 
     private VBox setMapSelector() {
         VBox sideBox = new VBox();
-        RadioButton button1 = new RadioButton("Map 1");
+        RadioButton button1 = new RadioButton("1");
         button1.setToggleGroup(mapSelector);
         button1.setStyle(LABEL_STYLE);
         button1.setSelected(true);
-        RadioButton button2 = new RadioButton("Map 2");
+        RadioButton button2 = new RadioButton("2");
         button2.setStyle(LABEL_STYLE);
         button2.setToggleGroup(mapSelector);
-        RadioButton button3 = new RadioButton("Map 3");
+        RadioButton button3 = new RadioButton("3");
         button3.setStyle(LABEL_STYLE);
         button3.setToggleGroup(mapSelector);
-        RadioButton button4 = new RadioButton("Map 4");
+        RadioButton button4 = new RadioButton("4");
         button4.setStyle(LABEL_STYLE);
         button4.setToggleGroup(mapSelector);
         Label selectMap = new Label("Select map: ");
@@ -894,7 +790,7 @@ public class GUI extends Application {
         return firstPlayer;
     }
 
-    private void setAmmoConfiguration1(){
+    private void setAmmoA1(){
         //square 0
         ammoSet.getChildren().get(0).setTranslateX(-255);
         ammoSet.getChildren().get(0).setTranslateY(-80);
@@ -907,6 +803,17 @@ public class GUI extends Application {
         ammoSet.getChildren().get(5).setTranslateX(-130);
         ammoSet.getChildren().get(5).setTranslateY(40);
 
+        //square 8
+        ammoSet.getChildren().get(8).setTranslateX(-250);
+        ammoSet.getChildren().get(8).setTranslateY(210);
+
+        //square 9
+        ammoSet.getChildren().get(9).setTranslateX(-120);
+        ammoSet.getChildren().get(9).setTranslateY(210);
+    }
+
+    private void setAmmoA2(){
+
         //square 6
         ammoSet.getChildren().get(6).setTranslateX(55);
         ammoSet.getChildren().get(6).setTranslateY(50);
@@ -915,19 +822,12 @@ public class GUI extends Application {
         ammoSet.getChildren().get(7).setTranslateX(265);
         ammoSet.getChildren().get(7).setTranslateY(55);
 
-        //square 8
-        ammoSet.getChildren().get(8).setTranslateX(-250);
-        ammoSet.getChildren().get(8).setTranslateY(210);
-
-        //square 9
-        ammoSet.getChildren().get(9).setTranslateX(-120);
-        ammoSet.getChildren().get(9).setTranslateY(210);
-
         //square 10
         ammoSet.getChildren().get(10).setTranslateX(35);
         ammoSet.getChildren().get(10).setTranslateY(215);
     }
-    private void setAmmoConfiguration2(){
+
+    private void setAmmoB1(){
         //square 0
         ammoSet.getChildren().get(0).setTranslateX(-260);
         ammoSet.getChildren().get(0).setTranslateY(-160);
@@ -940,46 +840,21 @@ public class GUI extends Application {
         ammoSet.getChildren().get(5).setTranslateX(-125);
         ammoSet.getChildren().get(5).setTranslateY(30);
 
-        //square 6
-        ammoSet.getChildren().get(6).setTranslateX(55);
-        ammoSet.getChildren().get(6).setTranslateY(50);
-
-        //square 7
-        ammoSet.getChildren().get(7).setTranslateX(265);
-        ammoSet.getChildren().get(7).setTranslateY(55);
-
         //square 9
         ammoSet.getChildren().get(9).setTranslateX(-120);
         ammoSet.getChildren().get(9).setTranslateY(210);
 
-        //square 10
-        ammoSet.getChildren().get(10).setTranslateX(35);
-        ammoSet.getChildren().get(10).setTranslateY(215);
     }
-    private void setAmmoConfiguration3(){
-        //square 0
-        ammoSet.getChildren().get(0).setTranslateX(-260);
-        ammoSet.getChildren().get(0).setTranslateY(-160);
 
-        //square 1
-        ammoSet.getChildren().get(1).setTranslateX(-115);
-        ammoSet.getChildren().get(1).setTranslateY(-90);
+    private void setAmmoB2(){
 
         //square 3
         ammoSet.getChildren().get(3).setTranslateX(265);
         ammoSet.getChildren().get(3).setTranslateY(-90);
 
-        //square 5
-        ammoSet.getChildren().get(5).setTranslateX(-125);
-        ammoSet.getChildren().get(5).setTranslateY(30);
-
         //square 6
         ammoSet.getChildren().get(6).setTranslateX(50);
         ammoSet.getChildren().get(6).setTranslateY(80);
-
-        //square 7
-        ammoSet.getChildren().get(7).setTranslateX(190);
-        ammoSet.getChildren().get(7).setTranslateY(80);
 
         //square 9
         ammoSet.getChildren().get(9).setTranslateX(-120);
@@ -989,43 +864,132 @@ public class GUI extends Application {
         ammoSet.getChildren().get(10).setTranslateX(60);
         ammoSet.getChildren().get(10).setTranslateY(210);
     }
-    private void setAmmoConfiguration4(){
-        //square 0
-        ammoSet.getChildren().get(0).setTranslateX(-255);
-        ammoSet.getChildren().get(0).setTranslateY(-80);
 
-        //square 1
-        ammoSet.getChildren().get(1).setTranslateX(-120);
-        ammoSet.getChildren().get(1).setTranslateY(-160);
-
-        //square 3
-        ammoSet.getChildren().get(3).setTranslateX(265);
-        ammoSet.getChildren().get(3).setTranslateY(-90);
-
-
-        //square 5
-        ammoSet.getChildren().get(5).setTranslateX(-130);
-        ammoSet.getChildren().get(5).setTranslateY(40);
-
-        //square 6
-        ammoSet.getChildren().get(6).setTranslateX(50);
-        ammoSet.getChildren().get(6).setTranslateY(80);
-
-        //square 7
-        ammoSet.getChildren().get(7).setTranslateX(190);
-        ammoSet.getChildren().get(7).setTranslateY(80);
-
-        //square 8
-        ammoSet.getChildren().get(8).setTranslateX(-250);
-        ammoSet.getChildren().get(8).setTranslateY(210);
-
-        //square 9
-        ammoSet.getChildren().get(9).setTranslateX(-120);
-        ammoSet.getChildren().get(9).setTranslateY(210);
-
-        //square 10
-        ammoSet.getChildren().get(10).setTranslateX(60);
-        ammoSet.getChildren().get(10).setTranslateY(210);
+    private void setMovementSquares(){
+        for (int i = 0; i < 12; i++) {
+            Rectangle rectangle = (Rectangle) grid.getChildren().get(i);
+            for (Square square : guiController.getMyRemoteView().getReachableSquare()) {
+                if (rectangle.getId().equals(Integer.toString(square.getPosition()))) {
+                    rectangle.setFill(Color.color(1, 1, 0, 0.4));
+                    rectangle.setOnMouseClicked(o -> {
+                        //textArea.setText("\nSquare #: " + rectangle.getId() + "\n" + textArea.getText());
+                        try {
+                            guiController.getRmiStub().setNewPosition(guiController.getMyRemoteView().getUsername(), Integer.parseInt(rectangle.getId()));
+                            textArea.setText("New position: " + rectangle.getId()+"\n" + textArea.getText());
+                            setFigures();
+                            restoreSquares();
+                            guiController.getRmiStub().useAction(this.username);
+                            guiController.getMyRemoteView().setCanMove(false);
+                        } catch (Exception exc) {
+                            exc.printStackTrace();
+                        }
+                    });
+                }
+            }
+        }
     }
+
+
+    private void setMoveGrabSquares(){
+        for (int i = 0; i < 12; i++) {
+            Rectangle rectangle = (Rectangle) grid.getChildren().get(i);
+            for (Square square : guiController.getMyRemoteView().getReachableSquare()) {
+                if (rectangle.getId().equals(Integer.toString(square.getPosition()))) {
+                    rectangle.setFill(Color.color(0, 0.2, 1, 0.4));
+                    rectangle.setOnMouseClicked(o -> {
+                        //textArea.setText("\nSquare #: " + rectangle.getId() + "\n" + textArea.getText());
+                        try {
+                            guiController.getRmiStub().setNewPosition(guiController.getMyRemoteView().getUsername(), Integer.parseInt(rectangle.getId()));
+                            textArea.setText("New position: " + rectangle.getId() + "\n" + textArea.getText());
+                            setFigures();
+                            ammoSet.getChildren().get(Integer.parseInt(rectangle.getId())).setTranslateX(-350);
+                            ammoSet.getChildren().get(Integer.parseInt(rectangle.getId())).setTranslateY(250);
+                            restoreSquares();
+                            boolean isSpawn = guiController.getRmiStub().isSpawnPoint(myRemoteView.getPosition());
+                            if (!isSpawn) {
+                                guiController.getRmiStub().pickUpAmmo(myRemoteView.getUsername());
+                                textArea.setText("You have picked up an ammo\n" + textArea.getText());
+                            }
+                            else {
+                                //TODO to implement
+                                //TODO indexToPickUp e indexToSwitch sono due input dell'utente
+                                int indexToPickUp = 0;
+                                int indexToSwitch = 0;
+                                if (myRemoteView.getWeapons().size() < 3) {
+                                    guiController.getRmiStub().pickUpWeapon(username, indexToPickUp);
+                                    textArea.setText("You have picked a weapon: " + myRemoteView.getWeapons().get(myRemoteView.getWeapons().size() - 1) + "\n" + textArea.getText());
+                                } else if (myRemoteView.getWeapons().size() == 3) {
+                                    textArea.setText("You already have three weapons in you hand.\nChoose one to discard..." + "\n" + textArea.getText());
+                                } else {
+                                    throw new Exception("You have more than three weapons in your hand\n");
+                                }
+                            }
+                            guiController.getRmiStub().useAction(this.username);
+                            guiController.getMyRemoteView().setCanMove(false);
+                        } catch (Exception exc) {
+                            exc.printStackTrace();
+                        }
+                    });
+                }
+            }
+        }
+    }
+
+    private void moveAction(int steps){
+            try {
+                if(guiController.getRmiStub().getActivePlayer().equals(this.username)){
+                    if(guiController.getRmiStub().checkNumberAction(username)){
+                        if (!guiController.getMyRemoteView().getCanMove()) {
+                            guiController.getMyRemoteView().setCanMove(true);
+                            guiController.getMyRemoteView().setReachableSquare(guiController.getRmiStub().reacheableSquare(guiController.getMyRemoteView().getPosition(),steps));
+                            setMovementSquares();
+                        } else {
+                            textArea.setText("Resolve your previous action!\n" + textArea.getText());
+                        }
+                    } else {
+                        textArea.setText("You have used all of your actions. Pass the turn.\n" + textArea.getText());
+                    }
+                }
+                else {
+                    textArea.setText("It's not your round!\n" + textArea.getText());
+                }
+            } catch (RemoteException e1) {
+                e1.printStackTrace();
+            }
+
+    }
+
+    private void moveGrabAction(int steps){
+        try {
+            if(guiController.getRmiStub().getActivePlayer().equals(username)){
+                if(guiController.getRmiStub().checkNumberAction(username)){
+                    if (!guiController.getMyRemoteView().getCanMove()) {
+                        guiController.getMyRemoteView().setCanMove(true);
+                        guiController.getMyRemoteView().setReachableSquare(guiController.getRmiStub().reacheableSquare(guiController.getMyRemoteView().getPosition(),steps));
+                        setMoveGrabSquares();
+                        } else {
+                        textArea.setText("Resolve your previous action!\n" + textArea.getText());
+                    }
+                    } else {
+                        textArea.setText("You have used all of your actions. Pass the turn.\n" + textArea.getText());
+                    }
+                }
+                else {
+                    textArea.setText("It's not your round!\n" + textArea.getText());
+                }
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+    }
+
+    private void restoreSquares(){
+        for (int j = 0; j < 12; j++) {
+            Rectangle rect = (Rectangle) grid.getChildren().get(j);
+            rect.setFill(Color.color(1, 1, 1, 0.1));
+            rect.setOnMouseClicked(g -> {
+            });
+        }
+    }
+
 }
 

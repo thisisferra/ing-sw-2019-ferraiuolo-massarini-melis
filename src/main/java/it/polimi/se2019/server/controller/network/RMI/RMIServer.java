@@ -30,9 +30,9 @@ public class RMIServer extends Server implements RMIServerInterface {
 
     //Attributi
 
-    PrintStream out = new PrintStream(System.out);
+    private PrintStream out = new PrintStream(System.out);
 
-    Player activePlayer;
+    private Player activePlayer;
 
     private Match match;
 
@@ -52,6 +52,7 @@ public class RMIServer extends Server implements RMIServerInterface {
 
     public RMIServer(OneAboveAll oneAboveAll, int port, String remObjName) {
         super(oneAboveAll);
+        //System.setProperty("java.rmi.server.hostname","192.168.1.208");
         try {
             this.ipAddress = InetAddress.getLocalHost().getHostAddress().trim();
         }
