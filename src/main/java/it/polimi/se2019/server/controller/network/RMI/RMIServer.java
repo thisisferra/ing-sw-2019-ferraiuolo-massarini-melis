@@ -198,6 +198,13 @@ public class RMIServer extends Server implements RMIServerInterface {
         getMyVirtualView(username).setCubes(currentPlayer.getPlayerBoard().getAmmoCubes());
         updateAllClient();
 
+    }
+    public void pickUpWeapon(String username, int indexToPickUp, int indexToDrop) throws RemoteException{
+        Player currentPlayer = match.searchPlayerByClientName(username);
+        currentPlayer.pickUpWeapon(indexToPickUp,indexToDrop);
+        getMyVirtualView(username).setWeapons(currentPlayer.getHand().getWeapons());
+        getMyVirtualView(username).setCubes(currentPlayer.getPlayerBoard().getAmmoCubes());
+        updateAllClient();
 
     }
 

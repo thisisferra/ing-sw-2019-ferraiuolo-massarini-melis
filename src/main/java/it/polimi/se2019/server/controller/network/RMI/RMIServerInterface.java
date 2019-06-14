@@ -27,6 +27,8 @@ public interface RMIServerInterface extends Remote {
 
     void pickUpWeapon(String username, int indexToPickUp)throws RemoteException;
 
+    void pickUpWeapon(String username, int indexToPickUp, int indexToDrop)throws RemoteException;
+
     void restoreMap() throws RemoteException;
 
     Match getMatch() throws RemoteException;

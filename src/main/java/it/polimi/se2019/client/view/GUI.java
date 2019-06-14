@@ -44,6 +44,8 @@ public class GUI extends Application {
     private VBox userInfoBox = new VBox();
     private StackPane stack = new StackPane();
     private VBox rightPane = new VBox();
+    private int indexToPickUp = -1;
+    private int indexToDrop = -1;
     private BorderPane borderPane = new BorderPane();
     private TextArea textArea = new TextArea("Welcome to Adrenaline!");
     static final String BUTTON_STYLE = "-fx-background-color: #3c3c3c;-fx-text-fill: #999999;";
@@ -415,8 +417,8 @@ public class GUI extends Application {
     }
 
     private void closeProgram() {
-        boolean answer = ConfirmBox.display("Exit Adrenaline", "Are you sure?");
-        if (answer) {
+        boolean closeAnswer = ConfirmBox.display("Exit Adrenaline", "Are you sure?");
+        if (closeAnswer) {
             window.close();
         }
     }
@@ -916,15 +918,19 @@ public class GUI extends Application {
                             else {
                                 //TODO to implement
                                 //TODO indexToPickUp e indexToSwitch sono due input dell'utente
-                                int indexToPickUp = 0;
-                                int indexToSwitch = 0;
-                                if (myRemoteView.getWeapons().size() < 3) {
-                                    guiController.getRmiStub().pickUpWeapon(username, indexToPickUp);
-                                    textArea.setText("You have picked a weapon: " + myRemoteView.getWeapons().get(myRemoteView.getWeapons().size() - 1) + "\n" + textArea.getText());
-                                } else if (myRemoteView.getWeapons().size() == 3) {
-                                    textArea.setText("You already have three weapons in you hand.\nChoose one to discard..." + "\n" + textArea.getText());
-                                } else {
-                                    throw new Exception("You have more than three weapons in your hand\n");
+                                displayCabinet();
+                                if(indexToPickUp!= -1){
+                                    if (myRemoteView.getWeapons().size() < 3) {
+                                        guiController.getRmiStub().pickUpWeapon(username, indexToPickUp);
+                                        textArea.setText("You have picked a weapon: " + myRemoteView.getWeapons().get(myRemoteView.getWeapons().size() - 1) + "\n" + textArea.getText());
+                                    } else if (myRemoteView.getWeapons().size() == 3) {
+                                        if(indexToDrop != -1){
+                                            textArea.setText("You already have three weapons in you hand.\nChoose one to discard..." + "\n" + textArea.getText());
+                                            guiController.getRmiStub().pickUpWeapon(username,indexToPickUp,indexToDrop);
+                                        }
+                                    } else {
+                                        throw new Exception("You have more than three weapons in your hand\n");
+                                    }
                                 }
                             }
                             guiController.getRmiStub().useAction(this.username);
@@ -1008,12 +1014,205 @@ public class GUI extends Application {
         userView = new ImageView(userImage);
         userView.setPreserveRatio(true);
         userView.setFitWidth(50);
-        moves.setStyle(BUTTON_STYLE);
-        userName.setStyle(BUTTON_STYLE);
+        moves.setStyle(LABEL_STYLE);
+        userName.setStyle(LABEL_STYLE);
         userInfoBox.getChildren().addAll(userView,userName,moves);
         userName.setAlignment(Pos.CENTER);
         userInfoBox.setSpacing(5);
     }
 
-}
+    private void displayCabinet(){
+        Stage cabinetWindow = new Stage();
+        String color = null;
+        HBox locker = new HBox();
+        GridPane choiceBox = new GridPane();
+        Image weaponImage = null;
+        ImageView weaponView = null;
+        int availableWeapons =0;
 
+        ToggleGroup weaponSelection = new ToggleGroup();
+        RadioButton button0 = new RadioButton("0");
+        button0.setToggleGroup(weaponSelection);
+        button0.setStyle(LABEL_STYLE);
+
+        RadioButton button1 = new RadioButton("1");
+        button1.setStyle(LABEL_STYLE);
+        button1.setToggleGroup(weaponSelection);
+
+
+        RadioButton button2 = new RadioButton("2");
+        button2.setStyle(LABEL_STYLE);
+        button2.setToggleGroup(weaponSelection);
+
+        Button confirm = new Button("Confirm");
+        confirm.setStyle(BUTTON_STYLE);
+        confirm.setOnMouseEntered(ent ->
+                confirm.setStyle(HIGHLIGHT_BUTTON_STYLE));
+        confirm.setOnMouseExited(ex ->
+                confirm.setStyle(BUTTON_STYLE));
+        confirm.setOnAction(e->{
+            RadioButton weaponChoice = (RadioButton) weaponSelection.getSelectedToggle();
+            indexToPickUp = Integer.parseInt(weaponChoice.getText());
+            if(myRemoteView.getWeapons().size()==3)
+                displayWeaponHand();
+            cabinetWindow.close();
+        });
+        choiceBox.setConstraints(button0,0,0);
+        choiceBox.setConstraints(button1,3,0);
+        choiceBox.setConstraints(button2,6,0);
+        choiceBox.setConstraints(confirm,4,1);
+
+        if(myRemoteView.getPosition() == 4){
+            color = "Red";
+            for(int i = 0; i<myRemoteView.getCabinetRed().getSlot().length; i++){
+                if(myRemoteView.getCabinetRed().getSlot()[i] != null){
+                    weaponImage = createImage("src/main/resources/Images/Weapons/"+ myRemoteView.getCabinetRed().getSlot()[i].getType() +".png");
+                    weaponView = new ImageView(weaponImage);
+                    weaponView.setFitWidth(200);
+                    weaponView.setPreserveRatio(true);
+                    weaponView.setId(Integer.toString(i));
+                    locker.getChildren().add(weaponView);
+                    locker.setSpacing(5);
+                    if(i==0)
+                        choiceBox.getChildren().add(button0);
+                    if(i==1)
+                        choiceBox.getChildren().add(button1);
+                    if(i==2)
+                        choiceBox.getChildren().add(button2);
+                }
+
+            }
+        }else if(myRemoteView.getPosition() == 11){
+            color = "Yellow";
+            for(int i = 0; i<myRemoteView.getCabinetYellow().getSlot().length; i++){
+                if(myRemoteView.getCabinetRed().getSlot()[i] != null){
+                    weaponImage = createImage("src/main/resources/Images/Weapons/"+ myRemoteView.getCabinetYellow().getSlot()[i].getType() +".png");
+                    weaponView = new ImageView(weaponImage);
+                    weaponView.setFitWidth(200);
+                    weaponView.setPreserveRatio(true);
+                    weaponView.setId(Integer.toString(i));
+                    locker.getChildren().add(weaponView);
+                    locker.setSpacing(5);
+                    if(i==0)
+                        choiceBox.getChildren().add(button0);
+                    if(i==1)
+                        choiceBox.getChildren().add(button1);
+                    if(i==2)
+                        choiceBox.getChildren().add(button2);
+                }
+
+            }
+
+        } else if(myRemoteView.getPosition() == 2){
+            color = "Blue";
+            for(int i = 0; i<myRemoteView.getCabinetBlue().getSlot().length; i++){
+                if(myRemoteView.getCabinetRed().getSlot()[i] != null){
+                    weaponImage = createImage("src/main/resources/Images/Weapons/"+ myRemoteView.getCabinetBlue().getSlot()[i].getType() +".png");
+                    weaponView = new ImageView(weaponImage);
+                    weaponView.setFitWidth(200);
+                    weaponView.setPreserveRatio(true);
+                    weaponView.setId(Integer.toString(i));
+                    locker.getChildren().add(weaponView);
+                    locker.setSpacing(5);
+                    if(i==0)
+                        choiceBox.getChildren().add(button0);
+                    if(i==1)
+                        choiceBox.getChildren().add(button1);
+                    if(i==2)
+                        choiceBox.getChildren().add(button2);
+                }
+            }
+        }
+        choiceBox.getChildren().add(confirm);
+        Label info = new Label("Choose a weapon");
+        info.setStyle(LABEL_STYLE);
+        BorderPane weaponPane = new BorderPane();
+        cabinetWindow.initModality(Modality.APPLICATION_MODAL);
+        cabinetWindow.setTitle( color + " cabinet");
+        weaponPane.setCenter(locker);
+        weaponPane.setStyle(BACKGROUND_STYLE);
+        weaponPane.setTop(info);
+        weaponPane.setBottom(choiceBox);
+        Scene cabinetScene = new Scene(weaponPane);
+        cabinetWindow.setOnCloseRequest( e -> {
+            indexToDrop = -1;
+            cabinetWindow.close();
+        });
+        cabinetWindow.setScene(cabinetScene);
+        cabinetWindow.showAndWait();
+    }
+
+    private void displayWeaponHand(){
+        Stage weaponHandWindow = new Stage();
+        HBox hand = new HBox();
+        GridPane choiceBox = new GridPane();
+        Image weaponImage = null;
+        ImageView weaponView = null;
+
+        ToggleGroup weaponSelection = new ToggleGroup();
+        RadioButton button0 = new RadioButton("0");
+        button0.setToggleGroup(weaponSelection);
+        button0.setStyle(LABEL_STYLE);
+
+        RadioButton button1 = new RadioButton("1");
+        button1.setStyle(LABEL_STYLE);
+        button1.setToggleGroup(weaponSelection);
+
+
+        RadioButton button2 = new RadioButton("2");
+        button2.setStyle(LABEL_STYLE);
+        button2.setToggleGroup(weaponSelection);
+
+        Button confirm = new Button("Confirm");
+        confirm.setStyle(BUTTON_STYLE);
+        confirm.setOnMouseEntered(ent ->
+                confirm.setStyle(HIGHLIGHT_BUTTON_STYLE));
+        confirm.setOnMouseExited(ex ->
+                confirm.setStyle(BUTTON_STYLE));
+        confirm.setOnAction(e->{
+            RadioButton weaponChoice = (RadioButton) weaponSelection.getSelectedToggle();
+            indexToDrop = Integer.parseInt(weaponChoice.getText());
+            weaponHandWindow.close();
+        });
+        choiceBox.setConstraints(button0,0,0);
+        choiceBox.setConstraints(button1,3,0);
+        choiceBox.setConstraints(button2,6,0);
+        choiceBox.setConstraints(confirm,4,1);
+
+        for(int i = 0; i<myRemoteView.getWeapons().size(); i++){
+
+                weaponImage = createImage("src/main/resources/Images/Weapons/"+ myRemoteView.getWeapons().get(i).getType() +".png");
+                weaponView = new ImageView(weaponImage);
+                weaponView.setFitWidth(200);
+                weaponView.setPreserveRatio(true);
+                weaponView.setId(Integer.toString(i));
+                hand.getChildren().add(weaponView);
+                hand.setSpacing(5);
+                if(i==0)
+                    choiceBox.getChildren().add(button0);
+                if(i==1)
+                    choiceBox.getChildren().add(button1);
+                if(i==2)
+                    choiceBox.getChildren().add(button2);
+            }
+
+        choiceBox.getChildren().add(confirm);
+        Label info = new Label("Choose a weapon to discard");
+        info.setStyle(LABEL_STYLE);
+        BorderPane weaponPane = new BorderPane();
+        weaponHandWindow.initModality(Modality.APPLICATION_MODAL);
+        weaponHandWindow.setTitle("Your hand");
+        weaponPane.setCenter(hand);
+        weaponPane.setStyle(BACKGROUND_STYLE);
+        weaponPane.setTop(info);
+        weaponPane.setBottom(choiceBox);
+        Scene cabinetScene = new Scene(weaponPane);
+        weaponHandWindow.setOnCloseRequest( e -> {
+            indexToDrop = -1;
+            weaponHandWindow.close();
+        });
+        weaponHandWindow.setScene(cabinetScene);
+        weaponHandWindow.showAndWait();
+    }
+
+}
