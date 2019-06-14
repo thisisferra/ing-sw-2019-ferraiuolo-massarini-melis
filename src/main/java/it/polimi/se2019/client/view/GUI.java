@@ -41,6 +41,7 @@ public class GUI extends Application {
     private VBox cubeBox = new VBox();
     private StackPane ammoSet = new StackPane();
     private VBox leftMenu = new VBox();
+    private VBox userInfoBox = new VBox();
     private StackPane stack = new StackPane();
     private VBox rightPane = new VBox();
     private BorderPane borderPane = new BorderPane();
@@ -157,8 +158,10 @@ public class GUI extends Application {
 
         ImageView firstPlayer = setFirstPlayer();
 
-        leftMenu.getChildren().addAll(moveButton, grabButton, shootButton, passButton, weapons, powerUps, playersButton, points, cubeBox);
+        setUserInfos();
 
+        leftMenu.getChildren().addAll(moveButton, grabButton, shootButton, passButton, weapons, powerUps, playersButton, points, cubeBox,userInfoBox);
+        leftMenu.setSpacing(3);
         setTextArea();
 
         rightPane.getChildren().add(textArea);
@@ -179,6 +182,7 @@ public class GUI extends Application {
 
             if(myRemoteView != null){
                 setCubes();
+                setUserInfos();
                 setFigures();
                 setWeaponView(redBox, myRemoteView.getCabinetRed().getSlot());
                 setWeaponView(yellowBox, myRemoteView.getCabinetYellow().getSlot());
@@ -279,14 +283,14 @@ public class GUI extends Application {
             damageBar = new HBox();
             deathBar = new HBox();
             markBar = new HBox();
-            for(int i = 0; i<12; i++){
-                icon = createImage("src/main/resources/Images/icons/blue_damage_icon.png");
+            for(int i = 0; i<myRemoteView.getDamagePlayerBoard().size(); i++){
+                icon = createImage("src/main/resources/Images/icons/"+myRemoteView.getDamagePlayerBoard().get(i).getColor()+"_damage_icon.png");
                 iconImg = new ImageView(icon);
                 iconImg.setPreserveRatio(true);
                 iconImg.setFitWidth(28);
                 damageBar.getChildren().add(iconImg);
             }
-            for(int i = 0 ; i<5;i++){
+            for(int i = 0 ; i<myRemoteView.getDeathsPlayerBoard();i++){
                 icon = createImage("src/main/resources/Images/icons/skull_icon.png");
                 iconImg = new ImageView(icon);
                 iconImg.setPreserveRatio(true);
@@ -294,8 +298,8 @@ public class GUI extends Application {
                 deathBar.getChildren().add(iconImg);
 
             }
-            for(int i = 0; i<4; i++){
-                icon = createImage("src/main/resources/Images/icons/blue_damage_icon.png");
+            for(int i = 0; i<myRemoteView.getMarkPlayerBoard().size(); i++){
+                icon = createImage("src/main/resources/Images/icons/"+myRemoteView.getMarkPlayerBoard().get(i).getColor()+"_damage_icon.png");
                 iconImg = new ImageView(icon);
                 iconImg.setPreserveRatio(true);
                 iconImg.setFitWidth(32);
@@ -889,7 +893,6 @@ public class GUI extends Application {
         }
     }
 
-
     private void setMoveGrabSquares(){
         for (int i = 0; i < 12; i++) {
             Rectangle rectangle = (Rectangle) grid.getChildren().get(i);
@@ -941,7 +944,7 @@ public class GUI extends Application {
                     if(guiController.getRmiStub().checkNumberAction(username)){
                         if (!guiController.getMyRemoteView().getCanMove()) {
                             guiController.getMyRemoteView().setCanMove(true);
-                            guiController.getMyRemoteView().setReachableSquare(guiController.getRmiStub().reacheableSquare(guiController.getMyRemoteView().getPosition(),steps));
+                            guiController.getMyRemoteView().setReachableSquare(guiController.getRmiStub().reachableSquares(guiController.getMyRemoteView().getPosition(),steps));
                             setMovementSquares();
                         } else {
                             textArea.setText("Resolve your previous action!\n" + textArea.getText());
@@ -965,7 +968,7 @@ public class GUI extends Application {
                 if(guiController.getRmiStub().checkNumberAction(username)){
                     if (!guiController.getMyRemoteView().getCanMove()) {
                         guiController.getMyRemoteView().setCanMove(true);
-                        guiController.getMyRemoteView().setReachableSquare(guiController.getRmiStub().reacheableSquare(guiController.getMyRemoteView().getPosition(),steps));
+                        guiController.getMyRemoteView().setReachableSquare(guiController.getRmiStub().reachableSquares(guiController.getMyRemoteView().getPosition(),steps));
                         setMoveGrabSquares();
                         } else {
                         textArea.setText("Resolve your previous action!\n" + textArea.getText());
@@ -989,6 +992,27 @@ public class GUI extends Application {
             rect.setOnMouseClicked(g -> {
             });
         }
+    }
+
+    private void setUserInfos(){
+        Label userName = new Label("");
+        Label moves = new Label("Moves:");
+        Image userImage = null;
+        ImageView userView;
+        userInfoBox.getChildren().clear();
+        if(myRemoteView != null){
+            userImage = createImage("src/main/resources/Images/icons/"+ myRemoteView.getCharacter() +"_icon.png");
+            userName = new Label(" "+ myRemoteView.getUsername());
+            moves = new Label("Moves: "+ myRemoteView.getNumberOfActions());
+        }
+        userView = new ImageView(userImage);
+        userView.setPreserveRatio(true);
+        userView.setFitWidth(50);
+        moves.setStyle(BUTTON_STYLE);
+        userName.setStyle(BUTTON_STYLE);
+        userInfoBox.getChildren().addAll(userView,userName,moves);
+        userName.setAlignment(Pos.CENTER);
+        userInfoBox.setSpacing(5);
     }
 
 }

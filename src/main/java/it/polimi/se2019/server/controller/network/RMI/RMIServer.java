@@ -126,7 +126,7 @@ public class RMIServer extends Server implements RMIServerInterface {
         return true;
     }
 
-    public ArrayList<Square> reacheableSquare(int position,int steps){
+    public ArrayList<Square> reachableSquares(int position, int steps){
         MovementChecker movementChecker = new MovementChecker(match.getMap().getAllSquare(), steps, position);
         return movementChecker.getReachableSquares();
     }
@@ -143,7 +143,7 @@ public class RMIServer extends Server implements RMIServerInterface {
         currentPlayer.setPosition(newPosition);
         try {
             getMyVirtualView(username).setPosition(currentPlayer.getPosition());
-            getMyVirtualView(username).setNumberOfAction(currentPlayer.getNumberOfAction());
+            getMyVirtualView(username).setNumberOfAction(currentPlayer.getNumberOfAction()-1);
             updateAllClient();
 
         } catch (Exception e) {

@@ -17,7 +17,7 @@ public interface RMIServerInterface extends Remote {
 
     void register(String username, GUIControllerInterface guiController) throws RemoteException;
 
-    ArrayList<Square> reacheableSquare(int position,int steps) throws RemoteException;
+    ArrayList<Square> reachableSquares(int position, int steps) throws RemoteException;
 
     void pickUpAmmo(String username) throws RemoteException;
 
