@@ -70,7 +70,8 @@ public class RMIServer extends Server implements RMIServerInterface {
             rmiRegistry = LocateRegistry.createRegistry(port);
             UnicastRemoteObject.exportObject(this, port);
             rmiRegistry.bind(remObjName, this);
-            System.out.println("Registry created and object exported");/*
+            System.out.println("Registry created and object exported");
+            /*
             match = new Match(1);
             match.initializeMatch();
             System.out.println("Match created");
@@ -85,9 +86,9 @@ public class RMIServer extends Server implements RMIServerInterface {
         return RemoteServer.getClientHost();
     }
 
-    public synchronized void register(String username, GUIControllerInterface guiController) throws RemoteException{
+    public synchronized void register(String username, GUIControllerInterface guiController,int mapId) throws RemoteException{
         if (!mapAlreadySelected()) {
-            this.createMatch(1);
+            this.createMatch(mapId);
         }
         VirtualView virtualView = createVirtualView(guiController);
         Player player = createPlayer(username);
@@ -242,7 +243,7 @@ public class RMIServer extends Server implements RMIServerInterface {
     }
 
     private void createMatch(int mapId) {
-        match = new Match(1);
+        match = new Match(mapId);
         this.mapId = 1;
         match.initializeMatch();
         out.println("Match created");

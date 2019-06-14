@@ -15,7 +15,7 @@ public interface RMIServerInterface extends Remote {
 
     boolean checkUsername(String username) throws Exception;
 
-    void register(String username, GUIControllerInterface guiController) throws RemoteException;
+    void register(String username, GUIControllerInterface guiController,int mapId) throws RemoteException;
 
     ArrayList<Square> reachableSquares(int position, int steps) throws RemoteException;
 

@@ -55,7 +55,7 @@ public class GUI extends Application {
     static final String TEXT_FIELD_STYLE = "-fx-background-color: #726B72";
     static final String HIGHLIGHT_BUTTON_STYLE = "-fx-background-color: #bbbbbb;-fx-text-fill: #999999;";
     static final String TEXT_AREA_STYLE = "-fx-control-inner-background:#717171;  -fx-highlight-fill: #f1f7eb; -fx-highlight-text-fill: #717171; -fx-text-fill: #f1f7eb;-fx-border-color: #ffffff ";
-    private int mapNumber = 1;
+    private int mapNumber;
     private Scene scene;
 
 
@@ -68,133 +68,8 @@ public class GUI extends Application {
     public void start(Stage primaryStage){
 
         setStage(primaryStage);
-
-        setAmmo(mapNumber);
-
-        setDeathTrackSkulls();
-
-        setMapGrid();
-
-        setCabinets();
-
-        Label points = setPoints();
-
-        Button moveButton = setButton("src/main/resources/Images/icons/move_icon.png", "Move");
-        Button grabButton = setButton("src/main/resources/Images/icons/grab_icon.png", "Move and grab");
-        Button shootButton = setButton("src/main/resources/Images/icons/shoot_icon.png", "Shoot");
-        Button passButton = setButton("src/main/resources/Images/icons/pass_icon.png", "Pass turn and reload");
-        Button powerUps = setButton("src/main/resources/Images/icons/powerup_icon.png", "");
-        Button playersButton = setButton("src/main/resources/Images/icons/players_icon.png", "");
-        Button weapons = setButton("src/main/resources/Images/icons/weapon_icon.png", "");
-
-        moveButton.setOnAction(e ->
-                    moveAction(3)
-                );
-        grabButton.setOnAction(e ->
-                moveGrabAction(1)
-                );
-        shootButton.setOnAction(e -> {
-            try {
-                if (guiController.getRmiStub().checkNumberAction(username)) {
-                    guiController.getRmiStub().useAction(username);
-                    //INIZIO STAMPA DI CONTROLLO
-                    System.out.println("SPAR(T)A");
-                } else {
-                    textArea.setText("You have already used two actions. Pass your turn\n" + textArea.getText());
-                }
-            }
-            catch(RemoteException exc) {
-                exc.printStackTrace();
-            }
-        });
-        passButton.setOnAction(e -> {
-            //TODO maschere per loadare un'arma
-            try {
-                if (guiController.getRmiStub().getActivePlayer().equals(username)) {
-                    guiController.getRmiStub().restoreMap();
-                    setAmmo(mapNumber);
-                    guiController.getRmiStub().resetActionNumber(username);
-                    guiController.getRmiStub().setActivePlayer(username);
-                }
-                else {
-                    System.out.println("It's not your round!!!");
-                }
-            }
-            catch(Exception exc) {
-                exc.printStackTrace();
-            }
-        });
-        powerUps.setOnAction(e -> {
-            HBox box = new HBox();
-            ImageView powerUpView = null;
-            for (PowerUp powerUp: myRemoteView.getPowerUp()) {
-
-                powerUpView = new ImageView(createImage("src/main/resources/Images/PowerUps/" + powerUp.getColor() +"_"+ powerUp.getType() + ".png"));
-                powerUpView.setPreserveRatio(true);
-                powerUpView.setFitHeight(200);
-                box.getChildren().add(powerUpView);
-
-            }
-            display(box, "Power ups");
-        });
-        playersButton.setOnAction(e ->
-            displayPlayers()
-        );
-        weapons.setOnAction(e -> {
-            HBox box = new HBox();
-            ImageView weaponView;
-            Image weaponImage;
-            for (Weapon obj : myRemoteView.getWeapons()) {
-                weaponImage = createImage("src/main/resources/Images/Weapons/" + obj.getType() + ".png");
-                if(!obj.getLoad())
-                    weaponImage = toGrayScale(weaponImage);
-                weaponView = new ImageView(weaponImage);
-                weaponView.setPreserveRatio(true);
-                weaponView.setFitHeight(300);
-                box.getChildren().add(weaponView);
-
-            }
-            display(box, "Weapons");
-        });
-
-        setCubes();
-
-        setFirstPlayer();
-
-        setUserInfos();
-
-        leftMenu.getChildren().addAll(moveButton, grabButton, shootButton, passButton, weapons, powerUps, playersButton, points, cubeBox,userInfoBox);
-        leftMenu.setSpacing(3);
-        setTextArea();
-
-        rightPane.getChildren().add(textArea);
-        rightPane.setSpacing(10);
-
-        stack.getChildren().addAll(setMap(), ammoSet, firstPlayer, deathTrack, cabinets, grid, pawnsGrid);
-        Group root = new Group(stack);
-        root.setTranslateY(-375);
-        root.setTranslateX(25);
-        borderPane.setStyle(BACKGROUND_STYLE);
-        borderPane.setCenter(root);
-        borderPane.setRight(rightPane);
-        borderPane.setLeft(leftMenu);
-        scene = new Scene(borderPane, 1300, 700);
         window.show();
 
-        Timeline fiveSecondsWonder = new Timeline(new KeyFrame(Duration.seconds(1), e-> {
-
-            if(myRemoteView != null){
-                setCubes();
-                setUserInfos();
-                setFigures();
-                setFirstPlayer();
-                setWeaponView(redBox, myRemoteView.getCabinetRed().getSlot());
-                setWeaponView(yellowBox, myRemoteView.getCabinetYellow().getSlot());
-                setWeaponView(blueBox, myRemoteView.getCabinetBlue().getSlot());
-            }
-        }));
-        fiveSecondsWonder.setCycleCount(Timeline.INDEFINITE);
-        fiveSecondsWonder.play();
     }
 
     private void setMapGrid(){
@@ -502,7 +377,7 @@ public class GUI extends Application {
                     System.out.println("Selected map #: "+ mapChoice.getText() );
                     guiController.setUsername(usernameTyped);
                     this.username = usernameTyped;
-                    guiController.getRmiStub().register(usernameTyped, guiController);
+                    guiController.getRmiStub().register(usernameTyped, guiController,Integer.parseInt(mapChoice.getText()));
                     myRemoteView = guiController.getMyRemoteView();
                     setWaitScene();
                     textArea.setText(usernameTyped + "\n" + textArea.getText());
@@ -525,7 +400,6 @@ public class GUI extends Application {
         Scene newScene = new Scene(pane, 400, 250);
         pane.setStyle(BACKGROUND_STYLE);
         return newScene;
-
     }
 
     private void setWaitScene(){
@@ -537,11 +411,12 @@ public class GUI extends Application {
         waitLabel.setAlignment(Pos.CENTER);
         Scene waitScene = new Scene(pane,300,200);
         window.setScene(waitScene);
-
-            Timeline wait = new Timeline(new KeyFrame(Duration.seconds(1), e->
-                window.setScene(scene)
+            Timeline wait = new Timeline(new KeyFrame(Duration.seconds(10), e->{
+                setGameScene();
+                window.setScene(scene);
+            }
             ));
-            wait.setCycleCount(Timeline.INDEFINITE);
+            wait.setCycleCount(1);
             wait.play();
 
 
@@ -1146,4 +1021,141 @@ public class GUI extends Application {
         weaponHandWindow.showAndWait();
     }
 
+    private void setGameScene(){
+
+        try{
+            mapNumber = guiController.getRmiStub().getMatch().getMap().getMapID();
+            System.out.println(mapNumber);
+
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+
+        setAmmo(mapNumber);
+
+        setDeathTrackSkulls();
+
+        setMapGrid();
+
+        setCabinets();
+
+        Label points = setPoints();
+
+        Button moveButton = setButton("src/main/resources/Images/icons/move_icon.png", "Move");
+        Button grabButton = setButton("src/main/resources/Images/icons/grab_icon.png", "Move and grab");
+        Button shootButton = setButton("src/main/resources/Images/icons/shoot_icon.png", "Shoot");
+        Button passButton = setButton("src/main/resources/Images/icons/pass_icon.png", "Pass turn and reload");
+        Button powerUps = setButton("src/main/resources/Images/icons/powerup_icon.png", "");
+        Button playersButton = setButton("src/main/resources/Images/icons/players_icon.png", "");
+        Button weapons = setButton("src/main/resources/Images/icons/weapon_icon.png", "");
+
+        moveButton.setOnAction(e ->
+                moveAction(3)
+        );
+        grabButton.setOnAction(e ->
+                moveGrabAction(1)
+        );
+        shootButton.setOnAction(e -> {
+            try {
+                if (guiController.getRmiStub().checkNumberAction(username)) {
+                    guiController.getRmiStub().useAction(username);
+                    //INIZIO STAMPA DI CONTROLLO
+                    System.out.println("SPAR(T)A");
+                } else {
+                    textArea.setText("You have already used two actions. Pass your turn\n" + textArea.getText());
+                }
+            }
+            catch(RemoteException exc) {
+                exc.printStackTrace();
+            }
+        });
+        passButton.setOnAction(e -> {
+            //TODO maschere per loadare un'arma
+            try {
+                if (guiController.getRmiStub().getActivePlayer().equals(username)) {
+                    guiController.getRmiStub().restoreMap();
+                    setAmmo(mapNumber);
+                    guiController.getRmiStub().resetActionNumber(username);
+                    guiController.getRmiStub().setActivePlayer(username);
+                }
+                else {
+                    System.out.println("It's not your round!!!");
+                }
+            }
+            catch(Exception exc) {
+                exc.printStackTrace();
+            }
+        });
+        powerUps.setOnAction(e -> {
+            HBox box = new HBox();
+            ImageView powerUpView = null;
+            for (PowerUp powerUp: myRemoteView.getPowerUp()) {
+
+                powerUpView = new ImageView(createImage("src/main/resources/Images/PowerUps/" + powerUp.getColor() +"_"+ powerUp.getType() + ".png"));
+                powerUpView.setPreserveRatio(true);
+                powerUpView.setFitHeight(200);
+                box.getChildren().add(powerUpView);
+
+            }
+            display(box, "Power ups");
+        });
+        playersButton.setOnAction(e ->
+                displayPlayers()
+        );
+        weapons.setOnAction(e -> {
+            HBox box = new HBox();
+            ImageView weaponView;
+            Image weaponImage;
+            for (Weapon obj : myRemoteView.getWeapons()) {
+                weaponImage = createImage("src/main/resources/Images/Weapons/" + obj.getType() + ".png");
+                if(!obj.getLoad())
+                    weaponImage = toGrayScale(weaponImage);
+                weaponView = new ImageView(weaponImage);
+                weaponView.setPreserveRatio(true);
+                weaponView.setFitHeight(300);
+                box.getChildren().add(weaponView);
+
+            }
+            display(box, "Weapons");
+        });
+
+        setCubes();
+
+        setFirstPlayer();
+
+        setUserInfos();
+
+        leftMenu.getChildren().addAll(moveButton, grabButton, shootButton, passButton, weapons, powerUps, playersButton, points, cubeBox,userInfoBox);
+        leftMenu.setSpacing(3);
+        setTextArea();
+
+        rightPane.getChildren().add(textArea);
+        rightPane.setSpacing(10);
+
+        stack.getChildren().addAll(setMap(), ammoSet, firstPlayer, deathTrack, cabinets, grid, pawnsGrid);
+        Group root = new Group(stack);
+        root.setTranslateY(-375);
+        root.setTranslateX(25);
+        borderPane.setStyle(BACKGROUND_STYLE);
+        borderPane.setCenter(root);
+        borderPane.setRight(rightPane);
+        borderPane.setLeft(leftMenu);
+        scene = new Scene(borderPane, 1300, 700);
+        window.show();
+
+        Timeline fiveSecondsWonder = new Timeline(new KeyFrame(Duration.seconds(1), e-> {
+
+            if(myRemoteView != null){
+                setCubes();
+                setUserInfos();
+                setFigures();
+                setFirstPlayer();
+                setWeaponView(redBox, myRemoteView.getCabinetRed().getSlot());
+                setWeaponView(yellowBox, myRemoteView.getCabinetYellow().getSlot());
+                setWeaponView(blueBox, myRemoteView.getCabinetBlue().getSlot());
+            }
+        }));
+        fiveSecondsWonder.setCycleCount(Timeline.INDEFINITE);
+        fiveSecondsWonder.play();
+    }
 }
