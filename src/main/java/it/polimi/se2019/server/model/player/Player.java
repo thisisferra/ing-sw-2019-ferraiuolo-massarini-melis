@@ -157,11 +157,9 @@ public class Player implements Serializable {
                 //Add the current ammo into the discardedAmmos list
                 currentMatch.discardAmmo(currentAmmo);
                 //If the ammo I've picked up has a power up -> pick a power up card from ArrayList
-                if(currentAmmo.getPowerUpCard()) {
-                    if (this.playerHand.getPowerUps().size() < 3) {
-                        //Add a power up to player's hand
-                        playerHand.addPowerUp(currentMatch.pickUpPowerUp());
-                    }
+                if(currentAmmo.getPowerUpCard() && this.playerHand.getPowerUps().size() < 3) {
+                    //Add a power up to player's hand
+                    playerHand.addPowerUp(currentMatch.pickUpPowerUp());
                 }
                 //Create an object cubes that contains the cubes in the ammo that I've picked up
                 Cubes currentCubes = currentAmmo.getAmmoCubes();

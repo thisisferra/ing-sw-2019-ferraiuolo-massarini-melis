@@ -27,9 +27,9 @@ import java.rmi.RemoteException;
 public class GUI extends Application {
 
     private String username;
-    private GUIController guiController = new GUIController();
     private RemoteView myRemoteView;
     private Stage window;
+    private GUIController guiController;
     private ToggleGroup mapSelector = new ToggleGroup();
     private GridPane grid = new GridPane();
     private GridPane pawnsGrid = new GridPane();
@@ -204,14 +204,11 @@ public class GUI extends Application {
     private void setAmmo(int map) {
 
         Image ammoBack;
+
         ammoBack = createImage("src/main/resources/Images/Ammo/ammoback.png");
         ammoSet.getChildren().clear();
-        for (int i = 0; i < 12; i++) {
+        for(int i=0; i<12;i++){
             ammoSet.getChildren().add(new ImageView(ammoBack));
-        }
-        for (Node obj : ammoSet.getChildren()) {
-            obj.setTranslateX(-350);
-            obj.setTranslateY(250);
         }
         switch (map) {
 
@@ -242,6 +239,18 @@ public class GUI extends Application {
             obj.setScaleX(0.3);
             obj.setScaleY(0.3);
         }
+
+        try{
+            Square[] realSquares = guiController.getRmiStub().getAllSquares();
+            for(int i=0;i<12;i++){
+                if(realSquares[i].isSpawnPoint() || !realSquares[i].isFull() || realSquares[i].getColor().equals("")){
+                    ammoSet.getChildren().get(i).setTranslateX(-350);
+                    ammoSet.getChildren().get(i).setTranslateY(250);
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private void setCubes() {
@@ -270,27 +279,19 @@ public class GUI extends Application {
     }
 
     private int getMyPoints() {
-        if(myRemoteView!= null)
-            return myRemoteView.getPoints();
-        else return 0;
+        return myRemoteView.getPoints();
     }
 
     private int getMyReds(){
-        if(myRemoteView != null)
-            return myRemoteView.getCubes().getReds();
-        else return 1;
+        return myRemoteView.getCubes().getReds();
     }
 
     private int getMyYellows(){
-        if(myRemoteView != null)
-            return myRemoteView.getCubes().getYellows();
-        else return 1;
+        return myRemoteView.getCubes().getYellows();
     }
 
     private int getMyBlues(){
-        if(myRemoteView != null)
-            return myRemoteView.getCubes().getBlues();
-        else return 1;
+        return myRemoteView.getCubes().getBlues();
     }
 
     private void closeProgram() {
@@ -315,6 +316,7 @@ public class GUI extends Application {
     }
 
     private Scene setLoginScene() {
+
         GridPane layout = new GridPane();
         layout.setPadding(new Insets(50, 75, 50, 75));
         layout.setVgap(10);
@@ -342,7 +344,7 @@ public class GUI extends Application {
         GridPane.setConstraints(loginButton, 1, 3);
         loginButton.setOnAction(e -> {
             try {
-                //guiController = new GUIController();
+                 guiController = new GUIController(IPInput.getText());
                 String usernameTyped = nameInput.getText();
                 boolean check = guiController.getRmiStub().checkUsername(usernameTyped);
                 if (!check) {
@@ -372,14 +374,14 @@ public class GUI extends Application {
                     window.setScene(errorScene);
                 }
                 else {
-                    //TODO save this value on the server before starting the match.
+                    System.out.println("RemoteView Status: "+ myRemoteView!=null + "\n");
+                    setWaitScene();
                     RadioButton mapChoice = (RadioButton) mapSelector.getSelectedToggle();
                     System.out.println("Selected map #: "+ mapChoice.getText() );
                     guiController.setUsername(usernameTyped);
                     this.username = usernameTyped;
                     guiController.getRmiStub().register(usernameTyped, guiController,Integer.parseInt(mapChoice.getText()));
                     myRemoteView = guiController.getMyRemoteView();
-                    setWaitScene();
                     textArea.setText(usernameTyped + "\n" + textArea.getText());
                 }
             } catch (Exception ex) {
@@ -403,6 +405,7 @@ public class GUI extends Application {
     }
 
     private void setWaitScene(){
+        System.out.println("Inizio creazione scena di attesa");
         Label waitLabel = new Label("Please wait.");
         waitLabel.setStyle(LABEL_STYLE);
         BorderPane pane = new BorderPane();
@@ -411,7 +414,9 @@ public class GUI extends Application {
         waitLabel.setAlignment(Pos.CENTER);
         Scene waitScene = new Scene(pane,300,200);
         window.setScene(waitScene);
-            Timeline wait = new Timeline(new KeyFrame(Duration.seconds(10), e->{
+        System.out.println("Inizio attesa 10 secondi");
+        Timeline wait = new Timeline(new KeyFrame(Duration.seconds(10), e->{
+            System.out.println("Fine attesa 10 secondi, setGameScene: ");
                 setGameScene();
                 window.setScene(scene);
             }
@@ -631,11 +636,9 @@ public class GUI extends Application {
     }
 
     private void setCabinets(){
-        if(myRemoteView != null){
-            setWeaponView(redBox, myRemoteView.getCabinetRed().getSlot());
-            setWeaponView(yellowBox, myRemoteView.getCabinetYellow().getSlot());
-            setWeaponView(blueBox, myRemoteView.getCabinetBlue().getSlot());
-        }
+        setWeaponView(redBox, myRemoteView.getCabinetRed().getSlot());
+        setWeaponView(yellowBox, myRemoteView.getCabinetYellow().getSlot());
+        setWeaponView(blueBox, myRemoteView.getCabinetBlue().getSlot());
 
         //blue cabinet
         blueBox.setTranslateX(490);
@@ -665,7 +668,7 @@ public class GUI extends Application {
     }
 
     private void setFirstPlayer(){
-        if(myRemoteView != null && guiController.getAllViews().get(0).getUsername().equals(username)){
+        if(guiController.getAllViews().get(0).getUsername().equals(username)){
             firstPlayer.getChildren().clear();
             ImageView firstPlayerView = new ImageView(createImage("src/main/resources/Images/Playerboards/first_player.png"));
             firstPlayerView.setFitHeight(100);
@@ -742,6 +745,10 @@ public class GUI extends Application {
         ammoSet.getChildren().get(6).setTranslateX(50);
         ammoSet.getChildren().get(6).setTranslateY(80);
 
+        //square 7
+        ammoSet.getChildren().get(7).setTranslateX(190);
+        ammoSet.getChildren().get(7).setTranslateY(77);
+
         //square 9
         ammoSet.getChildren().get(9).setTranslateX(-120);
         ammoSet.getChildren().get(9).setTranslateY(210);
@@ -793,7 +800,7 @@ public class GUI extends Application {
                             boolean isSpawn = guiController.getRmiStub().isSpawnPoint(myRemoteView.getPosition());
                             if (!isSpawn) {
                                 guiController.getRmiStub().pickUpAmmo(myRemoteView.getUsername());
-                                textArea.setText("You have picked up an ammo\n" + textArea.getText());
+                                textArea.setText("You have picked up an ammo:\n"+guiController.getRmiStub().showLastAmmo().toString()+"\n" + textArea.getText());
                             }
                             else {
                                 //TODO to implement
@@ -815,6 +822,7 @@ public class GUI extends Application {
                             }
                             guiController.getRmiStub().useAction(this.username);
                             guiController.getMyRemoteView().setCanMove(false);
+                            setCubes();
                         } catch (Exception exc) {
                             exc.printStackTrace();
                         }
@@ -881,16 +889,15 @@ public class GUI extends Application {
     }
 
     private void setUserInfos(){
-        Label userName = new Label("");
-        Label moves = new Label("Moves:");
-        Image userImage = null;
+        Label userName;
+        Label moves;
+        Image userImage;
         ImageView userView;
         userInfoBox.getChildren().clear();
-        if(myRemoteView != null){
-            userImage = createImage("src/main/resources/Images/icons/"+ myRemoteView.getCharacter() +"_icon.png");
-            userName = new Label(" "+ myRemoteView.getUsername());
-            moves = new Label("Moves: "+ myRemoteView.getNumberOfActions());
-        }
+        userImage = createImage("src/main/resources/Images/icons/"+ myRemoteView.getCharacter() +"_icon.png");
+        userName = new Label(" "+ myRemoteView.getUsername());
+        moves = new Label("Moves: "+ myRemoteView.getNumberOfActions());
+
         userView = new ImageView(userImage);
         userView.setPreserveRatio(true);
         userView.setFitWidth(50);
@@ -1023,9 +1030,9 @@ public class GUI extends Application {
 
     private void setGameScene(){
 
+        System.out.println("Inizio creazione scena di gioco");
         try{
             mapNumber = guiController.getRmiStub().getMatch().getMap().getMapID();
-            System.out.println(mapNumber);
 
         } catch(Exception e){
             e.printStackTrace();
@@ -1125,6 +1132,10 @@ public class GUI extends Application {
 
         setUserInfos();
 
+        setFirstPlayer();
+
+        setCubes();
+
         leftMenu.getChildren().addAll(moveButton, grabButton, shootButton, passButton, weapons, powerUps, playersButton, points, cubeBox,userInfoBox);
         leftMenu.setSpacing(3);
         setTextArea();
@@ -1142,18 +1153,14 @@ public class GUI extends Application {
         borderPane.setLeft(leftMenu);
         scene = new Scene(borderPane, 1300, 700);
         window.show();
-
+        System.out.println("Fine creazione scena di gioco");
         Timeline fiveSecondsWonder = new Timeline(new KeyFrame(Duration.seconds(1), e-> {
-
-            if(myRemoteView != null){
-                setCubes();
-                setUserInfos();
-                setFigures();
-                setFirstPlayer();
-                setWeaponView(redBox, myRemoteView.getCabinetRed().getSlot());
-                setWeaponView(yellowBox, myRemoteView.getCabinetYellow().getSlot());
-                setWeaponView(blueBox, myRemoteView.getCabinetBlue().getSlot());
-            }
+            setUserInfos();
+            setFigures();
+            setAmmo(mapNumber);
+            setWeaponView(redBox, myRemoteView.getCabinetRed().getSlot());
+            setWeaponView(yellowBox, myRemoteView.getCabinetYellow().getSlot());
+            setWeaponView(blueBox, myRemoteView.getCabinetBlue().getSlot());
         }));
         fiveSecondsWonder.setCycleCount(Timeline.INDEFINITE);
         fiveSecondsWonder.play();

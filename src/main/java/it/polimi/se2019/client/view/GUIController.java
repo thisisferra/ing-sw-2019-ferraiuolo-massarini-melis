@@ -23,9 +23,10 @@ public class GUIController implements GUIControllerInterface {
 
     private ArrayList<RemoteView> allViews = new ArrayList<>();
 
-    public GUIController(/*String IPAddress*/) {
+    public GUIController(String IPAddress) {
         try {
-            Registry registry = LocateRegistry.getRegistry("192.168.1.208",0);
+            //Registry registry = LocateRegistry.getRegistry("192.168.",0);
+            Registry registry = LocateRegistry.getRegistry(IPAddress,0);
             rmiStub = (RMIServerInterface) registry.lookup("remServer");
             UnicastRemoteObject.exportObject(this, 0);
         }

@@ -2,6 +2,7 @@ package it.polimi.se2019.server.controller.network.RMI;
 
 import it.polimi.se2019.client.view.GUIController;
 import it.polimi.se2019.client.view.GUIControllerInterface;
+import it.polimi.se2019.server.model.cards.Ammo;
 import it.polimi.se2019.server.model.game.Match;
 import it.polimi.se2019.server.model.map.Square;
 
@@ -19,7 +20,11 @@ public interface RMIServerInterface extends Remote {
 
     ArrayList<Square> reachableSquares(int position, int steps) throws RemoteException;
 
+    Square[] getAllSquares() throws  RemoteException;
+
     void pickUpAmmo(String username) throws RemoteException;
+
+    Ammo showLastAmmo() throws  RemoteException;
 
     void setNewPosition(String username, int newPosition) throws RemoteException;
 

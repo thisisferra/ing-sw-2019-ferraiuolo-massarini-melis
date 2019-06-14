@@ -29,6 +29,6 @@ public class Ammo implements Serializable {
     }
 
     public String toString(){
-        return this.ammoCubes.toString() +" PUC: " + this.powerUpCard;
+        return this.ammoCubes.toString() +"\nPower Up : " + this.powerUpCard;
     }
 }

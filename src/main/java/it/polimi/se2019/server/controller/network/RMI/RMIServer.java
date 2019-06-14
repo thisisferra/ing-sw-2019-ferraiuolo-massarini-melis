@@ -5,6 +5,7 @@ import it.polimi.se2019.client.view.GUIControllerInterface;
 import it.polimi.se2019.server.OneAboveAll;
 import it.polimi.se2019.server.controller.VirtualView;
 import it.polimi.se2019.server.controller.network.Server;
+import it.polimi.se2019.server.model.cards.Ammo;
 import it.polimi.se2019.server.model.cards.weapons.Weapon;
 import it.polimi.se2019.server.model.game.Match;
 import it.polimi.se2019.server.model.game.MovementChecker;
@@ -132,11 +133,21 @@ public class RMIServer extends Server implements RMIServerInterface {
         return movementChecker.getReachableSquares();
     }
 
+    public Square[] getAllSquares(){
+        return match.getMap().getAllSquare();
+    }
+
     public void pickUpAmmo(String username) throws RemoteException{
         Player player = match.searchPlayerByClientName(username);
         Square square = match.getMap().searchSquare(player.getPosition());
         player.pickUpAmmo(square, match);
         this.updateAllClient();
+    }
+
+    public Ammo showLastAmmo() throws  RemoteException{
+        if(!match.getDiscardedAmmos().isEmpty())
+            return match.getDiscardedAmmos().get(match.getDiscardedAmmos().size()-1);
+        else return null;
     }
 
     public void setNewPosition(String username, int newPosition){
