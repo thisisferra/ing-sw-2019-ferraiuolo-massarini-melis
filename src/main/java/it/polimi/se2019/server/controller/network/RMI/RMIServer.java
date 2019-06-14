@@ -221,9 +221,10 @@ public class RMIServer extends Server implements RMIServerInterface {
     }
 
     @Override
-    public void restoreMap(){
+    public void restoreMap()throws RemoteException{
         restoreTile();
         restoreWeaponSlot();
+        updateAllClient();
     }
 
     private void restoreTile() {

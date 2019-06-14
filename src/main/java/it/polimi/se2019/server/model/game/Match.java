@@ -123,7 +123,8 @@ public class Match extends Observable implements Serializable {
 
         try {
             aS = gson.fromJson(new FileReader("./src/main/resources/ammo.json"), Ammo[].class);
-            ammoStack = new ArrayList<>(Arrays.asList(aS));
+            pUS = gson.fromJson(new FileReader("./src/main/resources/powerups.json"),PowerUp[].class);
+
             weaponStack.add(gson.fromJson(new FileReader("./src/main/resources/machine_gun.json"), MachineGun.class));
             weaponStack.add(gson.fromJson(new FileReader("./src/main/resources/plasma_gun.json"), PlasmaGun.class));
             weaponStack.add(gson.fromJson(new FileReader("./src/main/resources/thor.json"), Thor.class));
@@ -145,10 +146,12 @@ public class Match extends Observable implements Serializable {
             weaponStack.add(gson.fromJson(new FileReader("./src/main/resources/shockwave.json"), Shockwave.class));
             weaponStack.add(gson.fromJson(new FileReader("./src/main/resources/cyberblade.json"), Cyberblade.class));
             weaponStack.add(gson.fromJson(new FileReader("./src/main/resources/sledgehammer.json"), Sledgehammer.class));
-            Collections.shuffle(weaponStack);
-            pUS = gson.fromJson(new FileReader("./src/main/resources/powerups.json"),PowerUp[].class);
             powerUpStack = new ArrayList<>(Arrays.asList(pUS));
+            ammoStack = new ArrayList<>(Arrays.asList(aS));
+
+            Collections.shuffle(weaponStack);
             Collections.shuffle(powerUpStack);
+            Collections.shuffle(ammoStack);
 
         } catch (FileNotFoundException e) {
             System.out.println(e);

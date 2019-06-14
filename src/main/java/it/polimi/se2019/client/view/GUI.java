@@ -5,7 +5,9 @@ import it.polimi.se2019.server.model.cards.weapons.Weapon;
 import it.polimi.se2019.server.model.map.Square;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
 import javafx.application.Application;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -318,33 +320,33 @@ public class GUI extends Application {
     private Scene setLoginScene() {
 
         GridPane layout = new GridPane();
-        layout.setPadding(new Insets(50, 75, 50, 75));
+        layout.setPadding(new Insets(50, 75, 50, 25));
         layout.setVgap(10);
 
         //Name input
         TextField nameInput = new TextField();
         nameInput.setPromptText("Username");
         nameInput.setStyle(TEXT_FIELD_STYLE);
-        GridPane.setConstraints(nameInput, 1, 0);
+        GridPane.setConstraints(nameInput, 0, 0);
 
         //Password input
         PasswordField passInput = new PasswordField();
         passInput.setStyle(TEXT_FIELD_STYLE);
         passInput.setPromptText("Password");
-        GridPane.setConstraints(passInput, 1, 1);
+        GridPane.setConstraints(passInput, 0, 1);
 
         //IP input
-        TextField IPInput = new TextField();
-        IPInput.setPromptText("Server IP");
-        IPInput.setStyle(TEXT_FIELD_STYLE);
-        GridPane.setConstraints(IPInput, 1, 2);
+        TextField ipInput = new TextField();
+        ipInput.setPromptText("Server IP");
+        ipInput.setStyle(TEXT_FIELD_STYLE);
+        GridPane.setConstraints(ipInput, 0, 2);
 
         //login button
         Button loginButton = new Button("Log in");
-        GridPane.setConstraints(loginButton, 1, 3);
+        GridPane.setConstraints(loginButton, 0, 3);
         loginButton.setOnAction(e -> {
             try {
-                 guiController = new GUIController(IPInput.getText());
+                 guiController = new GUIController(ipInput.getText());
                 String usernameTyped = nameInput.getText();
                 boolean check = guiController.getRmiStub().checkUsername(usernameTyped);
                 if (!check) {
@@ -390,7 +392,7 @@ public class GUI extends Application {
 
         });
         BorderPane pane = new BorderPane();
-        VBox sideBox = setMapSelector();
+        HBox sideBox = setMapSelector();
         pane.setLeft(sideBox);
         pane.setCenter(layout);
         pane.setPadding(new Insets(10, 10, 10, 10));
@@ -398,8 +400,9 @@ public class GUI extends Application {
         loginButton.setOnMouseEntered(e -> loginButton.setStyle(HIGHLIGHT_BUTTON_STYLE));
         loginButton.setOnMouseExited(e -> loginButton.setStyle(BUTTON_STYLE));
         loginButton.setAlignment(Pos.CENTER);
-        layout.getChildren().addAll(nameInput, passInput, IPInput, loginButton);
-        Scene newScene = new Scene(pane, 400, 250);
+        layout.getChildren().addAll(nameInput, passInput, ipInput, loginButton);
+        layout.setAlignment(Pos.CENTER_LEFT);
+        Scene newScene = new Scene(pane, 500, 400);
         pane.setStyle(BACKGROUND_STYLE);
         return newScene;
     }
@@ -427,28 +430,70 @@ public class GUI extends Application {
 
     }
 
-    private VBox setMapSelector() {
+    private HBox setMapSelector() {
         VBox sideBox = new VBox();
+        VBox mapsBox = new VBox();
+        HBox box1 = new HBox();
+        ImageView map1 = new ImageView(createImage("src/main/resources/Images/Maps/map1_preview.png"));
+        ImageView map2 = new ImageView(createImage("src/main/resources/Images/Maps/map2_preview.png"));
+        ImageView map3 = new ImageView(createImage("src/main/resources/Images/Maps/map3_preview.png"));
+        ImageView map4 = new ImageView(createImage("src/main/resources/Images/Maps/map4_preview.png"));
+        map1.setPreserveRatio(true);
+        map2.setPreserveRatio(true);
+        map3.setPreserveRatio(true);
+        map4.setPreserveRatio(true);
+        map1.setFitWidth(100);
+        map2.setFitWidth(100);
+        map3.setFitWidth(100);
+        map4.setFitWidth(100);
+        mapsBox.getChildren().addAll(map1,map2,map3,map4);
+        box1.prefHeightProperty().bind(box1.heightProperty());
+        box1.setPrefWidth(200);
+        box1.setTranslateX(-110);
+        TranslateTransition menuTranslation = new TranslateTransition(Duration.millis(500), box1);
+
+        menuTranslation.setFromX(-110);
+        menuTranslation.setToX(0);
+
+        box1.setOnMouseEntered(evt -> {
+            menuTranslation.setRate(1);
+            menuTranslation.play();
+        });
+        box1.setOnMouseExited(evt -> {
+            menuTranslation.setRate(-1);
+            menuTranslation.play();
+        });
+
+
         RadioButton button1 = new RadioButton("1");
         button1.setToggleGroup(mapSelector);
         button1.setStyle(LABEL_STYLE);
         button1.setSelected(true);
+
         RadioButton button2 = new RadioButton("2");
         button2.setStyle(LABEL_STYLE);
         button2.setToggleGroup(mapSelector);
+
         RadioButton button3 = new RadioButton("3");
         button3.setStyle(LABEL_STYLE);
         button3.setToggleGroup(mapSelector);
+
         RadioButton button4 = new RadioButton("4");
         button4.setStyle(LABEL_STYLE);
         button4.setToggleGroup(mapSelector);
+
         Label selectMap = new Label("Select map: ");
         selectMap.setStyle(LABEL_STYLE);
-        sideBox.getChildren().addAll(selectMap, button1, button2, button3, button4);
-        sideBox.setSpacing(10);
+        sideBox.getChildren().addAll(selectMap,button1, button2, button3, button4);
+        box1.getChildren().addAll(mapsBox,sideBox);
+        box1.setSpacing(10);
+        mapsBox.setAlignment(Pos.CENTER);
+        mapsBox.setStyle(BUTTON_STYLE);
+        mapsBox.setSpacing(10);
+        sideBox.setSpacing(20);
         sideBox.setAlignment(Pos.CENTER);
         sideBox.setStyle(BUTTON_STYLE);
-        return sideBox;
+        return box1;
     }
 
     private void setTextArea(){
@@ -619,7 +664,7 @@ public class GUI extends Application {
         window = primaryStage;
         window.setScene(setLoginScene());
         window.setTitle("Adrenaline");
-        window.setResizable(true);
+        window.setResizable(false);
         window.setFullScreen(false);
         window.alwaysOnTopProperty();
         window.setOnCloseRequest(e -> {

@@ -22,7 +22,6 @@ public class Map implements Serializable {
         return this.mapID;
     }
 
-
     //get an array of all squares of the map
     public Square[] getAllSquare(){
         return this.allSquare;
