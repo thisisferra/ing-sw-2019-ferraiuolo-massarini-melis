@@ -50,9 +50,6 @@ public class RemoteView {
     public RemoteView(String username) {
         this.username = username;
     }
-
-
-
     /* * *   GETTERS   * * */
 
     /**

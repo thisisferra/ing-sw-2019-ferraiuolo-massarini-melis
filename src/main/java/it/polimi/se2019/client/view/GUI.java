@@ -46,6 +46,7 @@ public class GUI extends Application {
     private VBox rightPane = new VBox();
     private int indexToPickUp = -1;
     private int indexToDrop = -1;
+    private Pane firstPlayer = new Pane();
     private BorderPane borderPane = new BorderPane();
     private TextArea textArea = new TextArea("Welcome to Adrenaline!");
     static final String BUTTON_STYLE = "-fx-background-color: #3c3c3c;-fx-text-fill: #999999;";
@@ -158,7 +159,7 @@ public class GUI extends Application {
 
         setCubes();
 
-        ImageView firstPlayer = setFirstPlayer();
+        setFirstPlayer();
 
         setUserInfos();
 
@@ -186,6 +187,7 @@ public class GUI extends Application {
                 setCubes();
                 setUserInfos();
                 setFigures();
+                setFirstPlayer();
                 setWeaponView(redBox, myRemoteView.getCabinetRed().getSlot());
                 setWeaponView(yellowBox, myRemoteView.getCabinetYellow().getSlot());
                 setWeaponView(blueBox, myRemoteView.getCabinetBlue().getSlot());
@@ -199,7 +201,7 @@ public class GUI extends Application {
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 4; col++) {
                 Rectangle box = new Rectangle(160, 160);
-                box.setFill(Color.color(1, 1, 1, 0.1));
+                box.setFill(Color.color(1, 1, 1, 0));
                 box.setId(Integer.toString(row * 4 + col));
                 grid.add(box, col, row);
             }
@@ -787,13 +789,16 @@ public class GUI extends Application {
         return points;
     }
 
-    private ImageView setFirstPlayer(){
-        ImageView firstPlayer = new ImageView(createImage("src/main/resources/Images/Playerboards/first_player.png"));
-        firstPlayer.setFitHeight(100);
-        firstPlayer.setPreserveRatio(true);
-        firstPlayer.setTranslateX(-400);
-        firstPlayer.setTranslateY(275);
-        return firstPlayer;
+    private void setFirstPlayer(){
+        if(myRemoteView != null && guiController.getAllViews().get(0).getUsername().equals(username)){
+            firstPlayer.getChildren().clear();
+            ImageView firstPlayerView = new ImageView(createImage("src/main/resources/Images/Playerboards/first_player.png"));
+            firstPlayerView.setFitHeight(100);
+            firstPlayerView.setPreserveRatio(true);
+            firstPlayerView.setTranslateX(30);
+            firstPlayerView.setTranslateY(580);
+            firstPlayer.getChildren().add(firstPlayerView);
+        }
     }
 
     private void setAmmoA1(){
@@ -994,7 +999,7 @@ public class GUI extends Application {
     private void restoreSquares(){
         for (int j = 0; j < 12; j++) {
             Rectangle rect = (Rectangle) grid.getChildren().get(j);
-            rect.setFill(Color.color(1, 1, 1, 0.1));
+            rect.setFill(Color.color(1, 1, 1, 0.0));
             rect.setOnMouseClicked(g -> {
             });
         }
@@ -1025,42 +1030,8 @@ public class GUI extends Application {
         Stage cabinetWindow = new Stage();
         String color = null;
         HBox locker = new HBox();
-        GridPane choiceBox = new GridPane();
         Image weaponImage = null;
         ImageView weaponView = null;
-        int availableWeapons =0;
-
-        ToggleGroup weaponSelection = new ToggleGroup();
-        RadioButton button0 = new RadioButton("0");
-        button0.setToggleGroup(weaponSelection);
-        button0.setStyle(LABEL_STYLE);
-
-        RadioButton button1 = new RadioButton("1");
-        button1.setStyle(LABEL_STYLE);
-        button1.setToggleGroup(weaponSelection);
-
-
-        RadioButton button2 = new RadioButton("2");
-        button2.setStyle(LABEL_STYLE);
-        button2.setToggleGroup(weaponSelection);
-
-        Button confirm = new Button("Confirm");
-        confirm.setStyle(BUTTON_STYLE);
-        confirm.setOnMouseEntered(ent ->
-                confirm.setStyle(HIGHLIGHT_BUTTON_STYLE));
-        confirm.setOnMouseExited(ex ->
-                confirm.setStyle(BUTTON_STYLE));
-        confirm.setOnAction(e->{
-            RadioButton weaponChoice = (RadioButton) weaponSelection.getSelectedToggle();
-            indexToPickUp = Integer.parseInt(weaponChoice.getText());
-            if(myRemoteView.getWeapons().size()==3)
-                displayWeaponHand();
-            cabinetWindow.close();
-        });
-        choiceBox.setConstraints(button0,0,0);
-        choiceBox.setConstraints(button1,3,0);
-        choiceBox.setConstraints(button2,6,0);
-        choiceBox.setConstraints(confirm,4,1);
 
         if(myRemoteView.getPosition() == 4){
             color = "Red";
@@ -1073,19 +1044,13 @@ public class GUI extends Application {
                     weaponView.setId(Integer.toString(i));
                     locker.getChildren().add(weaponView);
                     locker.setSpacing(5);
-                    if(i==0)
-                        choiceBox.getChildren().add(button0);
-                    if(i==1)
-                        choiceBox.getChildren().add(button1);
-                    if(i==2)
-                        choiceBox.getChildren().add(button2);
                 }
 
             }
         }else if(myRemoteView.getPosition() == 11){
             color = "Yellow";
             for(int i = 0; i<myRemoteView.getCabinetYellow().getSlot().length; i++){
-                if(myRemoteView.getCabinetRed().getSlot()[i] != null){
+                if(myRemoteView.getCabinetYellow().getSlot()[i] != null){
                     weaponImage = createImage("src/main/resources/Images/Weapons/"+ myRemoteView.getCabinetYellow().getSlot()[i].getType() +".png");
                     weaponView = new ImageView(weaponImage);
                     weaponView.setFitWidth(200);
@@ -1093,12 +1058,6 @@ public class GUI extends Application {
                     weaponView.setId(Integer.toString(i));
                     locker.getChildren().add(weaponView);
                     locker.setSpacing(5);
-                    if(i==0)
-                        choiceBox.getChildren().add(button0);
-                    if(i==1)
-                        choiceBox.getChildren().add(button1);
-                    if(i==2)
-                        choiceBox.getChildren().add(button2);
                 }
 
             }
@@ -1106,7 +1065,7 @@ public class GUI extends Application {
         } else if(myRemoteView.getPosition() == 2){
             color = "Blue";
             for(int i = 0; i<myRemoteView.getCabinetBlue().getSlot().length; i++){
-                if(myRemoteView.getCabinetRed().getSlot()[i] != null){
+                if(myRemoteView.getCabinetBlue().getSlot()[i] != null){
                     weaponImage = createImage("src/main/resources/Images/Weapons/"+ myRemoteView.getCabinetBlue().getSlot()[i].getType() +".png");
                     weaponView = new ImageView(weaponImage);
                     weaponView.setFitWidth(200);
@@ -1114,16 +1073,20 @@ public class GUI extends Application {
                     weaponView.setId(Integer.toString(i));
                     locker.getChildren().add(weaponView);
                     locker.setSpacing(5);
-                    if(i==0)
-                        choiceBox.getChildren().add(button0);
-                    if(i==1)
-                        choiceBox.getChildren().add(button1);
-                    if(i==2)
-                        choiceBox.getChildren().add(button2);
                 }
             }
         }
-        choiceBox.getChildren().add(confirm);
+
+        for(Node obj : locker.getChildren()){
+            ImageView view = (ImageView) obj;
+            obj.setOnMouseClicked(e->{
+                indexToPickUp = Integer.parseInt(view.getId());
+                if(myRemoteView.getWeapons().size()==3)
+                    displayWeaponHand();
+                cabinetWindow.close();
+            });
+
+        }
         Label info = new Label("Choose a weapon");
         info.setStyle(LABEL_STYLE);
         BorderPane weaponPane = new BorderPane();
@@ -1132,7 +1095,6 @@ public class GUI extends Application {
         weaponPane.setCenter(locker);
         weaponPane.setStyle(BACKGROUND_STYLE);
         weaponPane.setTop(info);
-        weaponPane.setBottom(choiceBox);
         Scene cabinetScene = new Scene(weaponPane);
         cabinetWindow.setOnCloseRequest( e -> {
             indexToDrop = -1;
@@ -1145,58 +1107,28 @@ public class GUI extends Application {
     private void displayWeaponHand(){
         Stage weaponHandWindow = new Stage();
         HBox hand = new HBox();
-        GridPane choiceBox = new GridPane();
         Image weaponImage = null;
         ImageView weaponView = null;
 
-        ToggleGroup weaponSelection = new ToggleGroup();
-        RadioButton button0 = new RadioButton("0");
-        button0.setToggleGroup(weaponSelection);
-        button0.setStyle(LABEL_STYLE);
-
-        RadioButton button1 = new RadioButton("1");
-        button1.setStyle(LABEL_STYLE);
-        button1.setToggleGroup(weaponSelection);
-
-
-        RadioButton button2 = new RadioButton("2");
-        button2.setStyle(LABEL_STYLE);
-        button2.setToggleGroup(weaponSelection);
-
-        Button confirm = new Button("Confirm");
-        confirm.setStyle(BUTTON_STYLE);
-        confirm.setOnMouseEntered(ent ->
-                confirm.setStyle(HIGHLIGHT_BUTTON_STYLE));
-        confirm.setOnMouseExited(ex ->
-                confirm.setStyle(BUTTON_STYLE));
-        confirm.setOnAction(e->{
-            RadioButton weaponChoice = (RadioButton) weaponSelection.getSelectedToggle();
-            indexToDrop = Integer.parseInt(weaponChoice.getText());
-            weaponHandWindow.close();
-        });
-        choiceBox.setConstraints(button0,0,0);
-        choiceBox.setConstraints(button1,3,0);
-        choiceBox.setConstraints(button2,6,0);
-        choiceBox.setConstraints(confirm,4,1);
-
         for(int i = 0; i<myRemoteView.getWeapons().size(); i++){
+            weaponImage = createImage("src/main/resources/Images/Weapons/"+ myRemoteView.getWeapons().get(i).getType() +".png");
+            weaponView = new ImageView(weaponImage);
+            weaponView.setFitWidth(200);
+            weaponView.setPreserveRatio(true);
+            weaponView.setId(Integer.toString(i));
+            hand.getChildren().add(weaponView);
+            hand.setSpacing(5);
 
-                weaponImage = createImage("src/main/resources/Images/Weapons/"+ myRemoteView.getWeapons().get(i).getType() +".png");
-                weaponView = new ImageView(weaponImage);
-                weaponView.setFitWidth(200);
-                weaponView.setPreserveRatio(true);
-                weaponView.setId(Integer.toString(i));
-                hand.getChildren().add(weaponView);
-                hand.setSpacing(5);
-                if(i==0)
-                    choiceBox.getChildren().add(button0);
-                if(i==1)
-                    choiceBox.getChildren().add(button1);
-                if(i==2)
-                    choiceBox.getChildren().add(button2);
-            }
+        }
 
-        choiceBox.getChildren().add(confirm);
+        for(Node obj : hand.getChildren()){
+            ImageView view = (ImageView) obj;
+            view.setOnMouseClicked(e-> {
+                indexToDrop = Integer.parseInt(view.getId());
+                weaponHandWindow.close();
+            });
+        }
+
         Label info = new Label("Choose a weapon to discard");
         info.setStyle(LABEL_STYLE);
         BorderPane weaponPane = new BorderPane();
@@ -1205,7 +1137,6 @@ public class GUI extends Application {
         weaponPane.setCenter(hand);
         weaponPane.setStyle(BACKGROUND_STYLE);
         weaponPane.setTop(info);
-        weaponPane.setBottom(choiceBox);
         Scene cabinetScene = new Scene(weaponPane);
         weaponHandWindow.setOnCloseRequest( e -> {
             indexToDrop = -1;
