@@ -3,6 +3,8 @@ package it.polimi.se2019.server.controller.network.RMI;
 import it.polimi.se2019.client.view.GUIController;
 import it.polimi.se2019.client.view.GUIControllerInterface;
 import it.polimi.se2019.server.OneAboveAll;
+import it.polimi.se2019.server.controller.InfoShot;
+import it.polimi.se2019.server.controller.ShotController;
 import it.polimi.se2019.server.controller.VirtualView;
 import it.polimi.se2019.server.controller.network.Server;
 import it.polimi.se2019.server.model.cards.Ammo;
@@ -48,6 +50,8 @@ public class RMIServer extends Server implements RMIServerInterface {
     private Registry rmiRegistry;
 
     private ArrayList<VirtualView> allVirtualViews = new ArrayList<>();
+
+    private ShotController shotController;
 
     //Metodi
 
@@ -258,6 +262,7 @@ public class RMIServer extends Server implements RMIServerInterface {
         match = new Match(mapId);
         this.mapId = 1;
         match.initializeMatch();
+        this.shotController = new ShotController(this.match);
         out.println("Match created");
     }
 
@@ -311,8 +316,22 @@ public class RMIServer extends Server implements RMIServerInterface {
         return this.activePlayer.getClientName();
     }
 
-    public void resetActionNumber(String username) {
+    public void resetActionNumber(String username) throws RemoteException{
         Player currentPlayer = this.match.searchPlayerByClientName(username);
         currentPlayer.resetNumberOfAction();
+        this.updateAllClient();
+    }
+
+    public ArrayList<Weapon> verifyWeapons(String username) {
+        Player currentPlayer = this.match.searchPlayerByClientName(username);
+        return getShotController().checkAll(currentPlayer);
+    }
+
+    public ShotController getShotController() {
+        return this.shotController;
+    }
+
+    public void applyEffect(InfoShot infoShot) {
+        infoShot.getWeapon().applyEffect(infoShot);
     }
 }

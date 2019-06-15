@@ -1,5 +1,6 @@
 package it.polimi.se2019.client.view;
 
+import it.polimi.se2019.server.controller.InfoShot;
 import it.polimi.se2019.server.controller.VirtualView;
 import it.polimi.se2019.server.controller.network.RMI.RMIServerInterface;
 import it.polimi.se2019.server.model.cards.weapons.Weapon;
@@ -142,5 +143,14 @@ public class GUIController implements GUIControllerInterface {
             out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
             out.println();
         }
+    }
+
+    public void verifyWeapons() throws RemoteException{
+        RemoteView myRemoteView = this.getMyRemoteView();
+        myRemoteView.setAvailableWeapon(this.getRmiStub().verifyWeapons(this.username));
+    }
+
+    public void applyEffect(InfoShot infoShot) throws RemoteException{
+        this.getRmiStub().applyEffect(infoShot);
     }
 }

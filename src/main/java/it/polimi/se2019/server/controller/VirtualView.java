@@ -28,6 +28,7 @@ public class VirtualView implements Serializable {
     private WeaponSlot cabinetRed;
     private WeaponSlot cabinetYellow;
     private WeaponSlot cabinetBlue;
+    private InfoShot infoShot;
 
     //COSTRUTTORE
     public VirtualView(GUIControllerInterface clientReference) {
@@ -84,6 +85,10 @@ public class VirtualView implements Serializable {
         return this.cabinetBlue;
     }
 
+    public InfoShot getInfoShot() { return
+            this.infoShot;
+    }
+
 
     //SETTER
 
@@ -131,6 +136,10 @@ public class VirtualView implements Serializable {
         this.cabinetBlue = cabinetBlue;
     }
 
+    public void setInfoShot(InfoShot infoShot) {
+        this.infoShot = infoShot;
+    }
+
     //ALTRO
 
     public void initializeVirtualView(Player player, Match match) {
@@ -143,6 +152,7 @@ public class VirtualView implements Serializable {
         this.setCabinetRed(match.getArsenal().get(0));
         this.setCabinetYellow(match.getArsenal().get(1));
         this.setCabinetBlue(match.getArsenal().get(2));
+
     }
 
     /*

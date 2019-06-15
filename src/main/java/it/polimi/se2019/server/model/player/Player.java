@@ -1,6 +1,7 @@
 package it.polimi.se2019.server.model.player;
 
 import it.polimi.se2019.server.controller.Controller;
+import it.polimi.se2019.server.controller.ShotController;
 import it.polimi.se2019.server.model.cards.Ammo;
 import it.polimi.se2019.server.model.cards.PowerUp;
 import it.polimi.se2019.server.model.game.Cubes;
@@ -30,6 +31,7 @@ public class Player implements Serializable {
     private PlayerBoard playerBoard;
     private Match match;
     private int numberOfAction = 2;
+    private ShotController shotController;
 
     public Player(String clientName, Match match) {
         this.clientName = clientName;
@@ -40,6 +42,7 @@ public class Player implements Serializable {
         this.firstPlayer = false;
         this.playerBoard = new PlayerBoard(this);
         this.playerHand = new Hand();
+        this.shotController = new ShotController(match);
     }
 
     public String getCharacter() {
@@ -137,6 +140,10 @@ public class Player implements Serializable {
 
     public void resetNumberOfAction() {
         this.numberOfAction = 2;
+    }
+
+    public ShotController getShotController() {
+        return this.shotController;
     }
 
     /**
@@ -341,7 +348,7 @@ public class Player implements Serializable {
 
     @Override
     public String toString(){
-        return (this.clientName + " " + this.color + " " + this.getPosition());
+        return (this.clientName + " - " + this.character + " - " + this.getPosition());
     }
 
     /**

@@ -1,5 +1,6 @@
 package it.polimi.se2019.client.view;
 
+import it.polimi.se2019.server.controller.ShotController;
 import it.polimi.se2019.server.model.cards.PowerUp;
 import it.polimi.se2019.server.model.cards.weapons.Weapon;
 import it.polimi.se2019.server.model.map.Square;
@@ -1109,12 +1110,24 @@ public class GUI extends Application {
         );
         shootButton.setOnAction(e -> {
             try {
-                if (guiController.getRmiStub().checkNumberAction(username)) {
-                    guiController.getRmiStub().useAction(username);
-                    //INIZIO STAMPA DI CONTROLLO
-                    System.out.println("SPAR(T)A");
+                if (guiController.getRmiStub().getActivePlayer().equals(this.username)) {
+                    if (guiController.getRmiStub().checkNumberAction(username)) {
+                        guiController.verifyWeapons();
+                        guiController.getRmiStub().useAction(username);
+                        if (myRemoteView.getUsableWeapon().size() > 0) {
+                            for (Weapon weapon : myRemoteView.getUsableWeapon()) {
+                                for (int i = 0; i < weapon.getEffect().length; i++)
+                                System.out.println(weapon.getEffect()[i]);
+                            }
+                        }
+                        else{
+                            textArea.setText("You can't use any weapon\n" + textArea.getText());
+                        }
+                    } else {
+                        textArea.setText("You have already used two actions. Pass your turn\n" + textArea.getText());
+                    }
                 } else {
-                    textArea.setText("You have already used two actions. Pass your turn\n" + textArea.getText());
+                    textArea.setText("It's not your round\n" + textArea.getText());
                 }
             }
             catch(RemoteException exc) {

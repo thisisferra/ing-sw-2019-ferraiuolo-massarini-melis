@@ -8,11 +8,12 @@ import it.polimi.se2019.server.model.game.RoomChecker;
 import it.polimi.se2019.server.model.map.Square;
 import it.polimi.se2019.server.model.player.Player;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ShotController {
+public class ShotController implements Serializable {
 
     Controller controller;
     Match match;
@@ -60,7 +61,7 @@ public class ShotController {
         return loadedWeapon;
     }
 
-    public ArrayList<Weapon> checkVisibility(Match match, Player currentPlayer, ArrayList<Weapon> checkedWeapon) {
+    private ArrayList<Weapon> checkVisibility(Match match, Player currentPlayer, ArrayList<Weapon> checkedWeapon) {
         boolean usable = false;
         ArrayList<Weapon> weaponCanUse = new ArrayList<>();
         ArrayList<Player> visiblePlayers = new ArrayList<>();

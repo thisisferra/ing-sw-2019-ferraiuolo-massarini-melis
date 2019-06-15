@@ -2,7 +2,9 @@ package it.polimi.se2019.server.controller.network.RMI;
 
 import it.polimi.se2019.client.view.GUIController;
 import it.polimi.se2019.client.view.GUIControllerInterface;
+import it.polimi.se2019.server.controller.InfoShot;
 import it.polimi.se2019.server.model.cards.Ammo;
+import it.polimi.se2019.server.model.cards.weapons.Weapon;
 import it.polimi.se2019.server.model.game.Match;
 import it.polimi.se2019.server.model.map.Square;
 
@@ -47,5 +49,9 @@ public interface RMIServerInterface extends Remote {
     String getActivePlayer() throws RemoteException;
 
     void resetActionNumber(String username) throws RemoteException;
+
+    ArrayList<Weapon> verifyWeapons(String username) throws RemoteException;
+
+    void applyEffect(InfoShot infoShot) throws RemoteException;
 
 }

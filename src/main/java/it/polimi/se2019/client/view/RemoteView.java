@@ -1,7 +1,7 @@
 package it.polimi.se2019.client.view;
 
+import it.polimi.se2019.server.controller.InfoShot;
 import it.polimi.se2019.server.controller.VirtualView;
-import it.polimi.se2019.server.controller.network.RMI.RMIServerInterface;
 import it.polimi.se2019.server.model.cards.PowerUp;
 import it.polimi.se2019.server.model.cards.weapons.Weapon;
 import it.polimi.se2019.server.model.game.Cubes;
@@ -39,6 +39,8 @@ public class RemoteView {
     private WeaponSlot cabinetRed;
     private WeaponSlot cabinetYellow;
     private WeaponSlot cabinetBlue;
+    private InfoShot infoShot;
+    private ArrayList<Weapon> usableWeapon = new ArrayList<>();
 
     /**
      * Constructor of the class.
@@ -259,6 +261,14 @@ public class RemoteView {
         return this.cabinetBlue;
     }
 
+    public InfoShot getInfoShot() {
+        return this.infoShot;
+    }
+
+    public ArrayList<Weapon> getUsableWeapon() {
+        return this.usableWeapon;
+    }
+
 
 
     /* * *   SETTERS   * * */
@@ -368,7 +378,10 @@ public class RemoteView {
         this.cabinetBlue = cabinetBlue;
     }
 
-
+    public void setAvailableWeapon(ArrayList<Weapon> availableWeapon) {
+        this.usableWeapon.clear();
+        this.usableWeapon = availableWeapon;
+    }
 
     /* * *   OTHER   * * */
 

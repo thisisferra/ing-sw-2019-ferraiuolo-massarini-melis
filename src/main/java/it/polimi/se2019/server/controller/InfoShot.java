@@ -23,17 +23,45 @@ public class InfoShot {
 
     }
 
-    public String getNameEffect() {
-        return nameEffect;
+    /* * *   GETTERS   * * */
+
+    public Weapon getWeapon() {
+        return this.weapon;
     }
 
-    public Player getDamagingPlayer(){
+    public String getNameEffect() {
+        return this.nameEffect;
+    }
+
+    public Player getDamagingPlayer() {
         return this.damagingPlayer;
+    }
+
+    public ArrayList<Player> getTargetablePlayer() {
+        return this.targetablePlayer;
     }
 
     public ArrayList<Player> getTargetPlayer() {
         return this.targetPlayers;
     }
+
+    public ArrayList<Player> getAlreadyTarget() {
+        return alreadyTarget;
+    }
+
+    public String getCardinalDirection() {
+        return cardinalDirection;
+    }
+
+    public int getNumberOfMoves() {
+        return numberOfMoves;
+    }
+
+    public int getNewPosition() {
+        return this.newPosition;
+    }
+
+    /* * *   SETTERS   * * */
 
     public void setWeapon(Weapon weapon) {
         this.weapon = weapon;
@@ -71,31 +99,10 @@ public class InfoShot {
         this.newPosition = newPosition;
     }
 
-    public Weapon getWeapon() {
-        return weapon;
-    }
 
-    public ArrayList<Player> getTargetablePlayer() {
-        return targetablePlayer;
-    }
 
-    public ArrayList<Player> getTargetPlayers() {
-        return targetPlayers;
-    }
 
-    public ArrayList<Player> getAlreadyTarget() {
-        return alreadyTarget;
-    }
 
-    public String getCardinalDirection() {
-        return cardinalDirection;
-    }
 
-    public int getNumberOfMoves() {
-        return numberOfMoves;
-    }
 
-    public int getNewPosition() {
-        return newPosition;
-    }
 }
