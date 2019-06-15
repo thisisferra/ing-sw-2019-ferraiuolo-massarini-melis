@@ -32,6 +32,7 @@ public class RemoteView {
     private int deathsPlayerBoard;                                      //Info useful for Player-board GUI
     private ArrayList<Weapon> weapons = new ArrayList<>();
     private ArrayList<PowerUp> powerUp = new ArrayList<>();
+    private ArrayList<Player> killShotTrack = new ArrayList<>();
     private boolean canMove = false;
     private Cubes cubes;
     private ArrayList<Square> reachableSquare = new ArrayList<>();
@@ -403,15 +404,23 @@ public class RemoteView {
      */
 
     public void updateRemoteView(VirtualView virtualView) {
+        // public infos
         this.username = virtualView.getUsername();
-        this.character = virtualView.getCharacter();
-        this.position = virtualView.getPosition();
-        this.cubes = virtualView.getCubes();
-        this.cabinetRed = virtualView.getCabinetRed();
-        this.cabinetYellow = virtualView.getCabinetYellow();
-        this.cabinetBlue = virtualView.getCabinetBlue();
+        setCharacter(virtualView.getCharacter());
+        setPosition(virtualView.getPosition());
+        setCubes(virtualView.getCubes());
+        setCabinetRed(virtualView.getCabinetRed());
+        setCabinetYellow(virtualView.getCabinetYellow());
+        setCabinetBlue(virtualView.getCabinetBlue());
+        //setPhaseAction();
+        //setFinalFrenzy();
+        //setDeathsPlayerBoard();
+        //setMarkPlayerBoard();
+        //setDamagePlayerBoard();
         if (this.username.equals(virtualView.getUsername())) {
-            this.numberOfActions = virtualView.getNumberOfAction();
+            // private infos
+            setNumberOfActions(virtualView.getNumberOfAction());
+            //setPoints();
             this.weapons = virtualView.getWeapons();
             this.powerUp = virtualView.getPowerUps();
 

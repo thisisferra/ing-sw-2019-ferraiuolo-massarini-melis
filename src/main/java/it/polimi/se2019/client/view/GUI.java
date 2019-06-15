@@ -4,11 +4,11 @@ import it.polimi.se2019.server.controller.ShotController;
 import it.polimi.se2019.server.model.cards.PowerUp;
 import it.polimi.se2019.server.model.cards.weapons.Weapon;
 import it.polimi.se2019.server.model.map.Square;
+import it.polimi.se2019.server.model.player.Player;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -26,6 +26,7 @@ import javafx.util.Duration;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 
 public class GUI extends Application {
 
@@ -40,7 +41,7 @@ public class GUI extends Application {
     private HBox blueBox = new HBox();
     private HBox yellowBox = new HBox();
     private StackPane cabinets = new StackPane();
-    private HBox deathTrack = new HBox();
+    private HBox killShotTrack = new HBox();
     private VBox cubeBox = new VBox();
     private StackPane ammoSet = new StackPane();
     private VBox leftMenu = new VBox();
@@ -86,7 +87,6 @@ public class GUI extends Application {
         }
         grid.setTranslateX(149);
         grid.setTranslateY(145);
-        grid.setGridLinesVisible(true);
         grid.setPickOnBounds(false);
     }
 
@@ -126,22 +126,36 @@ public class GUI extends Application {
             }
     }
 
-    private void setDeathTrackSkulls() {
+    private void setKillShotTrack() {
 
         Image skullImage = createImage("src/main/resources/Images/icons/skull_icon.png");
         ImageView skullView;
+        ArrayList<Player> killShotTrackList = new ArrayList<>();
+        try{
+            killShotTrackList = guiController.getRmiStub().getKillShotTrack();
 
-        for (int i = 0; i < 8; i++) {
+            for(Player player : killShotTrackList){
+                skullImage = createImage("src/main/resources/Images/icons/"+ player.getCharacter()+"_icon.png");
+                skullView = new ImageView(skullImage);
+                skullView.setFitHeight(40);
+                skullView.setSmooth(true);
+                skullView.setPreserveRatio(true);
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        for (int i = 0; i < 8-killShotTrackList.size(); i++) {
             skullView = new ImageView(skullImage);
             skullView.setFitHeight(40);
             skullView.setSmooth(true);
             skullView.setPreserveRatio(true);
-            deathTrack.getChildren().add(skullView);
+            killShotTrack.getChildren().add(skullView);
         }
-        deathTrack.setTranslateX(66);
-        deathTrack.setTranslateY(40);
-        deathTrack.setSpacing(8);
-        deathTrack.setPickOnBounds(false);
+        killShotTrack.setTranslateX(66);
+        killShotTrack.setTranslateY(40);
+        killShotTrack.setSpacing(8);
+        killShotTrack.setPickOnBounds(false);
     }
 
     private VBox setPlayerBoardsStack(){
@@ -340,6 +354,7 @@ public class GUI extends Application {
         TextField ipInput = new TextField();
         ipInput.setPromptText("Server IP");
         ipInput.setStyle(TEXT_FIELD_STYLE);
+        ipInput.setPromptText("192.168.1.1");
         GridPane.setConstraints(ipInput, 0, 2);
 
         //login button
@@ -527,7 +542,6 @@ public class GUI extends Application {
         }
         pawnsGrid.setTranslateX(149);
         pawnsGrid.setTranslateY(145);
-        pawnsGrid.setGridLinesVisible(true);
         pawnsGrid.setPickOnBounds(false);
         pawnsGrid.setMouseTransparent(true);
     }
@@ -604,38 +618,6 @@ public class GUI extends Application {
         playersWindow.setScene(playersScene);
         playersWindow.setWidth(500);
         playersWindow.showAndWait();
-    }
-
-    private void display(Pane pane, String message){
-        Stage window = new Stage();
-        Pane layout = null;
-        Label info = new Label("Current "+ message + " are:");
-        BorderPane borderPane = new BorderPane();
-
-        info.setStyle("-fx-text-fill: #bdbdbd");
-        window.initModality(Modality.APPLICATION_MODAL);
-        window.setTitle(message);
-
-        Button closeButton = setHomeButton(window);
-        if(pane instanceof VBox){
-            layout = new VBox();
-        }else if(pane instanceof HBox){
-            layout = new HBox();
-        }
-
-        if(layout != null){
-            layout.getChildren().addAll(pane.getChildren());
-            layout.setStyle(BACKGROUND_STYLE);
-        }
-
-        borderPane.setTop(info);
-        borderPane.setCenter(layout);
-        borderPane.setBottom(closeButton);
-        borderPane.setStyle(BACKGROUND_STYLE);
-        borderPane.setAlignment(closeButton,Pos.CENTER);
-        Scene scene = new Scene(borderPane);
-        window.setScene(scene);
-        window.showAndWait();
     }
 
     private Button setHomeButton(Stage window){
@@ -826,6 +808,7 @@ public class GUI extends Application {
                 }
             }
         }
+        grid.setGridLinesVisible(true);
     }
 
     private void setMoveGrabSquares(){
@@ -876,6 +859,7 @@ public class GUI extends Application {
                 }
             }
         }
+        grid.setGridLinesVisible(true);
     }
 
     private void moveAction(int steps){
@@ -932,6 +916,8 @@ public class GUI extends Application {
             rect.setOnMouseClicked(g -> {
             });
         }
+        grid.setGridLinesVisible(false);
+
     }
 
     private void setUserInfos(){
@@ -1086,7 +1072,7 @@ public class GUI extends Application {
 
         setAmmo(mapNumber);
 
-        setDeathTrackSkulls();
+        setKillShotTrack();
 
         setMapGrid();
 
@@ -1155,14 +1141,12 @@ public class GUI extends Application {
             HBox box = new HBox();
             ImageView powerUpView = null;
             for (PowerUp powerUp: myRemoteView.getPowerUp()) {
-
                 powerUpView = new ImageView(createImage("src/main/resources/Images/PowerUps/" + powerUp.getColor() +"_"+ powerUp.getType() + ".png"));
                 powerUpView.setPreserveRatio(true);
                 powerUpView.setFitHeight(200);
                 box.getChildren().add(powerUpView);
-
             }
-            display(box, "Power ups");
+            displayPowerUpHand();
         });
         playersButton.setOnAction(e ->
                 displayPlayers()
@@ -1181,10 +1165,9 @@ public class GUI extends Application {
                 box.getChildren().add(weaponView);
 
             }
-            display(box, "Weapons");
+            //TODO possible bug
+            display(box,"Weapons");
         });
-
-        setCubes();
 
         setFirstPlayer();
 
@@ -1201,7 +1184,7 @@ public class GUI extends Application {
         rightPane.getChildren().add(textArea);
         rightPane.setSpacing(10);
 
-        stack.getChildren().addAll(setMap(), ammoSet, firstPlayer, deathTrack, cabinets, grid, pawnsGrid);
+        stack.getChildren().addAll(setMap(), ammoSet, firstPlayer, killShotTrack, cabinets, grid, pawnsGrid);
         Group root = new Group(stack);
         root.setTranslateY(-375);
         root.setTranslateX(25);
@@ -1223,4 +1206,125 @@ public class GUI extends Application {
         fiveSecondsWonder.setCycleCount(Timeline.INDEFINITE);
         fiveSecondsWonder.play();
     }
+
+    private void powerUpAlert(int index){
+        Stage powerUpAlert = new Stage();
+        GridPane gridPane = new GridPane();
+        BorderPane choicePane = new BorderPane();
+        choicePane.setStyle(BACKGROUND_STYLE);
+
+        Button powerUpButton = new Button("As a powerUp");
+        Button tradeButton = new Button("For cubes");
+        powerUpButton.setStyle(BUTTON_STYLE);
+        tradeButton.setStyle(BUTTON_STYLE);
+        powerUpButton.setOnMouseEntered(e-> powerUpButton.setStyle(HIGHLIGHT_BUTTON_STYLE));
+        tradeButton.setOnMouseEntered(e-> tradeButton.setStyle(HIGHLIGHT_BUTTON_STYLE));
+        powerUpButton.setOnMouseExited(e-> powerUpButton.setStyle(BUTTON_STYLE));
+        tradeButton.setOnMouseExited(e-> tradeButton.setStyle(BUTTON_STYLE));
+
+        tradeButton.setOnAction(trade -> {
+            try {
+                guiController.getRmiStub().tradeCube(index);
+                System.out.println(index);
+                setCubes();
+                powerUpAlert.close();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        });
+        gridPane.setConstraints(powerUpButton,0,1);
+        gridPane.setConstraints(tradeButton,2,1);
+        gridPane.getChildren().addAll(powerUpButton,tradeButton);
+        gridPane.setAlignment(Pos.CENTER);
+        gridPane.setHgap(30);
+        gridPane.setStyle(BACKGROUND_STYLE);
+
+        Label info = new Label("How do you want to use it?");
+        info.setStyle(LABEL_STYLE);
+
+        powerUpAlert.initModality(Modality.APPLICATION_MODAL);
+
+        choicePane.setCenter(gridPane);
+        choicePane.setAlignment(gridPane,Pos.CENTER);
+        choicePane.setStyle(BACKGROUND_STYLE);
+        choicePane.setTop(info);
+        choicePane.setAlignment(info,Pos.TOP_CENTER);
+        Scene cabinetScene = new Scene(choicePane);
+        powerUpAlert.setScene(cabinetScene);
+        powerUpAlert.setWidth(300);
+        powerUpAlert.setHeight(200);
+        powerUpAlert.showAndWait();
+    }
+
+    private void displayPowerUpHand(){
+        Stage powerUpWindow = new Stage();
+        HBox powerUpBox = new HBox();
+        Label info = new Label("Your power ups are:");
+        BorderPane powerUpPane = new BorderPane();
+        Image powerUpImage;
+        ImageView powerUpView;
+
+        info.setStyle("-fx-text-fill: #bdbdbd");
+        powerUpWindow.initModality(Modality.APPLICATION_MODAL);
+        powerUpWindow.setTitle("Power Ups");
+
+        ArrayList<PowerUp> powerUps = guiController.getMyRemoteView().getPowerUp();
+        for(int i=0; i<powerUps.size();i++){
+            powerUpImage = createImage("src/main/resources/Images/PowerUps/" + powerUps.get(i).getColor()+"_" + powerUps.get(i).getType() + ".png");
+            powerUpView = new ImageView(powerUpImage);
+            powerUpBox.getChildren().add(powerUpView);
+            powerUpView.setId(Integer.toString(i));
+        }
+
+        for(Node obj : powerUpBox.getChildren()){
+            ImageView view = (ImageView) obj;
+            view.setOnMouseClicked(e->{
+                powerUpAlert(Integer.parseInt(view.getId()));
+                powerUpWindow.close();
+            });
+        }
+
+        Button closeButton = setHomeButton(powerUpWindow);
+        powerUpPane.setTop(info);
+        powerUpPane.setCenter(powerUpBox);
+        powerUpPane.setBottom(closeButton);
+        powerUpPane.setStyle(BACKGROUND_STYLE);
+        powerUpPane.setAlignment(closeButton,Pos.CENTER);
+        Scene scene = new Scene(powerUpPane);
+        powerUpWindow.setScene(scene);
+        powerUpWindow.showAndWait();
+    }
+
+    private void display(Pane pane, String message){
+        Stage window = new Stage();
+        Pane layout = null;
+        Label info = new Label("Current "+ message + " are:");
+        BorderPane borderPane = new BorderPane();
+
+        info.setStyle("-fx-text-fill: #bdbdbd");
+        window.initModality(Modality.APPLICATION_MODAL);
+        window.setTitle(message);
+
+        Button closeButton = setHomeButton(window);
+        if(pane instanceof VBox){
+            layout = new VBox();
+        }else if(pane instanceof HBox){
+            layout = new HBox();
+        }
+
+        if(layout != null){
+            layout.getChildren().addAll(pane.getChildren());
+            layout.setStyle(BACKGROUND_STYLE);
+        }
+
+        borderPane.setTop(info);
+        borderPane.setCenter(layout);
+        borderPane.setBottom(closeButton);
+        borderPane.setStyle(BACKGROUND_STYLE);
+        borderPane.setAlignment(closeButton,Pos.CENTER);
+        Scene scene = new Scene(borderPane);
+        window.setScene(scene);
+        window.showAndWait();
+    }
+
 }

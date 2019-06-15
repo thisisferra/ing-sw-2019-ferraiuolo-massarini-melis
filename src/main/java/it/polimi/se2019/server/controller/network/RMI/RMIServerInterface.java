@@ -7,6 +7,7 @@ import it.polimi.se2019.server.model.cards.Ammo;
 import it.polimi.se2019.server.model.cards.weapons.Weapon;
 import it.polimi.se2019.server.model.game.Match;
 import it.polimi.se2019.server.model.map.Square;
+import it.polimi.se2019.server.model.player.Player;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -50,8 +51,12 @@ public interface RMIServerInterface extends Remote {
 
     void resetActionNumber(String username) throws RemoteException;
 
+    ArrayList<Player> getKillShotTrack() throws RemoteException;
+
     ArrayList<Weapon> verifyWeapons(String username) throws RemoteException;
 
     void applyEffect(InfoShot infoShot) throws RemoteException;
+
+     void tradeCube(int index) throws  RemoteException;
 
 }

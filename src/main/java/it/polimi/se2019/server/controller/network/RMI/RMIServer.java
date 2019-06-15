@@ -251,11 +251,7 @@ public class RMIServer extends Server implements RMIServerInterface {
     }
 
     private boolean mapAlreadySelected() {
-        if (mapId==0)
-            return false;
-        else
-            return true;
-
+        return (mapId != 0);
     }
 
     private void createMatch(int mapId) {
@@ -312,6 +308,10 @@ public class RMIServer extends Server implements RMIServerInterface {
         System.out.println("Next player is: " + activePlayer.getClientName());
     }
 
+    public ArrayList<Player> getKillShotTrack() throws RemoteException{
+        return match.getKillShotTrack();
+    }
+
     public String getActivePlayer() {
         return this.activePlayer.getClientName();
     }
@@ -333,5 +333,10 @@ public class RMIServer extends Server implements RMIServerInterface {
 
     public void applyEffect(InfoShot infoShot) {
         infoShot.getWeapon().applyEffect(infoShot);
+    }
+
+    public void tradeCube(int index) throws RemoteException{
+        activePlayer.tradeCube(index);
+        updateAllClient();
     }
 }

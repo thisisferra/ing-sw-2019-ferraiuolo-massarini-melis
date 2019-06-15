@@ -33,6 +33,7 @@ public class Cubes implements Serializable {
         if (checkNumberYellowCubes(cube)) {
             yellows = yellows + cube.getYellows();
         } else yellows = 3;
+
         if (checkNumberBlueCubes(cube)) {
             blues = blues + cube.getBlues();
         } else blues = 3;

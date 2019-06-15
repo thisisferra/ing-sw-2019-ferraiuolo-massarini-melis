@@ -289,8 +289,7 @@ public class Player implements Serializable {
     /**
      * Switch a power-up with the cubes specified by the power-up
      */
-    public void tradeCube(){
-        int index = this.playerHand.indexToDiscard();
+    public void tradeCube(int index){
         PowerUp powerUp = this.playerHand.chooseToDiscard(index);
         Cubes cubeObtained;
         switch(powerUp.getColor()) {

@@ -29,7 +29,7 @@ public class Match extends Observable implements Serializable {
     private ArrayList<Ammo> discardedAmmos;
     private int chosenMap;
     private Map map;
-    private ArrayList<Player> killShotTrack;
+    private ArrayList<Player> killShotTrack = new ArrayList<>();
     private ArrayList<WeaponSlot> arsenal;
     private ArrayList<String> characterAvailable = new ArrayList<>();
 
@@ -219,6 +219,10 @@ public class Match extends Observable implements Serializable {
 
     public void addPlayerKillShot(Player dead){
         killShotTrack.add(dead);
+    }
+
+    public ArrayList<Player> getKillShotTrack(){
+        return this.killShotTrack;
     }
 
     public ArrayList<PowerUp> getPowerUpStack(){
