@@ -1,15 +1,16 @@
 package it.polimi.se2019.server.model.player;
 
-import it.polimi.se2019.server.controller.Controller;
 import it.polimi.se2019.server.controller.ShotController;
 import it.polimi.se2019.server.model.cards.Ammo;
 import it.polimi.se2019.server.model.cards.PowerUp;
+import it.polimi.se2019.server.model.cards.weapons.Weapon;
 import it.polimi.se2019.server.model.game.Cubes;
 import it.polimi.se2019.server.model.game.Match;
 import it.polimi.se2019.server.model.map.Square;
 import it.polimi.se2019.server.model.map.WeaponSlot;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 
 /**
@@ -370,5 +371,25 @@ public class Player implements Serializable {
         double randomNumber = (int) (Math.random() * this.getMatch().getCharacterAvailable().size());
         int intRandomNumber = (int) randomNumber;
         return this.match.getCharacterAvailable().remove(intRandomNumber);
+    }
+
+
+    //return the list of weapons the player owns if he has enough cubes for each of them and if the weapons
+    // is unloaded.
+    // (E.G. if the player has 1 red cube and three weapons whose reload cost is 1 red cube each, this method will
+    //  return all three weapons)
+    public ArrayList<Weapon> getReloadableWeapons(){
+        ArrayList<Weapon> reloadableWeapons = new ArrayList<>();
+        for(Weapon weapon : this.getHand().getWeapons()){
+
+            if(weapon.getReloadCost().getReds() <= this.playerBoard.getAmmoCubes().getReds()
+                && weapon.getReloadCost().getYellows() <= this.playerBoard.getAmmoCubes().getYellows()
+                    && weapon.getReloadCost().getBlues() <= this.playerBoard.getAmmoCubes().getBlues()
+                        && !weapon.getLoad()){
+                reloadableWeapons.add(weapon);
+
+            }
+        }
+        return reloadableWeapons;
     }
 }

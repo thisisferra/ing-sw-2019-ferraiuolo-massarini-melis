@@ -5,6 +5,7 @@ import it.polimi.se2019.server.model.cards.PowerUp;
 import it.polimi.se2019.server.model.cards.weapons.Weapon;
 import it.polimi.se2019.server.model.game.Cubes;
 import it.polimi.se2019.server.model.game.Match;
+import it.polimi.se2019.server.model.map.Square;
 import it.polimi.se2019.server.model.map.WeaponSlot;
 import it.polimi.se2019.server.model.player.Player;
 
@@ -14,14 +15,16 @@ import java.util.ArrayList;
 
 public class VirtualView implements Serializable {
 
-    GUIControllerInterface clientReference;
+    private GUIControllerInterface clientReference;
 
     //
     private String username;
     private String character;
     private int position;
     private int damage;
-    private int numberOfAction;
+    private int points;
+    private int phaseAction;
+    private boolean finalFrenzy;
     private ArrayList<Weapon> weapons = new ArrayList<>();
     private ArrayList<PowerUp> powerUps = new ArrayList<>();
     private Cubes cubes;
@@ -29,6 +32,15 @@ public class VirtualView implements Serializable {
     private WeaponSlot cabinetYellow;
     private WeaponSlot cabinetBlue;
     private InfoShot infoShot;
+    private ArrayList<Player> markPlayerBoard = new ArrayList<>();      //Info useful for Player-board GUI
+    private ArrayList<Player> damagePlayerBoard = new ArrayList<>();    //Info useful for Player-board GUI
+    private int deathsPlayerBoard;                                      //Info useful for Player-board GUI
+    private ArrayList<Player> killShotTrack = new ArrayList<>();
+    private boolean canMove = false;
+    private ArrayList<Square> reachableSquare = new ArrayList<>();
+    private int numberOfActions = 2;
+    private ArrayList<Weapon> availableWeapons = new ArrayList<>();
+
 
     //COSTRUTTORE
     public VirtualView(GUIControllerInterface clientReference) {
@@ -57,8 +69,12 @@ public class VirtualView implements Serializable {
         return this.damage;
     }
 
-    public int getNumberOfAction() {
-        return this.numberOfAction;
+    public int getNumberOfActions() {
+        return this.numberOfActions;
+    }
+
+    public ArrayList<Square> getReachableSquare(){
+        return this.reachableSquare;
     }
 
     public ArrayList<Weapon> getWeapons(){
@@ -67,6 +83,34 @@ public class VirtualView implements Serializable {
 
     public ArrayList<PowerUp> getPowerUps() {
         return this.powerUps;
+    }
+
+    public int getPhaseAction() {
+        return phaseAction;
+    }
+
+    public boolean getFinalFrenzy(){
+        return this.finalFrenzy;
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+    public int getDeathsPlayerBoard(){
+        return this.deathsPlayerBoard;
+    }
+
+    public ArrayList<Player> getMarkPlayerBoard(){
+        return this.markPlayerBoard;
+    }
+
+    public ArrayList<Player> getDamagePlayerBoard(){
+        return this.damagePlayerBoard;
+    }
+
+    public ArrayList<Player> getKillShotTrack(){
+        return this.killShotTrack;
     }
 
     public Cubes getCubes(){
@@ -89,6 +133,13 @@ public class VirtualView implements Serializable {
             this.infoShot;
     }
 
+    public ArrayList<Weapon> getAvailableWeapons(){
+        return this.availableWeapons;
+    }
+
+    public boolean getCanMove(){
+        return this.canMove;
+    }
 
     //SETTER
 
@@ -104,12 +155,24 @@ public class VirtualView implements Serializable {
         this.position = position;
     }
 
+    public void setPoints(int points){
+        this.points = points;
+    }
+
+    public void setReachableSquare(ArrayList<Square> reachableSquare){
+        this.reachableSquare = reachableSquare;
+    }
+
+    public void setPhaseAction(int phaseAction) {
+        this.phaseAction = phaseAction;
+    }
+
     public void setDamage(int damage) {
         this.damage = damage;
     }
 
-    public void setNumberOfAction(int numberOfAction) {
-        this.numberOfAction = numberOfAction;
+    public void setNumberOfActions(int numberOfActions) {
+        this.numberOfActions = numberOfActions;
     }
 
     public void setWeapons(ArrayList<Weapon> weapons) {
@@ -118,6 +181,18 @@ public class VirtualView implements Serializable {
 
     public void setPowerUps(ArrayList<PowerUp> powerUps) {
         this.powerUps = powerUps;
+    }
+
+    public void setCanMove(boolean canMove){
+        this.canMove = canMove;
+    }
+
+    public void setDeathsPlayerBoard(int deathsPlayerBoard){
+        this.deathsPlayerBoard = deathsPlayerBoard;
+    }
+
+    public void setFinalFrenzy(boolean finalFrenzy){
+        this.finalFrenzy = finalFrenzy;
     }
 
     public void setCubes(Cubes cubes) {
@@ -140,13 +215,17 @@ public class VirtualView implements Serializable {
         this.infoShot = infoShot;
     }
 
+    public void setAvailableWeapons(ArrayList<Weapon> availableWeapons){
+        this.availableWeapons = availableWeapons;
+    }
+
     //ALTRO
 
     public void initializeVirtualView(Player player, Match match) {
         this.setUsername(player.getClientName());
         this.setPosition(player.getPosition());
         this.setCharacter(player.getCharacter());
-        this.setNumberOfAction(player.getNumberOfAction());
+        this.setNumberOfActions(player.getNumberOfAction());
         this.setWeapons(player.getHand().getWeapons());
         this.setPowerUps(player.getHand().getPowerUps());
         this.setCubes(player.getPlayerBoard().getAmmoCubes());

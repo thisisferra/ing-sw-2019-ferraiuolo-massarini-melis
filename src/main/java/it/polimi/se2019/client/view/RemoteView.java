@@ -31,7 +31,7 @@ public class RemoteView {
     private ArrayList<Player> damagePlayerBoard = new ArrayList<>();    //Info useful for Player-board GUI
     private int deathsPlayerBoard;                                      //Info useful for Player-board GUI
     private ArrayList<Weapon> weapons = new ArrayList<>();
-    private ArrayList<PowerUp> powerUp = new ArrayList<>();
+    private ArrayList<PowerUp> powerUps = new ArrayList<>();
     private ArrayList<Player> killShotTrack = new ArrayList<>();
     private boolean canMove = false;
     private Cubes cubes;
@@ -193,8 +193,8 @@ public class RemoteView {
      * @return a list of the power ups owned by the user.
      */
 
-    public ArrayList<PowerUp> getPowerUp() {
-        return this.powerUp;
+    public ArrayList<PowerUp> getPowerUps() {
+        return this.powerUps;
     }
 
 
@@ -272,6 +272,8 @@ public class RemoteView {
 
 
 
+
+
     /* * *   SETTERS   * * */
 
     /**
@@ -282,11 +284,11 @@ public class RemoteView {
      *                  square in which the user is.
      */
 
-    public void setPosition(int position) {
+    private void setPosition(int position) {
         this.position = position;
     }
 
-    public void setCharacter(String character) {
+    private void setCharacter(String character) {
         this.character = character;
     }
 
@@ -324,6 +326,8 @@ public class RemoteView {
      *                 of the user to move or not.
      */
 
+    //TODO this shouldn't be public!
+
     public void setCanMove(boolean canMove) {
         this.canMove = canMove;
     }
@@ -349,6 +353,8 @@ public class RemoteView {
      *                         from its position.
      */
 
+    //TODO this shouldn't be public!
+
     public void setReachableSquare(ArrayList<Square> reachableSquare) {
         this.reachableSquare.clear();
         this.reachableSquare = reachableSquare;
@@ -363,25 +369,47 @@ public class RemoteView {
      *                         to the user.
      */
 
-    public void setNumberOfActions(int numberOfActions) {
+    private void setNumberOfActions(int numberOfActions) {
         this.numberOfActions = numberOfActions;
     }
 
-    public void setCabinetRed(WeaponSlot cabinetRed) {
+    private void setInfoShot(InfoShot infoShot){
+        this.infoShot = infoShot;
+    }
+
+    private void setWeapons(ArrayList<Weapon> weapons){
+        this.weapons = weapons;
+    }
+
+    private void setPowerUps(ArrayList<PowerUp> powerUps){
+        this.powerUps = powerUps;
+    }
+
+    private void setKillShotTrack(ArrayList<Player> killShotTrack){
+        this.killShotTrack = killShotTrack;
+    }
+
+    private void setCabinetRed(WeaponSlot cabinetRed) {
         this.cabinetRed = cabinetRed;
     }
 
-    public void setCabinetYellow(WeaponSlot cabinetYellow) {
+    private void setCabinetYellow(WeaponSlot cabinetYellow) {
         this.cabinetYellow = cabinetYellow;
     }
 
-    public void setCabinetBlue(WeaponSlot cabinetBlue) {
+    private void setCabinetBlue(WeaponSlot cabinetBlue) {
         this.cabinetBlue = cabinetBlue;
     }
 
+
+    //TODO this shouldn't be public!
     public void setAvailableWeapon(ArrayList<Weapon> availableWeapon) {
         this.usableWeapon.clear();
         this.usableWeapon = availableWeapon;
+    }
+
+    private void setUsername(String username){
+        this.username = username;
     }
 
     /* * *   OTHER   * * */
@@ -405,24 +433,32 @@ public class RemoteView {
 
     public void updateRemoteView(VirtualView virtualView) {
         // public infos
-        this.username = virtualView.getUsername();
+        setUsername(virtualView.getUsername());
         setCharacter(virtualView.getCharacter());
         setPosition(virtualView.getPosition());
+
         setCubes(virtualView.getCubes());
+
         setCabinetRed(virtualView.getCabinetRed());
         setCabinetYellow(virtualView.getCabinetYellow());
         setCabinetBlue(virtualView.getCabinetBlue());
-        //setPhaseAction();
-        //setFinalFrenzy();
-        //setDeathsPlayerBoard();
-        //setMarkPlayerBoard();
-        //setDamagePlayerBoard();
-        if (this.username.equals(virtualView.getUsername())) {
+
+        setDeathsPlayerBoard(virtualView.getDeathsPlayerBoard());
+        setMarkPlayerBoard(virtualView.getMarkPlayerBoard());
+        setDamagePlayerBoard(virtualView.getDamagePlayerBoard());
+        setKillShotTrack(virtualView.getKillShotTrack());
+
+        setCanMove(virtualView.getCanMove());  //FORSE DA TOGLIERE
+        setPhaseAction(virtualView.getPhaseAction());
+        setFinalFrenzy(virtualView.getFinalFrenzy());
+        if (getUsername().equals(virtualView.getUsername())) {
             // private infos
-            setNumberOfActions(virtualView.getNumberOfAction());
-            //setPoints();
-            this.weapons = virtualView.getWeapons();
-            this.powerUp = virtualView.getPowerUps();
+            setNumberOfActions(virtualView.getNumberOfActions());
+            setPoints(virtualView.getPoints());
+            setInfoShot(virtualView.getInfoShot());  //FORSE DA TOGLIERE
+            setWeapons(virtualView.getWeapons());
+            setPowerUps(virtualView.getPowerUps());
+            setAvailableWeapon(virtualView.getAvailableWeapons());
 
         }
     }

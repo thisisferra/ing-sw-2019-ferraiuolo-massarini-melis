@@ -149,7 +149,7 @@ public class Match extends Observable implements Serializable {
             powerUpStack = new ArrayList<>(Arrays.asList(pUS));
             ammoStack = new ArrayList<>(Arrays.asList(aS));
 
-            //Collections.shuffle(weaponStack);
+            Collections.shuffle(weaponStack);
             Collections.shuffle(powerUpStack);
             Collections.shuffle(ammoStack);
 

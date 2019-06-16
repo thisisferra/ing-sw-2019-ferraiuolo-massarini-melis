@@ -61,4 +61,8 @@ public interface RMIServerInterface extends Remote {
 
     void discardAndSpawn(String username,int index) throws RemoteException;
 
+    ArrayList<Weapon> getReloadableWeapons(String username) throws RemoteException;
+
+    void reloadWeapon(String username, int index) throws RemoteException;
+
 }

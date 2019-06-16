@@ -3,19 +3,20 @@ package it.polimi.se2019.server.controller;
 import it.polimi.se2019.server.model.cards.weapons.Weapon;
 import it.polimi.se2019.server.model.player.Player;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class InfoShot {
+public class InfoShot implements Serializable {
 
-    Weapon weapon;
-    String nameEffect;
+    private Weapon weapon;
+    private String nameEffect;
     private Player damagingPlayer;
     private ArrayList<Player> targetablePlayer = new ArrayList<>();      //Other players I can view from my position
     private ArrayList<Player> targetPlayers = new ArrayList<>();        //ArrayLists of player i want to damage
     private ArrayList<Player> alreadyTarget = new ArrayList<>();        //Player that in my round I've already hit
-    String cardinalDirection;                                           //String that represent the cardinal direction in effects that pull/push enemy or player have to move
-    int numberOfMoves;                                                  //Integer that represents th number of movement
-    int newPosition;
+    private String cardinalDirection;                                           //String that represent the cardinal direction in effects that pull/push enemy or player have to move
+    private int numberOfMoves;                                                  //Integer that represents th number of movement
+    private int newPosition;
 
     public InfoShot(Weapon weapon, String nameEffect) {
         this.weapon = weapon;
