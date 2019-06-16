@@ -58,9 +58,9 @@ public class PlayerTest {
 
     @Test
     public void testGetPosition() {
-        Assert.assertEquals(0, p1.getPosition());
-        Assert.assertEquals(0, p2.getPosition());
-        Assert.assertEquals(0, p3.getPosition());
+        Assert.assertEquals(-1, p1.getPosition());
+        Assert.assertEquals(-1, p2.getPosition());
+        Assert.assertEquals(-1, p3.getPosition());
         p1.setPosition(5);
         Assert.assertEquals(5, p1.getPosition());
     }

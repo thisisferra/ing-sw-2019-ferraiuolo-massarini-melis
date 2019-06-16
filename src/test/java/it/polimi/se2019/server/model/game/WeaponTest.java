@@ -7,8 +7,8 @@ import org.junit.Test;
 
 public class WeaponTest {
 
-    Match m1;
-    Weapon createdWeapon;
+    private Match m1;
+    private Weapon createdWeapon;
     @Before
     public void setWeaponTest(){
         m1 = new Match(1);

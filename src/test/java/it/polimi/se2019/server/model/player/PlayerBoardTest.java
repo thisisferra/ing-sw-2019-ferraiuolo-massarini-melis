@@ -72,11 +72,12 @@ public class PlayerBoardTest {
         Assert.assertTrue(p1.checkDeath());
     }
 
-    /*
+
     @Test
     public void testGetDamage() {
         Assert.assertEquals(0, pl1.getDamage().size());
         Match m1 = new Match(3);
+        m1.initializeCharacterAvailable();
         Player p1 = new Player("Marco", m1);
         Player p2 = new Player("Mattia", m1);
         pl1.getDamage().add(p1);
@@ -86,7 +87,6 @@ public class PlayerBoardTest {
         Assert.assertEquals(p2, pl1.getDamage().get(1));
 
     }
-     */
 
     @Test(expected = IllegalStateException.class)
     public void testGetDeaths() {

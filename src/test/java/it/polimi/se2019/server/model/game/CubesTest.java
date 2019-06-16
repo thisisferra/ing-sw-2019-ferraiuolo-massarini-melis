@@ -6,7 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class CubesTest {
-    Cubes c1,c2,c3,c4;
+    private Cubes c1,c2,c3,c4;
 
     @Before
     public void initCubesTest(){

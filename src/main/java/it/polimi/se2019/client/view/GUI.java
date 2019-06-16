@@ -1,6 +1,5 @@
 package it.polimi.se2019.client.view;
 
-import it.polimi.se2019.server.controller.ShotController;
 import it.polimi.se2019.server.model.cards.PowerUp;
 import it.polimi.se2019.server.model.cards.weapons.Weapon;
 import it.polimi.se2019.server.model.map.Square;
@@ -39,7 +38,7 @@ public class GUI extends Application {
     private GridPane pawnsGrid = new GridPane();
     private HBox redBox = new HBox();
     private HBox blueBox = new HBox();
-    private boolean bool = true;
+    private boolean firstSpawn = true;
     private HBox yellowBox = new HBox();
     private StackPane cabinets = new StackPane();
     private HBox killShotTrack = new HBox();
@@ -791,7 +790,7 @@ public class GUI extends Application {
             Rectangle rectangle = (Rectangle) grid.getChildren().get(i);
             for (Square square : guiController.getMyRemoteView().getReachableSquare()) {
                 if (rectangle.getId().equals(Integer.toString(square.getPosition()))) {
-                    rectangle.setFill(Color.color(1, 1, 0, 0.4));
+                    rectangle.setFill(Color.color(0, 0.2, 1, 0.4));
                     rectangle.setOnMouseClicked(o -> {
                         //textArea.setText("\nSquare #: " + rectangle.getId() + "\n" + textArea.getText());
                         try {
@@ -805,10 +804,13 @@ public class GUI extends Application {
                             exc.printStackTrace();
                         }
                     });
+                    rectangle.setOnMouseEntered( enter ->
+                            rectangle.setFill(Color.color(0,0.2,1,0.6)));
+                    rectangle.setOnMouseExited( exit ->
+                            rectangle.setFill(Color.color(0,0.2,1,0.4)));
                 }
             }
         }
-        grid.setGridLinesVisible(true);
     }
 
     private void setMoveGrabSquares(){
@@ -816,7 +818,7 @@ public class GUI extends Application {
             Rectangle rectangle = (Rectangle) grid.getChildren().get(i);
             for (Square square : guiController.getMyRemoteView().getReachableSquare()) {
                 if (rectangle.getId().equals(Integer.toString(square.getPosition()))) {
-                    rectangle.setFill(Color.color(0, 0.2, 1, 0.4));
+                    rectangle.setFill(Color.color(1, 1, 0, 0.4));
                     rectangle.setOnMouseClicked(o -> {
                         //textArea.setText("\nSquare #: " + rectangle.getId() + "\n" + textArea.getText());
                         try {
@@ -856,10 +858,13 @@ public class GUI extends Application {
                             exc.printStackTrace();
                         }
                     });
+                    rectangle.setOnMouseEntered( enter ->
+                            rectangle.setFill(Color.color(1,1,0,0.6)));
+                    rectangle.setOnMouseExited( exit ->
+                            rectangle.setFill(Color.color(1,1,0,0.4)));
                 }
             }
         }
-        grid.setGridLinesVisible(true);
     }
 
     private void moveAction(int steps){
@@ -915,9 +920,11 @@ public class GUI extends Application {
             rect.setFill(Color.color(1, 1, 1, 0.0));
             rect.setOnMouseClicked(g -> {
             });
+            rect.setOnMouseEntered( enter ->
+                    setInvisible(rect));
+            rect.setOnMouseExited( exit ->
+                    setInvisible(rect));
         }
-        grid.setGridLinesVisible(false);
-
     }
 
     private void setUserInfos(){
@@ -1198,9 +1205,9 @@ public class GUI extends Application {
 
         Timeline fiveSecondsWonder = new Timeline(new KeyFrame(Duration.seconds(1), o-> {
             try{
-                if(guiController.getRmiStub().getActivePlayer().equals(username) && bool){
+                if(guiController.getRmiStub().getActivePlayer().equals(username) && firstSpawn){
                     startingDraw();
-                    bool = !bool;
+                    firstSpawn = !firstSpawn;
                 }
             } catch (Exception exception){
                 exception.printStackTrace();
@@ -1383,6 +1390,10 @@ public class GUI extends Application {
         Scene startingDrawScene = new Scene(spawnPane);
         startingDrawWindow.setScene(startingDrawScene);
         startingDrawWindow.show();
+        }
+
+        private void setInvisible(Rectangle rectangle){
+            rectangle.setFill(Color.color(0,0,0,0));
         }
 
 }

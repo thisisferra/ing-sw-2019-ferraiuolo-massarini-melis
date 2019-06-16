@@ -1,4 +1,4 @@
-package it.polimi.se2019.model.player;
+package it.polimi.se2019.server.model.player;
 
 import it.polimi.se2019.server.model.cards.PowerUp;
 import it.polimi.se2019.server.model.game.Match;
@@ -10,8 +10,8 @@ import org.junit.Test;
 
 public class HandTest {
 
-    Hand hand = new Hand();
-    Match m1;
+    private Hand hand = new Hand();
+    private Match m1;
     @Before
     public void setClass() {
         m1 = new Match(1);

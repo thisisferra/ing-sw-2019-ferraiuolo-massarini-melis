@@ -9,9 +9,9 @@ import org.junit.Test;
 
 public class AmmoTest {
 
-    Ammo ammoPowerUp;
-    Ammo ammo;
-    Cubes cube = new Cubes(1, 1, 1);
+    private Ammo ammoPowerUp;
+    private Ammo ammo;
+    private Cubes cube = new Cubes(1, 1, 1);
 
     @Before
     public void initialize() {
@@ -21,9 +21,9 @@ public class AmmoTest {
 
     @Test
     public void testGetAmmoCubes() {
-        Assert.assertEquals(cube.getReds(), 1);
-        Assert.assertEquals(cube.getYellows(), 1);
-        Assert.assertEquals(cube.getBlues(), 1);
+        Assert.assertEquals(1,cube.getReds());
+        Assert.assertEquals(1,cube.getYellows());
+        Assert.assertEquals(1,cube.getBlues());
         Assert.assertEquals(cube, ammo.getAmmoCubes());
     }
 
@@ -39,9 +39,9 @@ public class AmmoTest {
 
     @Test
     public void testToString() {
-        String expected = "Reds: 1 Blues: 1 Yellows: 1 PUC: false";
+        String expected = "Reds: 1 Blues: 1 Yellows: 1\nPower Up : false";
         Assert.assertEquals(expected, ammo.toString());
-        expected = "Reds: 1 Blues: 1 Yellows: 1 PUC: true";
+        expected = "Reds: 1 Blues: 1 Yellows: 1\nPower Up : true";
         Assert.assertEquals(expected, ammoPowerUp.toString());
 
 
