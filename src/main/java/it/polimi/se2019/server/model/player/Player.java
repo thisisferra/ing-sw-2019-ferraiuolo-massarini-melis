@@ -43,6 +43,7 @@ public class Player implements Serializable {
         this.playerBoard = new PlayerBoard(this);
         this.playerHand = new Hand();
         this.shotController = new ShotController(match);
+        this.position = -1;
     }
 
     public String getCharacter() {
@@ -179,6 +180,13 @@ public class Player implements Serializable {
         }
         else{
             System.out.println("You are in a spawn point, you can't pick up an ammo");
+        }
+    }
+
+    public void pickUpPowerUp(){
+        if(playerHand.getPowerUps().size()<3){
+            PowerUp powerUp = match.pickUpPowerUp();
+            playerHand.addPowerUp(powerUp);
         }
     }
 

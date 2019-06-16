@@ -57,6 +57,8 @@ public interface RMIServerInterface extends Remote {
 
     void applyEffect(InfoShot infoShot) throws RemoteException;
 
-     void tradeCube(int index) throws  RemoteException;
+    void tradeCube(int index) throws  RemoteException;
+
+    void discardAndSpawn(String username,int index) throws RemoteException;
 
 }

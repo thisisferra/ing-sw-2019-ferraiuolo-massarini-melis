@@ -39,6 +39,7 @@ public class GUI extends Application {
     private GridPane pawnsGrid = new GridPane();
     private HBox redBox = new HBox();
     private HBox blueBox = new HBox();
+    private boolean bool = true;
     private HBox yellowBox = new HBox();
     private StackPane cabinets = new StackPane();
     private HBox killShotTrack = new HBox();
@@ -434,16 +435,15 @@ public class GUI extends Application {
         Scene waitScene = new Scene(pane,300,200);
         window.setScene(waitScene);
         System.out.println("Inizio attesa 10 secondi");
-        Timeline wait = new Timeline(new KeyFrame(Duration.seconds(10), e->{
+
+        Timeline draw = new Timeline(new KeyFrame(Duration.seconds(10), e->{
             System.out.println("Fine attesa 10 secondi, setGameScene: ");
                 setGameScene();
                 window.setScene(scene);
             }
-            ));
-            wait.setCycleCount(1);
-            wait.play();
-
-
+        ));
+        draw.setCycleCount(1);
+        draw.play();
     }
 
     private HBox setMapSelector() {
@@ -530,7 +530,7 @@ public class GUI extends Application {
                 flowPane = new FlowPane();
                 //for every player, if there are players in this square fills the flowpane with them
                 for(RemoteView view : guiController.getAllViews()){
-                    if(view.getPosition() == row * 4 + col){
+                    if(view.getPosition() == row * 4 + col  && view.getPosition()!= -1){
                         flowPane.getChildren().add(setCharacterImage(view.getCharacter()));
                     }
                 }
@@ -1100,10 +1100,10 @@ public class GUI extends Application {
                     if (guiController.getRmiStub().checkNumberAction(username)) {
                         guiController.verifyWeapons();
                         guiController.getRmiStub().useAction(username);
-                        if (myRemoteView.getUsableWeapon().size() > 0) {
+                        if (!myRemoteView.getUsableWeapon().isEmpty()) {
                             for (Weapon weapon : myRemoteView.getUsableWeapon()) {
                                 for (int i = 0; i < weapon.getEffect().length; i++)
-                                System.out.println(weapon.getEffect()[i]);
+                                    System.out.println(weapon.getEffect()[i]);
                             }
                         }
                         else{
@@ -1195,7 +1195,16 @@ public class GUI extends Application {
         scene = new Scene(borderPane, 1300, 700);
         window.show();
         System.out.println("Fine creazione scena di gioco");
-        Timeline fiveSecondsWonder = new Timeline(new KeyFrame(Duration.seconds(1), e-> {
+
+        Timeline fiveSecondsWonder = new Timeline(new KeyFrame(Duration.seconds(1), o-> {
+            try{
+                if(guiController.getRmiStub().getActivePlayer().equals(username) && bool){
+                    startingDraw();
+                    bool = !bool;
+                }
+            } catch (Exception exception){
+                exception.printStackTrace();
+            }
             setUserInfos();
             setFigures();
             setAmmo(mapNumber);
@@ -1205,6 +1214,7 @@ public class GUI extends Application {
         }));
         fiveSecondsWonder.setCycleCount(Timeline.INDEFINITE);
         fiveSecondsWonder.play();
+
     }
 
     private void powerUpAlert(int index){
@@ -1264,11 +1274,11 @@ public class GUI extends Application {
         Image powerUpImage;
         ImageView powerUpView;
 
-        info.setStyle("-fx-text-fill: #bdbdbd");
+        info.setStyle(LABEL_STYLE);
         powerUpWindow.initModality(Modality.APPLICATION_MODAL);
         powerUpWindow.setTitle("Power Ups");
 
-        ArrayList<PowerUp> powerUps = guiController.getMyRemoteView().getPowerUp();
+        ArrayList<PowerUp> powerUps = myRemoteView.getPowerUp();
         for(int i=0; i<powerUps.size();i++){
             powerUpImage = createImage("src/main/resources/Images/PowerUps/" + powerUps.get(i).getColor()+"_" + powerUps.get(i).getType() + ".png");
             powerUpView = new ImageView(powerUpImage);
@@ -1326,5 +1336,53 @@ public class GUI extends Application {
         window.setScene(scene);
         window.showAndWait();
     }
+
+    //this method can be used for respawn after death (?)
+    private void startingDraw(){
+        Stage startingDrawWindow = new Stage();
+
+        Label info = new Label("Choose one of the two power ups to discard.\nIt determines your spawn location, based on its color.");
+        info.setStyle(LABEL_STYLE);
+        info.setPadding(new Insets (10,10,10,10));
+        BorderPane spawnPane = new BorderPane();
+        startingDrawWindow.initModality(Modality.APPLICATION_MODAL);
+        startingDrawWindow.setAlwaysOnTop(true);
+        startingDrawWindow.setTitle("First spawn");
+
+        borderPane.setTop(info);
+        HBox powerUpBox = new HBox();
+        powerUpBox.setSpacing(10);
+        powerUpBox.setPadding(new Insets(10,10,10,10));
+        ArrayList<PowerUp> powerUps = myRemoteView.getPowerUp();
+        for(int i=0; i<powerUps.size();i++){
+            Image powerUpImage = createImage("src/main/resources/Images/PowerUps/" + powerUps.get(i).getColor()+"_" + powerUps.get(i).getType() + ".png");
+            ImageView powerUpView = new ImageView(powerUpImage);
+            powerUpBox.getChildren().add(powerUpView);
+            powerUpView.setId(Integer.toString(i));
+        }
+        for(Node obj : powerUpBox.getChildren()) {
+            ImageView view = (ImageView) obj;
+            view.setOnMouseClicked(e -> {
+                //discard the selected powerup, respawn based on the color
+                try{
+                    guiController.getRmiStub().discardAndSpawn(username,Integer.parseInt(view.getId()));
+                    startingDrawWindow.close();
+                }catch (Exception exc){
+                    exc.printStackTrace();
+                }
+            });
+        }
+
+        startingDrawWindow.setOnCloseRequest(e->{
+            startingDraw();
+            startingDrawWindow.close();
+        });
+        spawnPane.setTop(info);
+        spawnPane.setCenter(powerUpBox);
+        spawnPane.setStyle(BACKGROUND_STYLE);
+        Scene startingDrawScene = new Scene(spawnPane);
+        startingDrawWindow.setScene(startingDrawScene);
+        startingDrawWindow.show();
+        }
 
 }

@@ -8,6 +8,7 @@ import it.polimi.se2019.server.controller.ShotController;
 import it.polimi.se2019.server.controller.VirtualView;
 import it.polimi.se2019.server.controller.network.Server;
 import it.polimi.se2019.server.model.cards.Ammo;
+import it.polimi.se2019.server.model.cards.PowerUp;
 import it.polimi.se2019.server.model.cards.weapons.Weapon;
 import it.polimi.se2019.server.model.game.Match;
 import it.polimi.se2019.server.model.game.MovementChecker;
@@ -148,6 +149,12 @@ public class RMIServer extends Server implements RMIServerInterface {
         this.updateAllClient();
     }
 
+    public void pickUpPowerUp(String username) throws RemoteException{
+        Player player = match.searchPlayerByClientName(username);
+        player.pickUpPowerUp();
+        this.updateAllClient();
+    }
+
     public Ammo showLastAmmo() throws  RemoteException{
         if(!match.getDiscardedAmmos().isEmpty())
             return match.getDiscardedAmmos().get(match.getDiscardedAmmos().size()-1);
@@ -271,8 +278,9 @@ public class RMIServer extends Server implements RMIServerInterface {
     private Player createPlayer(String username) {
         Player player = new Player(username, match);
         this.match.getAllPlayers().add(player);
+        player.pickUpPowerUp();
+        player.pickUpPowerUp();
         return player;
-
     }
 
     public Match getMatch() {
@@ -339,4 +347,38 @@ public class RMIServer extends Server implements RMIServerInterface {
         activePlayer.tradeCube(index);
         updateAllClient();
     }
+
+    public void discardAndSpawn(String username,int index) throws RemoteException{
+        Player player = this.match.searchPlayerByClientName(username);
+        PowerUp discardedPowerUp = player.getHand().getPowerUps().remove(index);
+
+        switch (discardedPowerUp.getColor()){
+            case "red" : {
+                this.setNewPosition(username,4);
+                break;
+            }
+            case "blue" : {
+                this.setNewPosition(username,2);
+                break;
+            }
+            case "yellow" : {
+                this.setNewPosition(username,11);
+                break;
+            }
+            default:
+                System.out.println("ERRORE");
+        }
+        match.getDiscardedPowerUps().add(discardedPowerUp);
+        updateAllClient();
+    }
 }
+
+
+
+
+
+
+
+
+
+

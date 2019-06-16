@@ -144,6 +144,7 @@ public class VirtualView implements Serializable {
 
     public void initializeVirtualView(Player player, Match match) {
         this.setUsername(player.getClientName());
+        this.setPosition(player.getPosition());
         this.setCharacter(player.getCharacter());
         this.setNumberOfAction(player.getNumberOfAction());
         this.setWeapons(player.getHand().getWeapons());

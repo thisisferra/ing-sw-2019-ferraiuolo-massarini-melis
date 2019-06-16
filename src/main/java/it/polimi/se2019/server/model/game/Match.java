@@ -216,7 +216,6 @@ public class Match extends Observable implements Serializable {
         return this.arsenal;
     }
 
-
     public void addPlayerKillShot(Player dead){
         killShotTrack.add(dead);
     }
@@ -232,6 +231,7 @@ public class Match extends Observable implements Serializable {
     public ArrayList<Weapon> getWeaponStack(){
         return this.weaponStack;
     }
+
     public ArrayList<Ammo> getAmmoStack(){
         return this.ammoStack;
     }
@@ -239,6 +239,7 @@ public class Match extends Observable implements Serializable {
     public ArrayList<Ammo> getDiscardedAmmos(){
         return this.discardedAmmos;
     }
+
     public ArrayList<PowerUp> getDiscardedPowerUps(){
         return this.discardedPowerUps;
     }
