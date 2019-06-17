@@ -1,6 +1,6 @@
 package it.polimi.se2019.server.controller;
 
-import it.polimi.se2019.server.model.cards.PowerUp;
+import it.polimi.se2019.server.model.cards.powerUp.PowerUp;
 import it.polimi.se2019.server.model.cards.weapons.Weapon;
 import it.polimi.se2019.server.model.game.Cubes;
 import it.polimi.se2019.server.model.game.CubesChecker;
@@ -201,7 +201,7 @@ public class Controller {
     }
 
 //    public void usePowerUpController(Player player) {
-//        PowerUp powerUpToUse = choosePowerUp(player);
+//        powerUp powerUpToUse = choosePowerUp(player);
 //        if (powerUpToUse.getType().equals("targeting scope")) {
 //            Cubes colorCube = askCubeToPay(player);
 //        }

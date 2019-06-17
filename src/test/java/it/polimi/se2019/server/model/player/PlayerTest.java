@@ -1,11 +1,9 @@
 package it.polimi.se2019.server.model.player;
 
-import it.polimi.se2019.server.model.cards.PowerUp;
+import it.polimi.se2019.server.model.cards.powerUp.PowerUp;
 import it.polimi.se2019.server.model.game.Match;
-import it.polimi.se2019.server.model.map.Square;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class PlayerTest {

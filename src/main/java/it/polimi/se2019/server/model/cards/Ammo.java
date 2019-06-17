@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 /*Ammo class represent the real counterpart ammo tile from the board game.
 * When a player picks it up from the terrain he receives some cubes and if the
-* attribute powerUpCard is true, he draws a PowerUp card from the PowerUp deck.
+* attribute powerUpCard is true, he draws a powerUp card from the powerUp deck.
 * Setters are omitted, since these cards are generated once, at the start of the game.*/
 
 public class Ammo implements Serializable {
@@ -29,6 +29,6 @@ public class Ammo implements Serializable {
     }
 
     public String toString(){
-        return this.ammoCubes.toString() +"\nPower Up : " + this.powerUpCard;
+        return this.ammoCubes.toString() +"\nPower Up: " + this.powerUpCard;
     }
 }

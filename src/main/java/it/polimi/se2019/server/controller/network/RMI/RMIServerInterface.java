@@ -55,7 +55,7 @@ public interface RMIServerInterface extends Remote {
 
     ArrayList<Weapon> verifyWeapons(String username) throws RemoteException;
 
-    void applyEffect(InfoShot infoShot) throws RemoteException;
+    void applyEffectWeapon(InfoShot infoShot) throws RemoteException;
 
     void tradeCube(int index) throws  RemoteException;
 
@@ -64,5 +64,9 @@ public interface RMIServerInterface extends Remote {
     ArrayList<Weapon> getReloadableWeapons(String username) throws RemoteException;
 
     void reloadWeapon(String username, int index) throws RemoteException;
+
+    boolean checkSizeWeapon(String username) throws RemoteException;
+
+    void usePowerUp(String username, int index, InfoShot infoShot) throws RemoteException;
 
 }

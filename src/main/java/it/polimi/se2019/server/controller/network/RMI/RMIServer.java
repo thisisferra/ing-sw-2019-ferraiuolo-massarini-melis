@@ -1,6 +1,5 @@
 package it.polimi.se2019.server.controller.network.RMI;
 
-import it.polimi.se2019.client.view.GUIController;
 import it.polimi.se2019.client.view.GUIControllerInterface;
 import it.polimi.se2019.server.OneAboveAll;
 import it.polimi.se2019.server.controller.InfoShot;
@@ -8,7 +7,7 @@ import it.polimi.se2019.server.controller.ShotController;
 import it.polimi.se2019.server.controller.VirtualView;
 import it.polimi.se2019.server.controller.network.Server;
 import it.polimi.se2019.server.model.cards.Ammo;
-import it.polimi.se2019.server.model.cards.PowerUp;
+import it.polimi.se2019.server.model.cards.powerUp.PowerUp;
 import it.polimi.se2019.server.model.cards.weapons.Weapon;
 import it.polimi.se2019.server.model.game.Match;
 import it.polimi.se2019.server.model.game.MovementChecker;
@@ -26,8 +25,6 @@ import java.rmi.server.RemoteServer;
 import java.rmi.server.ServerNotActiveException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 //ritorno
 public class RMIServer extends Server implements RMIServerInterface {
@@ -339,7 +336,7 @@ public class RMIServer extends Server implements RMIServerInterface {
         return this.shotController;
     }
 
-    public void applyEffect(InfoShot infoShot) {
+    public void applyEffectWeapon(InfoShot infoShot) {
         infoShot.getWeapon().applyEffect(infoShot);
     }
 
@@ -382,6 +379,35 @@ public class RMIServer extends Server implements RMIServerInterface {
         Weapon weaponToReload = player.getHand().getWeapons().get(index);
         weaponToReload.setLoad(true);
         this.updateAllClient();
+    }
+
+    public boolean checkSizeWeapon(String username) {
+        Player currentPlayer = this.match.searchPlayerByClientName(username);
+        return currentPlayer.getHand().getWeapons().size() > 0;
+
+    }
+
+    public void usePowerUp(String username, int index, InfoShot infoShot) throws RemoteException{
+
+        Player currentPlayer = this.match.searchPlayerByClientName(username);
+        PowerUp powerUp = currentPlayer.getHand().getPowerUps().get(index);
+        powerUp.applyEffect(infoShot);
+
+        this.updateAllVirtualView();
+
+
+
+    }
+
+    public void updateAllVirtualView() {
+        for (Player player : match.getAllPlayers()) {
+            for (VirtualView virtualView : allVirtualViews) {
+                if (player.getClientName().equals(virtualView.getUsername())) {
+                    virtualView.updateVirtualView(player, match);
+                }
+            }
+        }
+
     }
 }
 

@@ -3,10 +3,8 @@ package it.polimi.se2019.client.view;
 import it.polimi.se2019.server.controller.InfoShot;
 import it.polimi.se2019.server.controller.VirtualView;
 import it.polimi.se2019.server.controller.network.RMI.RMIServerInterface;
-import it.polimi.se2019.server.model.cards.weapons.Weapon;
 
 import java.io.PrintStream;
-import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -152,6 +150,6 @@ public class GUIController implements GUIControllerInterface {
     }
 
     public void applyEffect(InfoShot infoShot) throws RemoteException{
-        this.getRmiStub().applyEffect(infoShot);
+        this.getRmiStub().applyEffectWeapon(infoShot);
     }
 }

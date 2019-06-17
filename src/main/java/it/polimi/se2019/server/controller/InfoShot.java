@@ -24,6 +24,11 @@ public class InfoShot implements Serializable {
 
     }
 
+    public InfoShot() {
+
+    }
+
+
     /* * *   GETTERS   * * */
 
     public Weapon getWeapon() {
@@ -103,7 +108,6 @@ public class InfoShot implements Serializable {
 
 
 
-
-
+    /* * *   OTHERS   * * */
 
 }

@@ -1,0 +1,7 @@
+{
+  "type": "teleporter",
+  "color": "blue",
+  "effect" : {
+    "newPosition" : -1
+  }
+}

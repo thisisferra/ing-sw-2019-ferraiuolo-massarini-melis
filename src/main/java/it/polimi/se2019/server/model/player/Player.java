@@ -2,7 +2,7 @@ package it.polimi.se2019.server.model.player;
 
 import it.polimi.se2019.server.controller.ShotController;
 import it.polimi.se2019.server.model.cards.Ammo;
-import it.polimi.se2019.server.model.cards.PowerUp;
+import it.polimi.se2019.server.model.cards.powerUp.PowerUp;
 import it.polimi.se2019.server.model.cards.weapons.Weapon;
 import it.polimi.se2019.server.model.game.Cubes;
 import it.polimi.se2019.server.model.game.Match;
@@ -372,7 +372,6 @@ public class Player implements Serializable {
         int intRandomNumber = (int) randomNumber;
         return this.match.getCharacterAvailable().remove(intRandomNumber);
     }
-
 
     //return the list of weapons the player owns if he has enough cubes for each of them and if the weapons
     // is unloaded.

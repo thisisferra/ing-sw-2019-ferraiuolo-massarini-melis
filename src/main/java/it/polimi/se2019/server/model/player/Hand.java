@@ -1,7 +1,7 @@
 package it.polimi.se2019.server.model.player;
 
 import it.polimi.se2019.server.model.cards.weapons.Weapon;
-import it.polimi.se2019.server.model.cards.PowerUp;
+import it.polimi.se2019.server.model.cards.powerUp.PowerUp;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ public class Hand implements Serializable {
         }
         else{
             this.powerUps.add( currentPowerUp);
-            System.out.println("You already have three PowerUp cards.");
+            System.out.println("You already have three powerUp cards.");
             System.out.println("Choose one to discard!");
             int index = indexToDiscard();
             this.chooseToDiscard(index);
@@ -50,8 +50,8 @@ public class Hand implements Serializable {
         }
     }
 
-    //Check how many PowerUp the player has in his hand.
-    //Return true if the player can draw a PowerUp, false otherwise.
+    //Check how many powerUp the player has in his hand.
+    //Return true if the player can draw a powerUp, false otherwise.
     public boolean checkPowerUps() {
         if(powerUps.size() <= 3) {
             return true;
@@ -82,7 +82,7 @@ public class Hand implements Serializable {
             return null;
         }
         else {
-            //remove from the ArrayList the PowerUp chosen
+            //remove from the ArrayList the powerUp chosen
             return powerUps.remove(indexToDiscard);
 
         }

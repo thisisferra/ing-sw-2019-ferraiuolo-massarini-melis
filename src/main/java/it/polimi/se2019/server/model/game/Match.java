@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 
 import it.polimi.se2019.server.controller.VirtualView;
 import it.polimi.se2019.server.model.cards.*;
+import it.polimi.se2019.server.model.cards.powerUp.*;
 import it.polimi.se2019.server.model.cards.weapons.*;
 import it.polimi.se2019.server.model.map.Map;
 import it.polimi.se2019.server.model.map.WeaponSlot;
@@ -57,52 +58,6 @@ public class Match extends Observable implements Serializable {
         this.characterAvailable.add("sprog");
         this.characterAvailable.add("violet");
     }
-    //generate instances of players
-    //each player should type in his name and his figure(color figure)
-    /*
-    private void initPlayers(){
-        switch(this.numberOfPlayers){
-            case 0: {
-                System.out.println("Not enough players.");
-                break;
-            }
-            case 1: {
-                System.out.println("Not enough players.");
-                break;
-            }
-            case 2: {
-                players.add(new Player("Mattia","blue",this));
-                players.add(new Player("Marco","grey",this));
-                break;
-            }
-            case 3: {
-                players.add(new Player("Mattia","blue",this));
-                players.add(new Player("Marco","grey",this));
-                players.add(new Player("Ferra","yellow",this));
-                break;
-            }
-            case 4: {
-                players.add(new Player("Mattia","blue",this));
-                players.add(new Player("Marco","grey",this));
-                players.add(new Player("Ferra","yellow",this));
-                players.add(new Player("Matteo","purple",this));
-                break;
-            }
-            case 5: {
-                players.add(new Player("Mattia","blue",this));
-                players.add(new Player("Marco","grey",this));
-                players.add(new Player("Ferra","yellow",this));
-                players.add(new Player("Matteo","purple",this));
-                players.add(new Player("Bruno", "green",this));
-                break;
-            }
-            default:{
-                System.out.println("Too many players!");
-                break;
-            }
-        }
-    }
-     */
 
     /*Generate the game field:
     * -the map is generated starting from mapID (1,2,3 or 4)
@@ -113,8 +68,9 @@ public class Match extends Observable implements Serializable {
         * Each json file define an array containing Ammo, Weapon and PowerUp instances respectively.
         * After parsing each file into three arrays, they are converted into ArrayLists*/
         weaponStack = new ArrayList<>();
+        powerUpStack = new ArrayList<>();
         Ammo[] aS;
-        PowerUp[]pUS;
+        //PowerUp[]pUS;
         //create the map filling it with squares from the json file, based on the idMap
         map = new Map(this.chosenMap);
         map.setAllSquare();
@@ -123,7 +79,7 @@ public class Match extends Observable implements Serializable {
 
         try {
             aS = gson.fromJson(new FileReader("./src/main/resources/ammo.json"), Ammo[].class);
-            pUS = gson.fromJson(new FileReader("./src/main/resources/powerups.json"),PowerUp[].class);
+            //pUS = gson.fromJson(new FileReader("./src/main/resources/powerups.json"),PowerUp[].class);
 
             weaponStack.add(gson.fromJson(new FileReader("src/main/resources/machine_gun.json"), MachineGun.class));
             weaponStack.add(gson.fromJson(new FileReader("src/main/resources/plasma_gun.json"), PlasmaGun.class));
@@ -146,7 +102,21 @@ public class Match extends Observable implements Serializable {
             weaponStack.add(gson.fromJson(new FileReader("src/main/resources/shockwave.json"), Shockwave.class));
             weaponStack.add(gson.fromJson(new FileReader("src/main/resources/cyberblade.json"), Cyberblade.class));
             weaponStack.add(gson.fromJson(new FileReader("src/main/resources/sledgehammer.json"), Sledgehammer.class));
-            powerUpStack = new ArrayList<>(Arrays.asList(pUS));
+            for (int i = 0; i < 2; i++) {
+                powerUpStack.add(gson.fromJson(new FileReader("./src/main/resources/targeting_scopeRed.json"), TargetingScope.class));
+                powerUpStack.add(gson.fromJson(new FileReader("./src/main/resources/targeting_scopeYellow.json"), TargetingScope.class));
+                powerUpStack.add(gson.fromJson(new FileReader("./src/main/resources/targeting_scopeBlue.json"), TargetingScope.class));
+                powerUpStack.add(gson.fromJson(new FileReader("./src/main/resources/teleporterRed.json"), Teleporter.class));
+                powerUpStack.add(gson.fromJson(new FileReader("./src/main/resources/teleporterYellow.json"), Teleporter.class));
+                powerUpStack.add(gson.fromJson(new FileReader("./src/main/resources/teleporterBlue.json"), Teleporter.class));
+                powerUpStack.add(gson.fromJson(new FileReader("./src/main/resources/tagback_grenadeRed.json"), TagbackGrenade.class));
+                powerUpStack.add(gson.fromJson(new FileReader("./src/main/resources/tagback_grenadeYellow.json"), TagbackGrenade.class));
+                powerUpStack.add(gson.fromJson(new FileReader("./src/main/resources/tagback_grenadeBlue.json"), TagbackGrenade.class));
+                powerUpStack.add(gson.fromJson(new FileReader("./src/main/resources/newtonRed.json"), Newton.class));
+                powerUpStack.add(gson.fromJson(new FileReader("./src/main/resources/newtonYellow.json"), Newton.class));
+                powerUpStack.add(gson.fromJson(new FileReader("./src/main/resources/newtonBlue.json"), Newton.class));
+            }
+            //powerUpStack = new ArrayList<>(Arrays.asList(pUS));
             ammoStack = new ArrayList<>(Arrays.asList(aS));
 
             Collections.shuffle(weaponStack);

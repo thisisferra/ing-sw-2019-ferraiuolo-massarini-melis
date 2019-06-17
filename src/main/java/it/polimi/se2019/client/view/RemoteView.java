@@ -2,14 +2,13 @@ package it.polimi.se2019.client.view;
 
 import it.polimi.se2019.server.controller.InfoShot;
 import it.polimi.se2019.server.controller.VirtualView;
-import it.polimi.se2019.server.model.cards.PowerUp;
+import it.polimi.se2019.server.model.cards.powerUp.PowerUp;
 import it.polimi.se2019.server.model.cards.weapons.Weapon;
 import it.polimi.se2019.server.model.game.Cubes;
 import it.polimi.se2019.server.model.map.Square;
 import it.polimi.se2019.server.model.map.WeaponSlot;
 import it.polimi.se2019.server.model.player.Player;
 
-import java.rmi.registry.Registry;
 import java.util.ArrayList;
 
 /**
@@ -40,7 +39,7 @@ public class RemoteView {
     private WeaponSlot cabinetRed;
     private WeaponSlot cabinetYellow;
     private WeaponSlot cabinetBlue;
-    private InfoShot infoShot;
+    private InfoShot infoShot = new InfoShot();
     private ArrayList<Weapon> usableWeapon = new ArrayList<>();
 
     /**
@@ -187,7 +186,7 @@ public class RemoteView {
 
 
     /**
-     * Retrieves an ArrayList of PowerUp objects currently
+     * Retrieves an ArrayList of powerUp objects currently
      * in the hand of this user.
      *
      * @return a list of the power ups owned by the user.

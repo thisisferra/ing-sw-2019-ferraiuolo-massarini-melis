@@ -1,6 +1,6 @@
 package it.polimi.se2019.client.view;
 
-import it.polimi.se2019.server.model.cards.PowerUp;
+import it.polimi.se2019.server.model.cards.powerUp.PowerUp;
 import it.polimi.se2019.server.model.cards.weapons.Weapon;
 import it.polimi.se2019.server.model.map.Square;
 import it.polimi.se2019.server.model.player.Player;
@@ -1104,7 +1104,7 @@ public class GUI extends Application {
         shootButton.setOnAction(e -> {
             try {
                 if (guiController.getRmiStub().getActivePlayer().equals(this.username)) {
-                    if (guiController.getRmiStub().checkNumberAction(username)) {
+                    if (guiController.getRmiStub().checkNumberAction(username) && guiController.getRmiStub().checkSizeWeapon(this.username)) {
                         guiController.verifyWeapons();
                         guiController.getRmiStub().useAction(username);
                         if (!myRemoteView.getUsableWeapon().isEmpty()) {
@@ -1117,7 +1117,7 @@ public class GUI extends Application {
                             textArea.setText("You can't use any weapon\n" + textArea.getText());
                         }
                     } else {
-                        textArea.setText("You have already used two actions. Pass your turn\n" + textArea.getText());
+                        textArea.setText("You have already used two actions or you dont't have any weapons. Pass your turn\n" + textArea.getText());
                     }
                 } else {
                     textArea.setText("It's not your round\n" + textArea.getText());
@@ -1243,6 +1243,15 @@ public class GUI extends Application {
         powerUpButton.setOnMouseExited(e-> powerUpButton.setStyle(BUTTON_STYLE));
         tradeButton.setOnMouseExited(e-> tradeButton.setStyle(BUTTON_STYLE));
 
+
+        powerUpButton.setOnAction(ind -> {
+            try {
+                guiController.getRmiStub().usePowerUp(this.username, index, myRemoteView.getInfoShot());
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
         tradeButton.setOnAction(trade -> {
             try {
                 guiController.getRmiStub().tradeCube(index);
