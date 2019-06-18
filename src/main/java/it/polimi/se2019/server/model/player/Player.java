@@ -31,8 +31,11 @@ public class Player implements Serializable {
     private Hand playerHand;
     private PlayerBoard playerBoard;
     private Match match;
-    private int numberOfAction = 2;
+    private int numberOfAction;
     private ShotController shotController;
+    private boolean finalFrenzy = false;
+    private int phaseAction = 0;
+    private boolean canMove = false;
 
     public Player(String clientName, Match match) {
         this.clientName = clientName;
@@ -45,6 +48,7 @@ public class Player implements Serializable {
         this.playerHand = new Hand();
         this.shotController = new ShotController(match);
         this.position = -1;
+        this.numberOfAction=2;
     }
 
     public String getCharacter() {
@@ -67,12 +71,36 @@ public class Player implements Serializable {
         this.clientName= clientName;
     }
 
-    /**
-     * Getter of the color's player
-     * @return the color choosed by the player at the start of the game
-     */
+    public void setPhaseAction(int phaseAction){
+        this.phaseAction=phaseAction;
+    }
+
+    public int getPhaseAction(){
+        return this.phaseAction;
+    }
+
+    public void setColor(String color){
+        this.color = color;
+    }
+
     public String getColor(){
         return this.color;
+    }
+
+    public boolean getFinalFrenzy(){
+        return this.finalFrenzy;
+    }
+
+    public void setFinalFrenzy(boolean finalFrenzy){
+        this.finalFrenzy=finalFrenzy;
+    }
+
+    public boolean getCanMove(){
+        return this.canMove;
+    }
+
+    public void setCanMove(boolean canMove){
+        this.canMove=canMove;
     }
 
     /**
@@ -136,8 +164,16 @@ public class Player implements Serializable {
         return this.numberOfAction;
     }
 
-    public void setNumberOfAction() {
+    public void decreaseNumberOfAction() {
         this.numberOfAction = this.numberOfAction - 1;
+    }
+
+    public void increaseNumberOfAction(){
+        this.numberOfAction = this.numberOfAction +1;
+    }
+
+    public void setNumberOfAction(int numberOfAction) {
+        this.numberOfAction = numberOfAction;
     }
 
     public void resetNumberOfAction() {
@@ -304,20 +340,17 @@ public class Player implements Serializable {
         switch(powerUp.getColor()) {
             case "red": {
                 cubeObtained = new Cubes(1, 0, 0);
-                //powerup discarded goes into discardedPowerUps
                 this.match.getDiscardedPowerUps().add(powerUp);
                 break;
             }
             case "blue": {
                 cubeObtained = new Cubes(1, 0, 1);
-                //powerup discarded goes into discardedPowerUps
                 this.match.getDiscardedPowerUps().add(powerUp);
                 break;
 
             }
             case "yellow": {
                 cubeObtained = new Cubes(0, 1, 0);
-                //powerup discarded goes into discardedPowerUps
                 this.match.getDiscardedPowerUps().add(powerUp);
                 break;
             }

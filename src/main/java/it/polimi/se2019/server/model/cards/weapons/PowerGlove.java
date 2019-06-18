@@ -16,7 +16,7 @@ public class PowerGlove extends AbstractWeapon {
 
         }
         else if(infoShot.getNameEffect().equals("Optional2")){
-            if(infoShot.getTargetPlayer().size() >0){
+            if(!infoShot.getTargetPlayer().isEmpty()){
                 infoShot.getTargetPlayer().get(0).getPlayerBoard().dealDamage(infoShot.getDamagingPlayer(),2);
                 infoShot.getDamagingPlayer().setPosition(infoShot.getTargetPlayer().get(0).getPosition());
             }
@@ -25,6 +25,7 @@ public class PowerGlove extends AbstractWeapon {
                 infoShot.getDamagingPlayer().setPosition(infoShot.getTargetPlayer().get(1).getPosition());
             }
         }
+        this.setLoad(false);
     }
 
     public  PowerGlove (Weapon weapon){

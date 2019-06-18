@@ -23,6 +23,7 @@ public class GrenadeLauncher extends AbstractWeapon {
                 target.getPlayerBoard().dealDamage(infoShot.getDamagingPlayer(),1);
             }
         }
+        this.setLoad(false);
     }
 
     public  GrenadeLauncher (Weapon weapon){

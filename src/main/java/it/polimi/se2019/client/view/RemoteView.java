@@ -7,6 +7,7 @@ import it.polimi.se2019.server.model.cards.weapons.Weapon;
 import it.polimi.se2019.server.model.game.Cubes;
 import it.polimi.se2019.server.model.map.Square;
 import it.polimi.se2019.server.model.map.WeaponSlot;
+import it.polimi.se2019.server.model.player.EnemyMark;
 import it.polimi.se2019.server.model.player.Player;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class RemoteView {
     private int points;
     private int phaseAction;        /*useful to know if the player has enhanced action*/
     private boolean finalFrenzy;
-    private ArrayList<Player> markPlayerBoard = new ArrayList<>();      //Info useful for Player-board GUI
+    private ArrayList<EnemyMark> markPlayerBoard = new ArrayList<>();      //Info useful for Player-board GUI
     private ArrayList<Player> damagePlayerBoard = new ArrayList<>();    //Info useful for Player-board GUI
     private int deathsPlayerBoard;                                      //Info useful for Player-board GUI
     private ArrayList<Weapon> weapons = new ArrayList<>();
@@ -35,7 +36,7 @@ public class RemoteView {
     private boolean canMove = false;
     private Cubes cubes;
     private ArrayList<Square> reachableSquare = new ArrayList<>();
-    private int numberOfActions = 2;
+    private int numberOfActions;
     private WeaponSlot cabinetRed;
     private WeaponSlot cabinetYellow;
     private WeaponSlot cabinetBlue;
@@ -140,7 +141,7 @@ public class RemoteView {
      *         users to this user.
      */
 
-    public ArrayList<Player> getMarkPlayerBoard() {
+    public ArrayList<EnemyMark> getMarkPlayerBoard() {
         return this.markPlayerBoard;
     }
 
@@ -269,7 +270,9 @@ public class RemoteView {
         return this.usableWeapon;
     }
 
-
+    public ArrayList<Player> getKillShotTrack(){
+        return this.killShotTrack;
+    }
 
 
 
@@ -303,7 +306,7 @@ public class RemoteView {
         this.finalFrenzy = finalFrenzy;
     }
 
-    private void setMarkPlayerBoard(ArrayList<Player> markPlayerBoard) {
+    private void setMarkPlayerBoard(ArrayList<EnemyMark> markPlayerBoard) {
         this.markPlayerBoard = markPlayerBoard;
     }
 
@@ -447,14 +450,15 @@ public class RemoteView {
         setDamagePlayerBoard(virtualView.getDamagePlayerBoard());
         setKillShotTrack(virtualView.getKillShotTrack());
 
-        setCanMove(virtualView.getCanMove());  //FORSE DA TOGLIERE
+        setCanMove(virtualView.getCanMove());
+        setInfoShot(virtualView.getInfoShot());  //FORSE DA TOGLIERE
+
         setPhaseAction(virtualView.getPhaseAction());
         setFinalFrenzy(virtualView.getFinalFrenzy());
         if (getUsername().equals(virtualView.getUsername())) {
             // private infos
             setNumberOfActions(virtualView.getNumberOfActions());
             setPoints(virtualView.getPoints());
-            setInfoShot(virtualView.getInfoShot());  //FORSE DA TOGLIERE
             setWeapons(virtualView.getWeapons());
             setPowerUps(virtualView.getPowerUps());
             setAvailableWeapon(virtualView.getAvailableWeapons());

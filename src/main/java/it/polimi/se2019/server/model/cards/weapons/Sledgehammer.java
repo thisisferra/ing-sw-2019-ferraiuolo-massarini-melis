@@ -15,6 +15,7 @@ public class Sledgehammer extends AbstractWeapon {
             infoShot.getTargetPlayer().get(0).getPlayerBoard().dealDamage(infoShot.getDamagingPlayer(),3);
             infoShot.getTargetPlayer().get(0).setPosition(infoShot.getNewPosition());
         }
+        this.setLoad(false);
     }
 
     public  Sledgehammer (Weapon weapon){

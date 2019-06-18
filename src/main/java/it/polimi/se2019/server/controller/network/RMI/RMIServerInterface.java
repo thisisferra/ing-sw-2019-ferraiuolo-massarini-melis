@@ -43,6 +43,8 @@ public interface RMIServerInterface extends Remote {
 
     boolean checkNumberAction(String username) throws RemoteException;
 
+    void giftAction(String username) throws RemoteException;
+
     void useAction(String username) throws RemoteException;
 
     void setActivePlayer(String usernameLastPlayer) throws RemoteException;

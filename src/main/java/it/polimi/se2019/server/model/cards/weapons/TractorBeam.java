@@ -17,6 +17,7 @@ public class TractorBeam extends AbstractWeapon {
             infoShot.getTargetPlayer().get(0).getPlayerBoard().dealDamage(infoShot.getDamagingPlayer(),3);
             infoShot.getTargetPlayer().get(0).setPosition(infoShot.getDamagingPlayer().getPosition());
         }
+        this.setLoad(false);
     }
     public  TractorBeam (Weapon weapon){
         this.type = weapon.getType();

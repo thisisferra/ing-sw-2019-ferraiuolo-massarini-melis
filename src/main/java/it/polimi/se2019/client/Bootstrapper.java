@@ -22,7 +22,7 @@ public class Bootstrapper{
 
     private int rmiPort = 1099;
 
-    private String host = "127.0.0.1";
+    private String host;
 
     private String remObjName = "remServer";
 

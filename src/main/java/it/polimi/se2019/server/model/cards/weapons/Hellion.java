@@ -21,6 +21,7 @@ public class Hellion extends AbstractWeapon {
                 target.getPlayerBoard().dealMark(infoShot.getDamagingPlayer(),2);
             }
         }
+        this.setLoad(false);
     }
 
     public  Hellion (Weapon weapon){

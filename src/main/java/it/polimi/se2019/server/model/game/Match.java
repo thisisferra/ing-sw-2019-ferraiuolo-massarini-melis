@@ -17,6 +17,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class Match extends Observable implements Serializable {
@@ -76,7 +78,7 @@ public class Match extends Observable implements Serializable {
         map.setAllSquare();
         map.setRoomSquare();
         Gson gson = new Gson();
-
+        Logger logger = Logger.getAnonymousLogger();
         try {
             aS = gson.fromJson(new FileReader("./src/main/resources/ammo.json"), Ammo[].class);
             //pUS = gson.fromJson(new FileReader("./src/main/resources/powerups.json"),PowerUp[].class);
@@ -124,22 +126,8 @@ public class Match extends Observable implements Serializable {
             Collections.shuffle(ammoStack);
 
         } catch (FileNotFoundException e) {
-            System.out.println(e);
+            logger.log(Level.INFO,"Error while reading json files",e);
         }
-        //prints all decks
-        /*
-        if(!ammoStack.isEmpty()){
-            for(Ammo ammo : ammoStack)
-                System.out.println(ammo.toString());
-        }
-        if(!weaponStack.isEmpty()){
-            for(Weapon weapon : weaponStack)
-                System.out.println(weapon.toString());
-        }
-        if(!powerUpStack.isEmpty()){
-            for(PowerUp powerup : powerUpStack)
-                System.out.println(powerup.toString());
-        }*/
     }
 
     private void initCabinets(){

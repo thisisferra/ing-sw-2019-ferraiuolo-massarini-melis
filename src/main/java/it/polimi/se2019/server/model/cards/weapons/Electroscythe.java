@@ -19,6 +19,7 @@ public class Electroscythe extends AbstractWeapon {
                 target.getPlayerBoard().dealDamage(infoShot.getDamagingPlayer(),2);
             }
         }
+        this.setLoad(false);
     }
     public  Electroscythe(Weapon weapon){
         this.type = weapon.getType();

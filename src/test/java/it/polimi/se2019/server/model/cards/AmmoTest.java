@@ -39,9 +39,9 @@ public class AmmoTest {
 
     @Test
     public void testToString() {
-        String expected = "Reds: 1 Blues: 1 Yellows: 1\nPower Up : false";
+        String expected = "Reds: 1 Blues: 1 Yellows: 1\nPower Up: false";
         Assert.assertEquals(expected, ammo.toString());
-        expected = "Reds: 1 Blues: 1 Yellows: 1\nPower Up : true";
+        expected = "Reds: 1 Blues: 1 Yellows: 1\nPower Up: true";
         Assert.assertEquals(expected, ammoPowerUp.toString());
 
 

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public class RocketLauncher extends AbstractWeapon {
     public void applyEffect(InfoShot infoShot){
         //TODO ???
+        this.setLoad(false);
     }
 
     public  RocketLauncher (Weapon weapon){

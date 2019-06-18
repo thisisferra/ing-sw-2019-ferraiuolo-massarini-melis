@@ -25,6 +25,8 @@ import java.rmi.server.RemoteServer;
 import java.rmi.server.ServerNotActiveException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 //ritorno
 public class RMIServer extends Server implements RMIServerInterface {
@@ -51,6 +53,8 @@ public class RMIServer extends Server implements RMIServerInterface {
 
     private ShotController shotController;
 
+    private Logger logger = Logger.getAnonymousLogger();
+
     //Metodi
 
     public RMIServer(OneAboveAll oneAboveAll, int port, String remObjName) {
@@ -60,7 +64,7 @@ public class RMIServer extends Server implements RMIServerInterface {
             this.ipAddress = InetAddress.getLocalHost().getHostAddress().trim();
         }
         catch(UnknownHostException unknownHost) {
-            System.err.println("Unknown host");
+            logger.log(Level.INFO,"RMIServer constructor Error",unknownHost);
         }
         this.port = port;
         System.out.println("IP address: " + ipAddress + ":" + this.port);
@@ -81,7 +85,7 @@ public class RMIServer extends Server implements RMIServerInterface {
             System.out.println("Client connessi: ");*/
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.log(Level.INFO,"Error starting the server",e);
         }
     }
 
@@ -95,7 +99,7 @@ public class RMIServer extends Server implements RMIServerInterface {
         }
         VirtualView virtualView = createVirtualView(guiController);
         Player player = createPlayer(username);
-        virtualView.initializeVirtualView(player, match);
+        virtualView.updateVirtualView(player, match);
         this.printClientConnected();
         this.initAllClient();
         if (activePlayer == null) {
@@ -115,7 +119,9 @@ public class RMIServer extends Server implements RMIServerInterface {
          */
     }
 
-    public synchronized boolean checkUsername(String username) throws Exception {
+    public synchronized boolean checkUsername(String username) {
+
+
         if (match != null) {
             if (match.getAllPlayers().size() < 5) {
                 for (Player player : match.getAllPlayers()) {
@@ -124,7 +130,7 @@ public class RMIServer extends Server implements RMIServerInterface {
                     }
                 }
             } else {
-                throw new Exception("Already 5 players");
+                logger.log(Level.INFO,"Already 5 players",new Exception());
             }
         }
         return true;
@@ -143,12 +149,14 @@ public class RMIServer extends Server implements RMIServerInterface {
         Player player = match.searchPlayerByClientName(username);
         Square square = match.getMap().searchSquare(player.getPosition());
         player.pickUpAmmo(square, match);
+        updateAllVirtualView();
         this.updateAllClient();
     }
 
     public void pickUpPowerUp(String username) throws RemoteException{
         Player player = match.searchPlayerByClientName(username);
         player.pickUpPowerUp();
+        updateAllVirtualView();
         this.updateAllClient();
     }
 
@@ -163,11 +171,12 @@ public class RMIServer extends Server implements RMIServerInterface {
         currentPlayer.setPosition(newPosition);
         try {
             getMyVirtualView(username).setPosition(currentPlayer.getPosition());
-            getMyVirtualView(username).setNumberOfActions(currentPlayer.getNumberOfAction()-1);
+            getMyVirtualView(username).setNumberOfActions(currentPlayer.getNumberOfAction());
+            updateAllVirtualView();
             updateAllClient();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.log(Level.INFO,"SetNewPosition Error");
         }
     }
 
@@ -216,6 +225,7 @@ public class RMIServer extends Server implements RMIServerInterface {
         currentPlayer.pickUpWeapon(indexToPickUp);
         getMyVirtualView(username).setWeapons(currentPlayer.getHand().getWeapons());
         getMyVirtualView(username).setCubes(currentPlayer.getPlayerBoard().getAmmoCubes());
+        updateAllVirtualView();
         updateAllClient();
 
     }
@@ -224,6 +234,7 @@ public class RMIServer extends Server implements RMIServerInterface {
         currentPlayer.pickUpWeapon(indexToPickUp,indexToDrop);
         getMyVirtualView(username).setWeapons(currentPlayer.getHand().getWeapons());
         getMyVirtualView(username).setCubes(currentPlayer.getPlayerBoard().getAmmoCubes());
+        updateAllVirtualView();
         updateAllClient();
 
     }
@@ -232,6 +243,7 @@ public class RMIServer extends Server implements RMIServerInterface {
     public void restoreMap()throws RemoteException{
         restoreTile();
         restoreWeaponSlot();
+        updateAllVirtualView();
         updateAllClient();
     }
 
@@ -292,9 +304,18 @@ public class RMIServer extends Server implements RMIServerInterface {
         return false;
     }
 
-    public void useAction(String username) {
+    public void giftAction(String username) throws RemoteException{
         Player currentPlayer = match.searchPlayerByClientName(username);
-        currentPlayer.setNumberOfAction();
+        currentPlayer.increaseNumberOfAction();
+        this.updateAllVirtualView();
+        this.updateAllClient();
+    }
+
+    public void useAction(String username) throws RemoteException{
+        Player currentPlayer = match.searchPlayerByClientName(username);
+        currentPlayer.decreaseNumberOfAction();
+        this.updateAllVirtualView();
+        this.updateAllClient();
     }
 
     public void setActivePlayer(String usernameLastPlayer) {
@@ -324,6 +345,7 @@ public class RMIServer extends Server implements RMIServerInterface {
     public void resetActionNumber(String username) throws RemoteException{
         Player currentPlayer = this.match.searchPlayerByClientName(username);
         currentPlayer.resetNumberOfAction();
+        this.updateAllVirtualView();
         this.updateAllClient();
     }
 
@@ -342,7 +364,9 @@ public class RMIServer extends Server implements RMIServerInterface {
 
     public void tradeCube(int index) throws RemoteException{
         activePlayer.tradeCube(index);
-        updateAllClient();
+        this.updateAllVirtualView();
+        this.updateAllClient();
+
     }
 
     public void discardAndSpawn(String username,int index) throws RemoteException{
@@ -366,7 +390,8 @@ public class RMIServer extends Server implements RMIServerInterface {
                 System.out.println("ERRORE");
         }
         match.getDiscardedPowerUps().add(discardedPowerUp);
-        updateAllClient();
+        this.updateAllVirtualView();
+        this.updateAllClient();
     }
 
     public ArrayList<Weapon> getReloadableWeapons(String username) throws RemoteException{
@@ -378,12 +403,13 @@ public class RMIServer extends Server implements RMIServerInterface {
         Player player = this.match.searchPlayerByClientName(username);
         Weapon weaponToReload = player.getHand().getWeapons().get(index);
         weaponToReload.setLoad(true);
+        this.updateAllVirtualView();
         this.updateAllClient();
     }
 
     public boolean checkSizeWeapon(String username) {
         Player currentPlayer = this.match.searchPlayerByClientName(username);
-        return currentPlayer.getHand().getWeapons().size() > 0;
+        return !currentPlayer.getHand().getWeapons().isEmpty();
 
     }
 
@@ -392,10 +418,9 @@ public class RMIServer extends Server implements RMIServerInterface {
         Player currentPlayer = this.match.searchPlayerByClientName(username);
         PowerUp powerUp = currentPlayer.getHand().getPowerUps().get(index);
         powerUp.applyEffect(infoShot);
-
+        //TODO discardpowerup
         this.updateAllVirtualView();
-
-
+        this.updateAllClient();
 
     }
 

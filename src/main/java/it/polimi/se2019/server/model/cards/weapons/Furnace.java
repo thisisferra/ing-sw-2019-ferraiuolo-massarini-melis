@@ -20,6 +20,7 @@ public class Furnace extends AbstractWeapon {
                 target.getPlayerBoard().dealMark(infoShot.getDamagingPlayer(),1);
             }
         }
+        this.setLoad(false);
     }
     public  Furnace (Weapon weapon){
         this.type = weapon.getType();

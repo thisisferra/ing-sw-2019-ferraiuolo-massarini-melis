@@ -21,6 +21,7 @@ public class Thor extends AbstractWeapon {
             infoShot.getTargetPlayer().get(1).getPlayerBoard().dealDamage(infoShot.getDamagingPlayer(),1);
             infoShot.getTargetPlayer().get(2).getPlayerBoard().dealDamage(infoShot.getDamagingPlayer(),2);
         }
+        this.setLoad(false);
     }
 
     public  Thor (Weapon weapon){

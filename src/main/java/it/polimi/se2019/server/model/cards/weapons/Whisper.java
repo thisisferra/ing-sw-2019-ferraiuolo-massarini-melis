@@ -11,7 +11,7 @@ public class Whisper extends AbstractWeapon {
     public void applyEffect(InfoShot infoShot){
         infoShot.getTargetPlayer().get(0).getPlayerBoard().dealDamage(infoShot.getDamagingPlayer(),3);
         infoShot.getTargetPlayer().get(0).getPlayerBoard().dealMark(infoShot.getDamagingPlayer(),1);
-
+        this.setLoad(false);
     }
     public  Whisper (Weapon weapon){
         this.type = weapon.getType();

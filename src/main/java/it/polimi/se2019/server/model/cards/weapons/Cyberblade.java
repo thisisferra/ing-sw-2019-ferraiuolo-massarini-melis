@@ -27,6 +27,7 @@ public class Cyberblade extends AbstractWeapon{
             infoShot.getTargetPlayer().get(1).getPlayerBoard().dealDamage(infoShot.getDamagingPlayer(),2);
             infoShot.getDamagingPlayer().setPosition(infoShot.getNewPosition());
         }
+        this.setLoad(false);
     }
     public  Cyberblade(Weapon weapon){
         this.type = weapon.getType();

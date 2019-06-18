@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public class Heatseeker  extends AbstractWeapon{
     public void applyEffect(InfoShot infoShot){
         infoShot.getTargetPlayer().get(0).getPlayerBoard().dealDamage(infoShot.getDamagingPlayer(),3);
+        this.setLoad(false);
     }
 
     public  Heatseeker (Weapon weapon){

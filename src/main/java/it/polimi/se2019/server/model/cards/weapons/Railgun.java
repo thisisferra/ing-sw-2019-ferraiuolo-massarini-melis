@@ -18,6 +18,7 @@ public class Railgun extends AbstractWeapon {
                 target.getPlayerBoard().dealDamage(infoShot.getDamagingPlayer(),2);
             }
         }
+        this.setLoad(false);
     }
 
     public  Railgun (Weapon weapon){

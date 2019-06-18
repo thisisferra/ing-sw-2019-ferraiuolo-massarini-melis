@@ -30,6 +30,7 @@ public class Flamethrower extends AbstractWeapon {
                 }
             }
         }
+        this.setLoad(false);
     }
     public  Flamethrower (Weapon weapon){
         this.type = weapon.getType();

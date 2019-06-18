@@ -18,6 +18,7 @@ public class Shotgun extends AbstractWeapon {
             infoShot.getTargetPlayer().get(0).getPlayerBoard().dealDamage(infoShot.getDamagingPlayer(),2);
 
         }
+        this.setLoad(false);
     }
     public  Shotgun (Weapon weapon){
         this.type = weapon.getType();

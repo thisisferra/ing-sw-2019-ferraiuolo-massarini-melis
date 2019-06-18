@@ -20,6 +20,7 @@ public class LockRifle extends AbstractWeapon {
             infoShot.getTargetPlayer().get(0).getPlayerBoard().dealMark(infoShot.getDamagingPlayer(),1);
             infoShot.getTargetPlayer().get(1).getPlayerBoard().dealMark(infoShot.getDamagingPlayer(),1);
         }
+        this.setLoad(false);
 
     }
 

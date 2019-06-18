@@ -36,6 +36,7 @@ public class MachineGun extends AbstractWeapon {
                 infoShot.getTargetPlayer().get(2).getPlayerBoard().dealDamage(infoShot.getDamagingPlayer(),1);
             }
         }
+        this.setLoad(false);
     }
 
     public  MachineGun (Weapon weapon){

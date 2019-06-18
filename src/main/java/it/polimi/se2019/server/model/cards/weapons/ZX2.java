@@ -19,6 +19,7 @@ public class ZX2  extends AbstractWeapon {
                 target.getPlayerBoard().dealMark(infoShot.getDamagingPlayer(),1);
 
         }
+        this.setLoad(false);
     }
 
     public  ZX2 (Weapon weapon){

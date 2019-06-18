@@ -21,6 +21,7 @@ public class PlasmaGun extends AbstractWeapon {
         else if(infoShot.getNameEffect().equals("BasicEffect+Extra1+Extra2")){
             infoShot.getTargetPlayer().get(0).getPlayerBoard().dealDamage(infoShot.getDamagingPlayer(),3);
         }
+        this.setLoad(false);
     }
 
     public  PlasmaGun (Weapon weapon){

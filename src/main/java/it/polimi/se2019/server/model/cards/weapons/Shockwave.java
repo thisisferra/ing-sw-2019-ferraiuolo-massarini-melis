@@ -10,14 +10,14 @@ import java.util.ArrayList;
 public class Shockwave extends AbstractWeapon {
     public void applyEffect(InfoShot infoShot){
         if(infoShot.getNameEffect().equals("Optional1")){
-            // TODO optional1 effect is missing
+            // TODO optional1 effect is missing (Choose up to three targets, each on three different squares)
         }
         else if(infoShot.getNameEffect().equals("Optional2")){
             for(Player target: infoShot.getTargetPlayer()){
                 target.getPlayerBoard().dealDamage(infoShot.getDamagingPlayer(),1);
             }
         }
-
+        this.setLoad(false);
     }
 
     public  Shockwave (Weapon weapon){

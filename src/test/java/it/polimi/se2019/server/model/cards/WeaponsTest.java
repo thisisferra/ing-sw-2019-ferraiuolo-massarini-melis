@@ -11,6 +11,8 @@ import org.junit.Test;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class WeaponsTest {
 
@@ -39,6 +41,7 @@ public class WeaponsTest {
     private Player p1,p2,p3,p4,p5;
     private ArrayList<Player> enemyPlayers;
     private InfoShot infoShot;
+    Logger logger = Logger.getAnonymousLogger();
     @Before
     public void setWeaponsTest(){
         Gson gson = new Gson();
@@ -66,7 +69,7 @@ public class WeaponsTest {
             zx2 = gson.fromJson(new FileReader("./src/main/resources/zx-2.json"), ZX2.class);
 
         } catch (FileNotFoundException e){
-            System.out.println("File non trovato");
+            logger.log(Level.INFO,"Test error, loading json files");
         }
         match = new Match(1);
         match.initializeMatch();

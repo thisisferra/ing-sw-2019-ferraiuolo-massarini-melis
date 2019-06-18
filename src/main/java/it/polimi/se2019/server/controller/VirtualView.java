@@ -7,6 +7,7 @@ import it.polimi.se2019.server.model.game.Cubes;
 import it.polimi.se2019.server.model.game.Match;
 import it.polimi.se2019.server.model.map.Square;
 import it.polimi.se2019.server.model.map.WeaponSlot;
+import it.polimi.se2019.server.model.player.EnemyMark;
 import it.polimi.se2019.server.model.player.Player;
 
 import java.io.Serializable;
@@ -31,13 +32,13 @@ public class VirtualView implements Serializable {
     private WeaponSlot cabinetYellow;
     private WeaponSlot cabinetBlue;
     private InfoShot infoShot;
-    private ArrayList<Player> markPlayerBoard = new ArrayList<>();      //Info useful for Player-board GUI
+    private ArrayList<EnemyMark> markPlayerBoard = new ArrayList<>();      //Info useful for Player-board GUI
     private ArrayList<Player> damagePlayerBoard = new ArrayList<>();    //Info useful for Player-board GUI
     private int deathsPlayerBoard;                                      //Info useful for Player-board GUI
     private ArrayList<Player> killShotTrack = new ArrayList<>();
     private boolean canMove = false;
     private ArrayList<Square> reachableSquare = new ArrayList<>();
-    private int numberOfActions = 2;
+    private int numberOfActions;
     private ArrayList<Weapon> availableWeapons = new ArrayList<>();
 
 
@@ -100,7 +101,7 @@ public class VirtualView implements Serializable {
         return this.deathsPlayerBoard;
     }
 
-    public ArrayList<Player> getMarkPlayerBoard(){
+    public ArrayList<EnemyMark> getMarkPlayerBoard(){
         return this.markPlayerBoard;
     }
 
@@ -218,25 +219,41 @@ public class VirtualView implements Serializable {
         this.availableWeapons = availableWeapons;
     }
 
+    public void setMarkPlayerBoard(ArrayList<EnemyMark> markPlayerBoard){
+        this.markPlayerBoard = markPlayerBoard;
+    }
+
+    public void setDamagePlayerBoard(ArrayList<Player> damagePlayerBoard){
+        this.damagePlayerBoard = damagePlayerBoard;
+    }
+
+    public void setKillShotTrack(ArrayList<Player> killShotTrack ){
+        this.killShotTrack = killShotTrack;
+    }
+
     //ALTRO
 
-    public void initializeVirtualView(Player player, Match match) {
+    public void updateVirtualView(Player player, Match match) {
         this.setUsername(player.getClientName());
         this.setPosition(player.getPosition());
         this.setCharacter(player.getCharacter());
-        this.setNumberOfActions(player.getNumberOfAction());
         this.setWeapons(player.getHand().getWeapons());
         this.setPowerUps(player.getHand().getPowerUps());
         this.setCubes(player.getPlayerBoard().getAmmoCubes());
         this.setCabinetRed(match.getArsenal().get(0));
         this.setCabinetYellow(match.getArsenal().get(1));
         this.setCabinetBlue(match.getArsenal().get(2));
-
+        this.setPoints(player.getScore());
+        this.setCanMove(player.getCanMove());
+        this.setFinalFrenzy(player.getFinalFrenzy());
+        this.setPhaseAction(player.getPhaseAction());
+        this.setMarkPlayerBoard(player.getPlayerBoard().getEnemyMarks());
+        this.setDamagePlayerBoard(player.getPlayerBoard().getDamage());
+        this.setKillShotTrack(match.getKillShotTrack());
+        this.setDeathsPlayerBoard(player.getPlayerBoard().getDeaths());
+        this.setNumberOfActions(player.getNumberOfAction());
     }
 
-    public void updateVirtualView(Player player, Match match) {
-
-    }
 
     /*
     public void updateClient(VirtualView virtualView) throws RemoteException {

@@ -24,8 +24,8 @@ public class VortexCannon extends AbstractWeapon {
                 infoShot.getTargetPlayer().get(2).getPlayerBoard().dealDamage(infoShot.getDamagingPlayer(),1);
                 infoShot.getTargetPlayer().get(2).setPosition(infoShot.getNewPosition());
             }
-
         }
+        this.setLoad(false);
     }
 
     public  VortexCannon (Weapon weapon){
