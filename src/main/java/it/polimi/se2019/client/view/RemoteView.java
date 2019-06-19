@@ -1,6 +1,7 @@
 package it.polimi.se2019.client.view;
 
 import it.polimi.se2019.server.controller.InfoShot;
+import it.polimi.se2019.server.controller.PowerUpShot;
 import it.polimi.se2019.server.controller.VirtualView;
 import it.polimi.se2019.server.model.cards.powerUp.PowerUp;
 import it.polimi.se2019.server.model.cards.weapons.Weapon;
@@ -41,6 +42,7 @@ public class RemoteView {
     private WeaponSlot cabinetYellow;
     private WeaponSlot cabinetBlue;
     private InfoShot infoShot = new InfoShot();
+    private PowerUpShot powerUpShot = new PowerUpShot();
     private ArrayList<Weapon> usableWeapon = new ArrayList<>();
 
     /**
@@ -272,6 +274,10 @@ public class RemoteView {
 
     public ArrayList<Player> getKillShotTrack(){
         return this.killShotTrack;
+    }
+
+    public PowerUpShot getPowerUpShot() {
+        return this.powerUpShot;
     }
 
 

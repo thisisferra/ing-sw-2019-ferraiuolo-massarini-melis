@@ -2,6 +2,10 @@ package it.polimi.se2019.server.model.cards.powerUp;
 
 
 import it.polimi.se2019.server.controller.InfoShot;
+import it.polimi.se2019.server.controller.PowerUpShot;
+import it.polimi.se2019.server.model.game.Match;
+import it.polimi.se2019.server.model.game.MovementChecker;
+import it.polimi.se2019.server.model.player.Player;
 
 import java.io.Serializable;
 
@@ -14,7 +18,9 @@ public class Newton extends PowerUp implements Serializable {
     }
 
     @Override
-    public void applyEffect(InfoShot infoShot) {
-        System.out.println("Ciao sono Newton");
+    public void applyEffect(PowerUpShot powerUpShot) {
+        int newPosition = powerUpShot.getNewPosition();
+        Player player = powerUpShot.getTargetingPlayer();
+        player.setPosition(newPosition);
     }
 }

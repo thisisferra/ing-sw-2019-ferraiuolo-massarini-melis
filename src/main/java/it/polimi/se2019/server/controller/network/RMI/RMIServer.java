@@ -3,6 +3,7 @@ package it.polimi.se2019.server.controller.network.RMI;
 import it.polimi.se2019.client.view.GUIControllerInterface;
 import it.polimi.se2019.server.OneAboveAll;
 import it.polimi.se2019.server.controller.InfoShot;
+import it.polimi.se2019.server.controller.PowerUpShot;
 import it.polimi.se2019.server.controller.ShotController;
 import it.polimi.se2019.server.controller.VirtualView;
 import it.polimi.se2019.server.controller.network.Server;
@@ -413,11 +414,11 @@ public class RMIServer extends Server implements RMIServerInterface {
 
     }
 
-    public void usePowerUp(String username, int index, InfoShot infoShot) throws RemoteException{
+    public void usePowerUp(String username, int index, PowerUpShot powerUpShot) throws RemoteException{
 
         Player currentPlayer = this.match.searchPlayerByClientName(username);
         PowerUp powerUp = currentPlayer.getHand().getPowerUps().get(index);
-        powerUp.applyEffect(infoShot);
+        powerUp.applyEffect(powerUpShot);
         //TODO discardpowerup
         this.updateAllVirtualView();
         this.updateAllClient();
@@ -435,13 +436,3 @@ public class RMIServer extends Server implements RMIServerInterface {
 
     }
 }
-
-
-
-
-
-
-
-
-
-

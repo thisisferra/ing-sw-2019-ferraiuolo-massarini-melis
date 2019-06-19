@@ -1,5 +1,6 @@
 package it.polimi.se2019.client.view;
 
+import it.polimi.se2019.server.controller.InfoShot;
 import it.polimi.se2019.server.model.cards.powerUp.PowerUp;
 import it.polimi.se2019.server.model.cards.weapons.Weapon;
 import it.polimi.se2019.server.model.map.Square;
@@ -1272,9 +1273,26 @@ public class GUI extends Application {
                         powerUpAlert.close();
                         guiController.getRmiStub().giftAction(this.username);
                         moveAction(5);
+                        break;
                     }
+                    case "tagback_grenade" : {/*
+                        myRemoteView.getPowerUpShot().setDamagingPlayer(damagingPlayer);
+                        myRemoteView.getPowerUpShot().setTargetingPlayer(targetingPlayer);
+                        guiController.getRmiStub().usePowerUp(this,username, index, myRemoteView.getPowerUpShot);*/}
+                    case "targeting_scope" : {/*
+                        myRemoteView.getPowerUpShot().setDamagingPlayer(damagingPlayer);
+                        myRemoteView.getPowerUpShot().setTargetingPlayer(targetingPlayer);
+                        guiController.getRmiStub().usePowerUp(this.username, index, myRemoteView.getPowerUpShot());
+                        break;
+ */}
+                    case "newton" : {/*
+                        myRemoteView.getPowerUpShot().setTargetingPlayer(targetingPlayer);
+                        myRemoteView.getPowerUpShot().setNewPosition(newPosition);
+                        guiController.getRmiStub().usePowerUp(this.username, index, myRemoteView.getPowerUpShot());
+                        break;
+ */}
                 }
-                guiController.getRmiStub().usePowerUp(this.username, index, myRemoteView.getInfoShot());
+
             }
             catch (Exception e) {
                 logger.log(Level.INFO,"Error powerUpButton");
