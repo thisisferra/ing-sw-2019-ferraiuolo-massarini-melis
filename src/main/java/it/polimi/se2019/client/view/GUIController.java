@@ -115,6 +115,7 @@ public class GUIController implements GUIControllerInterface {
                 out.println("# action available: " + remoteView.getNumberOfActions());
                 out.println("Weapons: " + remoteView.getWeapons());
                 out.println("Power-up: " + remoteView.getPowerUps());
+                out.println("Points " + remoteView.getPoints());
             }
             out.println("Cubes: " + remoteView.getCubes());
             out.print("Cabinet red: [");
@@ -146,6 +147,7 @@ public class GUIController implements GUIControllerInterface {
     //TODO check this
     public void verifyWeapons() throws RemoteException{
         RemoteView myRemoteView = this.getMyRemoteView();
+        myRemoteView.getUsableWeapon().clear();
         myRemoteView.setAvailableWeapon(this.getRmiStub().verifyWeapons(this.username));
     }
 

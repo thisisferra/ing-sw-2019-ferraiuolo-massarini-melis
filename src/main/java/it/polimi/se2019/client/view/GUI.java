@@ -1,8 +1,11 @@
 package it.polimi.se2019.client.view;
 
+import com.sun.javafx.scene.control.skin.TextFieldSkin;
 import it.polimi.se2019.server.controller.InfoShot;
+import it.polimi.se2019.server.controller.PowerUpShot;
 import it.polimi.se2019.server.model.cards.powerUp.PowerUp;
 import it.polimi.se2019.server.model.cards.weapons.Weapon;
+import it.polimi.se2019.server.model.game.Cubes;
 import it.polimi.se2019.server.model.map.Square;
 import it.polimi.se2019.server.model.player.Player;
 import javafx.animation.KeyFrame;
@@ -11,6 +14,7 @@ import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.CacheHint;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -188,14 +192,14 @@ public class GUI extends Application {
             damageBar = new HBox();
             deathBar = new HBox();
             markBar = new HBox();
-            for(int i = 0; i<myRemoteView.getDamagePlayerBoard().size(); i++){
-                icon = createImage(ICONS_PATH +myRemoteView.getDamagePlayerBoard().get(i).getColor()+"_damage_icon.png");
+            for(int i = 0; i<view.getDamagePlayerBoard().size(); i++){
+                icon = createImage(ICONS_PATH +view.getDamagePlayerBoard().get(i).getCharacter()+"_damage_icon.png");
                 iconImg = new ImageView(icon);
                 iconImg.setPreserveRatio(true);
                 iconImg.setFitWidth(28);
                 damageBar.getChildren().add(iconImg);
             }
-            for(int i = 0 ; i<myRemoteView.getDeathsPlayerBoard();i++){
+            for(int i = 0 ; i<view.getDeathsPlayerBoard();i++){
                 icon = createImage("src/main/resources/Images/icons/skull_icon.png");
                 iconImg = new ImageView(icon);
                 iconImg.setPreserveRatio(true);
@@ -203,8 +207,8 @@ public class GUI extends Application {
                 deathBar.getChildren().add(iconImg);
 
             }
-            for(int i = 0; i<myRemoteView.getMarkPlayerBoard().size(); i++){
-                icon = createImage(ICONS_PATH +myRemoteView.getMarkPlayerBoard().get(i).getAggressorPlayer().getColor()+"_damage_icon.png");
+            for(int i = 0; i<view.getMarkPlayerBoard().size(); i++){
+                icon = createImage(ICONS_PATH +view.getMarkPlayerBoard().get(i).getAggressorPlayer().getCharacter()+"_damage_icon.png");
                 iconImg = new ImageView(icon);
                 iconImg.setPreserveRatio(true);
                 iconImg.setFitWidth(32);
@@ -302,10 +306,6 @@ public class GUI extends Application {
 
         cubeBox.getChildren().addAll(redLabel, yellowLabel, blueLabel);
         cubeBox.setSpacing(5);
-    }
-
-    private int getMyPoints() {
-        return myRemoteView.getPoints();
     }
 
     private int getMyReds(){
@@ -707,12 +707,6 @@ public class GUI extends Application {
         cabinets.getChildren().addAll(redBox, blueBox, yellowBox);
     }
 
-    private Label setPoints(){
-        Label points = new Label("Points: " + getMyPoints());
-        points.setStyle("-fx-background-color: #404040; -fx-text-fill: #aaaaaa");
-        return points;
-    }
-
     private void setFirstPlayer(){
         if(guiController.getAllViews().get(0).getUsername().equals(username)){
             firstPlayer.getChildren().clear();
@@ -949,17 +943,20 @@ public class GUI extends Application {
         Label moves;
         Image userImage;
         ImageView userView;
+        Label points;
         userInfoBox.getChildren().clear();
         userImage = createImage(ICONS_PATH + myRemoteView.getCharacter() +"_icon.png");
         userName = new Label(" "+ myRemoteView.getUsername());
         moves = new Label("Moves: "+ myRemoteView.getNumberOfActions());
+        points = new Label("Points " + myRemoteView.getPoints());
 
         userView = new ImageView(userImage);
         userView.setPreserveRatio(true);
         userView.setFitWidth(50);
         moves.setStyle(LABEL_STYLE);
+        points.setStyle(LABEL_STYLE);
         userName.setStyle(LABEL_STYLE);
-        userInfoBox.getChildren().addAll(userView,userName,moves);
+        userInfoBox.getChildren().addAll(userView,userName,moves,points);
         userName.setAlignment(Pos.CENTER);
         userInfoBox.setSpacing(5);
     }
@@ -1101,8 +1098,6 @@ public class GUI extends Application {
 
         setCabinets();
 
-        Label points = setPoints();
-
         Button moveButton = setButton("src/main/resources/Images/icons/move_icon.png", "Move");
         Button grabButton = setButton("src/main/resources/Images/icons/grab_icon.png", "Move and grab");
         Button shootButton = setButton("src/main/resources/Images/icons/shoot_icon.png", "Shoot");
@@ -1126,13 +1121,12 @@ public class GUI extends Application {
             try {
                 if (guiController.getRmiStub().getActivePlayer().equals(this.username)) {
                     if (guiController.getRmiStub().checkNumberAction(username) && guiController.getRmiStub().checkSizeWeapon(this.username)) {
-                        guiController.verifyWeapons();
-                        guiController.getRmiStub().useAction(username);
-                        if (!myRemoteView.getUsableWeapon().isEmpty()) {
-                            for (Weapon weapon : myRemoteView.getUsableWeapon()) {
-                                for (int i = 0; i < weapon.getEffect().length; i++)
-                                    System.out.println(weapon.getEffect()[i]);
-                            }
+                        ArrayList<Weapon> usableWeapons = guiController.getRmiStub().verifyWeapons(this.username);
+                        if (!usableWeapons.isEmpty()) {
+                            System.out.println(usableWeapons);
+                            displayUsableWeapons(usableWeapons);
+                            guiController.getRmiStub().useAction(this.username);
+
                         }
                         else{
                             textArea.setText("You can't use any weapon\n" + textArea.getText());
@@ -1150,8 +1144,8 @@ public class GUI extends Application {
         });
         passButton.setOnAction(e -> {
             try {
-                if (guiController.getRmiStub().getActivePlayer().equals(username)) {
-                    ArrayList<Weapon> reloadableWeapons = guiController.getRmiStub().getReloadableWeapons(username);
+                if (guiController.getRmiStub().getActivePlayer().equals(this.username)) {
+                    ArrayList<Weapon> reloadableWeapons = guiController.getRmiStub().getReloadableWeapons(this.username);
                     if(!reloadableWeapons.isEmpty())
                         reloadAlert(reloadableWeapons);
                     else {
@@ -1210,7 +1204,7 @@ public class GUI extends Application {
 
         setCubes();
 
-        leftMenu.getChildren().addAll(moveButton, grabButton, shootButton, passButton, weapons, powerUps, playersButton, points, cubeBox,userInfoBox);
+        leftMenu.getChildren().addAll(moveButton, grabButton, shootButton, passButton, weapons, powerUps, playersButton, cubeBox,userInfoBox);
         leftMenu.setSpacing(3);
         setTextArea();
 
@@ -1241,6 +1235,7 @@ public class GUI extends Application {
 
             setFigures();
             setAmmo(mapNumber);
+            setUserInfos();
             setWeaponView(redBox, myRemoteView.getCabinetRed().getSlot());
             setWeaponView(yellowBox, myRemoteView.getCabinetYellow().getSlot());
             setWeaponView(blueBox, myRemoteView.getCabinetBlue().getSlot());
@@ -1267,36 +1262,8 @@ public class GUI extends Application {
 
 
         powerUpButton.setOnAction(ind -> {
-            try {
-                switch(myRemoteView.getPowerUps().get(index).getType()){
-                    case "teleporter" : {
-                        powerUpAlert.close();
-                        guiController.getRmiStub().giftAction(this.username);
-                        moveAction(5);
-                        break;
-                    }
-                    case "tagback_grenade" : {/*
-                        myRemoteView.getPowerUpShot().setDamagingPlayer(damagingPlayer);
-                        myRemoteView.getPowerUpShot().setTargetingPlayer(targetingPlayer);
-                        guiController.getRmiStub().usePowerUp(this,username, index, myRemoteView.getPowerUpShot);*/}
-                    case "targeting_scope" : {/*
-                        myRemoteView.getPowerUpShot().setDamagingPlayer(damagingPlayer);
-                        myRemoteView.getPowerUpShot().setTargetingPlayer(targetingPlayer);
-                        guiController.getRmiStub().usePowerUp(this.username, index, myRemoteView.getPowerUpShot());
-                        break;
- */}
-                    case "newton" : {/*
-                        myRemoteView.getPowerUpShot().setTargetingPlayer(targetingPlayer);
-                        myRemoteView.getPowerUpShot().setNewPosition(newPosition);
-                        guiController.getRmiStub().usePowerUp(this.username, index, myRemoteView.getPowerUpShot());
-                        break;
- */}
-                }
-
-            }
-            catch (Exception e) {
-                logger.log(Level.INFO,"Error powerUpButton");
-            }
+            powerUpAction(index);
+            powerUpAlert.close();
         });
         tradeButton.setOnAction(trade -> {
             try {
@@ -1370,10 +1337,10 @@ public class GUI extends Application {
         powerUpWindow.showAndWait();
     }
 
-    private void displayWeapons(Pane pane){
+    private void displayWeapons(HBox box){
         Stage displayWindow = new Stage();
-        Pane layout = null;
         Label info = new Label("Your current weapons are: ");
+        HBox layout = new HBox();
         BorderPane borderPane = new BorderPane();
 
         info.setStyle(LABEL_STYLE);
@@ -1381,16 +1348,8 @@ public class GUI extends Application {
         displayWindow.setTitle("Weapons");
 
         Button closeButton = setHomeButton(displayWindow);
-        if(pane instanceof VBox){
-            layout = new VBox();
-        }else if(pane instanceof HBox){
-            layout = new HBox();
-        }
-
-        if(layout != null){
-            layout.getChildren().addAll(pane.getChildren());
-            layout.setStyle(BACKGROUND_STYLE);
-        }
+        layout.getChildren().addAll(box.getChildren());
+        layout.setStyle(BACKGROUND_STYLE);
 
         borderPane.setTop(info);
         borderPane.setCenter(layout);
@@ -1537,7 +1496,7 @@ public class GUI extends Application {
         reloadableWeaponPane.setStyle(BACKGROUND_STYLE);
 
         for(int i = 0; i < reloadableWeapons.size(); i++){
-            ImageView weaponView = new ImageView(createImage("src/main/resources/"+ reloadableWeapons.get(i).getType()+".json"));
+            ImageView weaponView = new ImageView(createImage(WEAPONS_PATH+ reloadableWeapons.get(i).getType()+".png"));
             weaponView.setId(Integer.toString(i));
             weaponsBox.getChildren().add(weaponView);
         }
@@ -1589,6 +1548,193 @@ public class GUI extends Application {
         weaponToReloadWindow.setWidth(300);
         weaponToReloadWindow.setHeight(200);
         weaponToReloadWindow.showAndWait();
+    }
+
+    private void displayUsableWeapons(ArrayList<Weapon> usableWeapons){
+        Stage usableWeaponsWindow = new Stage();
+        HBox weaponsBox = new HBox();
+        BorderPane usableWeaponsPane = new BorderPane();
+        usableWeaponsPane.setStyle(BACKGROUND_STYLE);
+
+        for(int i = 0; i < usableWeapons.size(); i++){
+            textArea.setText("\n" + usableWeapons.get(i).getType() + textArea.getText());
+            ImageView weaponView = new ImageView(createImage(WEAPONS_PATH + usableWeapons.get(i).getType()+".png"));
+            weaponView.setId(Integer.toString(i));
+            weaponView.setFitHeight(300);
+            weaponView.setPreserveRatio(true);
+            weaponsBox.getChildren().add(weaponView);
+        }
+
+        for(Node weaponView : weaponsBox.getChildren()){
+            weaponView.setOnMouseClicked(reload -> {
+                try{
+                    displayEffects(usableWeapons.get(Integer.parseInt(weaponView.getId())));
+
+                }catch (Exception e) {
+                    logger.log(Level.INFO,"displayUsableWeapons Error",e);
+                }
+            });
+        }
+        weaponsBox.setAlignment(Pos.CENTER);
+        weaponsBox.setSpacing(30);
+        weaponsBox.setStyle(BACKGROUND_STYLE);
+
+        Label info = new Label("Which weapon do you want to use?");
+        info.setStyle(LABEL_STYLE);
+
+        usableWeaponsWindow.initModality(Modality.APPLICATION_MODAL);
+
+        usableWeaponsPane.setCenter(weaponsBox);
+        usableWeaponsPane.setAlignment(weaponsBox,Pos.CENTER);
+        usableWeaponsPane.setStyle(BACKGROUND_STYLE);
+        usableWeaponsPane.setTop(info);
+        usableWeaponsPane.setAlignment(info,Pos.TOP_CENTER);
+        Scene usableScene = new Scene(usableWeaponsPane);
+        usableWeaponsWindow.setScene(usableScene);
+        usableWeaponsWindow.setWidth(400);
+        usableWeaponsWindow.setHeight(300);
+        usableWeaponsWindow.showAndWait();
+    }
+
+    private void displayEffects(Weapon chosenWeapon){
+        Stage availableEffectsWindow = new Stage();
+        ComboBox comboBox = new ComboBox();
+        BorderPane availableEffectPane = new BorderPane();
+        availableEffectPane.setStyle(BACKGROUND_STYLE);
+        String effect;
+        for(int i = 0; i < chosenWeapon.getEffect().length; i++){
+
+            if(chosenWeapon.getEffect()[i] != null){
+                effect = chosenWeapon.getEffect()[i].toString();
+                comboBox.getItems().add(effect);
+            }
+        }
+
+        Label info = new Label("Which effect do you want to use?");
+        info.setStyle(LABEL_STYLE);
+
+        Button confirmButton = new Button("Confirm");
+        confirmButton.setStyle(BUTTON_STYLE);
+        comboBox.setPromptText("Select effect");
+        comboBox.setPadding(new Insets(10,10,10,10));
+        confirmButton.setOnAction(e-> {
+            InfoShot infoShot = new InfoShot();
+            infoShot.setNameEffect((String) comboBox.getValue());
+        });
+        availableEffectsWindow.initModality(Modality.APPLICATION_MODAL);
+        availableEffectPane.setCenter(comboBox);
+        availableEffectPane.setAlignment(comboBox,Pos.CENTER);
+        availableEffectPane.setStyle(BACKGROUND_STYLE);
+        availableEffectPane.setTop(info);
+        availableEffectPane.setBottom(confirmButton);
+        availableEffectPane.setAlignment(confirmButton,Pos.CENTER);
+        availableEffectPane.setAlignment(info,Pos.TOP_CENTER);
+
+        Scene usableScene = new Scene(availableEffectPane);
+        availableEffectsWindow.setScene(usableScene);
+        availableEffectsWindow.setWidth(300);
+        availableEffectsWindow.setHeight(200);
+        availableEffectsWindow.showAndWait();
+
+    }
+
+    private void powerUpAction(int index){
+        try {
+            switch(myRemoteView.getPowerUps().get(index).getType()){
+                case "teleporter" : {
+                    teleporterAction();
+                    break;
+                }
+                case "tagback_grenade" : {/*
+                        myRemoteView.getPowerUpShot().setDamagingPlayer(damagingPlayer);
+                        myRemoteView.getPowerUpShot().setTargetingPlayer(targetingPlayer);
+                        guiController.getRmiStub().usePowerUp(this,username, index, myRemoteView.getPowerUpShot);
+                        break;
+                        */
+                }
+                case "targeting_scope" : {
+                        /*
+                        myRemoteView.getPowerUpShot().setDamagingPlayer(damagingPlayer);
+                        myRemoteView.getPowerUpShot().setTargetingPlayer(targetingPlayer);
+                        guiController.getRmiStub().usePowerUp(this.username, index, myRemoteView.getPowerUpShot());
+                        */
+                        displayTargetingScopeTargets(index);
+                        break;
+                }
+                case "newton" : {
+                        /*
+                        myRemoteView.getPowerUpShot().setTargetingPlayer(targetingPlayer);
+                        myRemoteView.getPowerUpShot().setNewPosition(newPosition);
+                        guiController.getRmiStub().usePowerUp(this.username, index, myRemoteView.getPowerUpShot());
+                        break;
+                        */
+                }
+            }
+
+        }
+        catch (Exception e) {
+            logger.log(Level.INFO,"Error powerUpButton");
+        }
+    }
+
+    private void teleporterAction() throws RemoteException{
+        guiController.getRmiStub().giftAction(this.username);
+        moveAction(5);
+
+    }
+
+    private void displayTargetingScopeTargets(int index){
+        Stage targetingScopeWindow = new Stage();
+        ComboBox comboBox = new ComboBox();
+        BorderPane targetingScopePane = new BorderPane();
+        targetingScopePane.setStyle(BACKGROUND_STYLE);
+        ArrayList<Player> targets = new ArrayList<>();
+        try{
+            targets.addAll(guiController.getRmiStub().getMatch().getAllPlayers());
+            System.out.println(targets);
+            for(Player target : targets){
+                comboBox.getItems().add( target.getClientName());
+            }
+
+        }catch (Exception exc){
+            logger.log(Level.INFO,"Targets targetingscope error",exc);
+        }
+        Label info = new Label("Who is the target?");
+        info.setStyle(LABEL_STYLE);
+
+        Button confirmButton = new Button("Confirm");
+        confirmButton.setStyle(BUTTON_STYLE);
+        comboBox.setPromptText("Select target");
+        comboBox.setPadding(new Insets(10,10,10,10));
+        //targets.addAll(guiController.getMyRemoteView().getInfoShot().getAlreadyTarget());
+
+        confirmButton.setOnAction(e-> {
+            PowerUpShot powerUpShot = guiController.getMyRemoteView().getPowerUpShot();
+            try{
+                powerUpShot.setDamagingPlayer(guiController.getRmiStub().getMatch().searchPlayerByClientName(this.username));
+                Player targetingPlayer = guiController.getRmiStub().getMatch().searchPlayerByClientName((String) comboBox.getValue());
+                powerUpShot.setTargetingPlayer(targetingPlayer);
+                System.out.println("\nPowerUpShot: "+powerUpShot.toString());
+                guiController.getRmiStub().usePowerUp(this.username,index,powerUpShot);
+            }catch (Exception err){
+                logger.log(Level.INFO,"TargetingScope method error",err);
+            }
+
+        });
+        targetingScopeWindow.initModality(Modality.APPLICATION_MODAL);
+        targetingScopePane.setCenter(comboBox);
+        targetingScopePane.setAlignment(comboBox,Pos.CENTER);
+        targetingScopePane.setStyle(BACKGROUND_STYLE);
+        targetingScopePane.setTop(info);
+        targetingScopePane.setBottom(confirmButton);
+        targetingScopePane.setAlignment(confirmButton,Pos.CENTER);
+        targetingScopePane.setAlignment(info,Pos.TOP_CENTER);
+
+        Scene usableScene = new Scene(targetingScopePane);
+        targetingScopeWindow.setScene(usableScene);
+        targetingScopeWindow.setWidth(300);
+        targetingScopeWindow.setHeight(200);
+        targetingScopeWindow.showAndWait();
     }
 
 }

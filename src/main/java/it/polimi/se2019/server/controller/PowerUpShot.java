@@ -2,15 +2,16 @@ package it.polimi.se2019.server.controller;
 
 import it.polimi.se2019.server.model.game.Cubes;
 import it.polimi.se2019.server.model.player.Player;
+import it.polimi.se2019.server.model.player.PlayerBoard;
 
 import java.io.Serializable;
 
 public class PowerUpShot implements Serializable {
 
-    Player damagingPlayer;
-    Player targetingPlayer;
-    int newPosition;
-    Cubes cubeToPay;
+    private Player damagingPlayer;
+    private Player targetingPlayer;
+    private int newPosition;
+    private Cubes cubeToPay;
 
     /* * *   GETTER   * * */
 
@@ -38,6 +39,7 @@ public class PowerUpShot implements Serializable {
 
     public void setTargetingPlayer(Player targetingPlayer) {
         this.targetingPlayer = targetingPlayer;
+
     }
 
     public void setNewPosition(int newPosition) {
@@ -54,5 +56,10 @@ public class PowerUpShot implements Serializable {
         this.targetingPlayer = null;
         this.newPosition = -1;
         this.cubeToPay = null;
+    }
+
+    @Override
+    public String toString(){
+        return " "+this.targetingPlayer + "";
     }
 }

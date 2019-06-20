@@ -82,8 +82,11 @@ public class RoomChecker {
 
     //return the list of players you cannot see
     public ArrayList<Player> getNonVisiblePlayers(Match match, Player owner){
-        ArrayList<Player> nonVisiblePlayers = match.getAllPlayers();
-        nonVisiblePlayers.removeAll(this.getVisiblePlayers(match,owner));
+        ArrayList<Player> nonVisiblePlayers = new ArrayList<>();
+        nonVisiblePlayers.addAll(match.getAllPlayers());
+        System.out.println("Before " + nonVisiblePlayers);
+        nonVisiblePlayers.removeAll(getVisiblePlayers(match,owner));
+        System.out.println("After" + nonVisiblePlayers);
         nonVisiblePlayers.remove(owner);
         return nonVisiblePlayers;
     }

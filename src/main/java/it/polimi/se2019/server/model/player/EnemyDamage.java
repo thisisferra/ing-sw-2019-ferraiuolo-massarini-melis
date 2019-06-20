@@ -1,7 +1,9 @@
 package it.polimi.se2019.server.model.player;
 
 
-public class EnemyDamage{
+import java.io.Serializable;
+
+public class EnemyDamage implements Serializable {
     private Player aggressorPlayer;
     private int damage;
 

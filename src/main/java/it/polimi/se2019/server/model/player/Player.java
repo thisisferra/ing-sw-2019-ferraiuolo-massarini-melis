@@ -31,7 +31,7 @@ public class Player implements Serializable {
     private Hand playerHand;
     private PlayerBoard playerBoard;
     private Match match;
-    private int numberOfAction;
+    private int numberOfAction = 2;
     private ShotController shotController;
     private boolean finalFrenzy = false;
     private int phaseAction = 0;
@@ -389,7 +389,7 @@ public class Player implements Serializable {
 
     @Override
     public String toString(){
-        return (this.clientName + " - " + this.character + " - " + this.getPosition());
+        return (this.clientName + " - " + this.character + " - " + this.getPosition() + " - " + this.getScore());
     }
 
     /**

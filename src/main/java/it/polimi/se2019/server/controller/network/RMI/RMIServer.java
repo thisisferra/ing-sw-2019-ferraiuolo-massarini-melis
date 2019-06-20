@@ -313,7 +313,8 @@ public class RMIServer extends Server implements RMIServerInterface {
     }
 
     public void useAction(String username) throws RemoteException{
-        Player currentPlayer = match.searchPlayerByClientName(username);
+        Player currentPlayer = this.match.searchPlayerByClientName(username);
+        System.out.println("Current player in rmiserver useaction: " + currentPlayer);
         currentPlayer.decreaseNumberOfAction();
         this.updateAllVirtualView();
         this.updateAllClient();
@@ -372,6 +373,7 @@ public class RMIServer extends Server implements RMIServerInterface {
 
     public void discardAndSpawn(String username,int index) throws RemoteException{
         Player player = this.match.searchPlayerByClientName(username);
+        System.out.println("discard and spawn method: " + player);
         PowerUp discardedPowerUp = player.getHand().getPowerUps().remove(index);
 
         switch (discardedPowerUp.getColor()){
@@ -397,6 +399,7 @@ public class RMIServer extends Server implements RMIServerInterface {
 
     public ArrayList<Weapon> getReloadableWeapons(String username) throws RemoteException{
         Player player = this.match.searchPlayerByClientName(username);
+        System.out.println("reloadableweaponsplayer: " + player);
         return player.getReloadableWeapons();
     }
 
@@ -415,8 +418,10 @@ public class RMIServer extends Server implements RMIServerInterface {
     }
 
     public void usePowerUp(String username, int index, PowerUpShot powerUpShot) throws RemoteException{
-
         Player currentPlayer = this.match.searchPlayerByClientName(username);
+        Player targetPlayer = this.match.searchPlayerByClientName(powerUpShot.getTargetingPlayer().getClientName());
+        powerUpShot.setTargetingPlayer(targetPlayer);
+        powerUpShot.setDamagingPlayer(currentPlayer);
         PowerUp powerUp = currentPlayer.getHand().getPowerUps().get(index);
         powerUp.applyEffect(powerUpShot);
         //TODO discardpowerup
@@ -426,7 +431,7 @@ public class RMIServer extends Server implements RMIServerInterface {
     }
 
     public void updateAllVirtualView() {
-        for (Player player : match.getAllPlayers()) {
+        for (Player player : this.match.getAllPlayers()) {
             for (VirtualView virtualView : allVirtualViews) {
                 if (player.getClientName().equals(virtualView.getUsername())) {
                     virtualView.updateVirtualView(player, match);

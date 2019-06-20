@@ -83,27 +83,30 @@ public class Match extends Observable implements Serializable {
             aS = gson.fromJson(new FileReader("./src/main/resources/ammo.json"), Ammo[].class);
             //pUS = gson.fromJson(new FileReader("./src/main/resources/powerups.json"),PowerUp[].class);
 
-            weaponStack.add(gson.fromJson(new FileReader("src/main/resources/machine_gun.json"), MachineGun.class));
             weaponStack.add(gson.fromJson(new FileReader("src/main/resources/plasma_gun.json"), PlasmaGun.class));
             weaponStack.add(gson.fromJson(new FileReader("src/main/resources/thor.json"), Thor.class));
             weaponStack.add(gson.fromJson(new FileReader("src/main/resources/electroscythe.json"), Electroscythe.class));
-            weaponStack.add(gson.fromJson(new FileReader("src/main/resources/tractor_beam.json"), TractorBeam.class));
-            weaponStack.add(gson.fromJson(new FileReader("src/main/resources/vortex_cannon.json"), VortexCannon.class));
-            weaponStack.add(gson.fromJson(new FileReader("src/main/resources/furnace.json"), Furnace.class));
             weaponStack.add(gson.fromJson(new FileReader("src/main/resources/lock_rifle.json"), LockRifle.class));
-            weaponStack.add(gson.fromJson(new FileReader("src/main/resources/heatseeker.json"), Heatseeker.class));
-            weaponStack.add(gson.fromJson(new FileReader("src/main/resources/hellion.json"), Hellion.class));
             weaponStack.add(gson.fromJson(new FileReader("src/main/resources/whisper.json"), Whisper.class));
-            weaponStack.add(gson.fromJson(new FileReader("src/main/resources/flamethrower.json"), Flamethrower.class));
             weaponStack.add(gson.fromJson(new FileReader("src/main/resources/zx-2.json"), ZX2.class));
-            weaponStack.add(gson.fromJson(new FileReader("src/main/resources/grenade_launcher.json"), GrenadeLauncher.class));
-            weaponStack.add(gson.fromJson(new FileReader("src/main/resources/rocket_launcher.json"), RocketLauncher.class));
+            weaponStack.add(gson.fromJson(new FileReader("src/main/resources/shockwave.json"), Shockwave.class));
+            weaponStack.add(gson.fromJson(new FileReader("src/main/resources/machine_gun.json"), MachineGun.class));
+            weaponStack.add(gson.fromJson(new FileReader("src/main/resources/flamethrower.json"), Flamethrower.class));
+
+            weaponStack.add(gson.fromJson(new FileReader("src/main/resources/furnace.json"), Furnace.class));
+            weaponStack.add(gson.fromJson(new FileReader("src/main/resources/hellion.json"), Hellion.class));
             weaponStack.add(gson.fromJson(new FileReader("src/main/resources/shotgun.json"), Shotgun.class));
             weaponStack.add(gson.fromJson(new FileReader("src/main/resources/power_glove.json"), PowerGlove.class));
+            weaponStack.add(gson.fromJson(new FileReader("src/main/resources/heatseeker.json"), Heatseeker.class));
+            weaponStack.add(gson.fromJson(new FileReader("src/main/resources/vortex_cannon.json"), VortexCannon.class));
+            weaponStack.add(gson.fromJson(new FileReader("src/main/resources/tractor_beam.json"), TractorBeam.class));
             weaponStack.add(gson.fromJson(new FileReader("src/main/resources/railgun.json"), Railgun.class));
-            weaponStack.add(gson.fromJson(new FileReader("src/main/resources/shockwave.json"), Shockwave.class));
-            weaponStack.add(gson.fromJson(new FileReader("src/main/resources/cyberblade.json"), Cyberblade.class));
             weaponStack.add(gson.fromJson(new FileReader("src/main/resources/sledgehammer.json"), Sledgehammer.class));
+            weaponStack.add(gson.fromJson(new FileReader("src/main/resources/cyberblade.json"), Cyberblade.class));
+            weaponStack.add(gson.fromJson(new FileReader("src/main/resources/rocket_launcher.json"), RocketLauncher.class));
+            weaponStack.add(gson.fromJson(new FileReader("src/main/resources/grenade_launcher.json"), GrenadeLauncher.class));
+
+
             for (int i = 0; i < 2; i++) {
                 powerUpStack.add(gson.fromJson(new FileReader("./src/main/resources/targeting_scopeRed.json"), TargetingScope.class));
                 powerUpStack.add(gson.fromJson(new FileReader("./src/main/resources/targeting_scopeYellow.json"), TargetingScope.class));
@@ -121,7 +124,7 @@ public class Match extends Observable implements Serializable {
             //powerUpStack = new ArrayList<>(Arrays.asList(pUS));
             ammoStack = new ArrayList<>(Arrays.asList(aS));
 
-            Collections.shuffle(weaponStack);
+            //Collections.shuffle(weaponStack);
             Collections.shuffle(powerUpStack);
             Collections.shuffle(ammoStack);
 

@@ -9,14 +9,14 @@ import it.polimi.se2019.server.model.map.Square;
 import it.polimi.se2019.server.model.player.Player;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
 public class ShotController implements Serializable {
 
-    Controller controller;
-    Match match;
+    private Match match;
 
     public ShotController(Match match) {
         this.match = match;
@@ -26,14 +26,18 @@ public class ShotController implements Serializable {
         ArrayList<Weapon> loadedWeapon = checkIsLoad(currentPlayer);
         ArrayList<Weapon> checkedWeapon;
         ArrayList<Weapon> usableWeapon;
-        if (loadedWeapon.size() == 0) {
-            return null;
+        ArrayList<Weapon> purgedWeapons;
+        if (loadedWeapon.isEmpty()) {
+            return new ArrayList<>();
         }
         else {
             checkedWeapon = checkCubes(currentPlayer, loadedWeapon);
-            usableWeapon = checkVisibility(match, currentPlayer, checkedWeapon);
+            usableWeapon = checkVisibility(currentPlayer, checkedWeapon);
+            purgedWeapons = purgeUselessWeapons(usableWeapon);
         }
-        return usableWeapon;
+        System.out.println("Usable in ShotController: "+ usableWeapon);
+        System.out.println("\nPurged in ShotController: "+ purgedWeapons);
+        return purgedWeapons;
     }
 
     private ArrayList<Weapon> checkIsLoad(Player currentPlayer) {
@@ -61,9 +65,8 @@ public class ShotController implements Serializable {
         return loadedWeapon;
     }
 
-    private ArrayList<Weapon> checkVisibility(Match match, Player currentPlayer, ArrayList<Weapon> checkedWeapon) {
-        boolean usable = false;
-        ArrayList<Weapon> weaponCanUse = new ArrayList<>();
+    private ArrayList<Weapon> checkVisibility(Player currentPlayer, ArrayList<Weapon> checkedWeapon) {
+
         ArrayList<Player> visiblePlayers = new ArrayList<>();
         ArrayList<Player> notVisiblePlayers = new ArrayList<>();
         for (Weapon weapon : checkedWeapon) {
@@ -87,14 +90,14 @@ public class ShotController implements Serializable {
                         }
                         case "CantSee": {
                             RoomChecker roomChecker = new RoomChecker(match.getMap(), currentPlayer.getPosition());
-                            visiblePlayers = roomChecker.getVisiblePlayers(match, currentPlayer);
-                            notVisiblePlayers.addAll(match.getAllPlayers());
-                            notVisiblePlayers.removeAll(visiblePlayers);
+                            notVisiblePlayers = roomChecker.getNonVisiblePlayers(match,currentPlayer);
+                            System.out.println(notVisiblePlayers);
                             notVisiblePlayers.remove(currentPlayer);
-                            if (!notVisiblePlayers.isEmpty()) {
+                            if (notVisiblePlayers.isEmpty()) {
                                 weapon.getEffect()[i] = null;
                             }
                             System.out.println(notVisiblePlayers);
+                            visiblePlayers.clear();
                             break;
                         }
                         case "CanSeeDistance": {
@@ -144,13 +147,20 @@ public class ShotController implements Serializable {
                             break;
                         }
                         case "CanSeeRoom": {
-                            for (Square square : match.getMap().getAllSquare()) {
-                                if (currentPlayer.getPosition() == square.getPosition()) {
-                                    if (!(square.getNorthWall() != -1 || square.getEastWall() != -1 || square.getSouthWall() != -1 || square.getWestWall() != -1)) {
-                                        weapon.getEffect()[i] = null;
+                            RoomChecker roomChecker = new RoomChecker(match.getMap(),currentPlayer.getPosition());
+                            ArrayList<Square> roomSquares = new ArrayList<>();
+                            roomSquares.addAll(roomChecker.getAccessibleRooms());
+                            for(Square square : roomSquares){
+                                for(Player player : match.getAllPlayers()){
+                                    if(player.getPosition() == square.getPosition()){
+                                        visiblePlayers.add(player);
                                     }
                                 }
                             }
+                            visiblePlayers.remove(currentPlayer);
+                            if(visiblePlayers.isEmpty()) weapon.getEffect()[i] = null;
+                            System.out.println(visiblePlayers);
+                            visiblePlayers.clear();
                             break;
                         }
                         case "DistanceFromAPosition": {
@@ -171,8 +181,65 @@ public class ShotController implements Serializable {
                             targetPlayer.remove(currentPlayer);
                             visiblePlayers.clear();
                             visiblePlayers.addAll(targetPlayer);
+                            if(visiblePlayers.isEmpty())
+                                weapon.getEffect()[i] = null;
+                            System.out.println(visiblePlayers);
+                            visiblePlayers.clear();
+                            break;
+                        }
+                        case "Cardinal" : {
+                            MovementChecker movementChecker = new MovementChecker(match.getMap().getAllSquare(),5,currentPlayer.getPosition());
+                            ArrayList<Square> cardinalSquares = new ArrayList<>();
+                            cardinalSquares.addAll(movementChecker.getAllUpwardsSquares());
+                            cardinalSquares.addAll(movementChecker.getAllRightSquares());
+                            cardinalSquares.addAll(movementChecker.getAllDownwardsSquares());
+                            cardinalSquares.addAll(movementChecker.getAllLeftSquares());
+
+                            for(Square square : cardinalSquares){
+                                for(Player player : match.getAllPlayers()){
+                                    if(player.getPosition() == square.getPosition())
+                                        visiblePlayers.add(player);
+                                }
+                            }
+                            visiblePlayers.remove(currentPlayer);
                             if(visiblePlayers.isEmpty()) weapon.getEffect()[i] = null;
                             System.out.println(visiblePlayers);
+                            visiblePlayers.clear();
+                            break;
+                        }
+
+                        case "InitiallyCantSee" : {
+
+                            ArrayList<Square> visibleSquares = new ArrayList<>();
+                            ArrayList<Square> extendedSquares = new ArrayList<>();
+                            HashSet<Player> playersSet = new HashSet<>();
+                            HashSet<Square> temporarySquares = new HashSet<>();
+                            RoomChecker roomChecker = new RoomChecker(match.getMap(),currentPlayer.getPosition());
+                            MovementChecker movementChecker;
+                            //ora contiene tutti gli square raggiungibili
+                            visibleSquares.addAll(roomChecker.getAccessibleRooms());
+
+                            extendedSquares.addAll(visibleSquares);
+                            for(Square square : visibleSquares){
+                                movementChecker = new MovementChecker(match.getMap().getAllSquare(),2,square.getPosition());
+                                temporarySquares.addAll(movementChecker.getReachableSquares());
+                            }
+                            temporarySquares.addAll(extendedSquares);
+                            extendedSquares.clear();
+                            extendedSquares.addAll(temporarySquares);
+                            for(Square square : extendedSquares){
+                                for(Player player : match.getAllPlayers()){
+                                    if(player.getPosition() == square.getPosition()){
+                                        playersSet.add(player);
+                                    }
+                                }
+                            }
+                            playersSet.remove(currentPlayer);
+                            visiblePlayers.addAll(playersSet);
+                            if(visiblePlayers.isEmpty())
+                                weapon.getEffect()[i] = null;
+                            System.out.println(visiblePlayers);
+                            visiblePlayers.clear();
                             break;
                         }
                         default: {
@@ -185,6 +252,24 @@ public class ShotController implements Serializable {
         }
         return checkedWeapon;
         }
+
+    private ArrayList<Weapon> purgeUselessWeapons(ArrayList<Weapon> usableWeapon){
+        int flag = 0;
+        ArrayList<Weapon> purgedWeapon = new ArrayList<>();
+        for(Weapon weapon : usableWeapon){
+
+            for(int i=0 ; i < weapon.getEffect().length; i++){
+                if(weapon.getEffect()[i] != null){
+                    flag = 1;
+                }
+            }
+            if(flag == 1){
+                purgedWeapon.add(weapon);
+            }
+            flag = 0;
+        }
+        return purgedWeapon;
+    }
 
 }
 

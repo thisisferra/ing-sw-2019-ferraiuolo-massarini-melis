@@ -37,7 +37,7 @@ public class RemoteView {
     private boolean canMove = false;
     private Cubes cubes;
     private ArrayList<Square> reachableSquare = new ArrayList<>();
-    private int numberOfActions;
+    private int numberOfActions = 2;
     private WeaponSlot cabinetRed;
     private WeaponSlot cabinetYellow;
     private WeaponSlot cabinetBlue;
@@ -413,7 +413,9 @@ public class RemoteView {
     //TODO this shouldn't be public!
     public void setAvailableWeapon(ArrayList<Weapon> availableWeapon) {
         this.usableWeapon.clear();
+        System.out.println("Usable weapon in setAvailableWeapon RemoteView: "+ this.usableWeapon);
         this.usableWeapon = availableWeapon;
+        System.out.println("Usable weapon in setAvailableWeapon RemoteView: "+ this.usableWeapon);
     }
 
     private void setUsername(String username){

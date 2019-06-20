@@ -18,12 +18,12 @@ public class PlayerBoard implements Serializable {
     //list of references of players who damaged this player
     private ArrayList<Player> damage;
     //list of enemyDamage instances counting the total damage each player inflicted
-    private  ArrayList<EnemyDamage> enemyDamages = new ArrayList<>();
+    private  ArrayList<EnemyDamage> enemyDamages ;
     //list of enemyMark instances counting the total marks each player inflicted
-    private  ArrayList<EnemyMark> enemyMarks = new ArrayList<>();
+    private  ArrayList<EnemyMark> enemyMarks ;
     private int deaths;
     //list representing the points players get when the target is killed (starting from 8,6,4,2,1,1,)
-    private ArrayList<Integer> pointDeaths = new ArrayList<>();
+    private ArrayList<Integer> pointDeaths;
     //cubes the player currently have
     private Cubes ammoCubes;
     private Player owner;
@@ -31,8 +31,11 @@ public class PlayerBoard implements Serializable {
     //constructor of the class
     //set the ammoCubes to 1 red, 1 yellow and 1 blue at the start of the game
     public PlayerBoard(Player owner){
-        tags = new ArrayList<>();
-        damage = new ArrayList<>();
+        this.enemyDamages = new ArrayList<>();
+        this.enemyMarks = new ArrayList<>();
+        this.tags = new ArrayList<>();
+        this.damage = new ArrayList<>();
+        this.pointDeaths = new ArrayList<>();
         this.ammoCubes = new Cubes(1,1,1);
         this.setPointDeaths();
         this.owner = owner;
