@@ -6,6 +6,7 @@ import it.polimi.se2019.server.controller.PowerUpShot;
 import it.polimi.se2019.server.model.cards.powerUp.PowerUp;
 import it.polimi.se2019.server.model.cards.weapons.Weapon;
 import it.polimi.se2019.server.model.game.Cubes;
+import it.polimi.se2019.server.model.game.MovementChecker;
 import it.polimi.se2019.server.model.map.Square;
 import it.polimi.se2019.server.model.player.Player;
 import javafx.animation.KeyFrame;
@@ -906,7 +907,7 @@ public class GUI extends Application {
         try {
             if(guiController.getRmiStub().getActivePlayer().equals(this.username)){
                 if(guiController.getRmiStub().checkNumberAction(this.username)){
-                    if (!guiController.getMyRemoteView().getCanMove()) {
+                    if (!guiController.getRmiStub().getMatch().searchPlayerByClientName(this.username).getCanMove()) {
                         guiController.getMyRemoteView().setCanMove(true);
                         guiController.getMyRemoteView().setReachableSquare(guiController.getRmiStub().reachableSquares(guiController.getRmiStub().getMatch().searchPlayerByClientName(username).getPosition(),steps));
                         setMoveGrabSquares();
@@ -1322,8 +1323,17 @@ public class GUI extends Application {
         for(Node obj : powerUpBox.getChildren()){
             ImageView view = (ImageView) obj;
             view.setOnMouseClicked(e->{
-                powerUpAlert(Integer.parseInt(view.getId()));
-                powerUpWindow.close();
+                try{
+                    if(guiController.getRmiStub().getActivePlayer().equals(this.username) && !guiController.getRmiStub().getMatch().searchPlayerByClientName(this.username).getCanMove()){
+                        powerUpAlert(Integer.parseInt(view.getId()));
+                        powerUpWindow.close();
+                    }
+                }catch (RemoteException g){
+                    logger.log(Level.INFO,"PowerUpHand error",g);
+                }
+
+
+
             });
         }
 
@@ -1654,21 +1664,13 @@ public class GUI extends Application {
                         */
                 }
                 case "targeting_scope" : {
-                        /*
-                        myRemoteView.getPowerUpShot().setDamagingPlayer(damagingPlayer);
-                        myRemoteView.getPowerUpShot().setTargetingPlayer(targetingPlayer);
-                        guiController.getRmiStub().usePowerUp(this.username, index, myRemoteView.getPowerUpShot());
-                        */
                         displayTargetingScopeTargets(index);
                         break;
                 }
                 case "newton" : {
-                        /*
-                        myRemoteView.getPowerUpShot().setTargetingPlayer(targetingPlayer);
-                        myRemoteView.getPowerUpShot().setNewPosition(newPosition);
-                        guiController.getRmiStub().usePowerUp(this.username, index, myRemoteView.getPowerUpShot());
-                        break;
-                        */
+                        displayNewtonTargets(index);
+                    break;
+
                 }
             }
 
@@ -1681,7 +1683,6 @@ public class GUI extends Application {
     private void teleporterAction() throws RemoteException{
         guiController.getRmiStub().giftAction(this.username);
         moveAction(5);
-
     }
 
     private void displayTargetingScopeTargets(int index){
@@ -1689,25 +1690,30 @@ public class GUI extends Application {
         ComboBox comboBox = new ComboBox();
         BorderPane targetingScopePane = new BorderPane();
         targetingScopePane.setStyle(BACKGROUND_STYLE);
-        ArrayList<Player> targets = new ArrayList<>();
+        ArrayList<Player> allTargets = new ArrayList<>();
         try{
-            targets.addAll(guiController.getRmiStub().getMatch().getAllPlayers());
-            System.out.println(targets);
-            for(Player target : targets){
-                comboBox.getItems().add( target.getClientName());
+            allTargets.addAll(guiController.getRmiStub().getMatch().getAllPlayers());
+            System.out.println(allTargets);
+            for(Player target : allTargets){
+                if(!target.getClientName().equals(this.username))
+                    comboBox.getItems().add(target.getClientName());
             }
 
         }catch (Exception exc){
-            logger.log(Level.INFO,"Targets targetingscope error",exc);
+            logger.log(Level.INFO,"Targets targetingScope error",exc);
         }
         Label info = new Label("Who is the target?");
         info.setStyle(LABEL_STYLE);
 
         Button confirmButton = new Button("Confirm");
         confirmButton.setStyle(BUTTON_STYLE);
+        confirmButton.setOnMouseExited(e ->
+                confirmButton.setStyle(BUTTON_STYLE));
+        confirmButton.setOnMouseEntered(e ->
+                confirmButton.setStyle(HIGHLIGHT_BUTTON_STYLE));
+
         comboBox.setPromptText("Select target");
         comboBox.setPadding(new Insets(10,10,10,10));
-        //targets.addAll(guiController.getMyRemoteView().getInfoShot().getAlreadyTarget());
 
         confirmButton.setOnAction(e-> {
             PowerUpShot powerUpShot = guiController.getMyRemoteView().getPowerUpShot();
@@ -1717,6 +1723,7 @@ public class GUI extends Application {
                 powerUpShot.setTargetingPlayer(targetingPlayer);
                 System.out.println("\nPowerUpShot: "+powerUpShot.toString());
                 guiController.getRmiStub().usePowerUp(this.username,index,powerUpShot);
+                targetingScopeWindow.close();
             }catch (Exception err){
                 logger.log(Level.INFO,"TargetingScope method error",err);
             }
@@ -1736,6 +1743,91 @@ public class GUI extends Application {
         targetingScopeWindow.setWidth(300);
         targetingScopeWindow.setHeight(200);
         targetingScopeWindow.showAndWait();
+    }
+
+    private void displayNewtonTargets(int index){
+
+        Stage newtonWindow = new Stage();
+        ComboBox comboBox = new ComboBox();
+        BorderPane newtonPane = new BorderPane();
+        newtonPane.setStyle(BACKGROUND_STYLE);
+        ArrayList<Player> allTargets = new ArrayList<>();
+        PowerUpShot powerUpShot = new PowerUpShot();
+
+        try{
+            allTargets.addAll(guiController.getRmiStub().getMatch().getAllPlayers());
+            System.out.println(allTargets);
+            for(Player target : allTargets){
+                if(!target.getClientName().equals(this.username))
+                    comboBox.getItems().add(target.getClientName());
+            }
+
+        }catch (Exception exc){
+            logger.log(Level.INFO,"Targets targetingScope error",exc);
+        }
+        Label info = new Label("Who is the target?");
+        info.setStyle(LABEL_STYLE);
+
+        Button confirmButton = new Button("Confirm");
+        confirmButton.setStyle(BUTTON_STYLE);
+        confirmButton.setOnMouseExited(e ->
+                confirmButton.setStyle(BUTTON_STYLE));
+        confirmButton.setOnMouseEntered(e ->
+                confirmButton.setStyle(HIGHLIGHT_BUTTON_STYLE));
+
+        comboBox.setPromptText("Select target");
+        comboBox.setPadding(new Insets(10,10,10,10));
+
+        confirmButton.setOnAction(e-> {
+            newtonWindow.close();
+            try{
+                MovementChecker movementChecker = new MovementChecker(guiController.getRmiStub().getMatch().getMap().getAllSquare(),2,guiController.getRmiStub().getMatch().searchPlayerByClientName((String) comboBox.getValue()).getPosition());
+                ArrayList<Square> squares = new ArrayList<>();
+                squares.addAll(movementChecker.getReachableSquares());
+                for (int i = 0; i < 12; i++) {
+                    Rectangle rectangle = (Rectangle) grid.getChildren().get(i);
+                    for (Square square : squares) {
+                        if (rectangle.getId().equals(Integer.toString(square.getPosition()))) {
+                            rectangle.setFill(Color.color(0, 0.4, 0.7, 0.4));
+                            rectangle.setOnMouseClicked(o -> {
+                                try {
+                                    powerUpShot.setDamagingPlayer(guiController.getRmiStub().getMatch().searchPlayerByClientName(this.username));
+                                    Player targetingPlayer = guiController.getRmiStub().getMatch().searchPlayerByClientName((String) comboBox.getValue());
+                                    powerUpShot.setTargetingPlayer(targetingPlayer);
+                                    powerUpShot.setNewPosition(Integer.parseInt(rectangle.getId()));
+                                    System.out.println("\nPowerUpShot: "+powerUpShot.toString());
+                                    guiController.getRmiStub().usePowerUp(this.username,index,powerUpShot);
+                                } catch (Exception exc) {
+                                    logger.log(Level.INFO,"setMovementSquare() Error",exc);
+                                }
+                                restoreSquares();
+                            });
+                            rectangle.setOnMouseEntered( enter ->
+                                    rectangle.setFill(Color.color(0,0.4,0.7,0.6)));
+                            rectangle.setOnMouseExited( exit ->
+                                    rectangle.setFill(Color.color(0,0.4,0.7,0.4)));
+                        }
+                    }
+                }
+            }catch (Exception err){
+                logger.log(Level.INFO,"TargetingScope method error",err);
+            }
+
+        });
+        newtonPane.setCenter(comboBox);
+        newtonPane.setAlignment(comboBox,Pos.CENTER);
+        newtonPane.setStyle(BACKGROUND_STYLE);
+        newtonPane.setTop(info);
+        newtonPane.setBottom(confirmButton);
+        newtonPane.setAlignment(confirmButton,Pos.CENTER);
+        newtonPane.setAlignment(info,Pos.TOP_CENTER);
+
+        Scene newtonScene = new Scene(newtonPane);
+        newtonWindow.setScene(newtonScene);
+        newtonWindow.setWidth(300);
+        newtonWindow.setHeight(200);
+        newtonWindow.showAndWait();
+
     }
 
 }

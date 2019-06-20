@@ -118,21 +118,22 @@ public class ShotController implements Serializable {
                             }
                             else if(maxDistanceTarget == minDistanceTarget && maxDistanceTarget == 0) {
                                 for (Player player : match.getAllPlayers()) {
-                                    if (player.getPosition() == currentPlayer.getPosition() && player.getClientName() != currentPlayer.getClientName()) {
+                                    if (player.getPosition() == currentPlayer.getPosition() && player.getClientName().equals(currentPlayer.getClientName())) {
                                         visiblePlayers.add(player);
                                     }
                                 }
                             }
                             else {
                                 int distance = maxDistanceTarget - minDistanceTarget;
-                                ArrayList<Square> reacheableSquare;
-                                ArrayList<Square> cantShootSquare;
+                                ArrayList<Square> reachableSquare = new ArrayList<>();
+                                ArrayList<Square> cantShootSquare = new ArrayList<>();
                                 MovementChecker maxMovementChecker = new MovementChecker(match.getMap().getAllSquare(), maxDistanceTarget, currentPlayer.getPosition());
                                 MovementChecker minMovementChecker = new MovementChecker(match.getMap().getAllSquare(), minDistanceTarget - 1, currentPlayer.getPosition());
-                                reacheableSquare = maxMovementChecker.getReachableSquares();
-                                cantShootSquare = minMovementChecker.getReachableSquares();
-                                reacheableSquare.removeAll(cantShootSquare);
-                                for (Square square : reacheableSquare) {
+                                reachableSquare.addAll(maxMovementChecker.getReachableSquares()) ;
+                                cantShootSquare.addAll(minMovementChecker.getReachableSquares());
+                                System.out.println("Squares :"+ cantShootSquare);
+                                reachableSquare.removeAll(cantShootSquare);
+                                for (Square square : reachableSquare) {
                                     for (Player player : match.getAllPlayers()) {
                                         if (player.getPosition() == square.getPosition()) {
                                             visiblePlayers.add(player);
