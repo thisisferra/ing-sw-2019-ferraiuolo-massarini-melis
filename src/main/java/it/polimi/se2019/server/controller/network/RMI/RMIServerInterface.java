@@ -72,4 +72,6 @@ public interface RMIServerInterface extends Remote {
 
     void usePowerUp(String username, int index, PowerUpShot powerUpShot) throws RemoteException;
 
+    void deathPlayer() throws RemoteException;
+
 }

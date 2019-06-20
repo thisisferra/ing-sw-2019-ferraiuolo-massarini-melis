@@ -1,5 +1,6 @@
 package it.polimi.se2019.server.controller.network.RMI;
 
+import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import it.polimi.se2019.client.view.GUIControllerInterface;
 import it.polimi.se2019.server.OneAboveAll;
 import it.polimi.se2019.server.controller.InfoShot;
@@ -14,7 +15,9 @@ import it.polimi.se2019.server.model.game.Match;
 import it.polimi.se2019.server.model.game.MovementChecker;
 import it.polimi.se2019.server.model.map.Square;
 import it.polimi.se2019.server.model.map.WeaponSlot;
+import it.polimi.se2019.server.model.player.EnemyDamage;
 import it.polimi.se2019.server.model.player.Player;
+import it.polimi.se2019.server.model.player.PlayerBoard;
 
 import java.io.PrintStream;
 import java.net.InetAddress;
@@ -439,5 +442,32 @@ public class RMIServer extends Server implements RMIServerInterface {
             }
         }
 
+    }
+
+    public void deathPlayer() {
+        for (Player player : match.getAllPlayers()) {
+            if (player.getPlayerDead()) {
+                assignPoints(player);
+                player.setPlayerDead(false);
+                player.setPhaseAction(0);
+                match.addPlayerKillShot(player);
+            }
+        }
+    }
+
+    private void assignPoints(Player player) {
+        PlayerBoard playerBoard = player.getPlayerBoard();
+        int indexPointDeaths = 0;
+        for (EnemyDamage enemyDamagePoints : playerBoard.getEnemyDamages()) {
+            Player aggressorPlayer = enemyDamagePoints.getAggressorPlayer();
+            if (indexPointDeaths <= player.getPlayerBoard().getPointDeaths().size()) {
+                aggressorPlayer.addPoints(player.getPlayerBoard().getPointDeaths().get(indexPointDeaths));
+            }
+            else {
+                aggressorPlayer.addPoints(1);
+            }
+            indexPointDeaths += 1;
+        }
+        playerBoard.getPointDeaths().remove(0);
     }
 }

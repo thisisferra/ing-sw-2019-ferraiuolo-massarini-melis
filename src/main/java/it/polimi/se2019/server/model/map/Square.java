@@ -139,4 +139,19 @@ public class Square implements Serializable {
         return  this.getPosition() + " " + this.color;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == this){
+            return true;
+        }
+
+        if (!(o instanceof Square)) {
+            return false;
+        }
+
+        Square square = (Square) o;
+
+        return this.getPosition() == ((Square) o).getPosition();
+    }
+
 }

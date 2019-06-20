@@ -11,6 +11,7 @@ public class EnemyDamage implements Serializable {
         this.aggressorPlayer = aggressorPlayer;
         this.damage = damage;
     }
+
     public EnemyDamage(){}
 
     public Player getAggressorPlayer() {

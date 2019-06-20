@@ -36,6 +36,7 @@ public class Player implements Serializable {
     private boolean finalFrenzy = false;
     private int phaseAction = 0;
     private boolean canMove = false;
+    private boolean playerDead;
 
     public Player(String clientName, Match match) {
         this.clientName = clientName;
@@ -49,6 +50,7 @@ public class Player implements Serializable {
         this.shotController = new ShotController(match);
         this.position = -1;
         this.numberOfAction=2;
+        this.playerDead = false;
     }
 
     public String getCharacter() {
@@ -423,5 +425,13 @@ public class Player implements Serializable {
             }
         }
         return reloadableWeapons;
+    }
+
+    public boolean getPlayerDead() {
+        return this.playerDead;
+    }
+
+    public void setPlayerDead(boolean playerDead) {
+        this.playerDead = playerDead;
     }
 }

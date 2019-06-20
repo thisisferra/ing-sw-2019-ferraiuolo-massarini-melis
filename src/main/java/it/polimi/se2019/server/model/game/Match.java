@@ -9,6 +9,7 @@ import it.polimi.se2019.server.model.cards.weapons.*;
 import it.polimi.se2019.server.model.map.Map;
 import it.polimi.se2019.server.model.map.WeaponSlot;
 import it.polimi.se2019.server.model.player.Player;
+import it.polimi.se2019.server.model.player.PlayerBoard;
 import it.polimi.se2019.utils.Observable;
 
 import java.io.Serializable;
@@ -178,7 +179,13 @@ public class Match extends Observable implements Serializable {
     }
 
     public void addPlayerKillShot(Player dead){
-        killShotTrack.add(dead);
+        PlayerBoard playerBoard = dead.getPlayerBoard();
+        if (playerBoard.getDamage().size() == 11) {
+            this.killShotTrack.add(playerBoard.getDamage().get(10));
+        }
+        else if(playerBoard.getDamage().size() == 12) {
+            this.killShotTrack.add(playerBoard.getDamage().get(11));
+        }
     }
 
     public ArrayList<Player> getKillShotTrack(){

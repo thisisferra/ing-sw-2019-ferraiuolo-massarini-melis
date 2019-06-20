@@ -14,7 +14,6 @@ import java.util.Comparator;
  */
 public class PlayerBoard implements Serializable {
     //list of references of players who marked this player (max 3 references per player)
-    private ArrayList<Player> tags;
     //list of references of players who damaged this player
     private ArrayList<Player> damage;
     //list of enemyDamage instances counting the total damage each player inflicted
@@ -33,7 +32,6 @@ public class PlayerBoard implements Serializable {
     public PlayerBoard(Player owner){
         this.enemyDamages = new ArrayList<>();
         this.enemyMarks = new ArrayList<>();
-        this.tags = new ArrayList<>();
         this.damage = new ArrayList<>();
         this.pointDeaths = new ArrayList<>();
         this.ammoCubes = new Cubes(1,1,1);
@@ -49,11 +47,6 @@ public class PlayerBoard implements Serializable {
         this.pointDeaths.add(2);
         this.pointDeaths.add(1);
         this.pointDeaths.add(1);
-    }
-
-    // show players tags
-    public ArrayList<Player> getTags(){
-        return this.tags;
     }
 
     //show damage taken from all players
@@ -150,6 +143,13 @@ public class PlayerBoard implements Serializable {
 
         if(this.damage.size() >11){
             attacker.getPlayerBoard().dealMark(this.owner,1);
+            owner.setPlayerDead(true);
+        }
+        if (this.damage.size()> 2 && this.damage.size() < 6) {
+            owner.setPhaseAction(1);
+        }
+        else if (this.damage.size() > 5 && this.damage.size() < 11 ) {
+            owner.setPhaseAction(2);
         }
         sortAggressor();
     }

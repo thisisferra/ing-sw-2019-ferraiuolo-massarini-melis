@@ -1149,6 +1149,7 @@ public class GUI extends Application {
                     if(!reloadableWeapons.isEmpty())
                         reloadAlert(reloadableWeapons);
                     else {
+                        guiController.getRmiStub().deathPlayer();
                         guiController.getRmiStub().restoreMap();
                         setAmmo(mapNumber);
                         guiController.getRmiStub().resetActionNumber(username);
