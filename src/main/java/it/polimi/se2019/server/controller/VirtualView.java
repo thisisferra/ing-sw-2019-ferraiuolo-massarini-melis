@@ -18,6 +18,7 @@ public class VirtualView implements Serializable {
     private GUIControllerInterface clientReference;
 
     //
+    private String ipClient;
     private String username;
     private String character;
     private int position;
@@ -48,6 +49,10 @@ public class VirtualView implements Serializable {
     }
 
     //GETTER
+
+    public String getIpClient() {
+        return this.ipClient;
+    }
 
     public GUIControllerInterface getClientReference() {
         return this.clientReference;
@@ -254,11 +259,4 @@ public class VirtualView implements Serializable {
         this.setNumberOfActions(player.getNumberOfAction());
     }
 
-
-    /*
-    public void updateClient(VirtualView virtualView) throws RemoteException {
-        clientReference.updateRemoteView(virtualView);
-    }
-
-     */
 }

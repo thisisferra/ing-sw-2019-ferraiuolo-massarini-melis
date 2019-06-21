@@ -11,4 +11,6 @@ public interface GUIControllerInterface extends Remote {
     void initRemoteView(ArrayList<VirtualView> allVirtualView) throws RemoteException;
 
     void update(ArrayList<VirtualView> allVirtualView) throws RemoteException;
+
+    String ping() throws RemoteException;
 }

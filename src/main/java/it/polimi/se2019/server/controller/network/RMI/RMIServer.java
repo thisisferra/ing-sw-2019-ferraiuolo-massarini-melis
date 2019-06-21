@@ -25,12 +25,13 @@ import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.rmi.server.RemoteServer;
-import java.rmi.server.ServerNotActiveException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 //ritorno
 public class RMIServer extends Server implements RMIServerInterface {
@@ -93,14 +94,25 @@ public class RMIServer extends Server implements RMIServerInterface {
         }
     }
 
-    public String getClientIP() throws ServerNotActiveException {
-        return RemoteServer.getClientHost();
+    /*
+    private String getClientIP(GUIControllerInterface guiController){
+        String ipClient = null;
+        String port = null;
+        Pattern IP_PATTERN = Pattern.compile("(((\\d)+(\\.)*)+:(\\d)+)");
+        Matcher matcher = IP_PATTERN.matcher(guiController.toString());
+        while(matcher.find()) {
+            ipClient = matcher.group(0);
+        }
+        System.out.println("ipClient: " + ipClient);
+        return ipClient;
     }
+     */
 
     public synchronized void register(String username, GUIControllerInterface guiController,int mapId) throws RemoteException{
         if (!mapAlreadySelected()) {
             this.createMatch(mapId);
         }
+        //String ipClient = getClientIP(guiController);
         VirtualView virtualView = createVirtualView(guiController);
         Player player = createPlayer(username);
         virtualView.updateVirtualView(player, match);
@@ -109,18 +121,7 @@ public class RMIServer extends Server implements RMIServerInterface {
         if (activePlayer == null) {
             activePlayer = match.getAllPlayers().get(0);
         }
-
-        /*
-        for (VirtualView virtualView : allVirtualViews) {
-            virtualView.getClientReference().notifyNewClient(username);
-        }
-        try {
-            this.updateAllClient();
-        }
-        catch (Exception e) {
-            System.err.println("Errore");
-        }
-         */
+        //this.pingClient();
     }
 
     public synchronized boolean checkUsername(String username) {
@@ -444,15 +445,18 @@ public class RMIServer extends Server implements RMIServerInterface {
 
     }
 
-    public void deathPlayer() {
+    public boolean deathPlayer() {
+        boolean flagDeath = false;
         for (Player player : match.getAllPlayers()) {
             if (player.getPlayerDead()) {
+                flagDeath = true;
                 assignPoints(player);
                 player.setPlayerDead(false);
                 player.setPhaseAction(0);
                 match.addPlayerKillShot(player);
             }
         }
+        return flagDeath;
     }
 
     private void assignPoints(Player player) {
@@ -469,5 +473,19 @@ public class RMIServer extends Server implements RMIServerInterface {
             indexPointDeaths += 1;
         }
         playerBoard.getPointDeaths().remove(0);
+        playerBoard.clearDamage();
+    }
+
+    private void pingClient() {
+        for (VirtualView virtualView : allVirtualViews) {
+            try {
+                String nameClient = virtualView.getClientReference().ping();
+                System.out.println("Client " + nameClient + "still connected");
+            }
+            catch(RemoteException remException) {
+                System.err.println("Client disconnesso");
+            }
+        }
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
     }
 }

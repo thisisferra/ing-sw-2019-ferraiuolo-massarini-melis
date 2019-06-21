@@ -141,7 +141,7 @@ public class PlayerBoard implements Serializable {
             found.setDamage(damage+additionalDamage);
         else this.enemyDamages.add(new EnemyDamage(attacker,damage+additionalDamage));
 
-        if(this.damage.size() >11){
+        if(this.damage.size() >=11){
             attacker.getPlayerBoard().dealMark(this.owner,1);
             owner.setPlayerDead(true);
         }
@@ -182,5 +182,10 @@ public class PlayerBoard implements Serializable {
             marked.setMarks(marks);
         }
         else this.enemyMarks.add(new EnemyMark(aggressor,marks));
+    }
+
+    public void clearDamage() {
+        this.enemyDamages.clear();
+        this.damage.clear();
     }
 }

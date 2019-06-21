@@ -154,4 +154,10 @@ public class GUIController implements GUIControllerInterface {
     public void applyEffect(InfoShot infoShot) throws RemoteException{
         this.getRmiStub().applyEffectWeapon(infoShot);
     }
+
+    @Override
+    public String ping() {
+        System.out.println("Client " + this.username + " still connected!");
+        return this.username;
+    }
 }

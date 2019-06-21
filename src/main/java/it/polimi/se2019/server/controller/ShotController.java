@@ -118,7 +118,7 @@ public class ShotController implements Serializable {
                             }
                             else if(maxDistanceTarget == minDistanceTarget && maxDistanceTarget == 0) {
                                 for (Player player : match.getAllPlayers()) {
-                                    if (player.getPosition() == currentPlayer.getPosition() && player.getClientName().equals(currentPlayer.getClientName())) {
+                                    if (player.getPosition() == currentPlayer.getPosition() && !player.getClientName().equals(currentPlayer.getClientName())) {
                                         visiblePlayers.add(player);
                                     }
                                 }

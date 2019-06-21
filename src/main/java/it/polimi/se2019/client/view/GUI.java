@@ -1113,15 +1113,19 @@ public class GUI extends Application {
             }
 
         );
-        grabButton.setOnAction(e ->{
-            moveGrabAction(1);
-                }
-
-        );
+        grabButton.setOnAction(e -> {
+            if (myRemoteView.getPhaseAction() == 0)
+                moveGrabAction(1);
+            else if (myRemoteView.getPhaseAction() == 1 || myRemoteView.getPhaseAction() == 2)
+                moveAction(2);
+        });
         shootButton.setOnAction(e -> {
             try {
                 if (guiController.getRmiStub().getActivePlayer().equals(this.username)) {
                     if (guiController.getRmiStub().checkNumberAction(username) && guiController.getRmiStub().checkSizeWeapon(this.username)) {
+                        if (myRemoteView.getPhaseAction() == 2) {
+                            moveAction(1);
+                        }
                         ArrayList<Weapon> usableWeapons = guiController.getRmiStub().verifyWeapons(this.username);
                         if (!usableWeapons.isEmpty()) {
                             System.out.println(usableWeapons);
@@ -1150,7 +1154,9 @@ public class GUI extends Application {
                     if(!reloadableWeapons.isEmpty())
                         reloadAlert(reloadableWeapons);
                     else {
-                        guiController.getRmiStub().deathPlayer();
+                        if (guiController.getRmiStub().deathPlayer()) {
+                            //TODO implementare spostamento skull e segnalino su killShotTrack
+                        }
                         guiController.getRmiStub().restoreMap();
                         setAmmo(mapNumber);
                         guiController.getRmiStub().resetActionNumber(username);
