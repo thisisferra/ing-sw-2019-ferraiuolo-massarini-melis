@@ -1332,6 +1332,7 @@ public class GUI extends Application {
         Stage powerUpWindow = new Stage();
         HBox powerUpBox = new HBox();
         Label info = new Label("These are your power ups.\n You can use them as intended, or trade it for a cube of the same color.\n");
+        info.setWrapText(true);
         BorderPane powerUpPane = new BorderPane();
         Image powerUpImage;
         ImageView powerUpView;
@@ -1383,6 +1384,7 @@ public class GUI extends Application {
         BorderPane borderPane = new BorderPane();
 
         info.setStyle(LABEL_STYLE);
+        info.setWrapText(true);
         displayWindow.initModality(Modality.APPLICATION_MODAL);
         displayWindow.setTitle("Weapons");
 
@@ -1849,7 +1851,7 @@ public class GUI extends Application {
                         Rectangle rectangle = (Rectangle) grid.getChildren().get(i);
                         for (Square square : squares) {
                             if (rectangle.getId().equals(Integer.toString(square.getPosition()))) {
-                                rectangle.setFill(Color.color(0, 0.4, 0.7, 0.4));
+                                rectangle.setFill(Color.color(0.5, 0, 1, 0.4));
                                 rectangle.setOnMouseClicked(o -> {
                                     try {
                                         powerUpShot.setDamagingPlayer(guiController.getRmiStub().getMatch().searchPlayerByClientName(this.username));
@@ -1864,9 +1866,9 @@ public class GUI extends Application {
                                     restoreSquares();
                                 });
                                 rectangle.setOnMouseEntered( enter ->
-                                        rectangle.setFill(Color.color(0,0.4,0.7,0.6)));
+                                        rectangle.setFill(Color.color(0.5,0,1,0.6)));
                                 rectangle.setOnMouseExited( exit ->
-                                        rectangle.setFill(Color.color(0,0.4,0.7,0.4)));
+                                        rectangle.setFill(Color.color(0.5,0,1,0.4)));
                             }
                         }
                     }
