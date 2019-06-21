@@ -9,6 +9,7 @@ import it.polimi.se2019.server.model.game.Cubes;
 import it.polimi.se2019.server.model.game.MovementChecker;
 import it.polimi.se2019.server.model.map.Square;
 import it.polimi.se2019.server.model.player.Player;
+import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
@@ -42,6 +43,8 @@ public class GUI extends Application {
     private String username;
     private RemoteView myRemoteView;
     private Stage window;
+    private Label waitLabel = new Label();
+    private BorderPane waitPane = new BorderPane();
     private GUIController guiController;
     private ToggleGroup mapSelector = new ToggleGroup();
     private GridPane grid = new GridPane();
@@ -140,35 +143,40 @@ public class GUI extends Application {
     }
 
     private void setKillShotTrack() {
-
+        killShotTrack.getChildren().clear();
         Image skullImage = createImage("src/main/resources/Images/icons/skull_icon.png");
+        Image characterImage;
+        ImageView characterImageView;
         ImageView skullView;
-        ArrayList<Player> killShotTrackList = new ArrayList<>();
+        ArrayList<Player> killShotTrackList;
         try{
             killShotTrackList = guiController.getMyRemoteView().getKillShotTrack();
 
             for(Player player : killShotTrackList){
-                skullImage = createImage(ICONS_PATH + player.getCharacter()+"_icon.png");
+                characterImage = createImage(ICONS_PATH + player.getCharacter()+"_damage_icon.png");
+                characterImageView = new ImageView(characterImage);
+                characterImageView.setFitWidth(40);
+                characterImageView.setSmooth(true);
+                characterImageView.setPreserveRatio(true);
+                killShotTrack.getChildren().add(characterImageView);
+            }
+
+            for (int i = 0; i < 8-killShotTrackList.size(); i++) {
                 skullView = new ImageView(skullImage);
-                skullView.setFitHeight(40);
+                skullView.setFitWidth(40);
                 skullView.setSmooth(true);
                 skullView.setPreserveRatio(true);
+                killShotTrack.getChildren().add(skullView);
             }
         }catch(Exception e){
 
             logger.log(Level.INFO,"Killshot track failed to load",e);
         }
 
-        for (int i = 0; i < 8-killShotTrackList.size(); i++) {
-            skullView = new ImageView(skullImage);
-            skullView.setFitHeight(40);
-            skullView.setSmooth(true);
-            skullView.setPreserveRatio(true);
-            killShotTrack.getChildren().add(skullView);
-        }
-        killShotTrack.setTranslateX(66);
+
+        killShotTrack.setTranslateX(64);
         killShotTrack.setTranslateY(40);
-        killShotTrack.setSpacing(8);
+        killShotTrack.setSpacing(-1);
         killShotTrack.setPickOnBounds(false);
     }
 
@@ -204,12 +212,12 @@ public class GUI extends Application {
                 icon = createImage("src/main/resources/Images/icons/skull_icon.png");
                 iconImg = new ImageView(icon);
                 iconImg.setPreserveRatio(true);
-                iconImg.setFitWidth(27);
+                iconImg.setFitWidth(35);
                 deathBar.getChildren().add(iconImg);
 
             }
             for(int i = 0; i<view.getMarkPlayerBoard().size(); i++){
-                icon = createImage(ICONS_PATH +view.getMarkPlayerBoard().get(i).getAggressorPlayer().getCharacter()+"_damage_icon.png");
+                icon = createImage(ICONS_PATH +view.getMarkPlayerBoard().get(i).getAggressorPlayer().getCharacter()+"_"+ view.getMarkPlayerBoard().get(i).getMarks()+"_mark_icon.png");
                 iconImg = new ImageView(icon);
                 iconImg.setPreserveRatio(true);
                 iconImg.setFitWidth(32);
@@ -221,7 +229,7 @@ public class GUI extends Application {
             damageBar.setTranslateY(45);
             damageBar.setTranslateX(40);
 
-            deathBar.setTranslateY(85);
+            deathBar.setTranslateY(87);
             deathBar.setTranslateX(100);
 
             markBar.setTranslateX(230);
@@ -433,27 +441,44 @@ public class GUI extends Application {
     }
 
     private void setWaitScene(){
-        Label waitLabel = new Label("Please wait...");
+        waitLabel = new Label("Waiting for the: " + (guiController.getAllViews().size()+1) + "° player.\nPlease wait...");
         waitLabel.setStyle(LABEL_STYLE);
-        BorderPane pane = new BorderPane();
-        pane.setStyle(BACKGROUND_STYLE);
-        pane.setCenter(waitLabel);
+        waitPane = new BorderPane();
+        waitPane.setStyle(BACKGROUND_STYLE);
+        waitPane.setCenter(waitLabel);
         waitLabel.setAlignment(Pos.CENTER);
-        Scene waitScene = new Scene(pane,300,200);
+        Scene waitScene = new Scene(waitPane,300,200);
         window.setScene(waitScene);
 
-        Timeline waitMinimumPlayers = new Timeline(new KeyFrame(Duration.millis(500), e-> {
+        Timeline waitMinimumPlayers = new Timeline(new KeyFrame(Duration.seconds(1), e-> {
             try{
-                //while(false){ guiController.getRmiStub().getMatch().getAllPlayers().size()<3}
-                    //
-                    Timeline waitAdditionalPlayers = new Timeline(new KeyFrame(Duration.seconds(1), f-> {
 
-                        setGameScene();
-                        window.setScene(scene);
+                //if(guiController.getRmiStub().getMatch().getAllPlayers().size()<3){
+                if(false){
+
+                    Timeline waitAdditionalPlayers = new Timeline(new KeyFrame(Duration.seconds(1), h-> {
+                        setWaitScene();
+                        window.setScene(waitScene);
                     }
                     ));
                     waitAdditionalPlayers.setCycleCount(1);
                     waitAdditionalPlayers.play();
+
+                } else{
+                    window.close();
+                    setGameScene();
+                    window.setScene(scene);
+                    window.show();
+                }
+                    /*
+                    Timeline waitAdditionalPlayers = new Timeline(new KeyFrame(Duration.seconds(1), f-> {
+                        setGameScene();
+                        window.setScene(scene);
+                    }
+                    ));
+                    waitAdditionalPlayers.setCycleCount(Timeline.INDEFINITE);
+                    waitAdditionalPlayers.play();
+                     */
 
             }catch (Exception o){
                 logger.log(Level.INFO,"TimeLine error",o);
@@ -622,7 +647,7 @@ public class GUI extends Application {
 
         Stage playersWindow = new Stage();
         VBox layout = setPlayerBoardsStack();
-        Label info = new Label("Current players are:");
+        Label info = new Label("These are the player's boards.");
         BorderPane playersPane = new BorderPane();
         info.setStyle(LABEL_STYLE);
         playersWindow.initModality(Modality.APPLICATION_MODAL);
@@ -1023,7 +1048,7 @@ public class GUI extends Application {
             });
 
         }
-        Label info = new Label("Choose a weapon");
+        Label info = new Label("Choose a weapon to pick up\nRemember: you don't have to pay for the first cube.");
         info.setStyle(LABEL_STYLE);
         BorderPane weaponPane = new BorderPane();
         cabinetWindow.initModality(Modality.APPLICATION_MODAL);
@@ -1065,7 +1090,7 @@ public class GUI extends Application {
             });
         }
 
-        Label info = new Label("Choose a weapon to discard");
+        Label info = new Label("Choose a weapon to discard\n It goes back inside the locker, loaded.");
         info.setStyle(LABEL_STYLE);
         BorderPane weaponPane = new BorderPane();
         weaponHandWindow.initModality(Modality.APPLICATION_MODAL);
@@ -1117,7 +1142,7 @@ public class GUI extends Application {
             if (myRemoteView.getPhaseAction() == 0)
                 moveGrabAction(1);
             else if (myRemoteView.getPhaseAction() == 1 || myRemoteView.getPhaseAction() == 2)
-                moveAction(2);
+                moveGrabAction(2);
         });
         shootButton.setOnAction(e -> {
             try {
@@ -1154,14 +1179,10 @@ public class GUI extends Application {
                     if(!reloadableWeapons.isEmpty())
                         reloadAlert(reloadableWeapons);
                     else {
-                        if (guiController.getRmiStub().deathPlayer()) {
-                            //TODO implementare spostamento skull e segnalino su killShotTrack
-                        }
+                        guiController.getRmiStub().deathPlayer();
                         guiController.getRmiStub().restoreMap();
-                        setAmmo(mapNumber);
                         guiController.getRmiStub().resetActionNumber(username);
                         guiController.getRmiStub().setActivePlayer(username);
-                        this.setUserInfos();
                     }
 
                 }
@@ -1242,6 +1263,7 @@ public class GUI extends Application {
             }
 
             setFigures();
+            setKillShotTrack();
             setAmmo(mapNumber);
             setUserInfos();
             setWeaponView(redBox, myRemoteView.getCabinetRed().getSlot());
@@ -1309,7 +1331,7 @@ public class GUI extends Application {
     private void displayPowerUpHand(){
         Stage powerUpWindow = new Stage();
         HBox powerUpBox = new HBox();
-        Label info = new Label("Your power ups are:");
+        Label info = new Label("These are your power ups.\n You can use them as intended, or trade it for a cube of the same color.\n");
         BorderPane powerUpPane = new BorderPane();
         Image powerUpImage;
         ImageView powerUpView;
@@ -1356,7 +1378,7 @@ public class GUI extends Application {
 
     private void displayWeapons(HBox box){
         Stage displayWindow = new Stage();
-        Label info = new Label("Your current weapons are: ");
+        Label info = new Label("These are your weapons.\nGrey ones are unloaded and you can't use them.");
         HBox layout = new HBox();
         BorderPane borderPane = new BorderPane();
 
@@ -1372,6 +1394,7 @@ public class GUI extends Application {
         borderPane.setCenter(layout);
         borderPane.setBottom(closeButton);
         borderPane.setStyle(BACKGROUND_STYLE);
+        borderPane.setAlignment(info,Pos.CENTER);
         borderPane.setAlignment(closeButton,Pos.CENTER);
         Scene scene = new Scene(borderPane);
         displayWindow.setScene(scene);
@@ -1659,7 +1682,7 @@ public class GUI extends Application {
         try {
             switch(myRemoteView.getPowerUps().get(index).getType()){
                 case "teleporter" : {
-                    teleporterAction();
+                    teleporterAction(index);
                     break;
                 }
                 case "tagback_grenade" : {/*
@@ -1686,9 +1709,39 @@ public class GUI extends Application {
         }
     }
 
-    private void teleporterAction() throws RemoteException{
+    private void teleporterAction(int index) throws RemoteException{
         guiController.getRmiStub().giftAction(this.username);
         moveAction(5);
+        try{
+            PowerUpShot powerUpShot= new PowerUpShot();
+            Square[] walkableSquares = guiController.getRmiStub().getAllSquares();
+            for (int i = 0; i < 12; i++) {
+                Rectangle rectangle = (Rectangle) grid.getChildren().get(i);
+                if(!walkableSquares[i].getColor().equals("")){
+                    rectangle.setFill(Color.color(0, 1, 0.6, 0.4));
+                    rectangle.setOnMouseClicked(o -> {
+                        try {
+                            powerUpShot.setDamagingPlayer(guiController.getRmiStub().getMatch().searchPlayerByClientName(this.username));
+                            powerUpShot.setTargetingPlayer(guiController.getRmiStub().getMatch().searchPlayerByClientName(this.username));
+                            powerUpShot.setNewPosition(Integer.parseInt(rectangle.getId()));
+                            guiController.getRmiStub().usePowerUp(this.username,index,powerUpShot);
+                        } catch (Exception exc) {
+                            logger.log(Level.INFO,"setMovementSquare() Error",exc);
+                        }
+                        restoreSquares();
+                    });
+                    rectangle.setOnMouseEntered( enter ->
+                            rectangle.setFill(Color.color(0,1,0.6,0.6)));
+                    rectangle.setOnMouseExited( exit ->
+                            rectangle.setFill(Color.color(0,1,0.6,0.4)));
+                }
+
+
+            }
+        }catch (Exception err){
+            logger.log(Level.INFO,"TargetingScope method error",err);
+        }
+
     }
 
     private void displayTargetingScopeTargets(int index){
@@ -1710,7 +1763,6 @@ public class GUI extends Application {
         }
         Label info = new Label("Who is the target?");
         info.setStyle(LABEL_STYLE);
-
         Button confirmButton = new Button("Confirm");
         confirmButton.setStyle(BUTTON_STYLE);
         confirmButton.setOnMouseExited(e ->
@@ -1722,18 +1774,20 @@ public class GUI extends Application {
         comboBox.setPadding(new Insets(10,10,10,10));
 
         confirmButton.setOnAction(e-> {
-            PowerUpShot powerUpShot = guiController.getMyRemoteView().getPowerUpShot();
-            try{
-                powerUpShot.setDamagingPlayer(guiController.getRmiStub().getMatch().searchPlayerByClientName(this.username));
-                Player targetingPlayer = guiController.getRmiStub().getMatch().searchPlayerByClientName((String) comboBox.getValue());
-                powerUpShot.setTargetingPlayer(targetingPlayer);
-                System.out.println("\nPowerUpShot: "+powerUpShot.toString());
-                guiController.getRmiStub().usePowerUp(this.username,index,powerUpShot);
-                targetingScopeWindow.close();
-            }catch (Exception err){
-                logger.log(Level.INFO,"TargetingScope method error",err);
-            }
+            if(comboBox.getValue()!=null){
+                PowerUpShot powerUpShot = guiController.getMyRemoteView().getPowerUpShot();
+                try{
+                    powerUpShot.setDamagingPlayer(guiController.getRmiStub().getMatch().searchPlayerByClientName(this.username));
+                    Player targetingPlayer = guiController.getRmiStub().getMatch().searchPlayerByClientName((String) comboBox.getValue());
+                    powerUpShot.setTargetingPlayer(targetingPlayer);
+                    System.out.println("\nPowerUpShot: "+powerUpShot.toString());
+                    guiController.getRmiStub().usePowerUp(this.username,index,powerUpShot);
+                    targetingScopeWindow.close();
+                }catch (Exception err){
+                    logger.log(Level.INFO,"TargetingScope method error",err);
+                }
 
+            }
         });
         targetingScopeWindow.initModality(Modality.APPLICATION_MODAL);
         targetingScopePane.setCenter(comboBox);
@@ -1786,37 +1840,39 @@ public class GUI extends Application {
 
         confirmButton.setOnAction(e-> {
             newtonWindow.close();
-            try{
-                MovementChecker movementChecker = new MovementChecker(guiController.getRmiStub().getMatch().getMap().getAllSquare(),2,guiController.getRmiStub().getMatch().searchPlayerByClientName((String) comboBox.getValue()).getPosition());
-                ArrayList<Square> squares = new ArrayList<>();
-                squares.addAll(movementChecker.getReachableSquares());
-                for (int i = 0; i < 12; i++) {
-                    Rectangle rectangle = (Rectangle) grid.getChildren().get(i);
-                    for (Square square : squares) {
-                        if (rectangle.getId().equals(Integer.toString(square.getPosition()))) {
-                            rectangle.setFill(Color.color(0, 0.4, 0.7, 0.4));
-                            rectangle.setOnMouseClicked(o -> {
-                                try {
-                                    powerUpShot.setDamagingPlayer(guiController.getRmiStub().getMatch().searchPlayerByClientName(this.username));
-                                    Player targetingPlayer = guiController.getRmiStub().getMatch().searchPlayerByClientName((String) comboBox.getValue());
-                                    powerUpShot.setTargetingPlayer(targetingPlayer);
-                                    powerUpShot.setNewPosition(Integer.parseInt(rectangle.getId()));
-                                    System.out.println("\nPowerUpShot: "+powerUpShot.toString());
-                                    guiController.getRmiStub().usePowerUp(this.username,index,powerUpShot);
-                                } catch (Exception exc) {
-                                    logger.log(Level.INFO,"setMovementSquare() Error",exc);
-                                }
-                                restoreSquares();
-                            });
-                            rectangle.setOnMouseEntered( enter ->
-                                    rectangle.setFill(Color.color(0,0.4,0.7,0.6)));
-                            rectangle.setOnMouseExited( exit ->
-                                    rectangle.setFill(Color.color(0,0.4,0.7,0.4)));
+            if(comboBox.getValue()!=null){
+                try{
+                    MovementChecker movementChecker = new MovementChecker(guiController.getRmiStub().getMatch().getMap().getAllSquare(),2,guiController.getRmiStub().getMatch().searchPlayerByClientName((String) comboBox.getValue()).getPosition());
+                    ArrayList<Square> squares = new ArrayList<>();
+                    squares.addAll(movementChecker.getReachableSquares());
+                    for (int i = 0; i < 12; i++) {
+                        Rectangle rectangle = (Rectangle) grid.getChildren().get(i);
+                        for (Square square : squares) {
+                            if (rectangle.getId().equals(Integer.toString(square.getPosition()))) {
+                                rectangle.setFill(Color.color(0, 0.4, 0.7, 0.4));
+                                rectangle.setOnMouseClicked(o -> {
+                                    try {
+                                        powerUpShot.setDamagingPlayer(guiController.getRmiStub().getMatch().searchPlayerByClientName(this.username));
+                                        Player targetingPlayer = guiController.getRmiStub().getMatch().searchPlayerByClientName((String) comboBox.getValue());
+                                        powerUpShot.setTargetingPlayer(targetingPlayer);
+                                        powerUpShot.setNewPosition(Integer.parseInt(rectangle.getId()));
+                                        System.out.println("\nPowerUpShot: "+powerUpShot.toString());
+                                        guiController.getRmiStub().usePowerUp(this.username,index,powerUpShot);
+                                    } catch (Exception exc) {
+                                        logger.log(Level.INFO,"setMovementSquare() Error",exc);
+                                    }
+                                    restoreSquares();
+                                });
+                                rectangle.setOnMouseEntered( enter ->
+                                        rectangle.setFill(Color.color(0,0.4,0.7,0.6)));
+                                rectangle.setOnMouseExited( exit ->
+                                        rectangle.setFill(Color.color(0,0.4,0.7,0.4)));
+                            }
                         }
                     }
+                }catch (Exception err){
+                    logger.log(Level.INFO,"TargetingScope method error",err);
                 }
-            }catch (Exception err){
-                logger.log(Level.INFO,"TargetingScope method error",err);
             }
 
         });

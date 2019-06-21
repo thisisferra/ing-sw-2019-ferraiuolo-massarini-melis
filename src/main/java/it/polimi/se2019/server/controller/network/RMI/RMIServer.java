@@ -22,6 +22,7 @@ import it.polimi.se2019.server.model.player.PlayerBoard;
 import java.io.PrintStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -445,18 +446,20 @@ public class RMIServer extends Server implements RMIServerInterface {
 
     }
 
-    public boolean deathPlayer() {
-        boolean flagDeath = false;
+    public void deathPlayer() throws RemoteException {
         for (Player player : match.getAllPlayers()) {
             if (player.getPlayerDead()) {
-                flagDeath = true;
+
+                match.addPlayerKillShot(player);
                 assignPoints(player);
+                player.getPlayerBoard().setDeaths();
                 player.setPlayerDead(false);
                 player.setPhaseAction(0);
-                match.addPlayerKillShot(player);
+                System.out.println("killshotTrack model"+match.getKillShotTrack());
             }
         }
-        return flagDeath;
+        updateAllVirtualView();
+        updateAllClient();
     }
 
     private void assignPoints(Player player) {

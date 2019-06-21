@@ -141,8 +141,9 @@ public class PlayerBoard implements Serializable {
             found.setDamage(damage+additionalDamage);
         else this.enemyDamages.add(new EnemyDamage(attacker,damage+additionalDamage));
 
-        if(this.damage.size() >=11){
-            attacker.getPlayerBoard().dealMark(this.owner,1);
+        if(this.damage.size() >10){
+            if(this.damage.size() == 12)
+                attacker.getPlayerBoard().dealMark(this.owner,1);
             owner.setPlayerDead(true);
         }
         if (this.damage.size()> 2 && this.damage.size() < 6) {
@@ -172,18 +173,18 @@ public class PlayerBoard implements Serializable {
 
     //apply a number of marks, if it's the first time the aggressor deals marks a new
     // EnemyMark object is created.
-    public void dealMark(Player aggressor,int marks){
+    public void dealMark(Player aggressor,int marks) {
         EnemyMark marked = null;
-        for(EnemyMark mrk: this.enemyMarks){
-            if(mrk.getAggressorPlayer().equals(aggressor))
+        for (EnemyMark mrk : this.enemyMarks) {
+            if (mrk.getAggressorPlayer().equals(aggressor))
                 marked = mrk;
         }
-        if(marked != null){
-            marked.setMarks(marks);
-        }
-        else this.enemyMarks.add(new EnemyMark(aggressor,marks));
-    }
 
+        if (marked != null) {
+            marked.setMarks(marks);
+        } else
+            this.enemyMarks.add(new EnemyMark(aggressor, marks));
+    }
     public void clearDamage() {
         this.enemyDamages.clear();
         this.damage.clear();
