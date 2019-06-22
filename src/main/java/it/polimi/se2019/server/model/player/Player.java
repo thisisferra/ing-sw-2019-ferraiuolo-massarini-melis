@@ -421,9 +421,9 @@ public class Player implements Serializable {
                     && weapon.getReloadCost().getBlues() <= this.playerBoard.getAmmoCubes().getBlues()
                         && !weapon.getLoad()){
                 reloadableWeapons.add(weapon);
-
             }
         }
+        System.out.println("ReloadableWeapons: " + reloadableWeapons);
         return reloadableWeapons;
     }
 

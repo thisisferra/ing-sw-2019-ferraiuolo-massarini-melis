@@ -9,6 +9,7 @@ import it.polimi.se2019.server.controller.ShotController;
 import it.polimi.se2019.server.controller.VirtualView;
 import it.polimi.se2019.server.controller.network.Server;
 import it.polimi.se2019.server.model.cards.Ammo;
+import it.polimi.se2019.server.model.cards.Shot;
 import it.polimi.se2019.server.model.cards.powerUp.PowerUp;
 import it.polimi.se2019.server.model.cards.weapons.Weapon;
 import it.polimi.se2019.server.model.game.Match;
@@ -319,7 +320,6 @@ public class RMIServer extends Server implements RMIServerInterface {
 
     public void useAction(String username) throws RemoteException{
         Player currentPlayer = this.match.searchPlayerByClientName(username);
-        System.out.println("Current player in rmiserver useaction: " + currentPlayer);
         currentPlayer.decreaseNumberOfAction();
         this.updateAllVirtualView();
         this.updateAllClient();
@@ -356,7 +356,7 @@ public class RMIServer extends Server implements RMIServerInterface {
         this.updateAllClient();
     }
 
-    public ArrayList<Weapon> verifyWeapons(String username) {
+    public ArrayList<InfoShot> verifyWeapons(String username) {
         Player currentPlayer = this.match.searchPlayerByClientName(username);
         return getShotController().checkAll(currentPlayer);
     }
@@ -366,7 +366,30 @@ public class RMIServer extends Server implements RMIServerInterface {
     }
 
     public void applyEffectWeapon(InfoShot infoShot) {
-        infoShot.getWeapon().applyEffect(infoShot);
+        InfoShot newInfoShot = new InfoShot();
+        for(Player target : infoShot.getTargetPlayer()){
+            newInfoShot.getTargetPlayer().add(match.searchPlayerByClientName(target.getClientName()));
+        }
+        System.out.println("Targets in newInfoShot" + newInfoShot.getTargetPlayer());
+        newInfoShot.setNameEffect(infoShot.getNameEffect());
+        System.out.println("Targets in newInfoShot" + newInfoShot.getNameEffect());
+        newInfoShot.setWeapon(infoShot.getWeapon());
+        System.out.println("Targets in newInfoShot" + newInfoShot.getWeapon());
+        newInfoShot.setDamagingPlayer(match.searchPlayerByClientName(infoShot.getDamagingPlayer().getClientName()));
+        System.out.println("Targets in newInfoShot" + newInfoShot.getDamagingPlayer());
+        //newInfoShot.setNewPosition(infoShot.getNewPosition());
+        infoShot.getWeapon().applyEffect(newInfoShot);
+        unloadWeapon(newInfoShot);
+        for(int i =0 ; i<newInfoShot.getWeapon().getEffect().length;i++){
+            if(newInfoShot.getWeapon().getEffect()[i] != null){
+                if(newInfoShot.getNameEffect().equals(newInfoShot.getWeapon().getEffect()[i].getNameEffect()))
+                    newInfoShot.getDamagingPlayer().getPlayerBoard().payCubes(
+                            newInfoShot.getWeapon().getEffect()[i].getExtraCost()
+                    );
+            }
+
+
+        }
     }
 
     public void tradeCube(int index) throws RemoteException{
@@ -378,7 +401,6 @@ public class RMIServer extends Server implements RMIServerInterface {
 
     public void discardAndSpawn(String username,int index) throws RemoteException{
         Player player = this.match.searchPlayerByClientName(username);
-        System.out.println("discard and spawn method: " + player);
         PowerUp discardedPowerUp = player.getHand().getPowerUps().remove(index);
 
         switch (discardedPowerUp.getColor()){
@@ -404,7 +426,6 @@ public class RMIServer extends Server implements RMIServerInterface {
 
     public ArrayList<Weapon> getReloadableWeapons(String username) throws RemoteException{
         Player player = this.match.searchPlayerByClientName(username);
-        System.out.println("reloadableweaponsplayer: " + player);
         return player.getReloadableWeapons();
     }
 
@@ -412,6 +433,10 @@ public class RMIServer extends Server implements RMIServerInterface {
         Player player = this.match.searchPlayerByClientName(username);
         Weapon weaponToReload = player.getHand().getWeapons().get(index);
         weaponToReload.setLoad(true);
+        System.out.println("Weapon to reload cube cost "+weaponToReload.getReloadCost());
+        System.out.println("Cubes player: " + player.getPlayerBoard().getAmmoCubes());
+        player.getPlayerBoard().payCubes(weaponToReload.getReloadCost());
+        System.out.println("Cubes player: " + player.getPlayerBoard().getAmmoCubes());
         this.updateAllVirtualView();
         this.updateAllClient();
     }
@@ -429,7 +454,7 @@ public class RMIServer extends Server implements RMIServerInterface {
         powerUpShot.setDamagingPlayer(currentPlayer);
         PowerUp powerUp = currentPlayer.getHand().getPowerUps().get(index);
         powerUp.applyEffect(powerUpShot);
-        //TODO discardpowerup
+        match.getDiscardedPowerUps().add(currentPlayer.getHand().getPowerUps().remove(index));
         this.updateAllVirtualView();
         this.updateAllClient();
 
@@ -455,7 +480,6 @@ public class RMIServer extends Server implements RMIServerInterface {
                 player.getPlayerBoard().setDeaths();
                 player.setPlayerDead(false);
                 player.setPhaseAction(0);
-                System.out.println("killshotTrack model"+match.getKillShotTrack());
             }
         }
         updateAllVirtualView();
@@ -477,6 +501,13 @@ public class RMIServer extends Server implements RMIServerInterface {
         }
         playerBoard.getPointDeaths().remove(0);
         playerBoard.clearDamage();
+    }
+
+    private void unloadWeapon(InfoShot infoShot){
+        for(Weapon weapon : match.searchPlayerByClientName(infoShot.getDamagingPlayer().getClientName()).getHand().getWeapons()){
+            if(infoShot.getWeapon().getType().equals(weapon.getType()))
+                weapon.setLoad(false);
+        }
     }
 
     private void pingClient() {

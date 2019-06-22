@@ -105,7 +105,10 @@ public class InfoShot implements Serializable {
         this.newPosition = newPosition;
     }
 
-
+    @Override
+    public String toString(){
+        return "" + this.getTargetablePlayer();
+    }
 
 
     /* * *   OTHERS   * * */

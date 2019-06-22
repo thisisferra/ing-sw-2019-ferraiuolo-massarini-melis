@@ -145,11 +145,13 @@ public class GUIController implements GUIControllerInterface {
     }
 
     //TODO check this
+    /*
     public void verifyWeapons() throws RemoteException{
         RemoteView myRemoteView = this.getMyRemoteView();
         myRemoteView.getUsableWeapon().clear();
         myRemoteView.setAvailableWeapon(this.getRmiStub().verifyWeapons(this.username));
     }
+     */
 
     public void applyEffect(InfoShot infoShot) throws RemoteException{
         this.getRmiStub().applyEffectWeapon(infoShot);

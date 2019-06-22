@@ -93,7 +93,6 @@ public class Match extends Observable implements Serializable {
             weaponStack.add(gson.fromJson(new FileReader("src/main/resources/shockwave.json"), Shockwave.class));
             weaponStack.add(gson.fromJson(new FileReader("src/main/resources/machine_gun.json"), MachineGun.class));
             weaponStack.add(gson.fromJson(new FileReader("src/main/resources/flamethrower.json"), Flamethrower.class));
-
             weaponStack.add(gson.fromJson(new FileReader("src/main/resources/furnace.json"), Furnace.class));
             weaponStack.add(gson.fromJson(new FileReader("src/main/resources/hellion.json"), Hellion.class));
             weaponStack.add(gson.fromJson(new FileReader("src/main/resources/shotgun.json"), Shotgun.class));
@@ -125,7 +124,7 @@ public class Match extends Observable implements Serializable {
             //powerUpStack = new ArrayList<>(Arrays.asList(pUS));
             ammoStack = new ArrayList<>(Arrays.asList(aS));
 
-            //Collections.shuffle(weaponStack);
+            Collections.shuffle(weaponStack);
             Collections.shuffle(powerUpStack);
             Collections.shuffle(ammoStack);
 

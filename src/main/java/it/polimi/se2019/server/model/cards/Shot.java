@@ -67,11 +67,14 @@ public class Shot implements Serializable {
         return this.maxDistanceTarget;
     }
 
+    @Override
     public String toString() {
         return "Name: " + this.nameEffect + "\n" + "Extra cost: " + this.extraCost;
     }
 
-
+    public String getNameEffect(){
+        return this.nameEffect;
+    }
 
     /*public void getInfo(){
 

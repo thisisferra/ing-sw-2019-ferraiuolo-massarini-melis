@@ -73,9 +73,6 @@ public class PlayerBoard implements Serializable {
         return this.enemyDamages;
     }
 
-    public ArrayList<EnemyMark> getMarkDamages(){
-        return this.enemyMarks;
-    }
     public ArrayList<Integer> getPointDeaths() {
         return this.pointDeaths;
     }
@@ -188,5 +185,14 @@ public class PlayerBoard implements Serializable {
     public void clearDamage() {
         this.enemyDamages.clear();
         this.damage.clear();
+    }
+
+    public void payCubes(Cubes cubesToPay){
+        int reds = this.ammoCubes.getReds() - cubesToPay.getReds();
+        int yellows = this.ammoCubes.getYellows() - cubesToPay.getYellows();
+        int blues = this.ammoCubes.getBlues() - cubesToPay.getBlues();
+        System.out.println("cubes before"+this.getAmmoCubes());
+        this.setDeltaAmmoCubes(new Cubes(reds,yellows,blues));
+        System.out.println("cubes after"+this.getAmmoCubes());
     }
 }

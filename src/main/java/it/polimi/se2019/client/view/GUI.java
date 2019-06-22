@@ -1151,7 +1151,8 @@ public class GUI extends Application {
                         if (myRemoteView.getPhaseAction() == 2) {
                             moveAction(1);
                         }
-                        ArrayList<Weapon> usableWeapons = guiController.getRmiStub().verifyWeapons(this.username);
+                        ArrayList<InfoShot> usableWeapons = guiController.getRmiStub().verifyWeapons(this.username);
+                        System.out.println("GUI after shootButton: " + usableWeapons);
                         if (!usableWeapons.isEmpty()) {
                             System.out.println(usableWeapons);
                             displayUsableWeapons(usableWeapons);
@@ -1472,12 +1473,15 @@ public class GUI extends Application {
 
         yesButton.setOnAction(trade -> {
             try {
-                displayReloadableWeapons(reloadableWeapons);
+                ArrayList<Weapon> newReloadableWeapons = guiController.getRmiStub().getReloadableWeapons(this.username);
+                if(!newReloadableWeapons.isEmpty())
+                    displayReloadableWeapons(newReloadableWeapons);
+                reloadAlert.close();
+
 
             }catch (Exception e){
                 logger.log(Level.INFO,"reloadAlert() Error",e);
             }
-            reloadAlert.close();
         });
 
         noButton.setOnAction( exit -> {
@@ -1493,17 +1497,6 @@ public class GUI extends Application {
             }
         });
 
-        reloadAlert.setOnCloseRequest(close -> {
-            try{
-                guiController.getRmiStub().restoreMap();
-                setAmmo(mapNumber);
-                guiController.getRmiStub().resetActionNumber(username);
-                guiController.getRmiStub().setActivePlayer(username);
-            }catch(Exception e){
-                logger.log(Level.INFO,"reloadAlertClose Error",e);
-            }
-        });
-
         gridPane.setConstraints(yesButton,0,1);
         gridPane.setConstraints(noButton,2,1);
         gridPane.getChildren().addAll(yesButton,noButton);
@@ -1513,7 +1506,6 @@ public class GUI extends Application {
 
         Label info = new Label("Do you want to reload your weapons?");
         info.setStyle(LABEL_STYLE);
-
         reloadAlert.initModality(Modality.APPLICATION_MODAL);
 
         reloadPane.setCenter(gridPane);
@@ -1527,44 +1519,57 @@ public class GUI extends Application {
         reloadAlert.setTitle("Reloading weapons");
         reloadAlert.setWidth(300);
         reloadAlert.setHeight(200);
-        reloadAlert.showAndWait();
+        reloadAlert.show();
     }
 
     private void displayReloadableWeapons(ArrayList<Weapon> reloadableWeapons){
         Stage weaponToReloadWindow = new Stage();
         HBox weaponsBox = new HBox();
-        GridPane gridPane = new GridPane();
         BorderPane reloadableWeaponPane = new BorderPane();
         reloadableWeaponPane.setStyle(BACKGROUND_STYLE);
-
-        for(int i = 0; i < reloadableWeapons.size(); i++){
-            ImageView weaponView = new ImageView(createImage(WEAPONS_PATH+ reloadableWeapons.get(i).getType()+".png"));
-            weaponView.setId(Integer.toString(i));
+        for(int i = 0; i < myRemoteView.getWeapons().size(); i++){
+            Image image = createImage(WEAPONS_PATH+ myRemoteView.getWeapons().get(i).getType()+".png");
+            ImageView weaponView;
+            if(!myRemoteView.getWeapons().get(i).getLoad()) {
+                image = toGrayScale(image);
+                weaponView = new ImageView(image);
+                weaponView.setId(Integer.toString(i));
+            } else{
+                weaponView = new ImageView(image);
+                weaponView.setId(Integer.toString(-1));
+            }
+            weaponView.setPreserveRatio(true);
+            weaponView.setFitHeight(300);
             weaponsBox.getChildren().add(weaponView);
         }
-
         for(Node weaponView : weaponsBox.getChildren()){
-            weaponView.setOnMouseClicked(reload -> {
-                try{
-                    guiController.getRmiStub().reloadWeapon(username,Integer.parseInt(weaponView.getId()));
-                    ArrayList<Weapon> newReloadableWeapons = guiController.getRmiStub().getReloadableWeapons(username);
-                    if(!newReloadableWeapons.isEmpty())
-                        reloadAlert(newReloadableWeapons);
-                    else{
-                        guiController.getRmiStub().restoreMap();
-                        setAmmo(mapNumber);
-                        guiController.getRmiStub().resetActionNumber(username);
-                        guiController.getRmiStub().setActivePlayer(username);
-                        weaponToReloadWindow.close();
+            ImageView imageView = (ImageView) weaponView;
+            if(Integer.parseInt(imageView.getId())!= -1){
+                imageView.setOnMouseClicked(reload -> {
+                    try{
+                        guiController.getRmiStub().reloadWeapon(username,Integer.parseInt(weaponView.getId()));
+                        setCubes();
+                        ArrayList<Weapon> newReloadableWeapons = guiController.getRmiStub().getReloadableWeapons(username);
+                        if(!newReloadableWeapons.isEmpty()){
+                            reloadAlert(newReloadableWeapons);
+                            weaponToReloadWindow.close();
+                        } else
+                        {
+                            guiController.getRmiStub().restoreMap();
+                            setAmmo(mapNumber);
+                            guiController.getRmiStub().resetActionNumber(username);
+                            guiController.getRmiStub().setActivePlayer(username);
+                            weaponToReloadWindow.close();
+                        }
+                    }catch (Exception e) {
+                        logger.log(Level.INFO,"displayReloadableWeapons Error",e);
                     }
-                }catch (Exception e) {
-                    logger.log(Level.INFO,"displayReloadableWeapons Error",e);
-                }
-            });
+                });
+            }
         }
-        gridPane.setAlignment(Pos.CENTER);
-        gridPane.setHgap(30);
-        gridPane.setStyle(BACKGROUND_STYLE);
+
+        weaponToReloadWindow.initModality(Modality.APPLICATION_MODAL);
+
         weaponToReloadWindow.setOnCloseRequest(close -> {
             try{
                 guiController.getRmiStub().restoreMap();
@@ -1580,27 +1585,28 @@ public class GUI extends Application {
 
         weaponToReloadWindow.initModality(Modality.APPLICATION_MODAL);
 
-        reloadableWeaponPane.setCenter(gridPane);
-        reloadableWeaponPane.setAlignment(gridPane,Pos.CENTER);
+        reloadableWeaponPane.setCenter(weaponsBox);
+        reloadableWeaponPane.setAlignment(weaponsBox,Pos.CENTER);
+        weaponsBox.setAlignment(Pos.CENTER);
+        weaponsBox.setSpacing(10);
+        weaponsBox.setPadding(new Insets(10,10,10,10));
         reloadableWeaponPane.setStyle(BACKGROUND_STYLE);
         reloadableWeaponPane.setTop(info);
         reloadableWeaponPane.setAlignment(info,Pos.TOP_CENTER);
         Scene reloadableScene = new Scene(reloadableWeaponPane);
         weaponToReloadWindow.setScene(reloadableScene);
-        weaponToReloadWindow.setWidth(300);
-        weaponToReloadWindow.setHeight(200);
-        weaponToReloadWindow.showAndWait();
+        weaponToReloadWindow.show();
     }
 
-    private void displayUsableWeapons(ArrayList<Weapon> usableWeapons){
+    private void displayUsableWeapons(ArrayList<InfoShot> usableWeapons){
         Stage usableWeaponsWindow = new Stage();
         HBox weaponsBox = new HBox();
         BorderPane usableWeaponsPane = new BorderPane();
         usableWeaponsPane.setStyle(BACKGROUND_STYLE);
 
         for(int i = 0; i < usableWeapons.size(); i++){
-            textArea.setText("\n" + usableWeapons.get(i).getType() + textArea.getText());
-            ImageView weaponView = new ImageView(createImage(WEAPONS_PATH + usableWeapons.get(i).getType()+".png"));
+            textArea.setText("\n" + usableWeapons.get(i).getWeapon().getType() + textArea.getText());
+            ImageView weaponView = new ImageView(createImage(WEAPONS_PATH + usableWeapons.get(i).getWeapon().getType()+".png"));
             weaponView.setId(Integer.toString(i));
             weaponView.setFitHeight(300);
             weaponView.setPreserveRatio(true);
@@ -1610,7 +1616,8 @@ public class GUI extends Application {
         for(Node weaponView : weaponsBox.getChildren()){
             weaponView.setOnMouseClicked(reload -> {
                 try{
-                    displayEffects(usableWeapons.get(Integer.parseInt(weaponView.getId())));
+                    displayTargets(usableWeapons.get(Integer.parseInt(weaponView.getId())));
+                    usableWeaponsWindow.close();
 
                 }catch (Exception e) {
                     logger.log(Level.INFO,"displayUsableWeapons Error",e);
@@ -1633,21 +1640,20 @@ public class GUI extends Application {
         usableWeaponsPane.setAlignment(info,Pos.TOP_CENTER);
         Scene usableScene = new Scene(usableWeaponsPane);
         usableWeaponsWindow.setScene(usableScene);
-        usableWeaponsWindow.setWidth(400);
-        usableWeaponsWindow.setHeight(300);
         usableWeaponsWindow.showAndWait();
     }
 
-    private void displayEffects(Weapon chosenWeapon){
+    private void displayEffects(InfoShot chosenWeapon){
         Stage availableEffectsWindow = new Stage();
         ComboBox comboBox = new ComboBox();
         BorderPane availableEffectPane = new BorderPane();
         availableEffectPane.setStyle(BACKGROUND_STYLE);
         String effect;
-        for(int i = 0; i < chosenWeapon.getEffect().length; i++){
+        System.out.println("chosen Weapon"+chosenWeapon);
+        for(int i = 0; i < chosenWeapon.getWeapon().getEffect().length; i++){
 
-            if(chosenWeapon.getEffect()[i] != null){
-                effect = chosenWeapon.getEffect()[i].toString();
+            if(chosenWeapon.getWeapon().getEffect()[i] != null){
+                effect = chosenWeapon.getWeapon().getEffect()[i].getNameEffect();
                 comboBox.getItems().add(effect);
             }
         }
@@ -1659,10 +1665,23 @@ public class GUI extends Application {
         confirmButton.setStyle(BUTTON_STYLE);
         comboBox.setPromptText("Select effect");
         comboBox.setPadding(new Insets(10,10,10,10));
+
         confirmButton.setOnAction(e-> {
             InfoShot infoShot = new InfoShot();
             infoShot.setNameEffect((String) comboBox.getValue());
+            try{
+                infoShot.setDamagingPlayer(guiController.getRmiStub().getMatch().searchPlayerByClientName(this.username));
+            }catch (RemoteException q){
+                logger.log(Level.INFO,"displayEffects error",q);
+            }
+            infoShot.setTargetablePlayer(chosenWeapon.getTargetablePlayer());
+            infoShot.setWeapon(chosenWeapon.getWeapon());
+            System.out.println(infoShot);
+            displayTargets(infoShot);
+
+            availableEffectsWindow.close();
         });
+
         availableEffectsWindow.initModality(Modality.APPLICATION_MODAL);
         availableEffectPane.setCenter(comboBox);
         availableEffectPane.setAlignment(comboBox,Pos.CENTER);
@@ -1678,6 +1697,65 @@ public class GUI extends Application {
         availableEffectsWindow.setHeight(200);
         availableEffectsWindow.showAndWait();
 
+    }
+
+    private void displayTargets(InfoShot infoShot){
+        Stage weaponTargetWindow = new Stage();
+        ComboBox comboBox = new ComboBox();
+        BorderPane weaponTargetPane = new BorderPane();
+        weaponTargetPane.setStyle(BACKGROUND_STYLE);
+        try{
+            System.out.println("TargetablePlayers: "+infoShot.getTargetablePlayer());
+            for(Player target : infoShot.getTargetablePlayer()){
+                if(!target.getClientName().equals(this.username))
+                    comboBox.getItems().add(target.getClientName());
+            }
+
+        }catch (Exception exc){
+            logger.log(Level.INFO,"Targets targetingScope error",exc);
+        }
+        Label info = new Label("Select the "+infoShot.getWeapon().getMaxTarget()+"° target");
+        info.setStyle(LABEL_STYLE);
+        Button confirmButton = new Button("Confirm");
+        confirmButton.setStyle(BUTTON_STYLE);
+        confirmButton.setOnMouseExited(e ->
+                confirmButton.setStyle(BUTTON_STYLE));
+        confirmButton.setOnMouseEntered(e ->
+                confirmButton.setStyle(HIGHLIGHT_BUTTON_STYLE));
+
+        comboBox.setPromptText("Select target");
+        comboBox.setPadding(new Insets(10,10,10,10));
+
+        confirmButton.setOnAction(e-> {
+            if(comboBox.getValue()!=null){
+                try{
+                    infoShot.getTargetPlayer().add(guiController.getRmiStub().getMatch().searchPlayerByClientName((String) comboBox.getValue()));
+                    guiController.getRmiStub().applyEffectWeapon(infoShot);
+                    infoShot.getWeapon().setMaxTarget(infoShot.getWeapon().getMaxTarget() - 1);
+                    if(infoShot.getWeapon().getMaxTarget()>0)
+                        displayTargets(infoShot);
+                    else
+                        weaponTargetWindow.close();
+                }catch (Exception err){
+                    logger.log(Level.INFO,"TargetingScope method error",err);
+                }
+
+            }
+        });
+        weaponTargetWindow.initModality(Modality.APPLICATION_MODAL);
+        weaponTargetPane.setCenter(comboBox);
+        weaponTargetPane.setAlignment(comboBox,Pos.CENTER);
+        weaponTargetPane.setStyle(BACKGROUND_STYLE);
+        weaponTargetPane.setTop(info);
+        weaponTargetPane.setBottom(confirmButton);
+        weaponTargetPane.setAlignment(confirmButton,Pos.CENTER);
+        weaponTargetPane.setAlignment(info,Pos.TOP_CENTER);
+
+        Scene usableScene = new Scene(weaponTargetPane);
+        weaponTargetWindow.setScene(usableScene);
+        weaponTargetWindow.setWidth(300);
+        weaponTargetWindow.setHeight(200);
+        weaponTargetWindow.showAndWait();
     }
 
     private void powerUpAction(int index){

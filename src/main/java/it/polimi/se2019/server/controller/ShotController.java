@@ -22,22 +22,21 @@ public class ShotController implements Serializable {
         this.match = match;
     }
 
-    public ArrayList<Weapon> checkAll(Player currentPlayer) {
+    public ArrayList<InfoShot> checkAll(Player currentPlayer) {
         ArrayList<Weapon> loadedWeapon = checkIsLoad(currentPlayer);
         ArrayList<Weapon> checkedWeapon;
         ArrayList<Weapon> usableWeapon;
         ArrayList<Weapon> purgedWeapons;
+        ArrayList<InfoShot> infoShots = new ArrayList<>();
         if (loadedWeapon.isEmpty()) {
             return new ArrayList<>();
         }
         else {
             checkedWeapon = checkCubes(currentPlayer, loadedWeapon);
-            usableWeapon = checkVisibility(currentPlayer, checkedWeapon);
-            purgedWeapons = purgeUselessWeapons(usableWeapon);
+            infoShots = checkVisibility(currentPlayer, checkedWeapon);
         }
-        System.out.println("Usable in ShotController: "+ usableWeapon);
-        System.out.println("\nPurged in ShotController: "+ purgedWeapons);
-        return purgedWeapons;
+        System.out.println("InfoShots: "+ infoShots);
+        return infoShots;
     }
 
     private ArrayList<Weapon> checkIsLoad(Player currentPlayer) {
@@ -65,12 +64,16 @@ public class ShotController implements Serializable {
         return loadedWeapon;
     }
 
-    private ArrayList<Weapon> checkVisibility(Player currentPlayer, ArrayList<Weapon> checkedWeapon) {
+    private ArrayList<InfoShot> checkVisibility(Player currentPlayer, ArrayList<Weapon> checkedWeapon) {
 
         ArrayList<Player> visiblePlayers = new ArrayList<>();
         ArrayList<Player> notVisiblePlayers = new ArrayList<>();
+        ArrayList<InfoShot> infoShots = new ArrayList<>();
+
         for (Weapon weapon : checkedWeapon) {
             for (int i = 0; i < weapon.getEffect().length; i++) {
+                visiblePlayers.clear();
+                notVisiblePlayers.clear();
                 if(weapon.getEffect()[i] != null){
                     switch(weapon.getEffect()[i].getTypeVisibility()) {
                         case "CanSee": {
@@ -83,7 +86,8 @@ public class ShotController implements Serializable {
                             //If i can't view anyone i can't use this effect
                             if (visiblePlayers.isEmpty()) {
                                 weapon.getEffect()[i] = null;
-                            }
+                            } else
+                                addInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(),infoShots);
                             System.out.println(visiblePlayers);
                             visiblePlayers.clear();
                             break;
@@ -95,9 +99,9 @@ public class ShotController implements Serializable {
                             notVisiblePlayers.remove(currentPlayer);
                             if (notVisiblePlayers.isEmpty()) {
                                 weapon.getEffect()[i] = null;
-                            }
+                            } else
+                                addInfoShot(currentPlayer,notVisiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(),infoShots);
                             System.out.println(notVisiblePlayers);
-                            visiblePlayers.clear();
                             break;
                         }
                         case "CanSeeDistance": {
@@ -118,22 +122,21 @@ public class ShotController implements Serializable {
                             }
                             else if(maxDistanceTarget == minDistanceTarget && maxDistanceTarget == 0) {
                                 for (Player player : match.getAllPlayers()) {
-                                    if (player.getPosition() == currentPlayer.getPosition() && !player.getClientName().equals(currentPlayer.getClientName())) {
+                                    if (player.getPosition() == currentPlayer.getPosition() && player.getClientName() != currentPlayer.getClientName()) {
                                         visiblePlayers.add(player);
                                     }
                                 }
                             }
                             else {
                                 int distance = maxDistanceTarget - minDistanceTarget;
-                                ArrayList<Square> reachableSquare = new ArrayList<>();
-                                ArrayList<Square> cantShootSquare = new ArrayList<>();
+                                ArrayList<Square> reacheableSquare;
+                                ArrayList<Square> cantShootSquare;
                                 MovementChecker maxMovementChecker = new MovementChecker(match.getMap().getAllSquare(), maxDistanceTarget, currentPlayer.getPosition());
                                 MovementChecker minMovementChecker = new MovementChecker(match.getMap().getAllSquare(), minDistanceTarget - 1, currentPlayer.getPosition());
-                                reachableSquare.addAll(maxMovementChecker.getReachableSquares()) ;
-                                cantShootSquare.addAll(minMovementChecker.getReachableSquares());
-                                System.out.println("Squares :"+ cantShootSquare);
-                                reachableSquare.removeAll(cantShootSquare);
-                                for (Square square : reachableSquare) {
+                                reacheableSquare = maxMovementChecker.getReachableSquares();
+                                cantShootSquare = minMovementChecker.getReachableSquares();
+                                reacheableSquare.removeAll(cantShootSquare);
+                                for (Square square : reacheableSquare) {
                                     for (Player player : match.getAllPlayers()) {
                                         if (player.getPosition() == square.getPosition()) {
                                             visiblePlayers.add(player);
@@ -142,9 +145,11 @@ public class ShotController implements Serializable {
                                 }
                             }
                             visiblePlayers.remove(currentPlayer);
-                            if(visiblePlayers.isEmpty()) weapon.getEffect()[i] = null;
+                            if(visiblePlayers.isEmpty())
+                                weapon.getEffect()[i] = null;
+                            else
+                                addInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(),infoShots);
                             System.out.println(visiblePlayers);
-                            visiblePlayers.clear();
                             break;
                         }
                         case "CanSeeRoom": {
@@ -159,9 +164,11 @@ public class ShotController implements Serializable {
                                 }
                             }
                             visiblePlayers.remove(currentPlayer);
-                            if(visiblePlayers.isEmpty()) weapon.getEffect()[i] = null;
+                            if(visiblePlayers.isEmpty())
+                                weapon.getEffect()[i] = null;
+                            else
+                                addInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(),infoShots);
                             System.out.println(visiblePlayers);
-                            visiblePlayers.clear();
                             break;
                         }
                         case "DistanceFromAPosition": {
@@ -184,8 +191,9 @@ public class ShotController implements Serializable {
                             visiblePlayers.addAll(targetPlayer);
                             if(visiblePlayers.isEmpty())
                                 weapon.getEffect()[i] = null;
+                            else
+                                addInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(),infoShots);
                             System.out.println(visiblePlayers);
-                            visiblePlayers.clear();
                             break;
                         }
                         case "Cardinal" : {
@@ -203,9 +211,11 @@ public class ShotController implements Serializable {
                                 }
                             }
                             visiblePlayers.remove(currentPlayer);
-                            if(visiblePlayers.isEmpty()) weapon.getEffect()[i] = null;
+                            if(visiblePlayers.isEmpty())
+                                weapon.getEffect()[i] = null;
+                            else
+                                addInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(),infoShots);
                             System.out.println(visiblePlayers);
-                            visiblePlayers.clear();
                             break;
                         }
 
@@ -240,7 +250,6 @@ public class ShotController implements Serializable {
                             if(visiblePlayers.isEmpty())
                                 weapon.getEffect()[i] = null;
                             System.out.println(visiblePlayers);
-                            visiblePlayers.clear();
                             break;
                         }
                         default: {
@@ -251,7 +260,7 @@ public class ShotController implements Serializable {
                 }
             }
         }
-        return checkedWeapon;
+        return infoShots;
         }
 
     private ArrayList<Weapon> purgeUselessWeapons(ArrayList<Weapon> usableWeapon){
@@ -270,6 +279,16 @@ public class ShotController implements Serializable {
             flag = 0;
         }
         return purgedWeapon;
+    }
+
+    private void addInfoShot(Player damagingPlayer,ArrayList<Player> targetablePlayers,Weapon weapon, String nameEffect,ArrayList<InfoShot> infoShots){
+        InfoShot infoShot = new InfoShot();
+        infoShot.setDamagingPlayer(damagingPlayer);
+        infoShot.setWeapon(weapon);
+        infoShot.getTargetablePlayer().addAll(targetablePlayers);
+        infoShot.setNameEffect(nameEffect);
+
+        infoShots.add(infoShot);
     }
 
 }

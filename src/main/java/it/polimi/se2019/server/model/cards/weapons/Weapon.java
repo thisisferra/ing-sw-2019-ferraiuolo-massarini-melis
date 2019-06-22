@@ -12,6 +12,8 @@ public interface Weapon {
     Cubes getBuyingCost();
     String getType();
     Shot[] getEffect();
+    int getMaxTarget();
+    void setMaxTarget(int maxTarget);
     void applyEffect(InfoShot infoShot);
     Weapon weaponFactory(Weapon weapon);
 }

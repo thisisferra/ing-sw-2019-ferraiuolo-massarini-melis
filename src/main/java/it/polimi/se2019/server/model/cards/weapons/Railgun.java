@@ -27,6 +27,7 @@ public class Railgun extends AbstractWeapon {
         this.buyingCost = new Cubes(weapon.getBuyingCost().getReds(), weapon.getBuyingCost().getYellows(), weapon.getBuyingCost().getBlues());
         this.reloadCost = new Cubes(weapon.getReloadCost().getReds(), weapon.getReloadCost().getYellows(), weapon.getReloadCost().getBlues());
         int length = weapon.getEffect().length;
+        this.maxTarget = weapon.getMaxTarget();
         this.effect = new Shot[length];
         for(int i = 0; i < length; i++)
             this.effect[i] = new Shot(weapon.getEffect()[i]);

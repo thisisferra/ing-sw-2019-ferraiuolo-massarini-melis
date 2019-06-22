@@ -14,6 +14,7 @@ public abstract class AbstractWeapon implements Weapon, Serializable {
     protected Cubes buyingCost;
     protected Cubes reloadCost;
     protected Shot[] effect;
+    protected int maxTarget;
 
     public void setLoad(boolean load) {
         this.load = load;
@@ -21,6 +22,14 @@ public abstract class AbstractWeapon implements Weapon, Serializable {
 
     public boolean getLoad(){
         return this.load;
+    }
+
+    public void setMaxTarget(int maxTarget){
+        this.maxTarget = maxTarget;
+    }
+
+    public int getMaxTarget(){
+        return this.maxTarget;
     }
 
     public Cubes getReloadCost() {
