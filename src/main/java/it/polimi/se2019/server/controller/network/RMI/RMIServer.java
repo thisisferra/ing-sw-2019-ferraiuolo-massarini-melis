@@ -10,6 +10,7 @@ import it.polimi.se2019.server.controller.network.Server;
 import it.polimi.se2019.server.model.cards.Ammo;
 import it.polimi.se2019.server.model.cards.powerUp.PowerUp;
 import it.polimi.se2019.server.model.cards.weapons.Weapon;
+import it.polimi.se2019.server.model.game.Cubes;
 import it.polimi.se2019.server.model.game.Match;
 import it.polimi.se2019.server.model.game.MovementChecker;
 import it.polimi.se2019.server.model.map.Square;
@@ -224,8 +225,6 @@ public class RMIServer extends Server implements RMIServerInterface {
     public void pickUpWeapon(String username, int indexToPickUp) throws RemoteException {
         Player currentPlayer = match.searchPlayerByClientName(username);
         currentPlayer.pickUpWeapon(indexToPickUp);
-        getMyVirtualView(username).setWeapons(currentPlayer.getHand().getWeapons());
-        getMyVirtualView(username).setCubes(currentPlayer.getPlayerBoard().getAmmoCubes());
         updateAllVirtualView();
         updateAllClient();
 
@@ -457,6 +456,17 @@ public class RMIServer extends Server implements RMIServerInterface {
         this.updateAllVirtualView();
         this.updateAllClient();
 
+    }
+
+    public void payCubes(String username,int reds, int yellows, int blues){
+        Cubes cubesToPay = new Cubes(reds,yellows,blues);
+        getMatch().searchPlayerByClientName(username).getPlayerBoard().payCubes(cubesToPay);
+        updateAllVirtualView();
+        try{
+            updateAllClient();
+        }catch (RemoteException e){
+            logger.log(Level.INFO,"PayCubes method error",e);
+        }
     }
 
     public void updateAllVirtualView() {

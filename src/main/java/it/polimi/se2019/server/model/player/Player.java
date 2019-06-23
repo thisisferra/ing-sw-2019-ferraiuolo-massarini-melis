@@ -316,6 +316,8 @@ public class Player implements Serializable {
                             this.getHand().getWeapons().add(weaponSlot.getSlot()[indexToPickUp]);
                             //Set the slot where i picked uop the weapon with the weapon I want to switch
                             weaponSlot.getSlot()[indexToPickUp] = this.getHand().getWeapons().get(indexToSwitch);
+                            //Set the weapon i've just dropped to load
+                            weaponSlot.getSlot()[indexToPickUp].setLoad(true);
                             //Delete the weapon i switched from my hand
                             this.getHand().getWeapons().remove(indexToSwitch);
                         }
@@ -334,9 +336,6 @@ public class Player implements Serializable {
         }
         return true;
     }
-
-    //TODO nel caso in cui abbia già 3 armi
-    //TODO pickupWeapon()
 
     /**
      * Switch a power-up with the cubes specified by the power-up
