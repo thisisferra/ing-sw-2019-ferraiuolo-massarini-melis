@@ -1,8 +1,12 @@
-package it.polimi.se2019.client.view;
+package it.polimi.se2019.client.controller;
 
+import it.polimi.se2019.client.view.GUI;
+import it.polimi.se2019.client.view.RemoteView;
 import it.polimi.se2019.server.controller.InfoShot;
 import it.polimi.se2019.server.controller.VirtualView;
 import it.polimi.se2019.server.controller.network.RMI.RMIServerInterface;
+import javafx.application.Platform;
+import javafx.scene.control.TextArea;
 
 import java.io.PrintStream;
 import java.rmi.RemoteException;
@@ -14,6 +18,8 @@ import java.util.ArrayList;
 //ritorno
 public class GUIController implements GUIControllerInterface {
 
+    GUI guiObject;
+
     PrintStream out;
 
     private String username;
@@ -22,12 +28,13 @@ public class GUIController implements GUIControllerInterface {
 
     private ArrayList<RemoteView> allViews = new ArrayList<>();
 
-    public GUIController(String IPAddress) {
+    public GUIController(String IPAddress, GUI guiObject) {
         try {
             //Registry registry = LocateRegistry.getRegistry("192.168.",0);
             Registry registry = LocateRegistry.getRegistry(IPAddress,0);
             rmiStub = (RMIServerInterface) registry.lookup("remServer");
             UnicastRemoteObject.exportObject(this, 0);
+            this.guiObject = guiObject;
         }
         catch (Exception e) {
             System.out.println("Errore nella creazione di GUIController");
@@ -102,6 +109,11 @@ public class GUIController implements GUIControllerInterface {
                 }
             }
         }
+        if (guiObject.getScene() != null) {
+            Platform.runLater(()->{
+                    guiObject.updateAllGUI();
+            });
+        }
         this.notifyClient();
     }
 
@@ -161,5 +173,16 @@ public class GUIController implements GUIControllerInterface {
     public String ping() {
         System.out.println("Client " + this.username + " still connected!");
         return this.username;
+    }
+
+    public void showrespawn() {
+        this.guiObject.startingDraw();
+    }
+
+    @Override
+    public void showMessageMovement(String message) throws RemoteException {
+        TextArea textArea = guiObject.getTextArea();
+        textArea.setText(message + "\n" + textArea.getText());
+
     }
 }

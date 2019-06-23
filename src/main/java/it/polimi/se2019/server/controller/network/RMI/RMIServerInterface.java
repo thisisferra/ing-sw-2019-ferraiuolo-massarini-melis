@@ -1,7 +1,6 @@
 package it.polimi.se2019.server.controller.network.RMI;
 
-import it.polimi.se2019.client.view.GUIController;
-import it.polimi.se2019.client.view.GUIControllerInterface;
+import it.polimi.se2019.client.controller.GUIControllerInterface;
 import it.polimi.se2019.server.controller.InfoShot;
 import it.polimi.se2019.server.controller.PowerUpShot;
 import it.polimi.se2019.server.model.cards.Ammo;
@@ -72,6 +71,10 @@ public interface RMIServerInterface extends Remote {
 
     void usePowerUp(String username, int index, PowerUpShot powerUpShot) throws RemoteException;
 
-    void deathPlayer() throws RemoteException;
+    boolean deathPlayer() throws RemoteException;
+
+    void respawnPlayer() throws RemoteException;
+
+    void notifyAllClientMovement(String username, Integer newPosition) throws RemoteException;
 
 }

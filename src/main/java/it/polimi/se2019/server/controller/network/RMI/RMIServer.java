@@ -1,7 +1,6 @@
 package it.polimi.se2019.server.controller.network.RMI;
 
-import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
-import it.polimi.se2019.client.view.GUIControllerInterface;
+import it.polimi.se2019.client.controller.GUIControllerInterface;
 import it.polimi.se2019.server.OneAboveAll;
 import it.polimi.se2019.server.controller.InfoShot;
 import it.polimi.se2019.server.controller.PowerUpShot;
@@ -9,7 +8,6 @@ import it.polimi.se2019.server.controller.ShotController;
 import it.polimi.se2019.server.controller.VirtualView;
 import it.polimi.se2019.server.controller.network.Server;
 import it.polimi.se2019.server.model.cards.Ammo;
-import it.polimi.se2019.server.model.cards.Shot;
 import it.polimi.se2019.server.model.cards.powerUp.PowerUp;
 import it.polimi.se2019.server.model.cards.weapons.Weapon;
 import it.polimi.se2019.server.model.game.Match;
@@ -23,7 +21,6 @@ import it.polimi.se2019.server.model.player.PlayerBoard;
 import java.io.PrintStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -31,9 +28,6 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 //ritorno
 public class RMIServer extends Server implements RMIServerInterface {
@@ -341,6 +335,11 @@ public class RMIServer extends Server implements RMIServerInterface {
         System.out.println("Next player is: " + activePlayer.getClientName());
     }
 
+    public void setSpecificActivePlayer(Player player) {
+        this.activePlayer = player;
+
+    }
+
     public ArrayList<Player> getKillShotTrack() throws RemoteException{
         return match.getKillShotTrack();
     }
@@ -471,10 +470,11 @@ public class RMIServer extends Server implements RMIServerInterface {
 
     }
 
-    public void deathPlayer() throws RemoteException {
+    public boolean deathPlayer() throws RemoteException {
+        boolean flagDeath = false;
         for (Player player : match.getAllPlayers()) {
             if (player.getPlayerDead()) {
-
+                flagDeath = true;
                 match.addPlayerKillShot(player);
                 assignPoints(player);
                 player.getPlayerBoard().setDeaths();
@@ -484,6 +484,7 @@ public class RMIServer extends Server implements RMIServerInterface {
         }
         updateAllVirtualView();
         updateAllClient();
+        return flagDeath;
     }
 
     private void assignPoints(Player player) {
@@ -521,5 +522,21 @@ public class RMIServer extends Server implements RMIServerInterface {
             }
         }
         System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    }
+
+    public void respawnPlayer() throws RemoteException {
+        for (Player playerToRespawn : this.match.getPlayersDead()) {
+            this.setSpecificActivePlayer(playerToRespawn);
+            playerToRespawn.pickUpPowerUpToRespawn();
+        }
+
+    }
+
+    public void notifyAllClientMovement(String username, Integer newPosition) throws  RemoteException{
+        String movementMessage = username + "si è spostato in posizione " + newPosition;
+        for (VirtualView virtualView : allVirtualViews) {
+            GUIControllerInterface clientRef = virtualView.getClientReference();
+            clientRef.showMessageMovement(movementMessage);
+        }
     }
 }

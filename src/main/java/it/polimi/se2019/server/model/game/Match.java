@@ -36,6 +36,7 @@ public class Match extends Observable implements Serializable {
     private ArrayList<Player> killShotTrack = new ArrayList<>();
     private ArrayList<WeaponSlot> arsenal;
     private ArrayList<String> characterAvailable = new ArrayList<>();
+    private ArrayList<Player> playersDead = new ArrayList<>();
 
     public Match(int chosenMap){
         this.chosenMap=chosenMap;
@@ -222,5 +223,17 @@ public class Match extends Observable implements Serializable {
 
     public ArrayList<String> getCharacterAvailable() {
         return this.characterAvailable;
+    }
+
+    public void setPlayerDead() {
+        for (Player player : this.getAllPlayers()) {
+            if (player.getPlayerDead()) {
+                this.playersDead.add(player);
+            }
+        }
+    }
+
+    public ArrayList<Player> getPlayersDead() {
+        return this.playersDead;
     }
 }

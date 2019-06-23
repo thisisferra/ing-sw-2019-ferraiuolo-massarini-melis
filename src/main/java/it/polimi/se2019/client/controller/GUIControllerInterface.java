@@ -1,4 +1,4 @@
-package it.polimi.se2019.client.view;
+package it.polimi.se2019.client.controller;
 
 import it.polimi.se2019.server.controller.VirtualView;
 
@@ -13,4 +13,6 @@ public interface GUIControllerInterface extends Remote {
     void update(ArrayList<VirtualView> allVirtualView) throws RemoteException;
 
     String ping() throws RemoteException;
+
+    void showMessageMovement(String message) throws RemoteException;
 }

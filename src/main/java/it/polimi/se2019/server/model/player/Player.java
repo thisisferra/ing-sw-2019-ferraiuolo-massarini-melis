@@ -229,6 +229,11 @@ public class Player implements Serializable {
         }
     }
 
+    public void pickUpPowerUpToRespawn() {
+        PowerUp powerUp = match.pickUpPowerUp();
+        playerHand.addPowerUp(powerUp);
+    }
+
     /**
      * Pick up a weapon in case i have less then 3 weapons, it deletes from the right arsenal the weapon
      * I chose and add it to my hand. In the method I also pay the right amount of cubes to buy the weapon.

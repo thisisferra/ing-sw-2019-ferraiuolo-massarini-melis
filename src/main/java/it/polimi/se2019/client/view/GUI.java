@@ -1,22 +1,19 @@
 package it.polimi.se2019.client.view;
 
-import com.sun.javafx.scene.control.skin.TextFieldSkin;
+import it.polimi.se2019.client.controller.GUIController;
 import it.polimi.se2019.server.controller.InfoShot;
 import it.polimi.se2019.server.controller.PowerUpShot;
 import it.polimi.se2019.server.model.cards.powerUp.PowerUp;
 import it.polimi.se2019.server.model.cards.weapons.Weapon;
-import it.polimi.se2019.server.model.game.Cubes;
 import it.polimi.se2019.server.model.game.MovementChecker;
 import it.polimi.se2019.server.model.map.Square;
 import it.polimi.se2019.server.model.player.Player;
-import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.CacheHint;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -380,7 +377,7 @@ public class GUI extends Application {
         GridPane.setConstraints(loginButton, 0, 3);
         loginButton.setOnAction(e -> {
             try {
-                 guiController = new GUIController(ipInput.getText());
+                 guiController = new GUIController(ipInput.getText(), this);
                 String usernameTyped = nameInput.getText();
                 boolean check = guiController.getRmiStub().checkUsername(usernameTyped);
                 if (!check) {
@@ -833,10 +830,10 @@ public class GUI extends Application {
                     rectangle.setOnMouseClicked(o -> {
                         try {
                             guiController.getRmiStub().setNewPosition(guiController.getRmiStub().getMatch().searchPlayerByClientName(username).getClientName(), Integer.parseInt(rectangle.getId()));
+                            //PROVA OGGETTO GUI
+                            guiController.getRmiStub().notifyAllClientMovement(this.username, Integer.parseInt(rectangle.getId()));
                             textArea.setText("New position: " + rectangle.getId()+"\n" + textArea.getText());
                             guiController.getRmiStub().useAction(this.username);
-                            setUserInfos();
-                            setFigures();
                             restoreSquares();
                         } catch (Exception exc) {
                             logger.log(Level.INFO,"setMovementSquare() Error",exc);
@@ -1180,7 +1177,10 @@ public class GUI extends Application {
                     if(!reloadableWeapons.isEmpty())
                         reloadAlert(reloadableWeapons);
                     else {
-                        guiController.getRmiStub().deathPlayer();
+                        if(guiController.getRmiStub().deathPlayer()) {
+                            guiController.getRmiStub().respawnPlayer();
+                            this.startingDraw();
+                        }
                         guiController.getRmiStub().restoreMap();
                         guiController.getRmiStub().resetActionNumber(username);
                         guiController.getRmiStub().setActivePlayer(username);
@@ -1262,7 +1262,7 @@ public class GUI extends Application {
             } catch (Exception exception){
                 logger.log(Level.INFO,"startingDraw Error",exception);
             }
-
+            /*
             setFigures();
             setKillShotTrack();
             setAmmo(mapNumber);
@@ -1270,6 +1270,7 @@ public class GUI extends Application {
             setWeaponView(redBox, myRemoteView.getCabinetRed().getSlot());
             setWeaponView(yellowBox, myRemoteView.getCabinetYellow().getSlot());
             setWeaponView(blueBox, myRemoteView.getCabinetBlue().getSlot());
+             */
         }));
         fiveSecondsWonder.setCycleCount(Timeline.INDEFINITE);
         fiveSecondsWonder.play();
@@ -1405,7 +1406,7 @@ public class GUI extends Application {
     }
 
     //this method can be used for respawn after death (?)
-    private void startingDraw(){
+    public void startingDraw(){
         Stage startingDrawWindow = new Stage();
 
         Label info = new Label("Choose one of the two power ups to discard.\nIt determines your spawn location, based on its color.");
@@ -1970,6 +1971,24 @@ public class GUI extends Application {
         newtonWindow.setHeight(200);
         newtonWindow.showAndWait();
 
+    }
+
+    public TextArea getTextArea() {
+        return this.textArea;
+    }
+
+    public void updateAllGUI() {
+        this.setFigures();
+        this.setKillShotTrack();
+        this.setAmmo(mapNumber);
+        this.setUserInfos();
+        this.setWeaponView(redBox, myRemoteView.getCabinetRed().getSlot());
+        this.setWeaponView(yellowBox, myRemoteView.getCabinetYellow().getSlot());
+        this.setWeaponView(blueBox, myRemoteView.getCabinetBlue().getSlot());
+    }
+
+    public Scene getScene() {
+        return this.scene;
     }
 
 }
