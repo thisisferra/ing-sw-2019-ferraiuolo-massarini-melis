@@ -221,7 +221,6 @@ public class RMIServer extends Server implements RMIServerInterface {
         }
     }
 
-    @Override
     public void pickUpWeapon(String username, int indexToPickUp) throws RemoteException {
         Player currentPlayer = match.searchPlayerByClientName(username);
         currentPlayer.pickUpWeapon(indexToPickUp);
@@ -229,6 +228,7 @@ public class RMIServer extends Server implements RMIServerInterface {
         updateAllClient();
 
     }
+
     public void pickUpWeapon(String username, int indexToPickUp, int indexToDrop) throws RemoteException{
         Player currentPlayer = match.searchPlayerByClientName(username);
         currentPlayer.pickUpWeapon(indexToPickUp,indexToDrop);
@@ -239,7 +239,6 @@ public class RMIServer extends Server implements RMIServerInterface {
 
     }
 
-    @Override
     public void restoreMap()throws RemoteException{
         restoreTile();
         restoreWeaponSlot();
@@ -547,6 +546,17 @@ public class RMIServer extends Server implements RMIServerInterface {
         for (VirtualView virtualView : allVirtualViews) {
             GUIControllerInterface clientRef = virtualView.getClientReference();
             clientRef.showMessageMovement(movementMessage);
+        }
+    }
+
+    public void toggleAction(String username){
+        match.searchPlayerByClientName(username).setCanMove(!match.searchPlayerByClientName(username).getCanMove());
+        updateAllVirtualView();
+        try{
+            updateAllVirtualView();
+            updateAllClient();
+        } catch (RemoteException e){
+            logger.log(Level.INFO,"ToggleAction error");
         }
     }
 }

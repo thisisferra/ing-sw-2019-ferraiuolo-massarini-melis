@@ -31,11 +31,11 @@ public class Player implements Serializable {
     private Hand playerHand;
     private PlayerBoard playerBoard;
     private Match match;
-    private int numberOfAction = 2;
+    private int numberOfAction;
     private ShotController shotController;
-    private boolean finalFrenzy = false;
-    private int phaseAction = 0;
-    private boolean canMove = false;
+    private boolean finalFrenzy;
+    private int phaseAction;
+    private boolean canMove;
     private boolean playerDead;
 
     public Player(String clientName, Match match) {
@@ -51,6 +51,9 @@ public class Player implements Serializable {
         this.position = -1;
         this.numberOfAction=2;
         this.playerDead = false;
+        this.canMove = false;
+        this.finalFrenzy = false;
+        this.phaseAction = 0;
     }
 
     public String getCharacter() {
@@ -103,6 +106,7 @@ public class Player implements Serializable {
 
     public void setCanMove(boolean canMove){
         this.canMove=canMove;
+        System.out.println("Player setcanmove "+this.canMove);
     }
 
     /**

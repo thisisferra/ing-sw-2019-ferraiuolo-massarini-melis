@@ -829,6 +829,7 @@ public class GUI extends Application {
                             guiController.getRmiStub().notifyAllClientMovement(this.username, Integer.parseInt(rectangle.getId()));
                             textArea.setText("New position: " + rectangle.getId()+"\n" + textArea.getText());
                             guiController.getRmiStub().useAction(this.username);
+                            guiController.getRmiStub().toggleAction(this.username);
                             restoreSquares();
                         } catch (Exception exc) {
                             logger.log(Level.INFO,"setMovementSquare() Error",exc);
@@ -861,7 +862,7 @@ public class GUI extends Application {
                                textArea.setText("You have picked up an ammo:\n"+guiController.getRmiStub().showLastAmmo().toString()+"\n" + textArea.getText());
                             }
                             else {
-                                //TODO indexToPickUp e indexToSwitch sono due input dell'utente
+                                //indexToPickUp e indexToSwitch sono due input dell'utente
                                 displayCabinet();
                                 if(indexToPickUp!= -1){
                                     if (myRemoteView.getWeapons().size() < 3) {
@@ -873,12 +874,12 @@ public class GUI extends Application {
                                             guiController.getRmiStub().pickUpWeapon(username,indexToPickUp,indexToDrop);
                                         }
                                     } else {
-                                        throw new Exception("You have more than three weapons in your hand\n");
+                                        throw new RemoteException("You have more than three weapons in your hand\n");
                                     }
                                 }
                             }
                             guiController.getRmiStub().useAction(this.username);
-                            guiController.getMyRemoteView().setCanMove(false);
+                            guiController.getRmiStub().toggleAction(this.username);
                             setCubes();
                             setUserInfos();
                             setFigures();
@@ -900,8 +901,9 @@ public class GUI extends Application {
             try {
                 if(guiController.getRmiStub().getActivePlayer().equals(this.username)){
                     if(guiController.getRmiStub().checkNumberAction(this.username)){
-                        if (!guiController.getRmiStub().getMatch().searchPlayerByClientName(this.username).getCanMove()) {
-                            guiController.getRmiStub().getMatch().searchPlayerByClientName(this.username).setCanMove(true);
+                        if (!myRemoteView.getCanMove()) {
+                            guiController.getRmiStub().toggleAction(this.username);
+                            System.out.println("Can Move: " + myRemoteView.getCanMove());
                             guiController.getMyRemoteView().setReachableSquare(guiController.getRmiStub().reachableSquares(guiController.getMyRemoteView().getPosition(),steps));
                             setMovementSquares();
                         } else {
@@ -924,8 +926,9 @@ public class GUI extends Application {
         try {
             if(guiController.getRmiStub().getActivePlayer().equals(this.username)){
                 if(guiController.getRmiStub().checkNumberAction(this.username)){
-                    if (!guiController.getRmiStub().getMatch().searchPlayerByClientName(this.username).getCanMove()) {
-                        guiController.getMyRemoteView().setCanMove(true);
+                    if (!myRemoteView.getCanMove()) {
+                        guiController.getRmiStub().toggleAction(this.username);
+                        System.out.println("Can Move: " + myRemoteView.getCanMove());
                         guiController.getMyRemoteView().setReachableSquare(guiController.getRmiStub().reachableSquares(guiController.getRmiStub().getMatch().searchPlayerByClientName(username).getPosition(),steps));
                         setMoveGrabSquares();
                         } else {
@@ -1171,7 +1174,7 @@ public class GUI extends Application {
                 if (guiController.getRmiStub().getActivePlayer().equals(this.username)) {
                     ArrayList<Weapon> reloadableWeapons = guiController.getRmiStub().getReloadableWeapons(this.username);
                     if(!reloadableWeapons.isEmpty())
-                        reloadAlert(reloadableWeapons);
+                        reloadAlert();
                     else {
                         if(guiController.getRmiStub().deathPlayer()) {
                             guiController.getRmiStub().respawnPlayer();
@@ -1339,7 +1342,7 @@ public class GUI extends Application {
             ImageView view = (ImageView) obj;
             view.setOnMouseClicked(e->{
                 try{
-                    if(guiController.getRmiStub().getActivePlayer().equals(this.username) && !guiController.getRmiStub().getMatch().searchPlayerByClientName(this.username).getCanMove()){
+                    if(guiController.getRmiStub().getActivePlayer().equals(this.username) && !myRemoteView.getCanMove()){
                         powerUpAlert(Integer.parseInt(view.getId()));
                         powerUpWindow.close();
                     }
@@ -1457,7 +1460,7 @@ public class GUI extends Application {
             rectangle.setFill(Color.color(0,0,0,0));
         }
 
-    private void reloadAlert(ArrayList<Weapon> reloadableWeapons){
+    private void reloadAlert(){
         Stage reloadAlert = new Stage();
         GridPane gridPane = new GridPane();
         BorderPane reloadPane = new BorderPane();
@@ -1476,7 +1479,7 @@ public class GUI extends Application {
             try {
                 ArrayList<Weapon> newReloadableWeapons = guiController.getRmiStub().getReloadableWeapons(this.username);
                 if(!newReloadableWeapons.isEmpty())
-                    displayReloadableWeapons(newReloadableWeapons);
+                    displayReloadableWeapons();
                 reloadAlert.close();
 
 
@@ -1523,7 +1526,7 @@ public class GUI extends Application {
         reloadAlert.show();
     }
 
-    private void displayReloadableWeapons(ArrayList<Weapon> reloadableWeapons){
+    private void displayReloadableWeapons(){
         Stage weaponToReloadWindow = new Stage();
         HBox weaponsBox = new HBox();
         BorderPane reloadableWeaponPane = new BorderPane();
@@ -1552,7 +1555,7 @@ public class GUI extends Application {
                         setCubes();
                         ArrayList<Weapon> newReloadableWeapons = guiController.getRmiStub().getReloadableWeapons(username);
                         if(!newReloadableWeapons.isEmpty()){
-                            reloadAlert(newReloadableWeapons);
+                            reloadAlert();
                             weaponToReloadWindow.close();
                         } else
                         {

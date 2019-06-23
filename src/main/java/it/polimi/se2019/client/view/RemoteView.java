@@ -34,7 +34,7 @@ public class RemoteView {
     private ArrayList<Weapon> weapons = new ArrayList<>();
     private ArrayList<PowerUp> powerUps = new ArrayList<>();
     private ArrayList<Player> killShotTrack = new ArrayList<>();
-    private boolean canMove = false;
+    private boolean canMove;
     private Cubes cubes;
     private ArrayList<Square> reachableSquare = new ArrayList<>();
     private int numberOfActions = 2;

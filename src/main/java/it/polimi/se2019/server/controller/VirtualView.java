@@ -37,7 +37,7 @@ public class VirtualView implements Serializable {
     private ArrayList<Player> damagePlayerBoard = new ArrayList<>();    //Info useful for Player-board GUI
     private int deathsPlayerBoard;                                      //Info useful for Player-board GUI
     private ArrayList<Player> killShotTrack = new ArrayList<>();
-    private boolean canMove = false;
+    private boolean canMove;
     private ArrayList<Square> reachableSquare = new ArrayList<>();
     private int numberOfActions;
     private ArrayList<Weapon> availableWeapons = new ArrayList<>();
