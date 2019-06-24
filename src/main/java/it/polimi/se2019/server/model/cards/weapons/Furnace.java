@@ -29,6 +29,8 @@ public class Furnace extends AbstractWeapon {
         this.reloadCost = new Cubes(weapon.getReloadCost().getReds(), weapon.getReloadCost().getYellows(), weapon.getReloadCost().getBlues());
         int length = weapon.getEffect().length;
         this.maxTarget = weapon.getMaxTarget();
+        this.maxMovementPlayer = weapon.getMaxMovementPlayer();
+        this.maxMovementTarget = weapon.getMaxMovementTarget();
         this.effect = new Shot[length];
         for(int i = 0; i < length; i++)
             this.effect[i] = new Shot(weapon.getEffect()[i]);

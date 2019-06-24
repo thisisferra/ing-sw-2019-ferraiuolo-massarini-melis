@@ -36,6 +36,8 @@ public class VortexCannon extends AbstractWeapon {
         int length = weapon.getEffect().length;
         this.effect = new Shot[length];
         this.maxTarget = weapon.getMaxTarget();
+        this.maxMovementPlayer = weapon.getMaxMovementPlayer();
+        this.maxMovementTarget = weapon.getMaxMovementTarget();
         for(int i = 0; i < length; i++)
             this.effect[i] = new Shot(weapon.getEffect()[i]);
     }

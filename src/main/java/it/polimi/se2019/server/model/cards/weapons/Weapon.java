@@ -14,6 +14,8 @@ public interface Weapon {
     Shot[] getEffect();
     int getMaxTarget();
     void setMaxTarget(int maxTarget);
+    int getMaxMovementTarget();
+    int getMaxMovementPlayer();
     void applyEffect(InfoShot infoShot);
     Weapon weaponFactory(Weapon weapon);
 }

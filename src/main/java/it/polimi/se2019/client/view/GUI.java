@@ -1375,7 +1375,7 @@ public class GUI extends Application {
         BorderPane weaponsPane = new BorderPane();
 
         ImageView weaponView;
-        Image weaponImage;
+        Image weaponImage = new Image("");
         for (Weapon obj : myRemoteView.getWeapons()) {
             weaponImage = createImage(WEAPONS_PATH + obj.getType() + ".png");
             if(!obj.getLoad())
@@ -1710,16 +1710,6 @@ public class GUI extends Application {
         ComboBox comboBox = new ComboBox();
         BorderPane weaponTargetPane = new BorderPane();
         weaponTargetPane.setStyle(BACKGROUND_STYLE);
-        try{
-            System.out.println("TargetablePlayers: "+infoShot.getTargetablePlayer());
-            for(Player target : infoShot.getTargetablePlayer()){
-                if(!target.getClientName().equals(this.username))
-                    comboBox.getItems().add(target.getClientName());
-            }
-
-        }catch (Exception exc){
-            logger.log(Level.INFO,"displayTargets error",exc);
-        }
         Label info = new Label("Select the "+infoShot.getWeapon().getMaxTarget()+"° target");
         info.setStyle(LABEL_STYLE);
         Button confirmButton = new Button("Confirm");
@@ -1731,6 +1721,17 @@ public class GUI extends Application {
 
         comboBox.setPromptText("Select target");
         comboBox.setPadding(new Insets(10,10,10,10));
+
+        try{
+            System.out.println("TargetablePlayers: "+infoShot.getTargetablePlayer());
+            for(Player target : infoShot.getTargetablePlayer()){
+                if(!target.getClientName().equals(this.username))
+                    comboBox.getItems().add(target.getClientName());
+            }
+
+        }catch (Exception exc){
+            logger.log(Level.INFO,"displayTargets error",exc);
+        }
 
         confirmButton.setOnAction(e-> {
             if(comboBox.getValue()!=null){
@@ -1910,8 +1911,6 @@ public class GUI extends Application {
         targetingScopeWindow.setHeight(200);
         targetingScopeWindow.showAndWait();
     }
-
-
 
     private void displayNewtonTargets(int index){
 
