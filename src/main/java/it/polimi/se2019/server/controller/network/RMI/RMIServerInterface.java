@@ -55,7 +55,7 @@ public interface RMIServerInterface extends Remote {
 
     ArrayList<Player> getKillShotTrack() throws RemoteException;
 
-    ArrayList<InfoShot> verifyWeapons(String username) throws RemoteException;
+    ArrayList<Weapon> verifyWeapons(String username) throws RemoteException;
 
     void applyEffectWeapon(InfoShot infoShot) throws RemoteException;
 

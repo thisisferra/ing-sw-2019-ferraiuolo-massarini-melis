@@ -353,7 +353,7 @@ public class RMIServer extends Server implements RMIServerInterface {
         this.updateAllClient();
     }
 
-    public ArrayList<InfoShot> verifyWeapons(String username) {
+    public ArrayList<Weapon> verifyWeapons(String username) {
         Player currentPlayer = this.match.searchPlayerByClientName(username);
         return getShotController().checkAll(currentPlayer);
     }
@@ -362,7 +362,7 @@ public class RMIServer extends Server implements RMIServerInterface {
         return this.shotController;
     }
 
-    public void applyEffectWeapon(InfoShot infoShot) {
+    public void applyEffectWeapon(InfoShot infoShot) throws RemoteException{
         InfoShot newInfoShot = new InfoShot();
         for(Player target : infoShot.getTargetPlayer()){
             newInfoShot.getTargetPlayer().add(match.searchPlayerByClientName(target.getClientName()));
@@ -387,6 +387,8 @@ public class RMIServer extends Server implements RMIServerInterface {
 
 
         }
+        updateAllVirtualView();
+        updateAllClient();
     }
 
     public void tradeCube(int index) throws RemoteException{

@@ -1,5 +1,6 @@
 package it.polimi.se2019.server.model.cards.weapons;
 
+import it.polimi.se2019.server.controller.InfoShot;
 import it.polimi.se2019.server.model.cards.*;
 import it.polimi.se2019.server.model.game.Cubes;
 import it.polimi.se2019.server.model.player.Player;
@@ -17,6 +18,7 @@ public abstract class AbstractWeapon implements Weapon, Serializable {
     protected int maxTarget;
     protected int maxMovementTarget;
     protected int maxMovementPlayer;
+    protected ArrayList<InfoShot> infoShots = new ArrayList<>();
 
     public void setLoad(boolean load) {
         this.load = load;
@@ -48,6 +50,10 @@ public abstract class AbstractWeapon implements Weapon, Serializable {
 
     public void setMaxMovementPlayer(int maxMovementPlayer){
         this.maxMovementPlayer = maxMovementPlayer;
+    }
+
+    public ArrayList<InfoShot> getInfoShots(){
+        return this.infoShots;
     }
 
     public Cubes getReloadCost() {

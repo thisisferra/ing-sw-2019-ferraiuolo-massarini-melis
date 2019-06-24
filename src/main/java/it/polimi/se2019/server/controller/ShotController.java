@@ -9,7 +9,6 @@ import it.polimi.se2019.server.model.map.Square;
 import it.polimi.se2019.server.model.player.Player;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -22,7 +21,7 @@ public class ShotController implements Serializable {
         this.match = match;
     }
 
-    public ArrayList<InfoShot> checkAll(Player currentPlayer) {
+    public ArrayList<Weapon> checkAll(Player currentPlayer) {
         ArrayList<Weapon> loadedWeapon = checkIsLoad(currentPlayer);
         ArrayList<Weapon> checkedWeapon;
         ArrayList<Weapon> usableWeapon;
@@ -33,10 +32,12 @@ public class ShotController implements Serializable {
         }
         else {
             checkedWeapon = checkCubes(currentPlayer, loadedWeapon);
-            infoShots = checkVisibility(currentPlayer, checkedWeapon);
+            usableWeapon = checkVisibility(currentPlayer,checkedWeapon);
+            purgedWeapons = purgeUselessWeapons(usableWeapon);
+            //infoShots = checkVisibility(currentPlayer, checkedWeapon);
         }
         System.out.println("InfoShots: "+ infoShots);
-        return infoShots;
+        return purgedWeapons;
     }
 
     private ArrayList<Weapon> checkIsLoad(Player currentPlayer) {
@@ -64,17 +65,22 @@ public class ShotController implements Serializable {
         return loadedWeapon;
     }
 
-    private ArrayList<InfoShot> checkVisibility(Player currentPlayer, ArrayList<Weapon> checkedWeapon) {
+    private ArrayList<Weapon> checkVisibility(Player currentPlayer, ArrayList<Weapon> checkedWeapon) {
 
         ArrayList<Player> visiblePlayers = new ArrayList<>();
         ArrayList<Player> notVisiblePlayers = new ArrayList<>();
         ArrayList<InfoShot> infoShots = new ArrayList<>();
 
+        //per ogni arma del giocatore
         for (Weapon weapon : checkedWeapon) {
+            //per ogni effetto dell'arma
             for (int i = 0; i < weapon.getEffect().length; i++) {
                 visiblePlayers.clear();
                 notVisiblePlayers.clear();
+                //se l'effetto è diverso da null ( posso pagarlo e l'arma e carica)
                 if(weapon.getEffect()[i] != null){
+                    //controllo il tipo di visibilità dell'effetto
+                    InfoShot infoShot;
                     switch(weapon.getEffect()[i].getTypeVisibility()) {
                         case "CanSee": {
                             //Create a RoomChecker object
@@ -86,8 +92,10 @@ public class ShotController implements Serializable {
                             //If i can't view anyone i can't use this effect
                             if (visiblePlayers.isEmpty()) {
                                 weapon.getEffect()[i] = null;
-                            } else
-                                addInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(),infoShots);
+                            } else{
+                                infoShot = createInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(),infoShots);
+                                weapon.getInfoShots().add(infoShot);
+                            }
                             System.out.println(visiblePlayers);
                             visiblePlayers.clear();
                             break;
@@ -99,8 +107,11 @@ public class ShotController implements Serializable {
                             notVisiblePlayers.remove(currentPlayer);
                             if (notVisiblePlayers.isEmpty()) {
                                 weapon.getEffect()[i] = null;
-                            } else
-                                addInfoShot(currentPlayer,notVisiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(),infoShots);
+                            } else{
+                                infoShot = createInfoShot(currentPlayer,notVisiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(),infoShots);
+                                weapon.getInfoShots().add(infoShot);
+                            }
+
                             System.out.println(notVisiblePlayers);
                             break;
                         }
@@ -147,8 +158,11 @@ public class ShotController implements Serializable {
                             visiblePlayers.remove(currentPlayer);
                             if(visiblePlayers.isEmpty())
                                 weapon.getEffect()[i] = null;
-                            else
-                                addInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(),infoShots);
+                            else{
+                                infoShot = createInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(),infoShots);
+                                weapon.getInfoShots().add(infoShot);
+                            }
+
                             System.out.println(visiblePlayers);
                             break;
                         }
@@ -166,8 +180,10 @@ public class ShotController implements Serializable {
                             visiblePlayers.remove(currentPlayer);
                             if(visiblePlayers.isEmpty())
                                 weapon.getEffect()[i] = null;
-                            else
-                                addInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(),infoShots);
+                            else{
+                                infoShot = createInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(),infoShots);
+                                weapon.getInfoShots().add(infoShot);
+                            }
                             System.out.println(visiblePlayers);
                             break;
                         }
@@ -191,8 +207,10 @@ public class ShotController implements Serializable {
                             visiblePlayers.addAll(targetPlayer);
                             if(visiblePlayers.isEmpty())
                                 weapon.getEffect()[i] = null;
-                            else
-                                addInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(),infoShots);
+                            else{
+                                infoShot = createInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(),infoShots);
+                                weapon.getInfoShots().add(infoShot);
+                            }
                             System.out.println(visiblePlayers);
                             break;
                         }
@@ -213,8 +231,10 @@ public class ShotController implements Serializable {
                             visiblePlayers.remove(currentPlayer);
                             if(visiblePlayers.isEmpty())
                                 weapon.getEffect()[i] = null;
-                            else
-                                addInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(),infoShots);
+                            else {
+                                infoShot = createInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(),infoShots);
+                                weapon.getInfoShots().add(infoShot);
+                            }
                             System.out.println(visiblePlayers);
                             break;
                         }
@@ -249,6 +269,10 @@ public class ShotController implements Serializable {
                             visiblePlayers.addAll(playersSet);
                             if(visiblePlayers.isEmpty())
                                 weapon.getEffect()[i] = null;
+                            else {
+                                infoShot = createInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(),infoShots);
+                                weapon.getInfoShots().add(infoShot);
+                            }
                             System.out.println(visiblePlayers);
                             break;
                         }
@@ -260,35 +284,26 @@ public class ShotController implements Serializable {
                 }
             }
         }
-        return infoShots;
+        return checkedWeapon;
         }
 
     private ArrayList<Weapon> purgeUselessWeapons(ArrayList<Weapon> usableWeapon){
-        int flag = 0;
         ArrayList<Weapon> purgedWeapon = new ArrayList<>();
         for(Weapon weapon : usableWeapon){
-
-            for(int i=0 ; i < weapon.getEffect().length; i++){
-                if(weapon.getEffect()[i] != null){
-                    flag = 1;
-                }
-            }
-            if(flag == 1){
+            if(!weapon.getInfoShots().isEmpty())
                 purgedWeapon.add(weapon);
-            }
-            flag = 0;
         }
         return purgedWeapon;
     }
 
-    private void addInfoShot(Player damagingPlayer,ArrayList<Player> targetablePlayers,Weapon weapon, String nameEffect,ArrayList<InfoShot> infoShots){
+    private InfoShot createInfoShot(Player damagingPlayer, ArrayList<Player> targetablePlayers, Weapon weapon, String nameEffect, ArrayList<InfoShot> infoShots){
         InfoShot infoShot = new InfoShot();
         infoShot.setDamagingPlayer(damagingPlayer);
         infoShot.setWeapon(weapon);
         infoShot.getTargetablePlayer().addAll(targetablePlayers);
         infoShot.setNameEffect(nameEffect);
 
-        infoShots.add(infoShot);
+        return infoShot;
     }
 
 }
