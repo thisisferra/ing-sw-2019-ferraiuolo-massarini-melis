@@ -185,4 +185,8 @@ public class GUIController implements GUIControllerInterface {
         textArea.setText(message + "\n" + textArea.getText());
 
     }
+
+    public void respawnDialog() {
+        Platform.runLater(() -> this.guiObject.startingDraw());
+    }
 }

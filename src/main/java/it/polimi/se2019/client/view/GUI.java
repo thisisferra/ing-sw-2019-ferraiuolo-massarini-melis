@@ -1178,7 +1178,6 @@ public class GUI extends Application {
                     else {
                         if(guiController.getRmiStub().deathPlayer()) {
                             guiController.getRmiStub().respawnPlayer();
-                            this.startingDraw();
                         }
                         guiController.getRmiStub().restoreMap();
                         guiController.getRmiStub().resetActionNumber(username);
@@ -1490,6 +1489,9 @@ public class GUI extends Application {
 
         noButton.setOnAction( exit -> {
             try{
+                if(guiController.getRmiStub().deathPlayer()) {
+                    guiController.getRmiStub().respawnPlayer();
+                }
                 guiController.getRmiStub().restoreMap();
                 setAmmo(mapNumber);
                 guiController.getRmiStub().resetActionNumber(username);

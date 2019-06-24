@@ -487,7 +487,6 @@ public class RMIServer extends Server implements RMIServerInterface {
                 match.addPlayerKillShot(player);
                 assignPoints(player);
                 player.getPlayerBoard().setDeaths();
-                player.setPlayerDead(false);
                 player.setPhaseAction(0);
             }
         }
@@ -533,10 +532,14 @@ public class RMIServer extends Server implements RMIServerInterface {
         System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
     }
 
-    public void respawnPlayer() throws RemoteException {
-        for (Player playerToRespawn : this.match.getPlayersDead()) {
-            this.setSpecificActivePlayer(playerToRespawn);
-            playerToRespawn.pickUpPowerUpToRespawn();
+    public void respawnPlayer() throws  RemoteException{
+        for (Player playerToRespawn : this.match.getAllPlayers()) {
+            if (playerToRespawn.getPlayerDead()) {
+                this.setSpecificActivePlayer(playerToRespawn);
+                playerToRespawn.pickUpPowerUpToRespawn();
+                getMyVirtualView(playerToRespawn.getClientName()).getClientReference().respawnDialog();
+                playerToRespawn.setPlayerDead(false);
+            }
         }
 
     }
