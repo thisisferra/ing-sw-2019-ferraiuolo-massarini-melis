@@ -67,6 +67,30 @@ public class Shot implements Serializable {
         return this.maxDistanceTarget;
     }
 
+    public void setMaxTarget(int maxTarget){
+        this.maxTarget = maxTarget;
+    }
+
+    public int getMaxTarget(){
+        return this.maxTarget;
+    }
+
+    public int getMaxMovementTarget(){
+        return this.maxMovementTarget;
+    }
+
+    public int getMaxMovementPlayer(){
+        return this.maxMovementPlayer;
+    }
+
+    public void setMaxMovementTarget(int maxMovementTarget){
+        this.maxMovementTarget = maxMovementTarget;
+    }
+
+    public void setMaxMovementPlayer(int maxMovementPlayer){
+        this.maxMovementPlayer = maxMovementPlayer;
+    }
+
     @Override
     public String toString() {
         return "Name: " + this.nameEffect + "\n" + "Extra cost: " + this.extraCost;

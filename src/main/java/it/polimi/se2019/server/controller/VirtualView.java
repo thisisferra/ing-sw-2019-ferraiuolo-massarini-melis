@@ -32,7 +32,7 @@ public class VirtualView implements Serializable {
     private WeaponSlot cabinetRed;
     private WeaponSlot cabinetYellow;
     private WeaponSlot cabinetBlue;
-    private InfoShot infoShot;
+    private WeaponShot weaponShot;
     private ArrayList<EnemyMark> markPlayerBoard = new ArrayList<>();      //Info useful for Player-board GUI
     private ArrayList<Player> damagePlayerBoard = new ArrayList<>();    //Info useful for Player-board GUI
     private int deathsPlayerBoard;                                      //Info useful for Player-board GUI
@@ -134,8 +134,8 @@ public class VirtualView implements Serializable {
         return this.cabinetBlue;
     }
 
-    public InfoShot getInfoShot() { return
-            this.infoShot;
+    public WeaponShot getWeaponShot() { return
+            this.weaponShot;
     }
 
     public ArrayList<Weapon> getAvailableWeapons(){
@@ -216,8 +216,8 @@ public class VirtualView implements Serializable {
         this.cabinetBlue = cabinetBlue;
     }
 
-    public void setInfoShot(InfoShot infoShot) {
-        this.infoShot = infoShot;
+    public void setWeaponShot(WeaponShot weaponShot) {
+        this.weaponShot = weaponShot;
     }
 
     public void setAvailableWeapons(ArrayList<Weapon> availableWeapons){

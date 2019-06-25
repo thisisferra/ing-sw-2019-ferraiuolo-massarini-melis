@@ -1,24 +1,21 @@
 package it.polimi.se2019.server.model.cards.weapons;
 
-import it.polimi.se2019.server.controller.InfoShot;
+import it.polimi.se2019.server.controller.WeaponShot;
 import it.polimi.se2019.server.model.cards.Shot;
 import it.polimi.se2019.server.model.game.Cubes;
-import it.polimi.se2019.server.model.player.Player;
-
-import java.util.ArrayList;
 
 public class LockRifle extends AbstractWeapon {
 
-    public void applyEffect(InfoShot infoShot){
+    public void applyEffect(WeaponShot weaponShot){
 
-        if (infoShot.getNameEffect().equals("BasicEffect")) {
-            infoShot.getTargetPlayer().get(0).getPlayerBoard().dealDamage(infoShot.getDamagingPlayer(),2);
-            infoShot.getTargetPlayer().get(0).getPlayerBoard().dealMark(infoShot.getDamagingPlayer(),1);
+        if (weaponShot.getNameEffect().equals("BasicEffect")) {
+            weaponShot.getTargetPlayer().get(0).getPlayerBoard().dealDamage(weaponShot.getDamagingPlayer(),2);
+            weaponShot.getTargetPlayer().get(0).getPlayerBoard().dealMark(weaponShot.getDamagingPlayer(),1);
         }
-        else if (infoShot.getNameEffect().equals("BasicEffect+Extra1")) {
-            infoShot.getTargetPlayer().get(0).getPlayerBoard().dealDamage(infoShot.getDamagingPlayer(),2);
-            infoShot.getTargetPlayer().get(0).getPlayerBoard().dealMark(infoShot.getDamagingPlayer(),1);
-            infoShot.getTargetPlayer().get(1).getPlayerBoard().dealMark(infoShot.getDamagingPlayer(),1);
+        else if (weaponShot.getNameEffect().equals("BasicEffect+Extra1")) {
+            weaponShot.getTargetPlayer().get(0).getPlayerBoard().dealDamage(weaponShot.getDamagingPlayer(),2);
+            weaponShot.getTargetPlayer().get(0).getPlayerBoard().dealMark(weaponShot.getDamagingPlayer(),1);
+            weaponShot.getTargetPlayer().get(1).getPlayerBoard().dealMark(weaponShot.getDamagingPlayer(),1);
         }
         this.setLoad(false);
 
@@ -32,9 +29,6 @@ public class LockRifle extends AbstractWeapon {
         this.reloadCost = new Cubes(weapon.getReloadCost().getReds(), weapon.getReloadCost().getYellows(), weapon.getReloadCost().getBlues());
         int length = weapon.getEffect().length;
         this.effect = new Shot[length];
-        this.maxTarget = weapon.getMaxTarget();
-        this.maxMovementPlayer = weapon.getMaxMovementPlayer();
-        this.maxMovementTarget = weapon.getMaxMovementTarget();
         for(int i = 0; i < length; i++)
             this.effect[i] = new Shot(weapon.getEffect()[i]);
     }

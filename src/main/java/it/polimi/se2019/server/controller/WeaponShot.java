@@ -6,7 +6,7 @@ import it.polimi.se2019.server.model.player.Player;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class InfoShot implements Serializable {
+public class WeaponShot implements Serializable {
 
     private Weapon weapon;
     private String nameEffect;
@@ -18,16 +18,15 @@ public class InfoShot implements Serializable {
     private int numberOfMoves;                                                  //Integer that represents th number of movement
     private int newPosition;
 
-    public InfoShot(Weapon weapon, String nameEffect) {
+    public WeaponShot(Weapon weapon, String nameEffect) {
         this.weapon = weapon;
         setNameEffect(nameEffect);
 
     }
 
-    public InfoShot() {
+    public WeaponShot() {
 
     }
-
 
     /* * *   GETTERS   * * */
 

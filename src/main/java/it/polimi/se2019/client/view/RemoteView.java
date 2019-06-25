@@ -1,6 +1,6 @@
 package it.polimi.se2019.client.view;
 
-import it.polimi.se2019.server.controller.InfoShot;
+import it.polimi.se2019.server.controller.WeaponShot;
 import it.polimi.se2019.server.controller.PowerUpShot;
 import it.polimi.se2019.server.controller.VirtualView;
 import it.polimi.se2019.server.model.cards.powerUp.PowerUp;
@@ -41,7 +41,7 @@ public class RemoteView {
     private WeaponSlot cabinetRed;
     private WeaponSlot cabinetYellow;
     private WeaponSlot cabinetBlue;
-    private InfoShot infoShot = new InfoShot();
+    private WeaponShot weaponShot = new WeaponShot();
     private PowerUpShot powerUpShot = new PowerUpShot();
     private ArrayList<Weapon> usableWeapon = new ArrayList<>();
 
@@ -264,8 +264,8 @@ public class RemoteView {
         return this.cabinetBlue;
     }
 
-    public InfoShot getInfoShot() {
-        return this.infoShot;
+    public WeaponShot getWeaponShot() {
+        return this.weaponShot;
     }
 
     public ArrayList<Weapon> getUsableWeapon() {
@@ -381,8 +381,8 @@ public class RemoteView {
         this.numberOfActions = numberOfActions;
     }
 
-    private void setInfoShot(InfoShot infoShot){
-        this.infoShot = infoShot;
+    private void setWeaponShot(WeaponShot weaponShot){
+        this.weaponShot = weaponShot;
     }
 
     private void setWeapons(ArrayList<Weapon> weapons){
@@ -459,7 +459,7 @@ public class RemoteView {
         setKillShotTrack(virtualView.getKillShotTrack());
 
         setCanMove(virtualView.getCanMove());
-        setInfoShot(virtualView.getInfoShot());  //FORSE DA TOGLIERE
+        setWeaponShot(virtualView.getWeaponShot());  //FORSE DA TOGLIERE
 
         setPhaseAction(virtualView.getPhaseAction());
         setFinalFrenzy(virtualView.getFinalFrenzy());

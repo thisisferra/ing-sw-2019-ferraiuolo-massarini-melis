@@ -2,7 +2,7 @@ package it.polimi.se2019.server.controller.network.RMI;
 
 import it.polimi.se2019.client.controller.GUIControllerInterface;
 import it.polimi.se2019.server.OneAboveAll;
-import it.polimi.se2019.server.controller.InfoShot;
+import it.polimi.se2019.server.controller.WeaponShot;
 import it.polimi.se2019.server.controller.PowerUpShot;
 import it.polimi.se2019.server.controller.ShotController;
 import it.polimi.se2019.server.controller.VirtualView;
@@ -362,26 +362,26 @@ public class RMIServer extends Server implements RMIServerInterface {
         return this.shotController;
     }
 
-    public void applyEffectWeapon(InfoShot infoShot) throws RemoteException{
-        InfoShot newInfoShot = new InfoShot();
-        for(Player target : infoShot.getTargetPlayer()){
-            newInfoShot.getTargetPlayer().add(match.searchPlayerByClientName(target.getClientName()));
+    public void applyEffectWeapon(WeaponShot weaponShot) throws RemoteException{
+        WeaponShot newWeaponShot = new WeaponShot();
+        for(Player target : weaponShot.getTargetPlayer()){
+            newWeaponShot.getTargetPlayer().add(match.searchPlayerByClientName(target.getClientName()));
         }
-        System.out.println("Targets in newInfoShot" + newInfoShot.getTargetPlayer());
-        newInfoShot.setNameEffect(infoShot.getNameEffect());
-        System.out.println("Targets in newInfoShot" + newInfoShot.getNameEffect());
-        newInfoShot.setWeapon(infoShot.getWeapon());
-        System.out.println("Targets in newInfoShot" + newInfoShot.getWeapon());
-        newInfoShot.setDamagingPlayer(match.searchPlayerByClientName(infoShot.getDamagingPlayer().getClientName()));
-        System.out.println("Targets in newInfoShot" + newInfoShot.getDamagingPlayer());
+        System.out.println("Targets in newInfoShot" + newWeaponShot.getTargetPlayer());
+        newWeaponShot.setNameEffect(weaponShot.getNameEffect());
+        System.out.println("Targets in newInfoShot" + newWeaponShot.getNameEffect());
+        newWeaponShot.setWeapon(weaponShot.getWeapon());
+        System.out.println("Targets in newInfoShot" + newWeaponShot.getWeapon());
+        newWeaponShot.setDamagingPlayer(match.searchPlayerByClientName(weaponShot.getDamagingPlayer().getClientName()));
+        System.out.println("Targets in newInfoShot" + newWeaponShot.getDamagingPlayer());
         //newInfoShot.setNewPosition(infoShot.getNewPosition());
-        infoShot.getWeapon().applyEffect(newInfoShot);
-        unloadWeapon(newInfoShot);
-        for(int i =0 ; i<newInfoShot.getWeapon().getEffect().length;i++){
-            if(newInfoShot.getWeapon().getEffect()[i] != null){
-                if(newInfoShot.getNameEffect().equals(newInfoShot.getWeapon().getEffect()[i].getNameEffect()))
-                    newInfoShot.getDamagingPlayer().getPlayerBoard().payCubes(
-                            newInfoShot.getWeapon().getEffect()[i].getExtraCost()
+        weaponShot.getWeapon().applyEffect(newWeaponShot);
+        unloadWeapon(newWeaponShot);
+        for(int i = 0; i< newWeaponShot.getWeapon().getEffect().length; i++){
+            if(newWeaponShot.getWeapon().getEffect()[i] != null){
+                if(newWeaponShot.getNameEffect().equals(newWeaponShot.getWeapon().getEffect()[i].getNameEffect()))
+                    newWeaponShot.getDamagingPlayer().getPlayerBoard().payCubes(
+                            newWeaponShot.getWeapon().getEffect()[i].getExtraCost()
                     );
             }
 
@@ -514,9 +514,9 @@ public class RMIServer extends Server implements RMIServerInterface {
         playerBoard.clearDamage();
     }
 
-    private void unloadWeapon(InfoShot infoShot){
-        for(Weapon weapon : match.searchPlayerByClientName(infoShot.getDamagingPlayer().getClientName()).getHand().getWeapons()){
-            if(infoShot.getWeapon().getType().equals(weapon.getType()))
+    private void unloadWeapon(WeaponShot weaponShot){
+        for(Weapon weapon : match.searchPlayerByClientName(weaponShot.getDamagingPlayer().getClientName()).getHand().getWeapons()){
+            if(weaponShot.getWeapon().getType().equals(weapon.getType()))
                 weapon.setLoad(false);
         }
     }

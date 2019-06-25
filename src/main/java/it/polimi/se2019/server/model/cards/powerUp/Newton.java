@@ -1,10 +1,7 @@
 package it.polimi.se2019.server.model.cards.powerUp;
 
 
-import it.polimi.se2019.server.controller.InfoShot;
 import it.polimi.se2019.server.controller.PowerUpShot;
-import it.polimi.se2019.server.model.game.Match;
-import it.polimi.se2019.server.model.game.MovementChecker;
 import it.polimi.se2019.server.model.player.Player;
 
 import java.io.Serializable;

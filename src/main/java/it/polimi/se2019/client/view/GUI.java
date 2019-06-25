@@ -1,8 +1,9 @@
 package it.polimi.se2019.client.view;
 
 import it.polimi.se2019.client.controller.GUIController;
-import it.polimi.se2019.server.controller.InfoShot;
+import it.polimi.se2019.server.controller.WeaponShot;
 import it.polimi.se2019.server.controller.PowerUpShot;
+import it.polimi.se2019.server.model.cards.Shot;
 import it.polimi.se2019.server.model.cards.powerUp.PowerUp;
 import it.polimi.se2019.server.model.cards.weapons.Weapon;
 import it.polimi.se2019.server.model.game.MovementChecker;
@@ -69,9 +70,9 @@ public class GUI extends Application {
     private static final String TEXT_FIELD_STYLE = "-fx-background-color: #726B72";
     static final String HIGHLIGHT_BUTTON_STYLE = "-fx-background-color: #bbbbbb;-fx-text-fill: #999999;";
     private static final String TEXT_AREA_STYLE = "-fx-control-inner-background:#717171;  -fx-highlight-fill: #f1f7eb; -fx-highlight-text-fill: #717171; -fx-text-fill: #f1f7eb;-fx-border-color: #ffffff ";
-    private static final String WEAPONS_PATH = "src/main/resources/Images/Weapons/";
-    private static final String POWERUPS_PATH = "src/main/resources/Images/PowerUps/";
-    private static final String ICONS_PATH = "src/main/resources/Images/icons/";
+    private static final String WEAPONS_PATH = "src/main/resources/images/weapons/";
+    private static final String POWERUPS_PATH = "src/main/resources/images/powerUps/";
+    private static final String ICONS_PATH = "src/main/resources/images/icons/";
     private int mapNumber;
     private Scene scene;
 
@@ -136,7 +137,7 @@ public class GUI extends Application {
 
     private void setKillShotTrack() {
         killShotTrack.getChildren().clear();
-        Image skullImage = createImage("src/main/resources/Images/icons/skull_icon.png");
+        Image skullImage = createImage("src/main/resources/images/icons/skull_icon.png");
         Image characterImage;
         ImageView characterImageView;
         ImageView skullView;
@@ -184,7 +185,7 @@ public class GUI extends Application {
         Image icon;
 
         for(RemoteView view : guiController.getAllViews()){
-            image = createImage("src/main/resources/Images/Playerboards/" + view.getCharacter()+ ".png");
+            image = createImage("src/main/resources/images/playerboards/" + view.getCharacter()+ ".png");
             img = new ImageView(image);
             img.setFitHeight(120);
             img.setPreserveRatio(true);
@@ -201,7 +202,7 @@ public class GUI extends Application {
                 damageBar.getChildren().add(iconImg);
             }
             for(int i = 0 ; i<view.getDeathsPlayerBoard();i++){
-                icon = createImage("src/main/resources/Images/icons/skull_icon.png");
+                icon = createImage("src/main/resources/images/icons/skull_icon.png");
                 iconImg = new ImageView(icon);
                 iconImg.setPreserveRatio(true);
                 iconImg.setFitWidth(35);
@@ -235,7 +236,7 @@ public class GUI extends Application {
 
         Image ammoBack;
 
-        ammoBack = createImage("src/main/resources/Images/Ammo/ammoback.png");
+        ammoBack = createImage("src/main/resources/images/ammo/ammoback.png");
         ammoSet.getChildren().clear();
         for(int i=0; i<12;i++){
             ammoSet.getChildren().add(new ImageView(ammoBack));
@@ -286,23 +287,23 @@ public class GUI extends Application {
     private void setCubes() {
         cubeBox.getChildren().clear();
         ImageView cubeImage;
-        cubeImage = new ImageView(createImage("src/main/resources/Images/icons/redCube.png"));
-        cubeImage.setFitWidth(20);
+        cubeImage = new ImageView(createImage("src/main/resources/images/icons/redCube.png"));
+        cubeImage.setFitWidth(30);
         cubeImage.setPreserveRatio(true);
         Label redLabel = new Label(" " + getMyReds() + "  ", cubeImage);
-        redLabel.setStyle("-fx-text-fill: #ff0000; -fx-background-color: #404040");
+        redLabel.setStyle("-fx-text-fill: #ff0000; -fx-background-color: #202020");
 
-        cubeImage = new ImageView(createImage("src/main/resources/Images/icons/yellowCube.png"));
-        cubeImage.setFitWidth(20);
+        cubeImage = new ImageView(createImage("src/main/resources/images/icons/yellowCube.png"));
+        cubeImage.setFitWidth(30);
         cubeImage.setPreserveRatio(true);
         Label yellowLabel = new Label(" "  + getMyYellows() + "  ", cubeImage);
-        yellowLabel.setStyle("-fx-text-fill: #fff000; -fx-background-color: #404040");
+        yellowLabel.setStyle("-fx-text-fill: #fff000; -fx-background-color: #202020");
 
-        cubeImage = new ImageView(createImage("src/main/resources/Images/icons/blueCube.png"));
-        cubeImage.setFitWidth(20);
+        cubeImage = new ImageView(createImage("src/main/resources/images/icons/blueCube.png"));
+        cubeImage.setFitWidth(30);
         cubeImage.setPreserveRatio(true);
         Label blueLabel = new Label(" " + getMyBlues()+"  ", cubeImage);
-        blueLabel.setStyle("-fx-text-fill: #0010ff; -fx-background-color: #404040;");
+        blueLabel.setStyle("-fx-text-fill: #1879ff; -fx-background-color: #202020;");
 
         cubeBox.getChildren().addAll(redLabel, yellowLabel, blueLabel);
         cubeBox.setSpacing(5);
@@ -333,11 +334,11 @@ public class GUI extends Application {
         buttonView.setPreserveRatio(true);
         Button newButton = new Button("", buttonView);
         setResponsiveButton(newButton);
-        newButton.setStyle(BUTTON_STYLE);
         return newButton;
     }
 
     private void setResponsiveButton(Button button){
+        button.setStyle(BUTTON_STYLE);
         button.setOnMouseEntered(e -> button.setStyle(HIGHLIGHT_BUTTON_STYLE));
         button.setOnMouseExited(e -> button.setStyle(BUTTON_STYLE));
     }
@@ -379,13 +380,7 @@ public class GUI extends Application {
                     Label errorLabel = new Label("Selected name already taken, please retry.");
                     errorLabel.setStyle("-fx-text-fill: #ff0000");
                     Button exitButton = new Button("Back");
-                    exitButton.setStyle(BUTTON_STYLE);
-                    exitButton.setOnMouseExited(exit ->
-                        exitButton.setStyle(BUTTON_STYLE)
-                    );
-                    exitButton.setOnMouseEntered(enter ->
-                        exitButton.setStyle(HIGHLIGHT_BUTTON_STYLE)
-                    );
+                    setResponsiveButton(exitButton);
                     exitButton.setOnAction(o -> {
                         Scene backScene;
                         backScene = setLoginScene();
@@ -421,9 +416,7 @@ public class GUI extends Application {
         pane.setLeft(sideBox);
         pane.setCenter(layout);
         pane.setPadding(new Insets(10, 10, 10, 10));
-        loginButton.setStyle(BUTTON_STYLE);
-        loginButton.setOnMouseEntered(e -> loginButton.setStyle(HIGHLIGHT_BUTTON_STYLE));
-        loginButton.setOnMouseExited(e -> loginButton.setStyle(BUTTON_STYLE));
+        setResponsiveButton(loginButton);
         loginButton.setAlignment(Pos.CENTER);
         layout.getChildren().addAll(nameInput, passInput, ipInput, loginButton);
         layout.setAlignment(Pos.CENTER_LEFT);
@@ -487,10 +480,10 @@ public class GUI extends Application {
         VBox sideBox = new VBox();
         VBox mapsBox = new VBox();
         HBox box1 = new HBox();
-        ImageView map1 = new ImageView(createImage("src/main/resources/Images/Maps/map1_preview.png"));
-        ImageView map2 = new ImageView(createImage("src/main/resources/Images/Maps/map2_preview.png"));
-        ImageView map3 = new ImageView(createImage("src/main/resources/Images/Maps/map3_preview.png"));
-        ImageView map4 = new ImageView(createImage("src/main/resources/Images/Maps/map4_preview.png"));
+        ImageView map1 = new ImageView(createImage("src/main/resources/images/maps/map1_preview.png"));
+        ImageView map2 = new ImageView(createImage("src/main/resources/images/maps/map2_preview.png"));
+        ImageView map3 = new ImageView(createImage("src/main/resources/images/maps/map3_preview.png"));
+        ImageView map4 = new ImageView(createImage("src/main/resources/images/maps/map4_preview.png"));
         map1.setPreserveRatio(true);
         map2.setPreserveRatio(true);
         map3.setPreserveRatio(true);
@@ -659,13 +652,11 @@ public class GUI extends Application {
     }
 
     private Button setHomeButton(Stage window){
-        ImageView img = new ImageView(createImage("src/main/resources/Images/icons/home.png"));
+        ImageView img = new ImageView(createImage("src/main/resources/images/icons/home.png"));
         img.setPreserveRatio(true);
         img.setFitHeight(50);
         Button closeButton = new Button("",img);
-        closeButton.setStyle(BUTTON_STYLE);
-        closeButton.setOnMouseEntered(e -> closeButton.setStyle(HIGHLIGHT_BUTTON_STYLE));
-        closeButton.setOnMouseExited(e -> closeButton.setStyle(BUTTON_STYLE));
+        setResponsiveButton(closeButton);
         closeButton.setOnAction(e-> window.close());
         return closeButton;
     }
@@ -694,7 +685,7 @@ public class GUI extends Application {
     }
 
     private ImageView setMap(){
-        ImageView imageView = new ImageView(createImage("src/main/resources/Images/Maps/Map" + mapNumber + ".png"));
+        ImageView imageView = new ImageView(createImage("src/main/resources/images/maps/Map" + mapNumber + ".png"));
         imageView.setFitHeight(700);
         imageView.setPreserveRatio(true);
         return imageView;
@@ -729,7 +720,7 @@ public class GUI extends Application {
     private void setFirstPlayer(){
         if(guiController.getAllViews().get(0).getUsername().equals(username)){
             firstPlayer.getChildren().clear();
-            ImageView firstPlayerView = new ImageView(createImage("src/main/resources/Images/Playerboards/first_player.png"));
+            ImageView firstPlayerView = new ImageView(createImage("src/main/resources/images/playerboards/first_player.png"));
             firstPlayerView.setFitHeight(100);
             firstPlayerView.setPreserveRatio(true);
             firstPlayerView.setTranslateX(30);
@@ -961,25 +952,28 @@ public class GUI extends Application {
     }
 
     private void setUserInfos(){
-        Label userName;
-        Label moves;
-        Image userImage;
-        ImageView userView;
-        Label points;
-        userInfoBox.getChildren().clear();
-        userImage = createImage(ICONS_PATH + myRemoteView.getCharacter() +"_icon.png");
-        userName = new Label(" "+ myRemoteView.getUsername());
-        moves = new Label("Moves: "+ myRemoteView.getNumberOfActions());
-        points = new Label("Points " + myRemoteView.getPoints());
+        Label userName = new Label(" "+ myRemoteView.getUsername());
+        Label moves = new Label("Moves: "+ myRemoteView.getNumberOfActions());
+        Label points = new Label("Points " + myRemoteView.getPoints());
+        Label activePlayerLabel = null;
+        try{
+            activePlayerLabel = new Label("Active player:\n" + guiController.getRmiStub().getActivePlayer());
+            activePlayerLabel.setStyle(LABEL_STYLE);
+        }catch (RemoteException e){
+            logger.log(Level.INFO,"Setuserinfo error",e);
+        }
 
-        userView = new ImageView(userImage);
+        Image userImage = createImage(ICONS_PATH + myRemoteView.getCharacter() +"_icon.png");
+        ImageView userView = new ImageView(userImage);
+        userInfoBox.getChildren().clear();
+
         userView.setPreserveRatio(true);
         userView.setFitWidth(50);
         moves.setStyle(LABEL_STYLE);
         points.setStyle(LABEL_STYLE);
         userName.setStyle(LABEL_STYLE);
-        userInfoBox.getChildren().addAll(userView,userName,moves,points);
-        userName.setAlignment(Pos.CENTER);
+
+        userInfoBox.getChildren().addAll(userView,userName,moves,points,activePlayerLabel);
         userInfoBox.setSpacing(5);
     }
 
@@ -1121,13 +1115,13 @@ public class GUI extends Application {
 
         setCabinets();
 
-        Button moveButton = setImageButton("src/main/resources/Images/icons/move_icon.png");
-        Button grabButton = setImageButton("src/main/resources/Images/icons/grab_icon.png");
-        Button shootButton = setImageButton("src/main/resources/Images/icons/shoot_icon.png");
-        Button passButton = setImageButton("src/main/resources/Images/icons/pass_icon.png");
-        Button powerUps = setImageButton("src/main/resources/Images/icons/powerup_icon.png");
-        Button playersButton = setImageButton("src/main/resources/Images/icons/players_icon.png");
-        Button weapons = setImageButton("src/main/resources/Images/icons/weapon_icon.png");
+        Button moveButton = setImageButton("src/main/resources/images/icons/move_icon.png");
+        Button grabButton = setImageButton("src/main/resources/images/icons/grab_icon.png");
+        Button shootButton = setImageButton("src/main/resources/images/icons/shoot_icon.png");
+        Button passButton = setImageButton("src/main/resources/images/icons/pass_icon.png");
+        Button powerUps = setImageButton("src/main/resources/images/icons/powerup_icon.png");
+        Button playersButton = setImageButton("src/main/resources/images/icons/players_icon.png");
+        Button weapons = setImageButton("src/main/resources/images/icons/weapon_icon.png");
 
         moveButton.setOnAction(e ->{
                 moveAction(3);
@@ -1266,12 +1260,8 @@ public class GUI extends Application {
 
         Button powerUpButton = new Button("As a powerUp");
         Button tradeButton = new Button("For cubes");
-        powerUpButton.setStyle(BUTTON_STYLE);
-        tradeButton.setStyle(BUTTON_STYLE);
-        powerUpButton.setOnMouseEntered(e-> powerUpButton.setStyle(HIGHLIGHT_BUTTON_STYLE));
-        tradeButton.setOnMouseEntered(e-> tradeButton.setStyle(HIGHLIGHT_BUTTON_STYLE));
-        powerUpButton.setOnMouseExited(e-> powerUpButton.setStyle(BUTTON_STYLE));
-        tradeButton.setOnMouseExited(e-> tradeButton.setStyle(BUTTON_STYLE));
+        setResponsiveButton(powerUpButton);
+        setResponsiveButton(tradeButton);
 
 
         powerUpButton.setOnAction(ind -> {
@@ -1462,12 +1452,8 @@ public class GUI extends Application {
 
         Button yesButton = new Button("Yes");
         Button noButton = new Button("No");
-        yesButton.setStyle(BUTTON_STYLE);
-        noButton.setStyle(BUTTON_STYLE);
-        yesButton.setOnMouseEntered(e-> yesButton.setStyle(HIGHLIGHT_BUTTON_STYLE));
-        noButton.setOnMouseEntered(e-> noButton.setStyle(HIGHLIGHT_BUTTON_STYLE));
-        yesButton.setOnMouseExited(e-> yesButton.setStyle(BUTTON_STYLE));
-        noButton.setOnMouseExited(e-> noButton.setStyle(BUTTON_STYLE));
+        setResponsiveButton(yesButton);
+        setResponsiveButton(noButton);
 
         yesButton.setOnAction(trade -> {
             try {
@@ -1659,9 +1645,9 @@ public class GUI extends Application {
         availableEffectPane.setStyle(BACKGROUND_STYLE);
         String effect;
         System.out.println("chosen Weapon"+chosenWeapon);
-        for(int i = 0; i < chosenWeapon.getInfoShots().size(); i++){
+        for(int i = 0; i < chosenWeapon.getWeaponShots().size(); i++){
 
-            effect = chosenWeapon.getInfoShots().get(i).getNameEffect();
+            effect = chosenWeapon.getWeaponShots().get(i).getNameEffect();
             comboBox.getItems().add(effect);
 
         }
@@ -1675,9 +1661,9 @@ public class GUI extends Application {
         comboBox.setPadding(new Insets(10,10,10,10));
 
         confirmButton.setOnAction(e-> {
-            for(InfoShot infoShot : chosenWeapon.getInfoShots()){
-                if(infoShot.getNameEffect().equals(comboBox.getValue()))
-                    displayTargets(infoShot);
+            for(WeaponShot weaponShot : chosenWeapon.getWeaponShots()){
+                if(weaponShot.getNameEffect().equals(comboBox.getValue()))
+                    displayTargets(weaponShot);
             }
 
             availableEffectsWindow.close();
@@ -1700,26 +1686,22 @@ public class GUI extends Application {
 
     }
 
-    private void displayTargets(InfoShot infoShot){
+    private void displayTargets(WeaponShot weaponShot){
         Stage weaponTargetWindow = new Stage();
         ComboBox comboBox = new ComboBox();
         BorderPane weaponTargetPane = new BorderPane();
         weaponTargetPane.setStyle(BACKGROUND_STYLE);
-        Label info = new Label("Select the "+infoShot.getWeapon().getMaxTarget()+"° target");
+        Label info = new Label("Select target");
         info.setStyle(LABEL_STYLE);
         Button confirmButton = new Button("Confirm");
-        confirmButton.setStyle(BUTTON_STYLE);
-        confirmButton.setOnMouseExited(e ->
-                confirmButton.setStyle(BUTTON_STYLE));
-        confirmButton.setOnMouseEntered(e ->
-                confirmButton.setStyle(HIGHLIGHT_BUTTON_STYLE));
+        setResponsiveButton(confirmButton);
 
         comboBox.setPromptText("Select target");
         comboBox.setPadding(new Insets(10,10,10,10));
 
         try{
-            System.out.println("TargetablePlayers: "+infoShot.getTargetablePlayer());
-            for(Player target : infoShot.getTargetablePlayer()){
+            System.out.println("TargetablePlayers: "+ weaponShot.getTargetablePlayer());
+            for(Player target : weaponShot.getTargetablePlayer()){
                 if(!target.getClientName().equals(this.username))
                     comboBox.getItems().add(target.getClientName());
             }
@@ -1731,13 +1713,38 @@ public class GUI extends Application {
         confirmButton.setOnAction(e-> {
             if(comboBox.getValue()!=null){
                 try{
-                    infoShot.getTargetPlayer().add(guiController.getRmiStub().getMatch().searchPlayerByClientName((String) comboBox.getValue()));
-                    guiController.getRmiStub().applyEffectWeapon(infoShot);
-                    infoShot.getWeapon().setMaxTarget(infoShot.getWeapon().getMaxTarget() - 1);
-                    if(infoShot.getWeapon().getMaxTarget()>0)
-                        displayTargets(infoShot);
-                    else
+                    Shot currentEffect = null;
+                    for(int i=0 ; i< weaponShot.getWeapon().getEffect().length; i++)
+                        if( weaponShot.getWeapon().getEffect()[i] != null
+                                && weaponShot.getWeapon().getEffect()[i].getNameEffect().equals(weaponShot.getNameEffect()))
+                            currentEffect = weaponShot.getWeapon().getEffect()[i];
+
+                    weaponShot.getTargetPlayer().add(guiController.getRmiStub().getMatch().searchPlayerByClientName((String) comboBox.getValue()));
+                    Player justHitTarget = null;
+                    for(Player targetablePlayer : weaponShot.getTargetablePlayer()){
+                        if(targetablePlayer.getClientName().equals(guiController.getRmiStub().getMatch().searchPlayerByClientName((String) comboBox.getValue()).getClientName()))
+                            justHitTarget = targetablePlayer;
+                    }
+                    if(justHitTarget!= null)
+                        weaponShot.getTargetablePlayer().remove(justHitTarget);
+
+
+                    if(currentEffect.getMaxMovementTarget()>0) {
+                        System.out.println("MaxMovement: " + currentEffect.getMaxMovementTarget());
+                        setPushSquares(weaponShot);
                         weaponTargetWindow.close();
+                    }
+
+                    currentEffect.setMaxTarget(currentEffect.getMaxTarget()-1);
+                    if(currentEffect.getMaxTarget()>0 && !weaponShot.getTargetablePlayer().isEmpty()){
+                        displayTargets(weaponShot);
+                        weaponTargetWindow.close();
+                    }
+
+                    else{
+                        guiController.getRmiStub().applyEffectWeapon(weaponShot);
+                        weaponTargetWindow.close();
+                    }
                 }catch (Exception err){
                     logger.log(Level.INFO,"TargetingScope method error",err);
                 }
@@ -1757,7 +1764,7 @@ public class GUI extends Application {
         weaponTargetWindow.setScene(usableScene);
         weaponTargetWindow.setWidth(300);
         weaponTargetWindow.setHeight(200);
-        weaponTargetWindow.showAndWait();
+        weaponTargetWindow.show();
     }
 
     private void powerUpAction(int index){
@@ -1859,11 +1866,7 @@ public class GUI extends Application {
         Label info = new Label("Who is the target?");
         info.setStyle(LABEL_STYLE);
         Button confirmButton = new Button("Confirm");
-        confirmButton.setStyle(BUTTON_STYLE);
-        confirmButton.setOnMouseExited(e ->
-                confirmButton.setStyle(BUTTON_STYLE));
-        confirmButton.setOnMouseEntered(e ->
-                confirmButton.setStyle(HIGHLIGHT_BUTTON_STYLE));
+        setResponsiveButton(confirmButton);
 
         comboBox.setPromptText("Select target");
         comboBox.setPadding(new Insets(10,10,10,10));
@@ -1931,11 +1934,7 @@ public class GUI extends Application {
         info.setStyle(LABEL_STYLE);
 
         Button confirmButton = new Button("Confirm");
-        confirmButton.setStyle(BUTTON_STYLE);
-        confirmButton.setOnMouseExited(e ->
-                confirmButton.setStyle(BUTTON_STYLE));
-        confirmButton.setOnMouseEntered(e ->
-                confirmButton.setStyle(HIGHLIGHT_BUTTON_STYLE));
+        setResponsiveButton(confirmButton);
 
         comboBox.setPromptText("Select target");
         comboBox.setPadding(new Insets(10,10,10,10));
@@ -2003,6 +2002,7 @@ public class GUI extends Application {
         this.setKillShotTrack();
         this.setAmmo(mapNumber);
         this.setUserInfos();
+        this.setCubes();
         this.setWeaponView(redBox, myRemoteView.getCabinetRed().getSlot());
         this.setWeaponView(yellowBox, myRemoteView.getCabinetYellow().getSlot());
         this.setWeaponView(blueBox, myRemoteView.getCabinetBlue().getSlot());
@@ -2061,7 +2061,40 @@ public class GUI extends Application {
                 textArea.setText("It's not your round!\n" + textArea.getText());
             }
         } catch (RemoteException e1) {
-            logger.log(Level.INFO,"moveAction Error",e1);
+            logger.log(Level.INFO,"shootAction Error",e1);
+        }
+    }
+
+    private void setPushSquares(WeaponShot weaponShot){
+        try{
+            Shot currentEffect = null;
+            for(Shot effect: weaponShot.getWeapon().getEffect())
+                if( effect != null && effect.getNameEffect().equals(weaponShot.getNameEffect()))
+                    currentEffect = effect;
+            guiController.getMyRemoteView().setReachableSquare(guiController.getRmiStub().reachableSquares(weaponShot.getTargetPlayer().get(0).getPosition(),currentEffect.getMaxMovementTarget()));
+        } catch (Exception exc) {
+        logger.log(Level.INFO,"setMovementSquare() Error",exc);
+    }
+        for (int i = 0; i < 12; i++) {
+            Rectangle rectangle = (Rectangle) grid.getChildren().get(i);
+            for (Square square : guiController.getMyRemoteView().getReachableSquare()) {
+                if (rectangle.getId().equals(Integer.toString(square.getPosition()))) {
+                    rectangle.setFill(Color.color(1, 0.4, 0, 0.4));
+                    rectangle.setOnMouseClicked(o -> {
+                        try {
+                            weaponShot.setNewPosition(Integer.parseInt(rectangle.getId()));
+                            guiController.getRmiStub().applyEffectWeapon(weaponShot);
+                            restoreSquares();
+                        } catch (Exception exc) {
+                            logger.log(Level.INFO,"setMovementSquare() Error",exc);
+                        }
+                    });
+                    rectangle.setOnMouseEntered( enter ->
+                            rectangle.setFill(Color.color(1,0.4,0,0.6)));
+                    rectangle.setOnMouseExited( exit ->
+                            rectangle.setFill(Color.color(1,0.4,0,0.4)));
+                }
+            }
         }
     }
 

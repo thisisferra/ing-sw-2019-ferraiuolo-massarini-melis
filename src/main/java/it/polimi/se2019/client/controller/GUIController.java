@@ -2,7 +2,7 @@ package it.polimi.se2019.client.controller;
 
 import it.polimi.se2019.client.view.GUI;
 import it.polimi.se2019.client.view.RemoteView;
-import it.polimi.se2019.server.controller.InfoShot;
+import it.polimi.se2019.server.controller.WeaponShot;
 import it.polimi.se2019.server.controller.VirtualView;
 import it.polimi.se2019.server.controller.network.RMI.RMIServerInterface;
 import javafx.application.Platform;
@@ -165,8 +165,8 @@ public class GUIController implements GUIControllerInterface {
     }
      */
 
-    public void applyEffect(InfoShot infoShot) throws RemoteException{
-        this.getRmiStub().applyEffectWeapon(infoShot);
+    public void applyEffect(WeaponShot weaponShot) throws RemoteException{
+        this.getRmiStub().applyEffectWeapon(weaponShot);
     }
 
     @Override
