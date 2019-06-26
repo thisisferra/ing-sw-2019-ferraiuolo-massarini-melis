@@ -27,7 +27,7 @@ public class RemoteView {
     private int position;
     private int points;
     private int phaseAction;        /*useful to know if the player has enhanced action*/
-    private boolean finalFrenzy;
+    private int finalFrenzy;
     private ArrayList<EnemyMark> markPlayerBoard = new ArrayList<>();      //Info useful for Player-board GUI
     private ArrayList<Player> damagePlayerBoard = new ArrayList<>();    //Info useful for Player-board GUI
     private int deathsPlayerBoard;                                      //Info useful for Player-board GUI
@@ -44,6 +44,7 @@ public class RemoteView {
     private WeaponShot weaponShot = new WeaponShot();
     private PowerUpShot powerUpShot = new PowerUpShot();
     private ArrayList<Weapon> usableWeapon = new ArrayList<>();
+    private int typePlayerBoard;
 
     /**
      * Constructor of the class.
@@ -129,7 +130,7 @@ public class RemoteView {
      * @return a boolean that represents in which phase the game is.
      */
 
-    public boolean getFinalFrenzy() {
+    public int getFinalFrenzy() {
         return this.finalFrenzy;
     }
 
@@ -308,7 +309,7 @@ public class RemoteView {
         this.phaseAction = phaseAction;
     }
 
-    private void setFinalFrenzy(boolean finalFrenzy) {
+    private void setFinalFrenzy(int finalFrenzy) {
         this.finalFrenzy = finalFrenzy;
     }
 
@@ -422,6 +423,10 @@ public class RemoteView {
         this.username = username;
     }
 
+    public void setTypePlayerBoard(int typePlayerBoard) {
+        this.typePlayerBoard = typePlayerBoard;
+    }
+
     /* * *   OTHER   * * */
 
     public void notifyNewClient(String newClient) {
@@ -463,6 +468,8 @@ public class RemoteView {
 
         setPhaseAction(virtualView.getPhaseAction());
         setFinalFrenzy(virtualView.getFinalFrenzy());
+        setTypePlayerBoard(virtualView.getTypePlayerBoard());
+
         if (getUsername().equals(virtualView.getUsername())) {
             // private infos
             setNumberOfActions(virtualView.getNumberOfActions());

@@ -175,10 +175,6 @@ public class GUIController implements GUIControllerInterface {
         return this.username;
     }
 
-    public void showrespawn() {
-        this.guiObject.startingDraw();
-    }
-
     @Override
     public void showMessageMovement(String message) throws RemoteException {
         TextArea textArea = guiObject.getTextArea();
@@ -187,6 +183,11 @@ public class GUIController implements GUIControllerInterface {
     }
 
     public void respawnDialog() {
-        Platform.runLater(() -> this.guiObject.startingDraw());
+        Platform.runLater(() -> this.guiObject.startingDraw("Choose one power ups to discard.\nIt determines your spawn location, based on its color."));
+    }
+
+    public int pingClient() {
+        return 13;
+        //System.out.println("Client " +this.username + " connesso");
     }
 }

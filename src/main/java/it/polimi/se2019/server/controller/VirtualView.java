@@ -25,7 +25,7 @@ public class VirtualView implements Serializable {
     private int damage;
     private int points;
     private int phaseAction;
-    private boolean finalFrenzy;
+    private int finalFrenzy;
     private ArrayList<Weapon> weapons = new ArrayList<>();
     private ArrayList<PowerUp> powerUps = new ArrayList<>();
     private Cubes cubes;
@@ -41,6 +41,7 @@ public class VirtualView implements Serializable {
     private ArrayList<Square> reachableSquare = new ArrayList<>();
     private int numberOfActions;
     private ArrayList<Weapon> availableWeapons = new ArrayList<>();
+    private int typePlayerBoard;
 
 
     //COSTRUTTORE
@@ -94,7 +95,7 @@ public class VirtualView implements Serializable {
         return phaseAction;
     }
 
-    public boolean getFinalFrenzy(){
+    public int getFinalFrenzy(){
         return this.finalFrenzy;
     }
 
@@ -146,7 +147,15 @@ public class VirtualView implements Serializable {
         return this.canMove;
     }
 
+    public int getTypePlayerBoard(){
+        return this.typePlayerBoard;
+    }
+
     //SETTER
+
+    public void setClientReference(GUIControllerInterface  clientReference) {
+        this.clientReference = clientReference;
+    }
 
     public void setUsername(String username) {
         this.username = username;
@@ -196,7 +205,7 @@ public class VirtualView implements Serializable {
         this.deathsPlayerBoard = deathsPlayerBoard;
     }
 
-    public void setFinalFrenzy(boolean finalFrenzy){
+    public void setFinalFrenzy(int finalFrenzy){
         this.finalFrenzy = finalFrenzy;
     }
 
@@ -236,6 +245,10 @@ public class VirtualView implements Serializable {
         this.killShotTrack = killShotTrack;
     }
 
+    public void setTypePlayerBoard(int typePlayerBoard) {
+        this.typePlayerBoard = typePlayerBoard;
+    }
+
     //ALTRO
 
     public void updateVirtualView(Player player, Match match) {
@@ -257,6 +270,7 @@ public class VirtualView implements Serializable {
         this.setKillShotTrack(match.getKillShotTrack());
         this.setDeathsPlayerBoard(player.getPlayerBoard().getDeaths());
         this.setNumberOfActions(player.getNumberOfAction());
+        this.setTypePlayerBoard(player.getTypePlayerBoard());
     }
 
 }

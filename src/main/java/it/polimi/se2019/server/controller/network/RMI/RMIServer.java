@@ -27,6 +27,8 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -56,6 +58,10 @@ public class RMIServer extends Server implements RMIServerInterface {
     private ShotController shotController;
 
     private Logger logger = Logger.getAnonymousLogger();
+
+    private Timer initializeMatchTimer = new Timer();
+
+    private int interval = 10;
 
     //Metodi
 
@@ -108,6 +114,8 @@ public class RMIServer extends Server implements RMIServerInterface {
     public synchronized void register(String username, GUIControllerInterface guiController,int mapId) throws RemoteException{
         if (!mapAlreadySelected()) {
             this.createMatch(mapId);
+            this.startingMatchTimer();
+
         }
         //String ipClient = getClientIP(guiController);
         VirtualView virtualView = createVirtualView(guiController);
@@ -136,6 +144,28 @@ public class RMIServer extends Server implements RMIServerInterface {
             }
         }
         return true;
+    }
+
+    public synchronized String checkUsername2(String username) throws Exception {
+        if (match != null) {
+            if (match.getOpenConnection()) {
+                for (Player player : match.getAllPlayers()) {
+                    if(player.getClientName().equals(username)) {
+                        return "AlreadyUsed";
+                    }
+                }
+                return "NotUsed";
+            }
+            else {
+                for (Player player : match.getAllPlayers()) {
+                    if (player.getClientName().equals(username)) {
+                        return "Reconnect";
+                    }
+                }
+                return "CantConnect";
+            }
+        }
+        return "NotUsed";
     }
 
     public ArrayList<Square> reachableSquares(int position, int steps){
@@ -206,9 +236,12 @@ public class RMIServer extends Server implements RMIServerInterface {
     }
 
     public void updateAllClient() throws RemoteException{
+        pingAllClient();
         for (VirtualView virtualView : allVirtualViews) {
-            GUIControllerInterface clientRef = virtualView.getClientReference();
-            clientRef.update(allVirtualViews);
+            if (!this.match.searchPlayerByClientName(virtualView.getUsername()).getSuspended()) {
+                GUIControllerInterface clientRef = virtualView.getClientReference();
+                clientRef.update(allVirtualViews);
+            }
         }
     }
 
@@ -318,18 +351,25 @@ public class RMIServer extends Server implements RMIServerInterface {
     }
 
     public void setActivePlayer(String usernameLastPlayer) {
-        Player lastPlayer = match.searchPlayerByClientName(usernameLastPlayer);
-        int size = match.getAllPlayers().size();
+        ArrayList<Player> notSuspendedPlayers = new ArrayList<>();
+        for (Player player : this.match.getAllPlayers()) {
+            player.setCanMove(false);
+            if (!player.getSuspended())
+                notSuspendedPlayers.add(player);
+        }
+        int size = notSuspendedPlayers.size();
         int index = 0;
-        while(!usernameLastPlayer.equals(match.getAllPlayers().get(index).getClientName())) {
+        while(!usernameLastPlayer.equals(notSuspendedPlayers.get(index).getClientName())) {
             index++;
         }
         if (index == size - 1) {
-            activePlayer = match.getAllPlayers().get(0);
+            activePlayer =notSuspendedPlayers.get(0);
         }
         else {
-            activePlayer = match.getAllPlayers().get(index + 1);
+
+            activePlayer = notSuspendedPlayers.get(index + 1);
         }
+        activePlayer.setCanMove(true);
         System.out.println("Next player is: " + activePlayer.getClientName());
     }
 
@@ -481,7 +521,7 @@ public class RMIServer extends Server implements RMIServerInterface {
 
     }
 
-    public boolean deathPlayer() throws RemoteException {
+    public boolean deathPlayer(String username) throws RemoteException {
         boolean flagDeath = false;
         for (Player player : match.getAllPlayers()) {
             if (player.getPlayerDead()) {
@@ -491,6 +531,9 @@ public class RMIServer extends Server implements RMIServerInterface {
                 player.getPlayerBoard().setDeaths();
                 player.setPhaseAction(0);
             }
+        }
+        if (this.match.getKillShotTrack().size() == 8) {
+            this.enableFinalFrenzy(username);
         }
         updateAllVirtualView();
         updateAllClient();
@@ -519,19 +562,6 @@ public class RMIServer extends Server implements RMIServerInterface {
             if(weaponShot.getWeapon().getType().equals(weapon.getType()))
                 weapon.setLoad(false);
         }
-    }
-
-    private void pingClient() {
-        for (VirtualView virtualView : allVirtualViews) {
-            try {
-                String nameClient = virtualView.getClientReference().ping();
-                System.out.println("Client " + nameClient + "still connected");
-            }
-            catch(RemoteException remException) {
-                System.err.println("Client disconnesso");
-            }
-        }
-        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
     }
 
     public void respawnPlayer() throws  RemoteException{
@@ -563,5 +593,92 @@ public class RMIServer extends Server implements RMIServerInterface {
         } catch (RemoteException e){
             logger.log(Level.INFO,"ToggleAction error");
         }
+    }
+
+    public void  enableFinalFrenzy(String username) {
+        boolean flag = false;
+        for (Player player : match.getAllPlayers()) {
+            if (player.getPlayerBoard().getDamage().isEmpty())
+                player.setTypePlayerBoard(1);
+            if (player.getClientName().equals(username)) {
+                flag = true;
+            }
+            if (flag) {
+                player.setFinalFrenzy(2);
+            }
+            else
+                player.setFinalFrenzy(1);
+        }
+        updateAllVirtualView();
+        try {
+            updateAllClient();
+        }
+        catch(RemoteException remException) {
+            logger.log(Level.INFO, "Errore calling UpdateAllClient method", remException);
+        }
+    }
+
+    public void pingAllClient() {
+        for (VirtualView virtualView : allVirtualViews) {
+            GUIControllerInterface clientRef = virtualView.getClientReference();
+            int attempt = 100;
+            try {
+                attempt = clientRef.pingClient();
+            }
+            catch (RemoteException remException) {
+                this.match.searchPlayerByClientName(virtualView.getUsername()).setSuspended(true);
+            }
+            if (attempt != 13) {
+                this.match.searchPlayerByClientName(virtualView.getUsername()).setSuspended(true);
+            }
+        }
+    }
+
+    public void reconnect(String usernameTyped, GUIControllerInterface guiController) throws RemoteException {
+        for (VirtualView virtualView : allVirtualViews) {
+            if (virtualView.getUsername().equals(usernameTyped)) {
+                this.match.searchPlayerByClientName(usernameTyped).setSuspended(false);
+                virtualView.setClientReference(guiController);
+                this.initAllClient();
+                virtualView.getClientReference().update(allVirtualViews);
+
+                System.out.println("Client " + usernameTyped + " reconnect");
+
+            }
+        }
+
+    }
+
+    public void startingMatchTimer() {
+        Timer startingMatchTimer = new Timer();
+        startingMatchTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                if (match.getAllPlayers().size() == 3) {
+                    initializeMatchTimer();
+                    startingMatchTimer.cancel();
+
+                }
+            }
+        }, 0, 1000);
+    }
+
+    public void initializeMatchTimer() {
+        initializeMatchTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                setInterval();
+
+            }
+        }, 0, 1000);
+    }
+
+    private final int setInterval() {
+        if (interval == 1) {
+            this.match.setOpenConnection(false);
+            System.out.println("Match openConnection: " + this.match.getOpenConnection());
+            initializeMatchTimer.cancel();
+        }
+        return --interval;
     }
 }

@@ -33,10 +33,11 @@ public class Player implements Serializable {
     private Match match;
     private int numberOfAction;
     private ShotController shotController;
-    private boolean finalFrenzy;
+    private int finalFrenzy;
     private int phaseAction;
     private boolean canMove;
     private boolean playerDead;
+    private int typePlayerBoard;
 
     public Player(String clientName, Match match) {
         this.clientName = clientName;
@@ -52,8 +53,9 @@ public class Player implements Serializable {
         this.numberOfAction=2;
         this.playerDead = false;
         this.canMove = false;
-        this.finalFrenzy = false;
+        this.finalFrenzy = 0;       //It will be 0 if final frenzy is disabled, 1 if player will have 1 action, 2 if player will have 2 action
         this.phaseAction = 0;
+        this.typePlayerBoard = 0;
     }
 
     public String getCharacter() {
@@ -92,11 +94,11 @@ public class Player implements Serializable {
         return this.color;
     }
 
-    public boolean getFinalFrenzy(){
+    public int getFinalFrenzy(){
         return this.finalFrenzy;
     }
 
-    public void setFinalFrenzy(boolean finalFrenzy){
+    public void setFinalFrenzy(int finalFrenzy){
         this.finalFrenzy=finalFrenzy;
     }
 
@@ -153,8 +155,8 @@ public class Player implements Serializable {
      * Specify if the player has disconnected from the match
      * @return true if the player has disconnected, false otherwise
      */
-    public boolean isSuspended() {
-        return suspended;
+    public boolean getSuspended() {
+        return this.suspended;
     }
 
     /**
@@ -183,7 +185,12 @@ public class Player implements Serializable {
     }
 
     public void resetNumberOfAction() {
-        this.numberOfAction = 2;
+        if (this.getFinalFrenzy() == 0)
+            this.numberOfAction = 2;
+        if (this.getFinalFrenzy() == 1)
+            this.numberOfAction = 1;
+        if (this.getFinalFrenzy() == 2)
+            this.numberOfAction = 2;
     }
 
     public ShotController getShotController() {
@@ -442,4 +449,17 @@ public class Player implements Serializable {
     public void setPlayerDead(boolean playerDead) {
         this.playerDead = playerDead;
     }
+
+    public void setSuspended(boolean suspended) {
+        this.suspended = suspended;
+    }
+
+    public int getTypePlayerBoard() {
+        return this.typePlayerBoard;
+    }
+
+    public void setTypePlayerBoard(int typePlayerBoard) {
+        this.typePlayerBoard = typePlayerBoard;
+    }
+
 }

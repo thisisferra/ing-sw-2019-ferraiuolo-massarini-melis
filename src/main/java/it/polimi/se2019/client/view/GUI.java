@@ -75,6 +75,7 @@ public class GUI extends Application {
     private static final String ICONS_PATH = "src/main/resources/images/icons/";
     private int mapNumber;
     private Scene scene;
+    private final String firstSpawnText = "Choose one of the two power ups to discard.\\nIt determines your spawn location, based on its color.";
 
 
     @Override
@@ -373,10 +374,10 @@ public class GUI extends Application {
         GridPane.setConstraints(loginButton, 0, 3);
         loginButton.setOnAction(e -> {
             try {
-                 guiController = new GUIController(ipInput.getText(), this);
+                guiController = new GUIController(ipInput.getText(), this);
                 String usernameTyped = nameInput.getText();
-                boolean check = guiController.getRmiStub().checkUsername(usernameTyped);
-                if (!check) {
+                String check = guiController.getRmiStub().checkUsername2(usernameTyped);
+                if (check.equals("AlreadyUsed")) {
                     Label errorLabel = new Label("Selected name already taken, please retry.");
                     errorLabel.setStyle("-fx-text-fill: #ff0000");
                     Button exitButton = new Button("Back");
@@ -396,7 +397,7 @@ public class GUI extends Application {
                     Scene errorScene = new Scene(vBox, 300, 200);
                     window.setScene(errorScene);
                 }
-                else {
+                else if(check.equals("NotUsed")){
 
                     RadioButton mapChoice = (RadioButton) mapSelector.getSelectedToggle();
                     guiController.setUsername(usernameTyped);
@@ -405,6 +406,20 @@ public class GUI extends Application {
                     myRemoteView = guiController.getMyRemoteView();
                     textArea.setText(usernameTyped + "\n" + textArea.getText());
                     setWaitScene();
+                }
+                else if(check.equals("Reconnect")) {
+                    guiController.setUsername(usernameTyped);
+                    this.username = usernameTyped;
+                    guiController.getRmiStub().reconnect(usernameTyped, guiController);
+                    myRemoteView = guiController.getMyRemoteView();
+                    setGameScene();
+                    window.setScene(scene);
+
+                }
+                else if (check.equals("CantConnect")) {
+                    Scene backScene;
+                    backScene = setLoginScene();
+                    window.setScene(backScene);
                 }
             } catch (Exception ex) {
                 logger.log(Level.INFO,"Failed to load login window",ex);
@@ -818,7 +833,7 @@ public class GUI extends Application {
                         try {
                             guiController.getRmiStub().setNewPosition(guiController.getRmiStub().getMatch().searchPlayerByClientName(username).getClientName(), Integer.parseInt(rectangle.getId()));
                             //PROVA OGGETTO GUI
-                            guiController.getRmiStub().notifyAllClientMovement(this.username, Integer.parseInt(rectangle.getId()));
+                            //guiController.getRmiStub().notifyAllClientMovement(this.username, Integer.parseInt(rectangle.getId()));
                             textArea.setText("New position: " + rectangle.getId()+"\n" + textArea.getText());
                             guiController.getRmiStub().useAction(this.username);
                             guiController.getRmiStub().toggleAction(this.username);
@@ -1125,9 +1140,7 @@ public class GUI extends Application {
 
         moveButton.setOnAction(e ->{
                 moveAction(3);
-            }
-
-        );
+            });
         grabButton.setOnAction(e -> {
             if (myRemoteView.getPhaseAction() == 0)
                 moveGrabAction(1);
@@ -1165,7 +1178,7 @@ public class GUI extends Application {
                     if(!reloadableWeapons.isEmpty())
                         reloadAlert();
                     else {
-                        if(guiController.getRmiStub().deathPlayer()) {
+                        if(guiController.getRmiStub().deathPlayer(this.username)) {
                             guiController.getRmiStub().respawnPlayer();
                         }
                         guiController.getRmiStub().restoreMap();
@@ -1230,7 +1243,7 @@ public class GUI extends Application {
         Timeline fiveSecondsWonder = new Timeline(new KeyFrame(Duration.seconds(1), o-> {
             try{
                 if(guiController.getRmiStub().getActivePlayer().equals(username) && firstSpawn){
-                    startingDraw();
+                    startingDraw(firstSpawnText);
                     firstSpawn = !firstSpawn;
                 }
             } catch (Exception exception){
@@ -1393,16 +1406,16 @@ public class GUI extends Application {
     }
 
     //this method can be used for respawn after death (?)
-    public void startingDraw(){
+    public void startingDraw(String message){
         Stage startingDrawWindow = new Stage();
 
-        Label info = new Label("Choose one of the two power ups to discard.\nIt determines your spawn location, based on its color.");
+        Label info = new Label(message);
         info.setStyle(LABEL_STYLE);
         info.setPadding(new Insets (10,10,10,10));
         BorderPane spawnPane = new BorderPane();
         startingDrawWindow.initModality(Modality.APPLICATION_MODAL);
         startingDrawWindow.setAlwaysOnTop(true);
-        startingDrawWindow.setTitle("First spawn");
+        startingDrawWindow.setTitle("Spawn");
 
         borderPane.setTop(info);
         HBox powerUpBox = new HBox();
@@ -1429,7 +1442,7 @@ public class GUI extends Application {
         }
 
         startingDrawWindow.setOnCloseRequest(e->{
-            startingDraw();
+            startingDraw(firstSpawnText);
             startingDrawWindow.close();
         });
         spawnPane.setTop(info);
@@ -1460,7 +1473,7 @@ public class GUI extends Application {
                 ArrayList<Weapon> newReloadableWeapons = guiController.getRmiStub().getReloadableWeapons(this.username);
                 if(!newReloadableWeapons.isEmpty())
                     displayReloadableWeapons();
-                if(guiController.getRmiStub().deathPlayer()) {
+                if(guiController.getRmiStub().deathPlayer(this.username)) {
                     guiController.getRmiStub().respawnPlayer();
                 }
                 reloadAlert.close();
@@ -1473,7 +1486,7 @@ public class GUI extends Application {
 
         noButton.setOnAction( exit -> {
             try{
-                if(guiController.getRmiStub().deathPlayer()) {
+                if(guiController.getRmiStub().deathPlayer(this.username)) {
                     guiController.getRmiStub().respawnPlayer();
                 }
                 guiController.getRmiStub().restoreMap();

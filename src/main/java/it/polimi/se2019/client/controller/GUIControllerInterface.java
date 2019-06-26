@@ -17,4 +17,6 @@ public interface GUIControllerInterface extends Remote {
     void showMessageMovement(String message) throws RemoteException;
 
     void respawnDialog() throws RemoteException;
+
+    int pingClient() throws RemoteException;
 }

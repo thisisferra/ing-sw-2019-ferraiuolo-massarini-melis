@@ -37,6 +37,7 @@ public class Match extends Observable implements Serializable {
     private ArrayList<WeaponSlot> arsenal;
     private ArrayList<String> characterAvailable = new ArrayList<>();
     private ArrayList<Player> playersDead = new ArrayList<>();
+    private boolean openConnection;
 
     public Match(int chosenMap){
         this.chosenMap=chosenMap;
@@ -45,6 +46,7 @@ public class Match extends Observable implements Serializable {
         this.discardedAmmos = new ArrayList<>();
         this.discardedPowerUps = new ArrayList<>();
         this.players = new ArrayList<>();
+        this.openConnection = true;
 
     }
 
@@ -235,5 +237,13 @@ public class Match extends Observable implements Serializable {
 
     public ArrayList<Player> getPlayersDead() {
         return this.playersDead;
+    }
+
+    public void setOpenConnection(boolean openConnection) {
+        this.openConnection = openConnection;
+    }
+
+    public boolean getOpenConnection() {
+        return this.openConnection;
     }
 }

@@ -9,6 +9,7 @@ import it.polimi.se2019.server.model.game.Match;
 import it.polimi.se2019.server.model.map.Square;
 import it.polimi.se2019.server.model.player.Player;
 
+import javax.management.relation.RelationNotFoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -18,6 +19,8 @@ public interface RMIServerInterface extends Remote {
 
 
     boolean checkUsername(String username) throws Exception;
+
+    String checkUsername2(String username) throws Exception;
 
     void register(String username, GUIControllerInterface guiController,int mapId) throws RemoteException;
 
@@ -71,7 +74,7 @@ public interface RMIServerInterface extends Remote {
 
     void usePowerUp(String username, int index, PowerUpShot powerUpShot) throws RemoteException;
 
-    boolean deathPlayer() throws RemoteException;
+    boolean deathPlayer(String username) throws RemoteException;
 
     void respawnPlayer() throws RemoteException;
 
@@ -80,4 +83,6 @@ public interface RMIServerInterface extends Remote {
     void toggleAction(String username) throws RemoteException;
 
     void payCubes(String username,int reds,int yellows,int blues) throws RemoteException;
+
+    void reconnect(String usernameTyped, GUIControllerInterface guiController) throws RemoteException;
 }
