@@ -29,6 +29,7 @@ import javafx.util.Duration;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.lang.annotation.Target;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -837,7 +838,7 @@ public class GUI extends Application {
                             textArea.setText("New position: " + rectangle.getId()+"\n" + textArea.getText());
                             guiController.getRmiStub().useAction(this.username);
                             guiController.getRmiStub().toggleAction(this.username);
-                            restoreSquares();
+                            updateAllGUI();
                         } catch (Exception exc) {
                             logger.log(Level.INFO,"setMovementSquare() Error",exc);
                         }
@@ -887,10 +888,7 @@ public class GUI extends Application {
                             }
                             guiController.getRmiStub().useAction(this.username);
                             guiController.getRmiStub().toggleAction(this.username);
-                            setCubes();
-                            setUserInfos();
-                            setFigures();
-                            restoreSquares();
+                            updateAllGUI();
                         } catch (Exception exc) {
                             logger.log(Level.INFO,"setMoveGrabSquares() Error",exc);
                         }
@@ -2042,6 +2040,7 @@ public class GUI extends Application {
                             guiController.getRmiStub().useAction(this.username);
                             guiController.getRmiStub().toggleAction(this.username);
                             restoreSquares();
+                            updateAllGUI();
                         } catch (Exception exc) {
                             logger.log(Level.INFO,"setMovementSquare() Error",exc);
                         }

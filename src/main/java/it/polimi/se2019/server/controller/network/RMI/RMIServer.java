@@ -586,7 +586,6 @@ public class RMIServer extends Server implements RMIServerInterface {
 
     public void toggleAction(String username){
         match.searchPlayerByClientName(username).setCanMove(!match.searchPlayerByClientName(username).getCanMove());
-        updateAllVirtualView();
         try{
             updateAllVirtualView();
             updateAllClient();
