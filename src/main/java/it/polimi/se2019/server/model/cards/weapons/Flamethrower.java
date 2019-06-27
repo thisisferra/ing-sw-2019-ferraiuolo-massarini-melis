@@ -12,22 +12,55 @@ import java.util.ArrayList;
 
 public class Flamethrower extends AbstractWeapon {
     public void applyEffect(WeaponShot weaponShot){
-        MovementChecker m1;
+        Square[] squares = weaponShot.getDamagingPlayer().getMatch().getMap().getAllSquare();
+        ArrayList<Player> players = weaponShot.getDamagingPlayer().getMatch().getAllPlayers();
+        int orientation = weaponShot.getTargetPlayer().get(0).getPosition()-weaponShot.getDamagingPlayer().getPosition();
+
         if(weaponShot.getNameEffect().equals("Optional1")){
             weaponShot.getTargetPlayer().get(0).getPlayerBoard().dealDamage(weaponShot.getDamagingPlayer(),1);
-            weaponShot.getTargetPlayer().get(1).getPlayerBoard().dealDamage(weaponShot.getDamagingPlayer(),1);
         }
         else if(weaponShot.getNameEffect().equals("Optional2")){
-            for(Player target: weaponShot.getTargetPlayer()){
-                target.getPlayerBoard().dealDamage(weaponShot.getDamagingPlayer(),1);
+            for(Player player : players){
+                if(player.getPosition() == weaponShot.getTargetPlayer().get(0).getPosition())
+                    player.getPlayerBoard().dealDamage(weaponShot.getDamagingPlayer(),2);
             }
-            m1 = new MovementChecker(weaponShot.getDamagingPlayer().getMatch().getMap().getAllSquare(),1, weaponShot.getDamagingPlayer().getPosition());
-            ArrayList<Square> reachableSquares = m1.getReachableSquares();
-            for(Player player : weaponShot.getTargetPlayer()){
-                for(Square square : reachableSquares){
-                    if(player.getPosition() == square.getPosition())
-                        player.getPlayerBoard().dealDamage(weaponShot.getDamagingPlayer(),1);
-                }
+        }
+
+        switch(orientation){
+            case 1 :{
+                if(squares[weaponShot.getTargetPlayer().get(0).getPosition()].getEast()!= -1)
+                    for(Player player : players)
+                        if(player.getPosition() == squares[weaponShot.getTargetPlayer().get(0).getPosition()].getEast())
+                            player.getPlayerBoard().dealDamage(weaponShot.getDamagingPlayer(),1);
+
+                break;
+            }
+
+            case -1 :{
+                weaponShot.getTargetPlayer().get(0).getPlayerBoard().dealDamage(weaponShot.getDamagingPlayer(),1);
+                if(squares[weaponShot.getTargetPlayer().get(0).getPosition()].getWest()!= -1)
+                    for(Player player : players)
+                        if(player.getPosition() == squares[weaponShot.getTargetPlayer().get(0).getPosition()].getWest())
+                            player.getPlayerBoard().dealDamage(weaponShot.getDamagingPlayer(),1);
+                break;
+            }
+
+            case -4 :{
+                weaponShot.getTargetPlayer().get(0).getPlayerBoard().dealDamage(weaponShot.getDamagingPlayer(),1);
+                if(squares[weaponShot.getTargetPlayer().get(0).getPosition()].getNorth()!= -1)
+                    for(Player player : players)
+                        if(player.getPosition() == squares[weaponShot.getTargetPlayer().get(0).getPosition()].getNorth())
+                            player.getPlayerBoard().dealDamage(weaponShot.getDamagingPlayer(),1);
+                break;
+            }
+
+            case 4 :{
+                weaponShot.getTargetPlayer().get(0).getPlayerBoard().dealDamage(weaponShot.getDamagingPlayer(),1);
+                if(squares[weaponShot.getTargetPlayer().get(0).getPosition()].getSouth()!= -1)
+                    for(Player player : players)
+                        if(player.getPosition() == squares[weaponShot.getTargetPlayer().get(0).getPosition()].getSouth())
+                            player.getPlayerBoard().dealDamage(weaponShot.getDamagingPlayer(),1);
+                break;
             }
         }
         this.setLoad(false);

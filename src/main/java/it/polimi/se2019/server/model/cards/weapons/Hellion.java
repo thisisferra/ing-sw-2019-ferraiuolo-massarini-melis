@@ -9,14 +9,18 @@ public class Hellion extends AbstractWeapon {
     public void applyEffect(WeaponShot weaponShot){
         if(weaponShot.getNameEffect().equals("Optional1")){
             weaponShot.getTargetPlayer().get(0).getPlayerBoard().dealDamage(weaponShot.getDamagingPlayer(),1);
-            for(Player target : weaponShot.getTargetPlayer()){
-                target.getPlayerBoard().dealMark(weaponShot.getDamagingPlayer(),1);
+            for(Player target : weaponShot.getDamagingPlayer().getMatch().getAllPlayers()) {
+                if (target.getPosition() == weaponShot.getDamagingPlayer().getPosition()){
+                    target.getPlayerBoard().dealMark(weaponShot.getDamagingPlayer(),1);
+                }
             }
         }
         else if(weaponShot.getNameEffect().equals("Optional2")){
             weaponShot.getTargetPlayer().get(0).getPlayerBoard().dealDamage(weaponShot.getDamagingPlayer(),1);
-            for(Player target : weaponShot.getTargetPlayer()){
-                target.getPlayerBoard().dealMark(weaponShot.getDamagingPlayer(),2);
+            for(Player target : weaponShot.getDamagingPlayer().getMatch().getAllPlayers()) {
+                if (target.getPosition() == weaponShot.getDamagingPlayer().getPosition()){
+                    target.getPlayerBoard().dealMark(weaponShot.getDamagingPlayer(),2);
+                }
             }
         }
         this.setLoad(false);

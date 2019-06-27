@@ -350,10 +350,10 @@ public class RMIServer extends Server implements RMIServerInterface {
         this.updateAllClient();
     }
 
-    public void setActivePlayer(String usernameLastPlayer) {
+    public void setActivePlayer(String usernameLastPlayer) throws RemoteException{
         ArrayList<Player> notSuspendedPlayers = new ArrayList<>();
         for (Player player : this.match.getAllPlayers()) {
-            player.setCanMove(false);
+            player.setCanMove(true);
             if (!player.getSuspended())
                 notSuspendedPlayers.add(player);
         }
@@ -369,9 +369,11 @@ public class RMIServer extends Server implements RMIServerInterface {
 
             activePlayer = notSuspendedPlayers.get(index + 1);
         }
-        activePlayer.setCanMove(true);
+        activePlayer.setCanMove(false);
         System.out.println("Next player is: " + activePlayer.getClientName());
-    }
+        updateAllVirtualView();
+        updateAllClient();
+}
 
     public void setSpecificActivePlayer(Player player) {
         this.activePlayer = player;
@@ -414,7 +416,7 @@ public class RMIServer extends Server implements RMIServerInterface {
         System.out.println("Targets in newInfoShot" + newWeaponShot.getWeapon());
         newWeaponShot.setDamagingPlayer(match.searchPlayerByClientName(weaponShot.getDamagingPlayer().getClientName()));
         System.out.println("Targets in newInfoShot" + newWeaponShot.getDamagingPlayer());
-        //newInfoShot.setNewPosition(infoShot.getNewPosition());
+        newWeaponShot.setNewPosition(weaponShot.getNewPosition());
         weaponShot.getWeapon().applyEffect(newWeaponShot);
         unloadWeapon(newWeaponShot);
         for(int i = 0; i< newWeaponShot.getWeapon().getEffect().length; i++){
@@ -424,8 +426,6 @@ public class RMIServer extends Server implements RMIServerInterface {
                             newWeaponShot.getWeapon().getEffect()[i].getExtraCost()
                     );
             }
-
-
         }
         updateAllVirtualView();
         updateAllClient();

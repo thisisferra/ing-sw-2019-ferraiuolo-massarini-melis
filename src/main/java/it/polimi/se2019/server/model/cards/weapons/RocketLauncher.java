@@ -18,7 +18,7 @@ public class RocketLauncher extends AbstractWeapon {
             weaponShot.getTargetPlayer().get(0).setPosition(weaponShot.getNewPosition());
             ArrayList<Player> players = weaponShot.getDamagingPlayer().getMatch().getAllPlayers();
             for(Player target : players)
-                if(target.getPosition() == weaponShot.getNewPosition())
+                if(target.getPosition() == weaponShot.getNewPosition() && !target.getClientName().equals(weaponShot.getDamagingPlayer().getClientName()))
                     target.getPlayerBoard().dealDamage(weaponShot.getDamagingPlayer(),1);
         }
         this.setLoad(false);

@@ -8,13 +8,17 @@ import it.polimi.se2019.server.model.player.Player;
 public class Electroscythe extends AbstractWeapon {
     public void applyEffect(WeaponShot weaponShot){
         if(weaponShot.getNameEffect().equals("Optional1")){
-            for(Player target : weaponShot.getTargetPlayer()){
-                target.getPlayerBoard().dealDamage(weaponShot.getDamagingPlayer(),1);
+            for(Player target : weaponShot.getDamagingPlayer().getMatch().getAllPlayers()){
+                if(target.getPosition() == weaponShot.getDamagingPlayer().getPosition()  &&
+                        !target.equals(weaponShot.getDamagingPlayer()))
+                    target.getPlayerBoard().dealDamage(weaponShot.getDamagingPlayer(),1);
             }
         }
         else if(weaponShot.getNameEffect().equals("Optional2")){
-            for(Player target : weaponShot.getTargetPlayer()){
-                target.getPlayerBoard().dealDamage(weaponShot.getDamagingPlayer(),2);
+            for(Player target : weaponShot.getDamagingPlayer().getMatch().getAllPlayers()) {
+                if (target.getPosition() == weaponShot.getDamagingPlayer().getPosition() &&
+                        !target.equals(weaponShot.getDamagingPlayer()))
+                    target.getPlayerBoard().dealDamage(weaponShot.getDamagingPlayer(), 2);
             }
         }
         this.setLoad(false);

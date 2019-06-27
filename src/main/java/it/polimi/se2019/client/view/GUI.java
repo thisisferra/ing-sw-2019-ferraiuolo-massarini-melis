@@ -76,7 +76,7 @@ public class GUI extends Application {
     private static final String ICONS_PATH = "src/main/resources/images/icons/";
     private int mapNumber;
     private Scene scene;
-    private final String firstSpawnText = "Choose one of the two power ups to discard.\\nIt determines your spawn location, based on its color.";
+    private static final String firstSpawnText = "Choose one of the two power ups to discard.\nIt determines your spawn location, based on its color.";
 
 
     @Override
@@ -839,6 +839,7 @@ public class GUI extends Application {
                             guiController.getRmiStub().useAction(this.username);
                             guiController.getRmiStub().toggleAction(this.username);
                             updateAllGUI();
+                            restoreSquares();
                         } catch (Exception exc) {
                             logger.log(Level.INFO,"setMovementSquare() Error",exc);
                         }
@@ -889,6 +890,7 @@ public class GUI extends Application {
                             guiController.getRmiStub().useAction(this.username);
                             guiController.getRmiStub().toggleAction(this.username);
                             updateAllGUI();
+                            restoreSquares();
                         } catch (Exception exc) {
                             logger.log(Level.INFO,"setMoveGrabSquares() Error",exc);
                         }
@@ -1403,7 +1405,6 @@ public class GUI extends Application {
         displayWindow.showAndWait();
     }
 
-    //this method can be used for respawn after death (?)
     public void startingDraw(String message){
         Stage startingDrawWindow = new Stage();
 
@@ -1739,21 +1740,19 @@ public class GUI extends Application {
                     if(justHitTarget!= null)
                         weaponShot.getTargetablePlayer().remove(justHitTarget);
 
-
-                    if(currentEffect.getMaxMovementTarget()>0) {
-                        System.out.println("MaxMovement: " + currentEffect.getMaxMovementTarget());
-                        setPushSquares(weaponShot);
-                        weaponTargetWindow.close();
-                    }
-
                     currentEffect.setMaxTarget(currentEffect.getMaxTarget()-1);
                     if(currentEffect.getMaxTarget()>0 && !weaponShot.getTargetablePlayer().isEmpty()){
                         displayTargets(weaponShot);
                         weaponTargetWindow.close();
                     }
 
-                    else{
+                    if(currentEffect.getMaxMovementTarget()>0) {
+                        System.out.println("MaxMovement: " + currentEffect.getMaxMovementTarget());
+                        setPushSquares(weaponShot);
+                        weaponTargetWindow.close();
+                    } else {
                         guiController.getRmiStub().applyEffectWeapon(weaponShot);
+                        guiController.getRmiStub().useAction(this.username);
                         weaponTargetWindow.close();
                     }
                 }catch (Exception err){
@@ -1811,8 +1810,6 @@ public class GUI extends Application {
     }
 
     private void teleporterAction(int index) throws RemoteException{
-        guiController.getRmiStub().giftAction(this.username);
-        moveAction(5);
         try{
             PowerUpShot powerUpShot= new PowerUpShot();
             Square[] walkableSquares = guiController.getRmiStub().getAllSquares();
@@ -2037,7 +2034,6 @@ public class GUI extends Application {
                             ArrayList<Weapon> newUsableWeapons = guiController.getRmiStub().verifyWeapons(this.username);
                             displayUsableWeapons(newUsableWeapons);
                             textArea.setText("New position: " + rectangle.getId()+"\n" + textArea.getText());
-                            guiController.getRmiStub().useAction(this.username);
                             guiController.getRmiStub().toggleAction(this.username);
                             restoreSquares();
                             updateAllGUI();
@@ -2095,6 +2091,7 @@ public class GUI extends Application {
                     rectangle.setOnMouseClicked(o -> {
                         try {
                             weaponShot.setNewPosition(Integer.parseInt(rectangle.getId()));
+                            System.out.println("Nuova Posizione: " + weaponShot.getNewPosition());
                             guiController.getRmiStub().applyEffectWeapon(weaponShot);
                             restoreSquares();
                         } catch (Exception exc) {

@@ -57,7 +57,7 @@
            "yellows": 1,
            "blues": 0
          },
-         "maxTarget": 4,
+         "maxTarget": 1,
          "peekingRequired": true,
          "typeVisibility": "CanSeeDistance",
          "cardinalDirection": false,
