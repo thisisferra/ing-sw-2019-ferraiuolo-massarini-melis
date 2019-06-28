@@ -52,7 +52,6 @@ public class Match extends Observable implements Serializable {
 
     public void initializeMatch(){
         this.initGameField();
-        //this.initPlayers();
         this.initCabinets();
         this.initializeCharacterAvailable();
     }

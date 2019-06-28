@@ -79,6 +79,11 @@ public class WeaponsTest {
         p3 = new Player("Alessandro",match);
         p4 = new Player("Matteo",match);
         p5 = new Player("Bruno",match);
+        match.getAllPlayers().add(p1);
+        match.getAllPlayers().add(p2);
+        match.getAllPlayers().add(p3);
+        match.getAllPlayers().add(p4);
+        match.getAllPlayers().add(p5);
     }
 
     @Test
@@ -100,7 +105,9 @@ public class WeaponsTest {
     @Test
     public void testElectroscythe(){
         enemyPlayers.add(p2);
-        enemyPlayers.add(p3);
+        p1.setPosition(1);
+        p2.setPosition(1);
+        p3.setPosition(1);
         weaponShot = new WeaponShot(electroscythe,"Optional1");
         weaponShot.setTargetPlayers(enemyPlayers);
         weaponShot.setDamagingPlayer(p1);
@@ -164,9 +171,11 @@ public class WeaponsTest {
         weaponShot.setTargetPlayers(enemyPlayers);
         weaponShot.setDamagingPlayer(p1);
         weaponShot.setNewPosition(5);
+        p1.setPosition(4);
+        p2.setPosition(5);
         tractorBeam.applyEffect(weaponShot); //p2 1 damage, pos 5
         Assert.assertEquals(1,p2.getPlayerBoard().getEnemyDamages().get(0).getDamage());
-        Assert.assertEquals(5,p2.getPosition());
+        Assert.assertEquals(0,p2.getPosition());
         weaponShot.setNameEffect("Optional2");
         tractorBeam.applyEffect(weaponShot);  //p2 4 damage, p2 pos == p1 pos
         Assert.assertEquals(4,p2.getPlayerBoard().getEnemyDamages().get(0).getDamage());
@@ -229,9 +238,12 @@ public class WeaponsTest {
 
     @Test
     public void testFurnace(){
+        p1.setPosition(4);
+        p2.setPosition(5);
         enemyPlayers.add(p2);
-        enemyPlayers.add(p3);
-        enemyPlayers.add(p4);
+        p3.setPosition(p2.getPosition());
+        p4.setPosition(p2.getPosition());
+        p5.setPosition(p2.getPosition());
         weaponShot = new WeaponShot(furnace,"Optional1");
         weaponShot.setNameEffect("Optional1");
         weaponShot.setTargetPlayers(enemyPlayers);
@@ -284,20 +296,20 @@ public class WeaponsTest {
         p4.setPosition(7);
         p1.setPosition(5);
         enemyPlayers.add(p2);
-        enemyPlayers.add(p3);
+
         weaponShot = new WeaponShot(flamethrower,"Optional1");
         weaponShot.setDamagingPlayer(p1);
         weaponShot.setTargetPlayers(enemyPlayers);
-        flamethrower.applyEffect(weaponShot); //p2, p3 1 damage
+        flamethrower.applyEffect(weaponShot); //p2, p3 ,p4 1 damage
         Assert.assertEquals(1,p2.getPlayerBoard().getEnemyDamages().get(0).getDamage());
         Assert.assertEquals(1,p3.getPlayerBoard().getEnemyDamages().get(0).getDamage());
-        enemyPlayers.add(p4);
+        Assert.assertEquals(1,p4.getPlayerBoard().getEnemyDamages().get(0).getDamage());
         weaponShot.setTargetPlayers(enemyPlayers);
         weaponShot.setNameEffect("Optional2");
-        flamethrower.applyEffect(weaponShot);  //p2 3 damage p3 2 damage p4 1 damage
+        flamethrower.applyEffect(weaponShot);  //p2 3 damage p3 2 damage p4 2 damage
         Assert.assertEquals(3,p2.getPlayerBoard().getEnemyDamages().get(0).getDamage());
         Assert.assertEquals(2,p3.getPlayerBoard().getEnemyDamages().get(0).getDamage());
-        Assert.assertEquals(1,p4.getPlayerBoard().getEnemyDamages().get(0).getDamage());
+        Assert.assertEquals(2,p4.getPlayerBoard().getEnemyDamages().get(0).getDamage());
     }
 
     @Test
@@ -350,6 +362,9 @@ public class WeaponsTest {
     @Test
     public void testPowerGlove(){
         enemyPlayers.add(p2);
+        p2.setPosition(5);
+        p3.setPosition(6);
+        p4.setPosition(7);
         weaponShot = new WeaponShot(powerGlove,"Optional1");
         weaponShot.setTargetPlayers(enemyPlayers);
         weaponShot.setDamagingPlayer(p1);
@@ -358,13 +373,13 @@ public class WeaponsTest {
         Assert.assertEquals(2,p2.getPlayerBoard().getEnemyMarks().get(0).getMarks());
         Assert.assertEquals(p1.getPosition(),p2.getPosition());
         weaponShot.setNameEffect("Optional2");
+        enemyPlayers.clear();
         enemyPlayers.add(p3);
         weaponShot.setTargetPlayers(enemyPlayers);
-        powerGlove.applyEffect(weaponShot);  //p2 5 damage, p3 2 damage, pos. p1 == pos p3
-        Assert.assertEquals(5,p2.getPlayerBoard().getEnemyDamages().get(0).getDamage());
-        Assert.assertTrue(p2.getPlayerBoard().getEnemyMarks().isEmpty());
+        powerGlove.applyEffect(weaponShot);  // p3 3 damage ,p4 2 damage, pos. p1 == pos p4
         Assert.assertEquals(2,p3.getPlayerBoard().getEnemyDamages().get(0).getDamage());
-        Assert.assertEquals(p1.getPosition(),p3.getPosition());
+        Assert.assertEquals(2,p4.getPlayerBoard().getEnemyDamages().get(0).getDamage());
+        Assert.assertEquals(p1.getPosition(),p4.getPosition());
     }
 
     @Test

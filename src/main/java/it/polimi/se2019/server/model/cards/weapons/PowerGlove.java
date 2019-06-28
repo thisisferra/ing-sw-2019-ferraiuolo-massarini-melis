@@ -12,7 +12,7 @@ public class PowerGlove extends AbstractWeapon {
     public void applyEffect(WeaponShot weaponShot){
         Square[] squares = weaponShot.getDamagingPlayer().getMatch().getMap().getAllSquare();
         ArrayList<Player> players = weaponShot.getDamagingPlayer().getMatch().getAllPlayers();
-        int orientation = weaponShot.getDamagingPlayer().getPosition()-weaponShot.getTargetPlayer().get(0).getPosition();
+        int orientation = weaponShot.getTargetPlayer().get(0).getPosition()-weaponShot.getDamagingPlayer().getPosition();
 
         if(weaponShot.getNameEffect().equals("Optional1")){
             weaponShot.getTargetPlayer().get(0).getPlayerBoard().dealDamage(weaponShot.getDamagingPlayer(),1);
@@ -44,7 +44,7 @@ public class PowerGlove extends AbstractWeapon {
                     break;
                 }
 
-                case 4 :{
+                case -4 :{
                     weaponShot.getTargetPlayer().get(0).getPlayerBoard().dealDamage(weaponShot.getDamagingPlayer(),1);
                     if(squares[weaponShot.getTargetPlayer().get(0).getPosition()].getNorth()!= -1)
                         for(Player player : players)
@@ -55,7 +55,7 @@ public class PowerGlove extends AbstractWeapon {
                     break;
                 }
 
-                case -4 :{
+                case 4 :{
                     weaponShot.getTargetPlayer().get(0).getPlayerBoard().dealDamage(weaponShot.getDamagingPlayer(),1);
                     if(squares[weaponShot.getTargetPlayer().get(0).getPosition()].getSouth()!= -1)
                         for(Player player : players)

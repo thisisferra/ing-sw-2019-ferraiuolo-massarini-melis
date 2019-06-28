@@ -1,5 +1,6 @@
 package it.polimi.se2019.server.controller;
 
+import it.polimi.se2019.server.model.cards.Shot;
 import it.polimi.se2019.server.model.cards.weapons.Weapon;
 import it.polimi.se2019.server.model.player.Player;
 
@@ -14,14 +15,18 @@ public class WeaponShot implements Serializable {
     private ArrayList<Player> targetablePlayer = new ArrayList<>();      //Other players I can view from my position
     private ArrayList<Player> targetPlayers = new ArrayList<>();        //ArrayLists of player i want to damage
     private ArrayList<Player> alreadyTarget = new ArrayList<>();        //Player that in my round I've already hit
+    private ArrayList<Player> northTargets = new ArrayList<>();
+    private ArrayList<Player> eastTargets = new ArrayList<>();
+    private ArrayList<Player> southTargets = new ArrayList<>();
+    private ArrayList<Player> westTargets = new ArrayList<>();
     private String cardinalDirection;                                           //String that represent the cardinal direction in effects that pull/push enemy or player have to move
     private int numberOfMoves;                                                  //Integer that represents th number of movement
     private int newPosition;
+    private Shot chosenEffect;
 
     public WeaponShot(Weapon weapon, String nameEffect) {
         this.weapon = weapon;
         setNameEffect(nameEffect);
-
     }
 
     public WeaponShot() {
@@ -66,7 +71,40 @@ public class WeaponShot implements Serializable {
         return this.newPosition;
     }
 
+    public Shot getChosenEffect(){
+        return  this.chosenEffect;
+    }
+
+    public ArrayList<Player> getNorthTargets(){
+        return this.northTargets;
+    }
+
+    public ArrayList<Player> getEastTargets(){
+        return this.eastTargets;
+    }
+
+    public ArrayList<Player> getSouthTargets(){
+        return this.southTargets;
+    }
+
+    public ArrayList<Player> getWestTargets(){
+        return this.westTargets;
+    }
+
     /* * *   SETTERS   * * */
+
+    public void setNorthTargets(ArrayList<Player> northTargets){
+        this.northTargets = northTargets;
+    }
+    public void setEastTargets(ArrayList<Player> eastTargets){
+        this.eastTargets = eastTargets;
+    }
+    public void setSouthTargets(ArrayList<Player> southTargets){
+        this.southTargets = southTargets;
+    }
+    public void setWestTargets(ArrayList<Player> westTargets){
+        this.westTargets = westTargets;
+    }
 
     public void setWeapon(Weapon weapon) {
         this.weapon = weapon;
@@ -102,6 +140,10 @@ public class WeaponShot implements Serializable {
 
     public void setNewPosition(int newPosition) {
         this.newPosition = newPosition;
+    }
+
+    public void setChosenEffect(Shot chosenEffect){
+        this.chosenEffect = chosenEffect;
     }
 
     @Override

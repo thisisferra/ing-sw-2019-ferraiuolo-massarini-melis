@@ -1671,11 +1671,15 @@ public class GUI extends Application {
         confirmButton.setStyle(BUTTON_STYLE);
         comboBox.setPromptText("Select effect");
         comboBox.setPadding(new Insets(10,10,10,10));
-
         confirmButton.setOnAction(e-> {
             for(WeaponShot weaponShot : chosenWeapon.getWeaponShots()){
-                if(weaponShot.getNameEffect().equals(comboBox.getValue()))
-                    displayTargets(weaponShot);
+                if(weaponShot.getNameEffect().equals(comboBox.getValue())) {
+                    if(weaponShot.getChosenEffect().getTypeVisibility().equals("Cardinal2"))
+                        displayOrientationChoice(weaponShot);
+                    else
+                        displayTargets(weaponShot);
+
+                }
             }
 
             availableEffectsWindow.close();
@@ -1741,12 +1745,11 @@ public class GUI extends Application {
                         weaponShot.getTargetablePlayer().remove(justHitTarget);
 
                     currentEffect.setMaxTarget(currentEffect.getMaxTarget()-1);
+
                     if(currentEffect.getMaxTarget()>0 && !weaponShot.getTargetablePlayer().isEmpty()){
                         displayTargets(weaponShot);
                         weaponTargetWindow.close();
-                    }
-
-                    if(currentEffect.getMaxMovementTarget()>0) {
+                    } else if(currentEffect.getMaxMovementTarget()>0) {
                         System.out.println("MaxMovement: " + currentEffect.getMaxMovementTarget());
                         setPushSquares(weaponShot);
                         weaponTargetWindow.close();
@@ -2105,6 +2108,79 @@ public class GUI extends Application {
                 }
             }
         }
+    }
+
+    private void displayOrientationChoice(WeaponShot weaponsShot){
+        Stage availableEffectsWindow = new Stage();
+        ComboBox comboBox = new ComboBox();
+        BorderPane availableEffectPane = new BorderPane();
+        availableEffectPane.setStyle(BACKGROUND_STYLE);
+        String effect;
+
+        if(!weaponsShot.getNorthTargets().isEmpty())
+            comboBox.getItems().add("North");
+        if(!weaponsShot.getEastTargets().isEmpty())
+            comboBox.getItems().add("East");
+        if(!weaponsShot.getSouthTargets().isEmpty())
+            comboBox.getItems().add("South");
+        if(!weaponsShot.getWestTargets().isEmpty())
+            comboBox.getItems().add("West");
+
+        Label info = new Label("Choose a direction");
+        info.setStyle(LABEL_STYLE);
+
+        Button confirmButton = new Button("Confirm");
+        confirmButton.setStyle(BUTTON_STYLE);
+        comboBox.setPromptText("Select effect");
+        comboBox.setPadding(new Insets(10,10,10,10));
+
+        confirmButton.setOnAction(e-> {
+            switch((String) comboBox.getValue()){
+                case "North" : {
+                    weaponsShot.setTargetablePlayer(weaponsShot.getNorthTargets());
+                    displayTargets(weaponsShot);
+                    availableEffectsWindow.close();
+                    break;
+                }
+
+                case "East" : {
+                    weaponsShot.setTargetablePlayer(weaponsShot.getEastTargets());
+                    displayTargets(weaponsShot);
+                    availableEffectsWindow.close();
+                    break;
+                }
+
+                case "South" : {
+                    weaponsShot.setTargetablePlayer(weaponsShot.getSouthTargets());
+                    displayTargets(weaponsShot);
+                    availableEffectsWindow.close();
+                    break;
+                }
+
+                case "West" : {
+                    weaponsShot.setTargetablePlayer(weaponsShot.getWestTargets());
+                    displayTargets(weaponsShot);
+                    availableEffectsWindow.close();
+                    break;
+                }
+            }
+        });
+
+        availableEffectsWindow.initModality(Modality.APPLICATION_MODAL);
+        availableEffectPane.setCenter(comboBox);
+        availableEffectPane.setAlignment(comboBox,Pos.CENTER);
+        availableEffectPane.setStyle(BACKGROUND_STYLE);
+        availableEffectPane.setTop(info);
+        availableEffectPane.setBottom(confirmButton);
+        availableEffectPane.setAlignment(confirmButton,Pos.CENTER);
+        availableEffectPane.setAlignment(info,Pos.TOP_CENTER);
+
+        Scene usableScene = new Scene(availableEffectPane);
+        availableEffectsWindow.setScene(usableScene);
+        availableEffectsWindow.setWidth(300);
+        availableEffectsWindow.setHeight(200);
+        availableEffectsWindow.show();
+
     }
 
 }

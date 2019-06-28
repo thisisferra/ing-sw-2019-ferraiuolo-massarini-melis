@@ -108,7 +108,6 @@ public class Player implements Serializable {
 
     public void setCanMove(boolean canMove){
         this.canMove=canMove;
-        System.out.println("Player setcanmove "+this.canMove);
     }
 
     /**

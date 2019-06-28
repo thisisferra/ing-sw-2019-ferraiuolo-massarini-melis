@@ -8,11 +8,11 @@ import org.junit.Test;
 
 public class PlayerTest {
 
-    Match m1;
-    Player p1;
-    Player p2;
-    Player p3;
-    Player p4;
+    private Match m1;
+    private Player p1;
+    private Player p2;
+    private Player p3;
+    private Player p4;
 
 
     @Before
@@ -24,35 +24,34 @@ public class PlayerTest {
         p2 = new Player("Mattia", m1);
         p3 = new Player("Ferra", m1);
         p4 = new Player("Matteo", m1);
-
+        p1.setColor("blue");
+        p2.setColor("green");
+        p3.setColor("grey");
+        p4.setColor("yellow");
 
     }
 
 
     @Test
-    public void getClientName() {
+    public void testGetClientName() {
         p1.setClientName("thisisferra");
         Assert.assertEquals("thisisferra", p1.getClientName());
     }
 
     @Test
-    public void setClientName() {
+    public void testSetClientName() {
         p1.setClientName("thisisferra");
         Assert.assertEquals("thisisferra", p1.getClientName());
         Assert.assertNotEquals("merklind", p1.getClientName());
     }
 
-    /*
     @Test
     public void testGetColor() {
-        Assert.assertTrue(p1.getColor().equals("red"));
-        Assert.assertFalse(p1.getColor() .equals("red"));
-        Assert.assertTrue(p2.getColor() .equals("yellow"));
-        Assert.assertFalse(p2.getColor() .equals("yellow"));
-        Assert.assertTrue(p3.getColor() .equals("blue"));
-        Assert.assertFalse(p3.getColor() .equals("blue"));
-        }
-     */
+        Assert.assertEquals("blue",p1.getColor());
+        Assert.assertEquals("green",p2.getColor());
+        Assert.assertEquals("grey",p3.getColor());
+        Assert.assertEquals("yellow",p4.getColor());
+    }
 
     @Test
     public void testGetPosition() {
@@ -76,6 +75,47 @@ public class PlayerTest {
         Assert.assertEquals(colorPowerUp, p1.getHand().getPowerUps().get(0).getColor());
         Assert.assertEquals(1, p1.getHand().getPowerUps().size());
 
+    }
+
+    @Test
+    public void testCanMove() {
+        Assert.assertEquals(false,p1.getCanMove());
+        Assert.assertEquals(false,p2.getCanMove());
+        Assert.assertEquals(false,p3.getCanMove());
+        Assert.assertEquals(false,p4.getCanMove());
+        p1.setCanMove(true);
+        Assert.assertEquals(true,p1.getCanMove());
+        p1.setCanMove(false);
+        Assert.assertEquals(false,p1.getCanMove());
+
+    }
+
+    @Test
+    public void testFinalFrenzy(){
+        Assert.assertEquals(0,p1.getFinalFrenzy());
+        Assert.assertEquals(0,p2.getFinalFrenzy());
+        Assert.assertEquals(0,p3.getFinalFrenzy());
+        Assert.assertEquals(0,p4.getFinalFrenzy());
+
+        p1.setFinalFrenzy(1);
+        p2.setFinalFrenzy(1);
+        p3.setFinalFrenzy(1);
+        p4.setFinalFrenzy(1);
+
+        Assert.assertEquals(1,p1.getFinalFrenzy());
+        Assert.assertEquals(1,p2.getFinalFrenzy());
+        Assert.assertEquals(1,p3.getFinalFrenzy());
+        Assert.assertEquals(1,p4.getFinalFrenzy());
+
+        p1.setFinalFrenzy(2);
+        p2.setFinalFrenzy(2);
+        p3.setFinalFrenzy(2);
+        p4.setFinalFrenzy(2);
+
+        Assert.assertEquals(2,p1.getFinalFrenzy());
+        Assert.assertEquals(2,p2.getFinalFrenzy());
+        Assert.assertEquals(2,p3.getFinalFrenzy());
+        Assert.assertEquals(2,p4.getFinalFrenzy());
 
     }
 }

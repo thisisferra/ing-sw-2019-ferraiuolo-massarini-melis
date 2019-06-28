@@ -1,5 +1,6 @@
 package it.polimi.se2019.server.controller;
 
+import it.polimi.se2019.server.model.cards.Shot;
 import it.polimi.se2019.server.model.cards.weapons.Weapon;
 import it.polimi.se2019.server.model.game.CubesChecker;
 import it.polimi.se2019.server.model.game.Match;
@@ -93,7 +94,7 @@ public class ShotController implements Serializable {
                             if (visiblePlayers.isEmpty()) {
                                 weapon.getEffect()[i] = null;
                             } else{
-                                weaponShot = createInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(), weaponShots);
+                                weaponShot = createInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(), weaponShots,weapon.getEffect()[i]);
                                 weapon.getWeaponShots().add(weaponShot);
                             }
                             System.out.println(visiblePlayers);
@@ -108,7 +109,7 @@ public class ShotController implements Serializable {
                             if (notVisiblePlayers.isEmpty()) {
                                 weapon.getEffect()[i] = null;
                             } else{
-                                weaponShot = createInfoShot(currentPlayer,notVisiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(), weaponShots);
+                                weaponShot = createInfoShot(currentPlayer,notVisiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(), weaponShots,weapon.getEffect()[i]);
                                 weapon.getWeaponShots().add(weaponShot);
                             }
 
@@ -133,13 +134,12 @@ public class ShotController implements Serializable {
                             }
                             else if(maxDistanceTarget == minDistanceTarget && maxDistanceTarget == 0) {
                                 for (Player player : match.getAllPlayers()) {
-                                    if (player.getPosition() == currentPlayer.getPosition() && player.getClientName() != currentPlayer.getClientName()) {
+                                    if (player.getPosition() == currentPlayer.getPosition() && !player.getClientName().equals(currentPlayer.getClientName())) {
                                         visiblePlayers.add(player);
                                     }
                                 }
                             }
                             else {
-                                int distance = maxDistanceTarget - minDistanceTarget;
                                 ArrayList<Square> reacheableSquare;
                                 ArrayList<Square> cantShootSquare;
                                 MovementChecker maxMovementChecker = new MovementChecker(match.getMap().getAllSquare(), maxDistanceTarget, currentPlayer.getPosition());
@@ -159,7 +159,7 @@ public class ShotController implements Serializable {
                             if(visiblePlayers.isEmpty())
                                 weapon.getEffect()[i] = null;
                             else{
-                                weaponShot = createInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(), weaponShots);
+                                weaponShot = createInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(), weaponShots,weapon.getEffect()[i]);
                                 weapon.getWeaponShots().add(weaponShot);
                             }
 
@@ -181,7 +181,7 @@ public class ShotController implements Serializable {
                             if(visiblePlayers.isEmpty())
                                 weapon.getEffect()[i] = null;
                             else{
-                                weaponShot = createInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(), weaponShots);
+                                weaponShot = createInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(), weaponShots,weapon.getEffect()[i]);
                                 weapon.getWeaponShots().add(weaponShot);
                             }
                             System.out.println(visiblePlayers);
@@ -208,7 +208,7 @@ public class ShotController implements Serializable {
                             if(visiblePlayers.isEmpty())
                                 weapon.getEffect()[i] = null;
                             else{
-                                weaponShot = createInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(), weaponShots);
+                                weaponShot = createInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(), weaponShots,weapon.getEffect()[i]);
                                 weapon.getWeaponShots().add(weaponShot);
                             }
                             System.out.println(visiblePlayers);
@@ -232,13 +232,12 @@ public class ShotController implements Serializable {
                             if(visiblePlayers.isEmpty())
                                 weapon.getEffect()[i] = null;
                             else {
-                                weaponShot = createInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(), weaponShots);
+                                weaponShot = createInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(), weaponShots,weapon.getEffect()[i]);
                                 weapon.getWeaponShots().add(weaponShot);
                             }
                             System.out.println(visiblePlayers);
                             break;
                         }
-
                         case "InitiallyCantSee" : {
 
                             ArrayList<Square> visibleSquares = new ArrayList<>();
@@ -270,7 +269,51 @@ public class ShotController implements Serializable {
                             if(visiblePlayers.isEmpty())
                                 weapon.getEffect()[i] = null;
                             else {
-                                weaponShot = createInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(), weaponShots);
+                                weaponShot = createInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(), weaponShots,weapon.getEffect()[i]);
+                                weapon.getWeaponShots().add(weaponShot);
+                            }
+                            System.out.println(visiblePlayers);
+                            break;
+                        }
+                        case "Cardinal2" : {
+                            MovementChecker movementChecker = new MovementChecker(match.getMap().getAllSquare(),5,currentPlayer.getPosition());
+                            weaponShot = new WeaponShot();
+                            for(Square square : movementChecker.getAllUpwardsSquares()){
+                                for(Player player : match.getAllPlayers()){
+                                    if(player.getPosition() == square.getPosition() && !player.equals(currentPlayer))
+                                        weaponShot.getNorthTargets().add(player);
+                                }
+                            }
+
+                            for(Square square : movementChecker.getAllRightSquares()){
+                                for(Player player : match.getAllPlayers()){
+                                    if(player.getPosition() == square.getPosition() && !player.equals(currentPlayer))
+                                        weaponShot.getEastTargets().add(player);
+                                }
+                            }
+
+                            for(Square square : movementChecker.getAllDownwardsSquares()){
+                                for(Player player : match.getAllPlayers()){
+                                    if(player.getPosition() == square.getPosition() && !player.equals(currentPlayer))
+                                        weaponShot.getSouthTargets().add(player);
+                                }
+                            }
+
+                            for(Square square : movementChecker.getAllLeftSquares()){
+                                for(Player player : match.getAllPlayers()){
+                                    if(player.getPosition() == square.getPosition() && !player.equals(currentPlayer))
+                                        weaponShot.getWestTargets().add(player);
+                                }
+                            }
+
+                            if(weaponShot.getNorthTargets().isEmpty() && weaponShot.getEastTargets().isEmpty() && weaponShot.getSouthTargets().isEmpty() &&
+                                    weaponShot.getWestTargets().isEmpty())
+                                weapon.getEffect()[i] = null;
+                            else {
+                                weaponShot.setDamagingPlayer(currentPlayer);
+                                weaponShot.setWeapon(weapon);
+                                weaponShot.setNameEffect(weapon.getEffect()[i].getNameEffect());
+                                weaponShot.setChosenEffect(weapon.getEffect()[i]);
                                 weapon.getWeaponShots().add(weaponShot);
                             }
                             System.out.println(visiblePlayers);
@@ -296,12 +339,13 @@ public class ShotController implements Serializable {
         return purgedWeapon;
     }
 
-    private WeaponShot createInfoShot(Player damagingPlayer, ArrayList<Player> targetablePlayers, Weapon weapon, String nameEffect, ArrayList<WeaponShot> weaponShots){
+    private WeaponShot createInfoShot(Player damagingPlayer, ArrayList<Player> targetablePlayers, Weapon weapon, String nameEffect, ArrayList<WeaponShot> weaponShots, Shot chosenEffect){
         WeaponShot weaponShot = new WeaponShot();
         weaponShot.setDamagingPlayer(damagingPlayer);
         weaponShot.setWeapon(weapon);
         weaponShot.getTargetablePlayer().addAll(targetablePlayers);
         weaponShot.setNameEffect(nameEffect);
+        weaponShot.setChosenEffect(chosenEffect);
 
         return weaponShot;
     }

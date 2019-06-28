@@ -15,13 +15,14 @@ public class Furnace extends AbstractWeapon {
             Square[] allSquares = weaponShot.getTargetPlayer().get(0).getMatch().getMap().getAllSquare();
             String color = allSquares[weaponShot.getTargetPlayer().get(0).getPosition()].getColor();
             for(Player target : weaponShot.getDamagingPlayer().getMatch().getAllPlayers()) {
-                if(allSquares[target.getPosition()].getColor().equals(color))
+                if(allSquares[target.getPosition()].getColor().equals(color)){
                     target.getPlayerBoard().dealDamage(weaponShot.getDamagingPlayer(),1);
+                }
             }
         }
         else if(weaponShot.getNameEffect().equals("Optional2")){
             for(Player target : weaponShot.getDamagingPlayer().getMatch().getAllPlayers()) {
-                if (target.getPosition() == weaponShot.getDamagingPlayer().getPosition()){
+                if (target.getPosition() == weaponShot.getTargetPlayer().get(0).getPosition()){
                     target.getPlayerBoard().dealDamage(weaponShot.getDamagingPlayer(), 1);
                     target.getPlayerBoard().dealMark(weaponShot.getDamagingPlayer(),1);
                 }
