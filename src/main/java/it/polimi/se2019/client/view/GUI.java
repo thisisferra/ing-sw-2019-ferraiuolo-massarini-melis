@@ -69,6 +69,12 @@ public class GUI extends Application {
     private static final String LABEL_STYLE = "-fx-text-fill: #cecece";
     private static final String BACKGROUND_STYLE = "-fx-background-color: #505050";
     private static final String TEXT_FIELD_STYLE = "-fx-background-color: #726B72";
+    private static final String distructor = "-fx-text-fill: #fff117";
+    private static final String banshee = "-fx-text-fill: #1879FF";
+    private static final String dozer = "-fx-text-fill: #726B72";
+    private static final String sprog = "-fx-text-fill: #077200";
+    private static final String violet = "-fx-text-fill: #E81AFF";
+
     static final String HIGHLIGHT_BUTTON_STYLE = "-fx-background-color: #bbbbbb;-fx-text-fill: #999999;";
     private static final String TEXT_AREA_STYLE = "-fx-control-inner-background:#717171;  -fx-highlight-fill: #f1f7eb; -fx-highlight-text-fill: #717171; -fx-text-fill: #f1f7eb;-fx-border-color: #ffffff ";
     private static final String WEAPONS_PATH = "src/main/resources/images/weapons/";
@@ -185,9 +191,11 @@ public class GUI extends Application {
         ImageView iconImg;
         Image image;
         Image icon;
+        Label playerName;
 
         for(RemoteView view : guiController.getAllViews()){
             image = createImage("src/main/resources/images/playerboards/" + view.getCharacter()+ ".png");
+            playerName = new Label(view.getUsername());
             img = new ImageView(image);
             img.setFitHeight(120);
             img.setPreserveRatio(true);
@@ -228,9 +236,14 @@ public class GUI extends Application {
             deathBar.setTranslateX(100);
 
             markBar.setTranslateX(230);
+            players.getChildren().add(playerName);
             players.getChildren().add(playerStack);
-            players.setSpacing(5);
+            playerName.setStyle(LABEL_STYLE);
+            playerName.setAlignment(Pos.CENTER);
+
         }
+        players.setSpacing(2);
+        players.setAlignment(Pos.CENTER);
         return players;
     }
 
@@ -308,7 +321,7 @@ public class GUI extends Application {
         blueLabel.setStyle("-fx-text-fill: #1879ff; -fx-background-color: #202020;");
 
         cubeBox.getChildren().addAll(redLabel, yellowLabel, blueLabel);
-        cubeBox.setSpacing(5);
+        cubeBox.setSpacing(2);
     }
 
     private int getMyReds(){
@@ -648,14 +661,10 @@ public class GUI extends Application {
 
         Stage playersWindow = new Stage();
         VBox layout = setPlayerBoardsStack();
-        Label info = new Label("These are the player's boards.");
         BorderPane playersPane = new BorderPane();
-        info.setStyle(LABEL_STYLE);
         playersWindow.initModality(Modality.APPLICATION_MODAL);
         playersWindow.setTitle("Players");
-
         Button closeButton = setHomeButton(playersWindow);
-        playersPane.setTop(info);
         playersPane.setCenter(layout);
         playersPane.setBottom(closeButton);
         playersPane.setStyle(BACKGROUND_STYLE);
@@ -971,9 +980,60 @@ public class GUI extends Application {
         Label moves = new Label("Moves: "+ myRemoteView.getNumberOfActions());
         Label points = new Label("Points " + myRemoteView.getPoints());
         Label activePlayerLabel = null;
+        Label active = new Label("Active player:\n");
         try{
-            activePlayerLabel = new Label("Active player:\n" + guiController.getRmiStub().getActivePlayer());
-            activePlayerLabel.setStyle(LABEL_STYLE);
+            activePlayerLabel = new Label( guiController.getRmiStub().getActivePlayer());
+            String color = guiController.getRmiStub().getMatch().searchPlayerByClientName(guiController.getRmiStub().getActivePlayer()).getCharacter();
+            String color2 = null;
+            switch(color){
+                case "distructor" : {
+                    color = distructor;
+                    break;
+                }
+                case "banshee" : {
+                    color = banshee;
+                    break;
+                }
+                case "dozer" : {
+                    color = dozer;
+                    break;
+                }
+                case "violet" : {
+                    color = violet;
+                    break;
+                }
+                case "sprog" : {
+                    color = sprog;
+                    break;
+                }
+            }
+
+            switch(myRemoteView.getCharacter()){
+                case "distructor" : {
+                    color2 = distructor;
+                    break;
+                }
+                case "banshee" : {
+                    color2 = banshee;
+                    break;
+                }
+                case "dozer" : {
+                    color2 = dozer;
+                    break;
+                }
+                case "violet" : {
+                    color2 = violet;
+                    break;
+                }
+                case "sprog" : {
+                    color2 = sprog;
+                    break;
+                }
+            }
+
+            activePlayerLabel.setStyle(color);
+            active.setStyle(LABEL_STYLE);
+            userName.setStyle(color2);
         }catch (RemoteException e){
             logger.log(Level.INFO,"Setuserinfo error",e);
         }
@@ -986,9 +1046,8 @@ public class GUI extends Application {
         userView.setFitWidth(50);
         moves.setStyle(LABEL_STYLE);
         points.setStyle(LABEL_STYLE);
-        userName.setStyle(LABEL_STYLE);
 
-        userInfoBox.getChildren().addAll(userView,userName,moves,points,activePlayerLabel);
+        userInfoBox.getChildren().addAll(userView,userName,moves,points,active, activePlayerLabel);
         userInfoBox.setSpacing(5);
     }
 
@@ -996,8 +1055,8 @@ public class GUI extends Application {
         Stage cabinetWindow = new Stage();
         String color = null;
         HBox locker = new HBox();
-        Image weaponImage = null;
-        ImageView weaponView = null;
+        Image weaponImage;
+        ImageView weaponView;
 
         if(myRemoteView.getPosition() == 4){
             color = "Red";
@@ -1061,6 +1120,7 @@ public class GUI extends Application {
         weaponPane.setCenter(locker);
         weaponPane.setStyle(BACKGROUND_STYLE);
         weaponPane.setTop(info);
+        cabinetWindow.setResizable(false);
         Scene cabinetScene = new Scene(weaponPane);
         cabinetWindow.setOnCloseRequest( e -> {
             indexToDrop = -1;
@@ -1110,6 +1170,7 @@ public class GUI extends Application {
             weaponHandWindow.close();
         });
         weaponHandWindow.setScene(cabinetScene);
+        weaponHandWindow.setResizable(false);
         weaponHandWindow.showAndWait();
     }
 
@@ -1223,6 +1284,7 @@ public class GUI extends Application {
 
         leftMenu.getChildren().addAll(moveButton, grabButton, shootButton, passButton, weapons, powerUps, playersButton, cubeBox,userInfoBox);
         leftMenu.setSpacing(3);
+        leftMenu.setPadding(new Insets(10,10,10,10));
         setTextArea();
 
         rightPane.getChildren().add(textArea);
@@ -1232,7 +1294,7 @@ public class GUI extends Application {
         Group root = new Group(stack);
         root.setTranslateY(-375);
         root.setTranslateX(25);
-        borderPane.setStyle(BACKGROUND_STYLE);
+        borderPane.setStyle("-fx-background-color: #202020");
         borderPane.setCenter(root);
         borderPane.setRight(rightPane);
         borderPane.setLeft(leftMenu);
@@ -1249,16 +1311,6 @@ public class GUI extends Application {
             } catch (Exception exception){
                 logger.log(Level.INFO,"startingDraw Error",exception);
             }
-            /*
-            setFigures();
-            setKillShotTrack();
-            setAmmo(mapNumber);
-            setUserInfos();
-            setCubes();
-            setWeaponView(redBox, myRemoteView.getCabinetRed().getSlot());
-            setWeaponView(yellowBox, myRemoteView.getCabinetYellow().getSlot());
-            setWeaponView(blueBox, myRemoteView.getCabinetBlue().getSlot());
-             */
         }));
         fiveSecondsWonder.setCycleCount(Timeline.INDEFINITE);
         fiveSecondsWonder.play();
@@ -1311,13 +1363,14 @@ public class GUI extends Application {
         powerUpAlert.setScene(cabinetScene);
         powerUpAlert.setWidth(300);
         powerUpAlert.setHeight(200);
+        powerUpAlert.setResizable(false);
         powerUpAlert.showAndWait();
     }
 
     private void displayPowerUpHand(){
         Stage powerUpWindow = new Stage();
         HBox powerUpBox = new HBox();
-        Label info = new Label("These are your power ups.\n You can use them as intended,\n or trade it for a cube of the same color.\n");
+        Label info = new Label("Those are your power ups.\n You can use them as intended,\n or trade it for a cube of the same color.\n");
         info.setWrapText(true);
         BorderPane powerUpPane = new BorderPane();
         Image powerUpImage;
@@ -1352,6 +1405,7 @@ public class GUI extends Application {
             });
         }
 
+        powerUpBox.setSpacing(5);
         Button closeButton = setHomeButton(powerUpWindow);
         powerUpPane.setTop(info);
         powerUpPane.setCenter(powerUpBox);
@@ -1382,7 +1436,7 @@ public class GUI extends Application {
             weaponView.setPreserveRatio(true);
             weaponView.setFitHeight(300);
             layout.getChildren().add(weaponView);
-
+            layout.setSpacing(5);
         }
 
 
@@ -1393,15 +1447,18 @@ public class GUI extends Application {
 
         Button closeButton = setHomeButton(displayWindow);
         layout.setStyle(BACKGROUND_STYLE);
-
+        layout.setAlignment(Pos.CENTER);
+        info.setAlignment(Pos.CENTER);
         weaponsPane.setTop(info);
         weaponsPane.setCenter(layout);
         weaponsPane.setBottom(closeButton);
         weaponsPane.setStyle(BACKGROUND_STYLE);
         weaponsPane.setAlignment(info,Pos.CENTER);
+        weaponsPane.setAlignment(layout,Pos.CENTER);
         weaponsPane.setAlignment(closeButton,Pos.CENTER);
         Scene scene = new Scene(weaponsPane);
         displayWindow.setScene(scene);
+        displayWindow.setResizable(false);
         displayWindow.showAndWait();
     }
 
@@ -1449,6 +1506,7 @@ public class GUI extends Application {
         spawnPane.setStyle(BACKGROUND_STYLE);
         Scene startingDrawScene = new Scene(spawnPane);
         startingDrawWindow.setScene(startingDrawScene);
+        startingDrawWindow.setResizable(false);
         startingDrawWindow.show();
         }
 
@@ -1521,6 +1579,7 @@ public class GUI extends Application {
         reloadAlert.setTitle("Reloading weapons");
         reloadAlert.setWidth(300);
         reloadAlert.setHeight(200);
+        reloadAlert.setResizable(false);
         reloadAlert.show();
     }
 
@@ -1529,12 +1588,11 @@ public class GUI extends Application {
         HBox weaponsBox = new HBox();
         BorderPane reloadableWeaponPane = new BorderPane();
         reloadableWeaponPane.setStyle(BACKGROUND_STYLE);
-        ImageView weaponImageView = new ImageView();
+        ImageView weaponImageView;
         Image image;
         try{
             ArrayList<Weapon> newReloadableWeapons = guiController.getRmiStub().getReloadableWeapons(username);
             for(int i = 0; i < myRemoteView.getWeapons().size(); i++) {
-
                 for (Weapon weaponToReload : newReloadableWeapons) {
                     if (weaponToReload.getType().equals(myRemoteView.getWeapons().get(i).getType())) {
                         image = createImage(WEAPONS_PATH + weaponToReload.getType() + ".png");
@@ -1600,6 +1658,7 @@ public class GUI extends Application {
         reloadableWeaponPane.setStyle(BACKGROUND_STYLE);
         reloadableWeaponPane.setTop(info);
         reloadableWeaponPane.setAlignment(info,Pos.TOP_CENTER);
+        weaponToReloadWindow.setResizable(false);
         Scene reloadableScene = new Scene(reloadableWeaponPane);
         weaponToReloadWindow.setScene(reloadableScene);
         weaponToReloadWindow.show();
@@ -1647,6 +1706,9 @@ public class GUI extends Application {
         usableWeaponsPane.setAlignment(info,Pos.TOP_CENTER);
         Scene usableScene = new Scene(usableWeaponsPane);
         usableWeaponsWindow.setScene(usableScene);
+        usableWeaponsWindow.setMinWidth(400);
+        usableWeaponsWindow.setMinHeight(300);
+        usableWeaponsWindow.setResizable(false);
         usableWeaponsWindow.showAndWait();
     }
 
@@ -1698,6 +1760,7 @@ public class GUI extends Application {
         availableEffectsWindow.setScene(usableScene);
         availableEffectsWindow.setWidth(300);
         availableEffectsWindow.setHeight(200);
+        availableEffectsWindow.setResizable(false);
         availableEffectsWindow.showAndWait();
 
     }
@@ -1751,13 +1814,20 @@ public class GUI extends Application {
                         weaponTargetWindow.close();
                     } else if(currentEffect.getMaxMovementTarget()>0) {
                         System.out.println("MaxMovement: " + currentEffect.getMaxMovementTarget());
+                        guiController.getRmiStub().getMatch().searchPlayerByClientName(this.username).setCanMove(true);
                         setPushSquares(weaponShot);
                         weaponTargetWindow.close();
                     } else {
                         guiController.getRmiStub().applyEffectWeapon(weaponShot);
                         guiController.getRmiStub().useAction(this.username);
+                        if(currentEffect.getMaxMovementPlayer()>0){
+                            guiController.getRmiStub().giftAction(this.username);
+                            moveAction(currentEffect.getMaxMovementPlayer());
+
+                        }
                         weaponTargetWindow.close();
                     }
+
                 }catch (Exception err){
                     logger.log(Level.INFO,"TargetingScope method error",err);
                 }
@@ -1777,6 +1847,7 @@ public class GUI extends Application {
         weaponTargetWindow.setScene(usableScene);
         weaponTargetWindow.setWidth(300);
         weaponTargetWindow.setHeight(200);
+        weaponTargetWindow.setResizable(false);
         weaponTargetWindow.show();
     }
 
@@ -1795,8 +1866,14 @@ public class GUI extends Application {
                         */
                 }
                 case "targeting_scope" : {
-                        if(myRemoteView.getCubes().getReds() + myRemoteView.getCubes().getYellows() + myRemoteView.getCubes().getBlues() >0)
-                            displayTargetingScopeTargets(index);
+                        try{
+                            if(guiController.getRmiStub().getMatch().searchPlayerByClientName(this.username).getPlayerBoard().getAmmoCubes().checkAtLeastOne() &&
+                                    !guiController.getRmiStub().getMatch().searchPlayerByClientName(this.username).getHitThisTurnPlayers().isEmpty()){
+                                displayTargetingScopeTargets(index);
+                            }
+                        }catch (RemoteException e){
+                            logger.log(Level.INFO,"TargetingScope PowerUpAction error");
+                        }
                         break;
                 }
                 case "newton" : {
@@ -1848,53 +1925,52 @@ public class GUI extends Application {
     private void displayTargetingScopeTargets(int index){
         Stage targetingScopeWindow = new Stage();
         ComboBox comboBox = new ComboBox();
-        ComboBox cubeBox = new ComboBox();
+        ComboBox cubesBox = new ComboBox();
         BorderPane targetingScopePane = new BorderPane();
         targetingScopePane.setStyle(BACKGROUND_STYLE);
         ArrayList<Player> allTargets = new ArrayList<>();
         try{
-            allTargets.addAll(guiController.getRmiStub().getMatch().getAllPlayers());
+            allTargets.addAll(guiController.getRmiStub().getMatch().searchPlayerByClientName(this.username).getHitThisTurnPlayers());
             System.out.println(allTargets);
             for(Player target : allTargets){
                 if(!target.getClientName().equals(this.username))
                     comboBox.getItems().add(target.getClientName());
             }
+            if(guiController.getRmiStub().getMatch().searchPlayerByClientName(this.username).getPlayerBoard().getAmmoCubes().getReds() > 0)
+                cubesBox.getItems().add("Red cube");
+
+            if(guiController.getRmiStub().getMatch().searchPlayerByClientName(this.username).getPlayerBoard().getAmmoCubes().getYellows()> 0)
+                cubesBox.getItems().add("Yellow cube");
+
+            if(guiController.getRmiStub().getMatch().searchPlayerByClientName(this.username).getPlayerBoard().getAmmoCubes().getBlues() > 0)
+                cubesBox.getItems().add("Blue cube");
 
         }catch (Exception exc){
             logger.log(Level.INFO,"Targets targetingScope error",exc);
         }
 
-        if(myRemoteView.getCubes().getReds() > 0)
-            cubeBox.getItems().add("Red cube");
-
-        if(myRemoteView.getCubes().getYellows()> 0)
-            cubeBox.getItems().add("Yellow cube");
-
-        if(myRemoteView.getCubes().getBlues() >0)
-            cubeBox.getItems().add("Blue cube");
-
-
         Label info = new Label("Who is the target?");
         info.setStyle(LABEL_STYLE);
         Button confirmButton = new Button("Confirm");
         setResponsiveButton(confirmButton);
-
+        cubesBox.setPromptText("Select cube");
         comboBox.setPromptText("Select target");
         comboBox.setPadding(new Insets(10,10,10,10));
+        cubesBox.setPadding(new Insets(10,10,10,10));
 
         confirmButton.setOnAction(e-> {
-            if(comboBox.getValue()!=null && cubeBox.getValue()!= null){
+            if(comboBox.getValue()!=null && cubesBox.getValue()!= null){
                 PowerUpShot powerUpShot = guiController.getMyRemoteView().getPowerUpShot();
                 try{
                     powerUpShot.setDamagingPlayer(guiController.getRmiStub().getMatch().searchPlayerByClientName(this.username));
                     Player targetingPlayer = guiController.getRmiStub().getMatch().searchPlayerByClientName((String) comboBox.getValue());
                     powerUpShot.setTargetingPlayer(targetingPlayer);
                     guiController.getRmiStub().usePowerUp(this.username,index,powerUpShot);
-                    if(cubeBox.getValue().equals("Red cube"))
+                    if(cubesBox.getValue().equals("Red cube"))
                         guiController.getRmiStub().payCubes(this.username,1,0,0);
-                    if(cubeBox.getValue().equals("Yellow cube"))
+                    if(cubesBox.getValue().equals("Yellow cube"))
                         guiController.getRmiStub().payCubes(this.username,0,1,0);
-                    if(cubeBox.getValue().equals("Blue cube"))
+                    if(cubesBox.getValue().equals("Blue cube"))
                         guiController.getRmiStub().payCubes(this.username,0,0,1);
                     targetingScopeWindow.close();
                 }catch (Exception err){
@@ -1905,8 +1981,8 @@ public class GUI extends Application {
         });
         targetingScopeWindow.initModality(Modality.APPLICATION_MODAL);
         targetingScopePane.setCenter(comboBox);
-        targetingScopePane.setRight(cubeBox);
-        targetingScopePane.setAlignment(cubeBox,Pos.CENTER_LEFT);
+        targetingScopePane.setRight(cubesBox);
+        targetingScopePane.setAlignment(cubesBox,Pos.CENTER_LEFT);
         targetingScopePane.setAlignment(comboBox,Pos.CENTER);
         targetingScopePane.setStyle(BACKGROUND_STYLE);
         targetingScopePane.setTop(info);
@@ -1918,6 +1994,7 @@ public class GUI extends Application {
         targetingScopeWindow.setScene(usableScene);
         targetingScopeWindow.setWidth(300);
         targetingScopeWindow.setHeight(200);
+        targetingScopeWindow.setResizable(false);
         targetingScopeWindow.showAndWait();
     }
 
@@ -1939,7 +2016,7 @@ public class GUI extends Application {
             }
 
         }catch (Exception exc){
-            logger.log(Level.INFO,"Targets targetingScope error",exc);
+            logger.log(Level.INFO,"Newton Targets error",exc);
         }
         Label info = new Label("Who is the target?");
         info.setStyle(LABEL_STYLE);
@@ -1954,9 +2031,9 @@ public class GUI extends Application {
             newtonWindow.close();
             if(comboBox.getValue()!=null){
                 try{
-                    MovementChecker movementChecker = new MovementChecker(guiController.getRmiStub().getMatch().getMap().getAllSquare(),2,guiController.getRmiStub().getMatch().searchPlayerByClientName((String) comboBox.getValue()).getPosition());
                     ArrayList<Square> squares = new ArrayList<>();
-                    squares.addAll(movementChecker.getReachableSquares());
+                    squares.addAll(guiController.getRmiStub().getCardinalDirectionsSquares(2,guiController.getRmiStub().getMatch().searchPlayerByClientName((String) comboBox.getValue()).getPosition()));
+
                     for (int i = 0; i < 12; i++) {
                         Rectangle rectangle = (Rectangle) grid.getChildren().get(i);
                         for (Square square : squares) {
@@ -1983,7 +2060,7 @@ public class GUI extends Application {
                         }
                     }
                 }catch (Exception err){
-                    logger.log(Level.INFO,"TargetingScope method error",err);
+                    logger.log(Level.INFO,"Newton method error",err);
                 }
             }
 
@@ -2000,6 +2077,7 @@ public class GUI extends Application {
         newtonWindow.setScene(newtonScene);
         newtonWindow.setWidth(300);
         newtonWindow.setHeight(200);
+        newtonWindow.setResizable(false);
         newtonWindow.showAndWait();
 
     }
@@ -2094,9 +2172,11 @@ public class GUI extends Application {
                     rectangle.setOnMouseClicked(o -> {
                         try {
                             weaponShot.setNewPosition(Integer.parseInt(rectangle.getId()));
-                            System.out.println("Nuova Posizione: " + weaponShot.getNewPosition());
                             guiController.getRmiStub().applyEffectWeapon(weaponShot);
                             restoreSquares();
+                            guiController.getRmiStub().getMatch().searchPlayerByClientName(this.username).setCanMove(false);
+                            if(weaponShot.getChosenEffect().getMaxMovementPlayer()>0)
+                                moveAction(weaponShot.getChosenEffect().getMaxMovementPlayer());
                         } catch (Exception exc) {
                             logger.log(Level.INFO,"setMovementSquare() Error",exc);
                         }
@@ -2111,11 +2191,10 @@ public class GUI extends Application {
     }
 
     private void displayOrientationChoice(WeaponShot weaponsShot){
-        Stage availableEffectsWindow = new Stage();
+        Stage orientationWindow = new Stage();
         ComboBox comboBox = new ComboBox();
-        BorderPane availableEffectPane = new BorderPane();
-        availableEffectPane.setStyle(BACKGROUND_STYLE);
-        String effect;
+        BorderPane orientationPane = new BorderPane();
+        orientationPane.setStyle(BACKGROUND_STYLE);
 
         if(!weaponsShot.getNorthTargets().isEmpty())
             comboBox.getItems().add("North");
@@ -2139,47 +2218,47 @@ public class GUI extends Application {
                 case "North" : {
                     weaponsShot.setTargetablePlayer(weaponsShot.getNorthTargets());
                     displayTargets(weaponsShot);
-                    availableEffectsWindow.close();
+                    orientationWindow.close();
                     break;
                 }
 
                 case "East" : {
                     weaponsShot.setTargetablePlayer(weaponsShot.getEastTargets());
                     displayTargets(weaponsShot);
-                    availableEffectsWindow.close();
+                    orientationWindow.close();
                     break;
                 }
 
                 case "South" : {
                     weaponsShot.setTargetablePlayer(weaponsShot.getSouthTargets());
                     displayTargets(weaponsShot);
-                    availableEffectsWindow.close();
+                    orientationWindow.close();
                     break;
                 }
 
                 case "West" : {
                     weaponsShot.setTargetablePlayer(weaponsShot.getWestTargets());
                     displayTargets(weaponsShot);
-                    availableEffectsWindow.close();
+                    orientationWindow.close();
                     break;
                 }
             }
         });
 
-        availableEffectsWindow.initModality(Modality.APPLICATION_MODAL);
-        availableEffectPane.setCenter(comboBox);
-        availableEffectPane.setAlignment(comboBox,Pos.CENTER);
-        availableEffectPane.setStyle(BACKGROUND_STYLE);
-        availableEffectPane.setTop(info);
-        availableEffectPane.setBottom(confirmButton);
-        availableEffectPane.setAlignment(confirmButton,Pos.CENTER);
-        availableEffectPane.setAlignment(info,Pos.TOP_CENTER);
+        orientationWindow.initModality(Modality.APPLICATION_MODAL);
+        orientationPane.setCenter(comboBox);
+        orientationPane.setAlignment(comboBox,Pos.CENTER);
+        orientationPane.setStyle(BACKGROUND_STYLE);
+        orientationPane.setTop(info);
+        orientationPane.setBottom(confirmButton);
+        orientationPane.setAlignment(confirmButton,Pos.CENTER);
+        orientationPane.setAlignment(info,Pos.TOP_CENTER);
 
-        Scene usableScene = new Scene(availableEffectPane);
-        availableEffectsWindow.setScene(usableScene);
-        availableEffectsWindow.setWidth(300);
-        availableEffectsWindow.setHeight(200);
-        availableEffectsWindow.show();
+        Scene usableScene = new Scene(orientationPane);
+        orientationWindow.setScene(usableScene);
+        orientationWindow.setWidth(300);
+        orientationWindow.setHeight(200);
+        orientationWindow.show();
 
     }
 

@@ -13,6 +13,7 @@ import it.polimi.se2019.server.model.cards.weapons.Weapon;
 import it.polimi.se2019.server.model.game.Cubes;
 import it.polimi.se2019.server.model.game.Match;
 import it.polimi.se2019.server.model.game.MovementChecker;
+import it.polimi.se2019.server.model.game.RoomChecker;
 import it.polimi.se2019.server.model.map.Square;
 import it.polimi.se2019.server.model.map.WeaponSlot;
 import it.polimi.se2019.server.model.player.EnemyDamage;
@@ -370,6 +371,7 @@ public class RMIServer extends Server implements RMIServerInterface {
             activePlayer = notSuspendedPlayers.get(index + 1);
         }
         activePlayer.setCanMove(false);
+        activePlayer.clearHitThisTurnPlayers();
         System.out.println("Next player is: " + activePlayer.getClientName());
         updateAllVirtualView();
         updateAllClient();
@@ -679,5 +681,16 @@ public class RMIServer extends Server implements RMIServerInterface {
             initializeMatchTimer.cancel();
         }
         return --interval;
+    }
+
+    public ArrayList<Square> getCardinalDirectionsSquares(int steps,int position){
+        ArrayList<Square> newtonSquares = new ArrayList<>();
+        MovementChecker movementChecker = new MovementChecker(match.getMap().getAllSquare(),steps,position);
+        newtonSquares.addAll(movementChecker.getWalkableLeftSquares());
+        newtonSquares.addAll(movementChecker.getWalkableDownwardsSquares());
+        newtonSquares.addAll(movementChecker.getWalkableRightSquares());
+        newtonSquares.addAll(movementChecker.getWalkableUpwardsSquares());
+
+        return newtonSquares;
     }
 }

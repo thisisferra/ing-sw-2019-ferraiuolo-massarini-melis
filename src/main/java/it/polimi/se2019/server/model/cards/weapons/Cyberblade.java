@@ -7,21 +7,13 @@ import it.polimi.se2019.server.model.game.Cubes;
 public class Cyberblade extends AbstractWeapon{
 
     public void applyEffect(WeaponShot weaponShot){
-        if(weaponShot.getNameEffect().equals("BasicEffect")){
+        if(weaponShot.getNameEffect().equals("BasicEffect")  || weaponShot.getNameEffect().equals("BasicEffect+Extra1")){
             weaponShot.getTargetPlayer().get(0).getPlayerBoard().dealDamage(weaponShot.getDamagingPlayer(),2);
         }
-        else if(weaponShot.getNameEffect().equals("BasicEffect+Extra1")){
+        else if(weaponShot.getNameEffect().equals("BasicEffect+Extra2") || weaponShot.getNameEffect().equals("BasicEffect+Extra1+Extra2")){
             weaponShot.getTargetPlayer().get(0).getPlayerBoard().dealDamage(weaponShot.getDamagingPlayer(),2);
-            weaponShot.getDamagingPlayer().setPosition(weaponShot.getNewPosition());
-        }
-        else if(weaponShot.getNameEffect().equals("BasicEffect+Extra2")){
-            weaponShot.getTargetPlayer().get(0).getPlayerBoard().dealDamage(weaponShot.getDamagingPlayer(),2);
-            weaponShot.getTargetPlayer().get(1).getPlayerBoard().dealDamage(weaponShot.getDamagingPlayer(),2);
-        }
-        else if(weaponShot.getNameEffect().equals("BasicEffect+Extra1+Extra2")){
-            weaponShot.getTargetPlayer().get(0).getPlayerBoard().dealDamage(weaponShot.getDamagingPlayer(),2);
-            weaponShot.getTargetPlayer().get(1).getPlayerBoard().dealDamage(weaponShot.getDamagingPlayer(),2);
-            weaponShot.getDamagingPlayer().setPosition(weaponShot.getNewPosition());
+            if(weaponShot.getTargetPlayer().size()==2)
+                weaponShot.getTargetPlayer().get(1).getPlayerBoard().dealDamage(weaponShot.getDamagingPlayer(),2);
         }
         this.setLoad(false);
     }

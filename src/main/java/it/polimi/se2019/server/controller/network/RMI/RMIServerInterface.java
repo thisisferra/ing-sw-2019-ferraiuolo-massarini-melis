@@ -84,5 +84,7 @@ public interface RMIServerInterface extends Remote {
 
     void payCubes(String username,int reds,int yellows,int blues) throws RemoteException;
 
+    ArrayList<Square> getCardinalDirectionsSquares(int steps,int position) throws RemoteException;
+
     void reconnect(String usernameTyped, GUIControllerInterface guiController) throws RemoteException;
 }

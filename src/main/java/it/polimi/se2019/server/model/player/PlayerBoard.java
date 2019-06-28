@@ -149,6 +149,7 @@ public class PlayerBoard implements Serializable {
         else if (this.damage.size() > 5 && this.damage.size() < 11 ) {
             owner.setPhaseAction(2);
         }
+        attacker.getHitThisTurnPlayers().add(owner);
         sortAggressor();
     }
 

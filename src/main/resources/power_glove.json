@@ -27,7 +27,7 @@
          "damage": [1],
          "mark": [2],
          "maxMovementTarget": 0,
-         "maxMovementPlayer": 1,
+         "maxMovementPlayer": 0,
          "minDistanceTarget": 1,
          "maxDistanceTarget": 1
        },
@@ -46,7 +46,7 @@
          "damage": [2],
          "mark": [0],
          "maxMovementTarget": 0,
-         "maxMovementPlayer": 1,
+         "maxMovementPlayer": 0,
          "minDistanceTarget": 1,
          "maxDistanceTarget": 1
        }

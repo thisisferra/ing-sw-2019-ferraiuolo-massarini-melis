@@ -9,8 +9,10 @@ import it.polimi.se2019.server.model.game.Match;
 import it.polimi.se2019.server.model.map.Square;
 import it.polimi.se2019.server.model.map.WeaponSlot;
 
+import javax.net.ssl.SSLEngineResult;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 
 /**
@@ -33,6 +35,7 @@ public class Player implements Serializable {
     private Match match;
     private int numberOfAction;
     private ShotController shotController;
+    private HashSet<Player> hitThisTurnPlayers = new HashSet<>();
     private int finalFrenzy;
     private int phaseAction;
     private boolean canMove;
@@ -165,6 +168,18 @@ public class Player implements Serializable {
      */
     public void setPosition(int position){
         this.position = position;
+    }
+
+    public HashSet<Player> getHitThisTurnPlayers(){
+        return this.hitThisTurnPlayers;
+    }
+
+    public void setHitThisTurnPlayers(HashSet<Player> hitThisTurnPlayers){
+        this.hitThisTurnPlayers = hitThisTurnPlayers;
+    }
+
+    public void clearHitThisTurnPlayers(){
+        this.hitThisTurnPlayers.clear();
     }
 
     public int getNumberOfAction() {

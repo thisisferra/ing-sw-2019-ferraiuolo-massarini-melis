@@ -9,11 +9,12 @@ import java.util.ArrayList;
 
 public class RocketLauncher extends AbstractWeapon {
     public void applyEffect(WeaponShot weaponShot){
-        if(weaponShot.getNameEffect().equals("BasicEffect")){
+        if(weaponShot.getNameEffect().equals("BasicEffect") || weaponShot.getNameEffect().equals("BasicEffect+Extra1")){
             weaponShot.getTargetPlayer().get(0).getPlayerBoard().dealDamage(weaponShot.getDamagingPlayer(),2);
             weaponShot.getTargetPlayer().get(0).setPosition(weaponShot.getNewPosition());
         }
-        if(weaponShot.getNameEffect().equals("BasicEffect+Extra2")){
+
+        if(weaponShot.getNameEffect().equals("BasicEffect+Extra2") || weaponShot.getNameEffect().equals("BasicEffect+Extra1+Extra2")){
             weaponShot.getTargetPlayer().get(0).getPlayerBoard().dealDamage(weaponShot.getDamagingPlayer(),2);
             weaponShot.getTargetPlayer().get(0).setPosition(weaponShot.getNewPosition());
             ArrayList<Player> players = weaponShot.getDamagingPlayer().getMatch().getAllPlayers();

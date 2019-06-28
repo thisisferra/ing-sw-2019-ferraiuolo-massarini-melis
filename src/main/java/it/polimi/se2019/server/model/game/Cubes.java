@@ -71,6 +71,12 @@ public class Cubes implements Serializable {
         this.yellows = cubes.getYellows();
         this.blues = cubes.getBlues();
     }
+
+    public boolean checkAtLeastOne(){
+        if(this.getBlues() + this.getYellows() + this. getReds() > 0)
+            return true;
+        else return false;
+    }
     public String toString(){
         return "Reds: "+ this.getReds() + " Blues: " + this.getBlues() + " Yellows: " + this.getYellows();
     }
