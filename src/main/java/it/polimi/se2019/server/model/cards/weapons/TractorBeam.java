@@ -13,6 +13,7 @@ public class TractorBeam extends AbstractWeapon {
     public void applyEffect(WeaponShot weaponShot){
         int pos = 0;
         if(weaponShot.getNameEffect().equals("Optional1")){
+            /*
             MovementChecker movementChecker = new MovementChecker(weaponShot.getDamagingPlayer().getMatch().getMap().getAllSquare(),2,weaponShot.getTargetPlayer().get(0).getPosition());
             RoomChecker roomChecker = new RoomChecker(weaponShot.getDamagingPlayer().getMatch().getMap(),weaponShot.getDamagingPlayer().getPosition());
             ArrayList<Square> intersecionSquare = new ArrayList<>();
@@ -26,6 +27,9 @@ public class TractorBeam extends AbstractWeapon {
                 pos = intersecionSquare.get(0).getPosition();
             weaponShot.getTargetPlayer().get(0).getPlayerBoard().dealDamage(weaponShot.getDamagingPlayer(),1);
             weaponShot.getTargetPlayer().get(0).setPosition(pos);
+             */
+            weaponShot.getTargetPlayer().get(0).getPlayerBoard().dealDamage(weaponShot.getDamagingPlayer(),1);
+            weaponShot.getTargetPlayer().get(0).setPosition(weaponShot.getNewPosition());
         }
         else if(weaponShot.getNameEffect().equals("Optional2")){
             weaponShot.getTargetPlayer().get(0).getPlayerBoard().dealDamage(weaponShot.getDamagingPlayer(),3);
