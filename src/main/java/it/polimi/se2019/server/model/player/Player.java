@@ -56,7 +56,7 @@ public class Player implements Serializable {
         this.numberOfAction=2;
         this.playerDead = false;
         this.canMove = false;
-        this.finalFrenzy = 0;       //It will be 0 if final frenzy is disabled, 1 if player will have 1 action, 2 if player will have 2 action
+        this.finalFrenzy = 0;       //It will be 0 if final frenzy is disabled, 1 if player will have 1 action, 2 if player will have 2 actions
         this.phaseAction = 0;
         this.typePlayerBoard = 0;
     }

@@ -189,17 +189,12 @@ public class GUI extends Application {
         StackPane playerStack;
         ImageView img;
         ImageView iconImg;
-        Image image;
+        Image image = null;
         Image icon;
         Label playerName;
-
         for(RemoteView view : guiController.getAllViews()){
-            image = createImage("src/main/resources/images/playerboards/" + view.getCharacter()+ ".png");
-            playerName = new Label(view.getUsername());
-            img = new ImageView(image);
-            img.setFitHeight(120);
-            img.setPreserveRatio(true);
 
+            playerName = new Label(view.getUsername());
             playerStack = new StackPane();
             damageBar = new HBox();
             deathBar = new HBox();
@@ -227,19 +222,29 @@ public class GUI extends Application {
                 markBar.getChildren().add(iconImg);
             }
 
-            playerStack.getChildren().addAll(img,damageBar,deathBar,markBar);
+            if(view.getTypePlayerBoard() == 0){
+                image = createImage("src/main/resources/images/playerboards/"+view.getCharacter()+".png");
+                damageBar.setTranslateX(40);
+                deathBar.setTranslateX(100);
+            }
+            else if(view.getTypePlayerBoard() == 1) {
+                image = createImage("src/main/resources/images/playerboards/"+view.getCharacter()+"_frenzy.png");
+                damageBar.setTranslateX(47);
+                deathBar.setTranslateX(125);
+            }
 
             damageBar.setTranslateY(45);
-            damageBar.setTranslateX(40);
-
             deathBar.setTranslateY(87);
-            deathBar.setTranslateX(100);
-
+            img = new ImageView(image);
+            img.setFitHeight(120);
+            img.setPreserveRatio(true);
             markBar.setTranslateX(230);
             players.getChildren().add(playerName);
             players.getChildren().add(playerStack);
             playerName.setStyle(LABEL_STYLE);
             playerName.setAlignment(Pos.CENTER);
+
+            playerStack.getChildren().addAll(img,damageBar,deathBar,markBar);
 
         }
         players.setSpacing(2);
@@ -1200,13 +1205,21 @@ public class GUI extends Application {
         Button weapons = setImageButton("src/main/resources/images/icons/weapon_icon.png");
 
         moveButton.setOnAction(e ->{
-                moveAction(3);
+            if(myRemoteView.getFinalFrenzy() == 2)
+                moveAction(4);
+            else if(myRemoteView.getFinalFrenzy() == 1){
+                textArea.setText("This action is disabled\n" + textArea.getText());
+            }
+            else moveAction(3);
             });
         grabButton.setOnAction(e -> {
-            if (myRemoteView.getPhaseAction() == 0)
+            if (myRemoteView.getPhaseAction() ==  0 && myRemoteView.getFinalFrenzy()== 0)
                 moveGrabAction(1);
-            else if (myRemoteView.getPhaseAction() == 1 || myRemoteView.getPhaseAction() == 2)
+            else if ((myRemoteView.getPhaseAction() >0 && myRemoteView.getFinalFrenzy()== 0) || myRemoteView.getFinalFrenzy() == 2)
                 moveGrabAction(2);
+            else if(myRemoteView.getFinalFrenzy() == 1)
+                moveGrabAction(3);
+
         });
         shootButton.setOnAction(e -> {
             try {
@@ -2259,6 +2272,11 @@ public class GUI extends Application {
         orientationWindow.setWidth(300);
         orientationWindow.setHeight(200);
         orientationWindow.show();
+
+    }
+
+    //TODO
+    private void setReloadShootSquares(){
 
     }
 

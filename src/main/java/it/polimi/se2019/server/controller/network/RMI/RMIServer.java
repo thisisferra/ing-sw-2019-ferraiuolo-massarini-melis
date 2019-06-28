@@ -372,7 +372,6 @@ public class RMIServer extends Server implements RMIServerInterface {
         }
         activePlayer.setCanMove(false);
         activePlayer.clearHitThisTurnPlayers();
-        System.out.println("Next player is: " + activePlayer.getClientName());
         updateAllVirtualView();
         updateAllClient();
 }
@@ -411,13 +410,9 @@ public class RMIServer extends Server implements RMIServerInterface {
         for(Player target : weaponShot.getTargetPlayer()){
             newWeaponShot.getTargetPlayer().add(match.searchPlayerByClientName(target.getClientName()));
         }
-        System.out.println("Targets in newInfoShot" + newWeaponShot.getTargetPlayer());
         newWeaponShot.setNameEffect(weaponShot.getNameEffect());
-        System.out.println("Targets in newInfoShot" + newWeaponShot.getNameEffect());
         newWeaponShot.setWeapon(weaponShot.getWeapon());
-        System.out.println("Targets in newInfoShot" + newWeaponShot.getWeapon());
         newWeaponShot.setDamagingPlayer(match.searchPlayerByClientName(weaponShot.getDamagingPlayer().getClientName()));
-        System.out.println("Targets in newInfoShot" + newWeaponShot.getDamagingPlayer());
         newWeaponShot.setNewPosition(weaponShot.getNewPosition());
         weaponShot.getWeapon().applyEffect(newWeaponShot);
         unloadWeapon(newWeaponShot);
@@ -474,10 +469,7 @@ public class RMIServer extends Server implements RMIServerInterface {
         Player player = this.match.searchPlayerByClientName(username);
         Weapon weaponToReload = player.getHand().getWeapons().get(index);
         weaponToReload.setLoad(true);
-        System.out.println("Weapon to reload cube cost "+weaponToReload.getReloadCost());
-        System.out.println("Cubes player: " + player.getPlayerBoard().getAmmoCubes());
         player.getPlayerBoard().payCubes(weaponToReload.getReloadCost());
-        System.out.println("Cubes player: " + player.getPlayerBoard().getAmmoCubes());
         this.updateAllVirtualView();
         this.updateAllClient();
     }
@@ -542,7 +534,7 @@ public class RMIServer extends Server implements RMIServerInterface {
         return flagDeath;
     }
 
-    private void assignPoints(Player player) {
+    private void assignPoints(Player player) throws RemoteException{
         PlayerBoard playerBoard = player.getPlayerBoard();
         int indexPointDeaths = 0;
         for (EnemyDamage enemyDamagePoints : playerBoard.getEnemyDamages()) {
@@ -557,13 +549,17 @@ public class RMIServer extends Server implements RMIServerInterface {
         }
         playerBoard.getPointDeaths().remove(0);
         playerBoard.clearDamage();
+        updateAllVirtualView();
+        updateAllClient();
     }
 
-    private void unloadWeapon(WeaponShot weaponShot){
+    private void unloadWeapon(WeaponShot weaponShot) throws RemoteException{
         for(Weapon weapon : match.searchPlayerByClientName(weaponShot.getDamagingPlayer().getClientName()).getHand().getWeapons()){
             if(weaponShot.getWeapon().getType().equals(weapon.getType()))
                 weapon.setLoad(false);
         }
+        updateAllVirtualView();
+        updateAllClient();
     }
 
     public void respawnPlayer() throws  RemoteException{
@@ -575,7 +571,8 @@ public class RMIServer extends Server implements RMIServerInterface {
                 playerToRespawn.setPlayerDead(false);
             }
         }
-
+        updateAllVirtualView();
+        updateAllClient();
     }
 
     public void notifyAllClientMovement(String username, Integer newPosition) throws  RemoteException{
@@ -586,17 +583,13 @@ public class RMIServer extends Server implements RMIServerInterface {
         }
     }
 
-    public void toggleAction(String username){
+    public void toggleAction(String username) throws RemoteException{
         match.searchPlayerByClientName(username).setCanMove(!match.searchPlayerByClientName(username).getCanMove());
-        try{
-            updateAllVirtualView();
-            updateAllClient();
-        } catch (RemoteException e){
-            logger.log(Level.INFO,"ToggleAction error");
-        }
+        updateAllVirtualView();
+        updateAllClient();
     }
 
-    public void  enableFinalFrenzy(String username) {
+    public void  enableFinalFrenzy(String username) throws RemoteException {
         boolean flag = false;
         for (Player player : match.getAllPlayers()) {
             if (player.getPlayerBoard().getDamage().isEmpty())
@@ -606,17 +599,12 @@ public class RMIServer extends Server implements RMIServerInterface {
             }
             if (flag) {
                 player.setFinalFrenzy(2);
-            }
-            else
+            } else
                 player.setFinalFrenzy(1);
         }
         updateAllVirtualView();
-        try {
-            updateAllClient();
-        }
-        catch(RemoteException remException) {
-            logger.log(Level.INFO, "Errore calling UpdateAllClient method", remException);
-        }
+        updateAllClient();
+
     }
 
     public void pingAllClient() {

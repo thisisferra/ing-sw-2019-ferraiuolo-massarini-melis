@@ -281,7 +281,9 @@ public class RemoteView {
         return this.powerUpShot;
     }
 
-
+    public int getTypePlayerBoard(){
+        return this.typePlayerBoard;
+    }
 
     /* * *   SETTERS   * * */
 
@@ -335,9 +337,7 @@ public class RemoteView {
      *                 of the user to move or not.
      */
 
-    //TODO this shouldn't be public!
-
-    public void setCanMove(boolean canMove) {
+    private void setCanMove(boolean canMove) {
         this.canMove = canMove;
     }
 
@@ -410,20 +410,16 @@ public class RemoteView {
         this.cabinetBlue = cabinetBlue;
     }
 
-
-    //TODO this shouldn't be public!
-    public void setAvailableWeapon(ArrayList<Weapon> availableWeapon) {
+    private void setAvailableWeapon(ArrayList<Weapon> availableWeapon) {
         this.usableWeapon.clear();
-        System.out.println("Usable weapon in setAvailableWeapon RemoteView: "+ this.usableWeapon);
         this.usableWeapon = availableWeapon;
-        System.out.println("Usable weapon in setAvailableWeapon RemoteView: "+ this.usableWeapon);
     }
 
     private void setUsername(String username){
         this.username = username;
     }
 
-    public void setTypePlayerBoard(int typePlayerBoard) {
+    private void setTypePlayerBoard(int typePlayerBoard) {
         this.typePlayerBoard = typePlayerBoard;
     }
 
@@ -464,8 +460,6 @@ public class RemoteView {
         setKillShotTrack(virtualView.getKillShotTrack());
 
         setCanMove(virtualView.getCanMove());
-        setWeaponShot(virtualView.getWeaponShot());  //FORSE DA TOGLIERE
-
         setPhaseAction(virtualView.getPhaseAction());
         setFinalFrenzy(virtualView.getFinalFrenzy());
         setTypePlayerBoard(virtualView.getTypePlayerBoard());
