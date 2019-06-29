@@ -1612,6 +1612,9 @@ public class GUI extends Application {
                 if(weaponShot.getNameEffect().equals(comboBox.getValue())) {
                     if(weaponShot.getChosenEffect().getTypeVisibility().equals("Cardinal2"))
                         displayOrientationChoice(weaponShot);
+                    else if(weaponShot.getChosenEffect().getTypeVisibility().equals("Vortex")){
+                        displayVortexSquares(weaponShot);
+                    }
                     else
                         displayTargets(weaponShot);
 
@@ -1912,7 +1915,7 @@ public class GUI extends Application {
                         Rectangle rectangle = (Rectangle) grid.getChildren().get(i);
                         for (Square square : squares) {
                             if (rectangle.getId().equals(Integer.toString(square.getPosition()))) {
-                                rectangle.setFill(Color.color(0.5, 0, 1, 0.4));
+                                rectangle.setFill(Color.color(0.7, 1, 1, 0.4));
                                 rectangle.setOnMouseClicked(o -> {
                                     try {
                                         powerUpShot.setDamagingPlayer(guiController.getRmiStub().getMatch().searchPlayerByClientName(this.username));
@@ -1927,9 +1930,9 @@ public class GUI extends Application {
                                     restoreSquares();
                                 });
                                 rectangle.setOnMouseEntered( enter ->
-                                        rectangle.setFill(Color.color(0.5,0,1,0.6)));
+                                        rectangle.setFill(Color.color(0.7,1,1,0.6)));
                                 rectangle.setOnMouseExited( exit ->
-                                        rectangle.setFill(Color.color(0.5,0,1,0.4)));
+                                        rectangle.setFill(Color.color(0.7,1,1,0.4)));
                             }
                         }
                     }
@@ -2262,7 +2265,6 @@ public class GUI extends Application {
         }
     }
 
-    //TODO
     private void setReloadShootSquares(){
         for (int i = 0; i < 12; i++) {
             Rectangle rectangle = (Rectangle) grid.getChildren().get(i);
@@ -2308,7 +2310,6 @@ public class GUI extends Application {
         }
     }
 
-
     private void endTurnActionsRoutine() throws RemoteException{
         if(guiController.getRmiStub().deathPlayer(this.username)) {
             guiController.getRmiStub().respawnPlayer();
@@ -2317,5 +2318,34 @@ public class GUI extends Application {
         setAmmo(mapNumber);
         guiController.getRmiStub().resetActionNumber(username);
         guiController.getRmiStub().setActivePlayer(username);
+    }
+
+    private void displayVortexSquares(WeaponShot weaponShot){
+        for (int i = 0; i < 12; i++) {
+            Rectangle rectangle = (Rectangle) grid.getChildren().get(i);
+            for (Square square : weaponShot.getSquares()) {
+                if (rectangle.getId().equals(Integer.toString(square.getPosition()))) {
+                    rectangle.setFill(Color.color(0.4, 0, 1, 0.4));
+                    rectangle.setOnMouseClicked(o -> {
+                        try {
+                            ArrayList<Player> localTargets = new ArrayList<>();
+                            localTargets = guiController.getRmiStub().getLocalTargets(this.username,Integer.parseInt(rectangle.getId()));
+                            if(!localTargets.isEmpty()){
+                                weaponShot.getTargetablePlayer().addAll(localTargets);
+                                weaponShot.setNewPosition(Integer.parseInt(rectangle.getId()));
+                                displayTargets(weaponShot);
+                            }
+                            restoreSquares();
+                        } catch (Exception exc) {
+                            logger.log(Level.INFO,"setMovementSquare() Error",exc);
+                        }
+                    });
+                    rectangle.setOnMouseEntered( enter ->
+                            rectangle.setFill(Color.color(0.4,0,1,0.6)));
+                    rectangle.setOnMouseExited( exit ->
+                            rectangle.setFill(Color.color(0.4,0,1,0.4)));
+                }
+            }
+        }
     }
 }

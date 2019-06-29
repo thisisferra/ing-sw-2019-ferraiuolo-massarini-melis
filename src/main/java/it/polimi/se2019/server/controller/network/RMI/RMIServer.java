@@ -367,7 +367,6 @@ public class RMIServer extends Server implements RMIServerInterface {
             activePlayer =notSuspendedPlayers.get(0);
         }
         else {
-
             activePlayer = notSuspendedPlayers.get(index + 1);
         }
         activePlayer.setCanMove(false);
@@ -680,5 +679,18 @@ public class RMIServer extends Server implements RMIServerInterface {
         newtonSquares.addAll(movementChecker.getWalkableUpwardsSquares());
 
         return newtonSquares;
+    }
+
+    public ArrayList<Player> getLocalTargets(String currentPlayer, int position) throws RemoteException{
+        MovementChecker movementChecker = new MovementChecker(match.getMap().getAllSquare(),1,position);
+        ArrayList<Player> targets = new ArrayList<>();
+        for(Square square : movementChecker.getReachableSquares()){
+            for(Player player : match.getAllPlayers()){
+                if(player.getPosition() == square.getPosition() && !currentPlayer.equals(player.getClientName())){
+                    targets.add(player);
+                }
+            }
+        }
+        return targets;
     }
 }

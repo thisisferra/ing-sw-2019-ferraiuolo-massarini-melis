@@ -2,6 +2,7 @@ package it.polimi.se2019.server.controller;
 
 import it.polimi.se2019.server.model.cards.Shot;
 import it.polimi.se2019.server.model.cards.weapons.Weapon;
+import it.polimi.se2019.server.model.map.Square;
 import it.polimi.se2019.server.model.player.Player;
 
 import java.io.Serializable;
@@ -19,6 +20,7 @@ public class WeaponShot implements Serializable {
     private ArrayList<Player> eastTargets = new ArrayList<>();
     private ArrayList<Player> southTargets = new ArrayList<>();
     private ArrayList<Player> westTargets = new ArrayList<>();
+    private ArrayList<Square> squares= new ArrayList<>();
     private String cardinalDirection;                                           //String that represent the cardinal direction in effects that pull/push enemy or player have to move
     private int numberOfMoves;                                                  //Integer that represents th number of movement
     private int newPosition;
@@ -75,6 +77,10 @@ public class WeaponShot implements Serializable {
         return  this.chosenEffect;
     }
 
+    public ArrayList<Square> getSquares() {
+        return this.squares;
+    }
+
     public ArrayList<Player> getNorthTargets(){
         return this.northTargets;
     }
@@ -92,19 +98,6 @@ public class WeaponShot implements Serializable {
     }
 
     /* * *   SETTERS   * * */
-
-    public void setNorthTargets(ArrayList<Player> northTargets){
-        this.northTargets = northTargets;
-    }
-    public void setEastTargets(ArrayList<Player> eastTargets){
-        this.eastTargets = eastTargets;
-    }
-    public void setSouthTargets(ArrayList<Player> southTargets){
-        this.southTargets = southTargets;
-    }
-    public void setWestTargets(ArrayList<Player> westTargets){
-        this.westTargets = westTargets;
-    }
 
     public void setWeapon(Weapon weapon) {
         this.weapon = weapon;

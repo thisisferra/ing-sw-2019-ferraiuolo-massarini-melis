@@ -10,6 +10,7 @@ import it.polimi.se2019.server.model.map.Square;
 import it.polimi.se2019.server.model.player.Player;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -344,6 +345,29 @@ public class ShotController implements Serializable {
                             }
                             System.out.println(visiblePlayers);
                             break;
+                        }
+                        case "Cascade" :{
+                        }
+                        case "Cascade2" : {
+
+                        }
+                        case "Vortex": {
+                            RoomChecker roomChecker = new RoomChecker(match.getMap(),currentPlayer.getPosition());
+                            ArrayList<Square> squares = new ArrayList<>();
+                            for(Square square : roomChecker.getAccessibleRooms()){
+                                if(square.getPosition() != currentPlayer.getPosition()){
+                                    squares.add(square);
+                                }
+                            }
+                            weaponShot = new WeaponShot();
+                            weaponShot.setDamagingPlayer(currentPlayer);
+                            weaponShot.setWeapon(weapon);
+                            weaponShot.setNameEffect(weapon.getEffect()[i].getNameEffect());
+                            weaponShot.setChosenEffect(weapon.getEffect()[i]);
+                            weaponShot.getSquares().addAll(squares);
+                            weapon.getWeaponShots().add(weaponShot);
+                            break;
+
                         }
                         default: {
                             System.out.println(weapon + " not yet implemented");

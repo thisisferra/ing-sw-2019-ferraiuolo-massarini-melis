@@ -86,5 +86,7 @@ public interface RMIServerInterface extends Remote {
 
     ArrayList<Square> getCardinalDirectionsSquares(int steps,int position) throws RemoteException;
 
+    ArrayList<Player> getLocalTargets(String currentPlayer, int position) throws RemoteException;
+
     void reconnect(String usernameTyped, GUIControllerInterface guiController) throws RemoteException;
 }
