@@ -453,7 +453,7 @@ public class GUI extends Application {
         return newScene;
     }
 
-    private void setWaitScene(){
+    public void setWaitScene(){
         Label waitLabel;
         BorderPane waitPane;
         waitLabel = new Label("Waiting for the: " + (guiController.getAllViews().size()+1) + "° player.\nPlease wait...");
@@ -465,6 +465,7 @@ public class GUI extends Application {
         Scene waitScene = new Scene(waitPane,300,200);
         window.setScene(waitScene);
 
+/*
         Timeline waitMinimumPlayers = new Timeline(new KeyFrame(Duration.seconds(1), e-> {
             try{
 
@@ -485,15 +486,6 @@ public class GUI extends Application {
                     window.setScene(scene);
                     window.show();
                 }
-                    /*
-                    Timeline waitAdditionalPlayers = new Timeline(new KeyFrame(Duration.seconds(1), f-> {
-                        setGameScene();
-                        window.setScene(scene);
-                    }
-                    ));
-                    waitAdditionalPlayers.setCycleCount(Timeline.INDEFINITE);
-                    waitAdditionalPlayers.play();
-                     */
 
             }catch (Exception o){
                 logger.log(Level.INFO,"TimeLine error",o);
@@ -501,8 +493,10 @@ public class GUI extends Application {
 
         }
         ));
+
         waitMinimumPlayers.setCycleCount(1);
         waitMinimumPlayers.play();
+*/
 
     }
 
@@ -2347,5 +2341,16 @@ public class GUI extends Application {
                 }
             }
         }
+    }
+
+    public void startMatch() {
+        window.close();
+        setGameScene();
+        window.setScene(scene);
+        window.show();
+    }
+
+    public void closeWindow() {
+        this.window.close();
     }
 }

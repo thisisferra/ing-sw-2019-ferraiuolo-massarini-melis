@@ -18,7 +18,7 @@ import java.util.ArrayList;
 //ritorno
 public class GUIController implements GUIControllerInterface {
 
-    GUI guiObject;
+    private GUI guiObject;
 
     PrintStream out;
 
@@ -189,5 +189,17 @@ public class GUIController implements GUIControllerInterface {
     public int pingClient() {
         return 13;
         //System.out.println("Client " +this.username + " connesso");
+    }
+
+    public void waitPlayers() throws RemoteException {
+        Platform.runLater(() -> this.guiObject.setWaitScene());
+    }
+
+    public void startingMatch() throws RemoteException {
+        Platform.runLater(() -> this.guiObject.startMatch());
+    }
+
+    public void closeGUI() throws RemoteException{
+        Platform.runLater(() -> this.guiObject.closeWindow());
     }
 }

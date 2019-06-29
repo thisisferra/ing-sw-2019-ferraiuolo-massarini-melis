@@ -62,7 +62,13 @@ public class RMIServer extends Server implements RMIServerInterface {
 
     private Timer initializeMatchTimer = new Timer();
 
+    private Timer roundTimer = new Timer();
+
     private int interval = 10;
+
+    private int roundTime = 30;
+
+    private boolean resetTimer = false;
 
     //Metodi
 
@@ -126,6 +132,9 @@ public class RMIServer extends Server implements RMIServerInterface {
         this.initAllClient();
         if (activePlayer == null) {
             activePlayer = match.getAllPlayers().get(0);
+        }
+        if (this.match.getOpenConnection()) {
+            virtualView.getClientReference().waitPlayers();
         }
         //this.pingClient();
     }
@@ -373,6 +382,7 @@ public class RMIServer extends Server implements RMIServerInterface {
         activePlayer.clearHitThisTurnPlayers();
         updateAllVirtualView();
         updateAllClient();
+        roundTime = 30;
 }
 
     public void setSpecificActivePlayer(Player player) {
@@ -643,7 +653,7 @@ public class RMIServer extends Server implements RMIServerInterface {
             @Override
             public void run() {
                 if (match.getAllPlayers().size() == 3) {
-                    initializeMatchTimer();
+                    setMatchTimer();
                     startingMatchTimer.cancel();
 
                 }
@@ -651,23 +661,73 @@ public class RMIServer extends Server implements RMIServerInterface {
         }, 0, 1000);
     }
 
-    public void initializeMatchTimer() {
+    public void setMatchTimer() {
         initializeMatchTimer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                setInterval();
+                try {
+                    countMatchTimer();
+                }
+                catch(RemoteException remException) {
+                    remException.printStackTrace();
+                }
 
             }
         }, 0, 1000);
     }
 
-    private final int setInterval() {
+    private final int countMatchTimer() throws RemoteException{
         if (interval == 1) {
             this.match.setOpenConnection(false);
             System.out.println("Match openConnection: " + this.match.getOpenConnection());
+            for (VirtualView virtualView : allVirtualViews) {
+                GUIControllerInterface clientRef = virtualView.getClientReference();
+                clientRef.startingMatch();
+            }
+            setResetTimer();
             initializeMatchTimer.cancel();
         }
         return --interval;
+    }
+
+    public void passRoundTimer() {
+        String usernameLastPlayer = activePlayer.getClientName();
+        GUIControllerInterface clientRef = getMyVirtualView(usernameLastPlayer).getClientReference();
+        try {
+            setActivePlayer(usernameLastPlayer);
+        } catch (RemoteException remException) {
+            remException.printStackTrace();
+        }
+        match.searchPlayerByClientName(usernameLastPlayer).setSuspended(true);
+        updateAllVirtualView();
+        try {
+            updateAllClient();
+        } catch (RemoteException remException1) {
+            logger.log(Level.INFO, "Errore nella chiamata");
+        }
+        //STAMPA DI CONTROLLO
+        System.out.println("Giocatore " + usernameLastPlayer + " sospeso!");
+        this.closeClient(clientRef);
+        //STAMPA DI CONTROLLO
+
+    }
+
+    public void setResetTimer(){
+        Timer resetTimer = new Timer();
+        resetTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                countSeconds();
+            }
+        }, 0, 1000);
+    }
+
+    public final int countSeconds() {
+        if (roundTime == 1) {
+            passRoundTimer();
+            roundTime = 30;
+        }
+        return --roundTime;
     }
 
     public ArrayList<Square> getCardinalDirectionsSquares(int steps,int position){
@@ -692,5 +752,15 @@ public class RMIServer extends Server implements RMIServerInterface {
             }
         }
         return targets;
+    }
+
+
+    public void closeClient(GUIControllerInterface clientRef){
+        try {
+            clientRef.closeGUI();
+        }
+        catch(RemoteException remException) {
+            logger.log(Level.INFO, "Can't close the window");
+        }
     }
 }

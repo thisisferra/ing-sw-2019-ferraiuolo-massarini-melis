@@ -19,4 +19,10 @@ public interface GUIControllerInterface extends Remote {
     void respawnDialog() throws RemoteException;
 
     int pingClient() throws RemoteException;
+
+    void waitPlayers() throws RemoteException;
+
+    void startingMatch() throws RemoteException;
+
+    void closeGUI() throws RemoteException;
 }
