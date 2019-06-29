@@ -59,7 +59,6 @@ public class PowerGlove extends AbstractWeapon {
                     }
                     break;
                 }
-
                 case 4 :{
                     weaponShot.getDamagingPlayer().setPosition(weaponShot.getTargetPlayer().get(0).getPosition());
                     if(squares[weaponShot.getTargetPlayer().get(0).getPosition()].getSouth()!= -1) {
@@ -77,8 +76,6 @@ public class PowerGlove extends AbstractWeapon {
                 }
             }
         }
-
-
         this.setLoad(false);
     }
 

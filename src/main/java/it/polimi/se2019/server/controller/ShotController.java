@@ -187,6 +187,32 @@ public class ShotController implements Serializable {
                             System.out.println(visiblePlayers);
                             break;
                         }
+                        case "CanSeeRoomNotIn": {
+                            RoomChecker roomChecker = new RoomChecker(match.getMap(),currentPlayer.getPosition());
+                            Square[] allSquares = match.getMap().getAllSquare();
+                            ArrayList<Square> roomSquares = new ArrayList<>();
+                            String currentPlayerColor = allSquares[currentPlayer.getPosition()].getColor();
+                            for(Square square : roomChecker.getAccessibleRooms()){
+                                if(!square.getColor().equals(currentPlayerColor))
+                                    roomSquares.add(square);
+                            }
+                            for(Square square : roomSquares){
+                                for(Player player : match.getAllPlayers()){
+                                    if(player.getPosition() == square.getPosition()){
+                                        visiblePlayers.add(player);
+                                    }
+                                }
+                            }
+                            visiblePlayers.remove(currentPlayer);
+                            if(visiblePlayers.isEmpty())
+                                weapon.getEffect()[i] = null;
+                            else{
+                                weaponShot = createInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(), weaponShots,weapon.getEffect()[i]);
+                                weapon.getWeaponShots().add(weaponShot);
+                            }
+                            System.out.println(visiblePlayers);
+                            break;
+                        }
                         case "DistanceFromAPosition": {
                             MovementChecker movementChecker;
                             RoomChecker roomChecker = new RoomChecker(match.getMap(), currentPlayer.getPosition());
