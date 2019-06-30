@@ -25,7 +25,13 @@
     <sonar.language>java</sonar.language>
 
     <!-- only for coverage test -->
-    <!--<sonar.exclusions>src/main/java/it/polimi/se2019/client/view/GUI.java</sonar.exclusions>-->
+    <!--  <sonar.exclusions>src/main/java/it/polimi/se2019/client/view/GUI.java,
+      src/main/java/it/polimi/se2019/client/view/ConfirmBox.java,
+      src/main/java/it/polimi/se2019/client/view/RemoteView.java ,
+      src/main/java/it/polimi/se2019/client/Bootstrapper.java ,
+      src/main/java/it/polimi/se2019/client/controller/GuiController.java ,
+      src/main/java/it/polimi/se2019/client/controller/GuiControllerInterface.java ,
+      src/main/java/it/polimi/se2019/client/controller/network/RMI/RMIClient.java</sonar.exclusions> -->
 
     <sonar.host.url>http://localhost:9000/</sonar.host.url>
     <!--sonar.login>admin</sonar.login>

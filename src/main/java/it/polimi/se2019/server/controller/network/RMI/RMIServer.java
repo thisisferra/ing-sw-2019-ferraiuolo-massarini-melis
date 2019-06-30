@@ -132,6 +132,8 @@ public class RMIServer extends Server implements RMIServerInterface {
         this.initAllClient();
         if (activePlayer == null) {
             activePlayer = match.getAllPlayers().get(0);
+            //TODO CHECKTHIS
+            activePlayer.setFirstPlayer(true);
         }
         if (this.match.getOpenConnection()) {
             virtualView.getClientReference().waitPlayers();
@@ -710,7 +712,7 @@ public class RMIServer extends Server implements RMIServerInterface {
                     countMatchTimer();
                 }
                 catch(RemoteException remException) {
-                    remException.printStackTrace();
+                    logger.log(Level.INFO,"setMatchTimer error",remException);
                 }
 
             }
@@ -737,7 +739,7 @@ public class RMIServer extends Server implements RMIServerInterface {
         try {
             setActivePlayer(usernameLastPlayer);
         } catch (RemoteException remException) {
-            remException.printStackTrace();
+            logger.log(Level.INFO,"passRoundTimer error",remException);
         }
         match.searchPlayerByClientName(usernameLastPlayer).setSuspended(true);
         updateAllVirtualView();
@@ -760,7 +762,7 @@ public class RMIServer extends Server implements RMIServerInterface {
                     countSeconds();
                 }
                 catch(RemoteException remException) {
-                    remException.printStackTrace();
+                    logger.log(Level.INFO,"setResetTimer",remException);
                 }
             }
         }, 0, 1000);
@@ -829,5 +831,10 @@ public class RMIServer extends Server implements RMIServerInterface {
 
     public void setFirstSpawnPlayer(String username) {
         this.match.searchPlayerByClientName(username).setFirstSpawn(false);
+    }
+
+    public boolean isFirstPlayer(String username) throws RemoteException{
+        Player player = match.searchPlayerByClientName(username);
+        return player.isFirstPlayer();
     }
 }

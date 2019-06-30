@@ -742,14 +742,18 @@ public class GUI extends Application {
     }
 
     private void setFirstPlayer(){
-        if(guiController.getAllViews().get(0).getUsername().equals(username)){
-            firstPlayer.getChildren().clear();
-            ImageView firstPlayerView = new ImageView(createImage("src/main/resources/images/playerboards/first_player.png"));
-            firstPlayerView.setFitHeight(100);
-            firstPlayerView.setPreserveRatio(true);
-            firstPlayerView.setTranslateX(30);
-            firstPlayerView.setTranslateY(580);
-            firstPlayer.getChildren().add(firstPlayerView);
+        try{
+            if(guiController.getRmiStub().isFirstPlayer(this.username)){
+                firstPlayer.getChildren().clear();
+                ImageView firstPlayerView = new ImageView(createImage("src/main/resources/images/playerboards/first_player.png"));
+                firstPlayerView.setFitHeight(100);
+                firstPlayerView.setPreserveRatio(true);
+                firstPlayerView.setTranslateX(30);
+                firstPlayerView.setTranslateY(580);
+                firstPlayer.getChildren().add(firstPlayerView);
+            }
+        } catch (RemoteException exc){
+            logger.log(Level.INFO,"FirstPlayer error",exc);
         }
     }
 
@@ -1306,14 +1310,17 @@ public class GUI extends Application {
         Label info = new Label("These are your weapons.\nGrey ones are unloaded and you can't use them.");
         HBox layout = new HBox();
         BorderPane weaponsPane = new BorderPane();
-
-        ImageView weaponView;
+        Image greyImage;
+        ImageView weaponView = new ImageView();
         Image weaponImage;
         for (Weapon obj : myRemoteView.getWeapons()) {
             weaponImage = createImage(WEAPONS_PATH + obj.getType() + ".png");
-            if(!obj.getLoad())
-                weaponImage = toGrayScale(weaponImage);
-            weaponView = new ImageView(weaponImage);
+            if(!obj.getLoad() && weaponImage!= null){
+                greyImage = toGrayScale(weaponImage);
+                weaponView = new ImageView(greyImage);
+            } else if(weaponImage!= null){
+                weaponView = new ImageView(weaponImage);
+            }
             weaponView.setPreserveRatio(true);
             weaponView.setFitHeight(300);
             layout.getChildren().add(weaponView);

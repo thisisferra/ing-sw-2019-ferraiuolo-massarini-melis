@@ -6,16 +6,10 @@ import it.polimi.se2019.server.model.game.Cubes;
 
 public class PlasmaGun extends AbstractWeapon {
     public void applyEffect(WeaponShot weaponShot){
-        if(weaponShot.getNameEffect().equals("BasicEffect")){
-            weaponShot.getTargetPlayer().get(0).getPlayerBoard().dealDamage(weaponShot.getDamagingPlayer(),2);
+        if(weaponShot.getNameEffect().equals("BasicEffect") || weaponShot.getNameEffect().equals("BasicEffect+Extra1")) {
+            weaponShot.getTargetPlayer().get(0).getPlayerBoard().dealDamage(weaponShot.getDamagingPlayer(), 2);
         }
-        else if(weaponShot.getNameEffect().equals("BasicEffect+Extra1")){
-            weaponShot.getTargetPlayer().get(0).getPlayerBoard().dealDamage(weaponShot.getDamagingPlayer(),2);
-        }
-        else if(weaponShot.getNameEffect().equals("BasicEffect+Extra2")){
-            weaponShot.getTargetPlayer().get(0).getPlayerBoard().dealDamage(weaponShot.getDamagingPlayer(),3);
-        }
-        else if(weaponShot.getNameEffect().equals("BasicEffect+Extra1+Extra2")){
+        else if(weaponShot.getNameEffect().equals("BasicEffect+Extra2") || weaponShot.getNameEffect().equals("BasicEffect+Extra1+Extra2")){
             weaponShot.getTargetPlayer().get(0).getPlayerBoard().dealDamage(weaponShot.getDamagingPlayer(),3);
         }
         this.setLoad(false);

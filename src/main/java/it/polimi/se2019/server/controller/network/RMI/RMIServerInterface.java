@@ -94,6 +94,8 @@ public interface RMIServerInterface extends Remote {
 
     WeaponShot getThorTargets(WeaponShot weaponShot,int targetsSize) throws RemoteException;
 
+    boolean isFirstPlayer(String username) throws RemoteException;
+
     void reconnect(String usernameTyped, GUIControllerInterface guiController) throws RemoteException;
 
     void setFirstSpawnPlayer(String username) throws RemoteException;
