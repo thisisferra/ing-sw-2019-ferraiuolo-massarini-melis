@@ -36,9 +36,7 @@ public class ShotController implements Serializable {
             checkedWeapon = checkCubes(currentPlayer, loadedWeapon);
             usableWeapon = checkVisibility(currentPlayer,checkedWeapon);
             purgedWeapons = purgeUselessWeapons(usableWeapon);
-            //infoShots = checkVisibility(currentPlayer, checkedWeapon);
         }
-        System.out.println("InfoShots: "+ weaponShots);
         return purgedWeapons;
     }
 
@@ -60,7 +58,6 @@ public class ShotController implements Serializable {
                 cubesChecker = new CubesChecker(currentPlayer.getPlayerBoard().getAmmoCubes(), currentWeapon.getEffect()[i].getExtraCost());
                 if(!cubesChecker.check()){
                     currentWeapon.getEffect()[i] = null;
-
                 }
             }
         }
@@ -98,14 +95,12 @@ public class ShotController implements Serializable {
                                 weaponShot = createInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(), weaponShots,weapon.getEffect()[i]);
                                 weapon.getWeaponShots().add(weaponShot);
                             }
-                            System.out.println(visiblePlayers);
                             visiblePlayers.clear();
                             break;
                         }
                         case "CantSee": {
                             RoomChecker roomChecker = new RoomChecker(match.getMap(), currentPlayer.getPosition());
                             notVisiblePlayers = roomChecker.getNonVisiblePlayers(match,currentPlayer);
-                            System.out.println(notVisiblePlayers);
                             notVisiblePlayers.remove(currentPlayer);
                             if (notVisiblePlayers.isEmpty()) {
                                 weapon.getEffect()[i] = null;
@@ -113,8 +108,6 @@ public class ShotController implements Serializable {
                                 weaponShot = createInfoShot(currentPlayer,notVisiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(), weaponShots,weapon.getEffect()[i]);
                                 weapon.getWeaponShots().add(weaponShot);
                             }
-
-                            System.out.println(notVisiblePlayers);
                             break;
                         }
                         case "CanSeeDistance": {
@@ -163,8 +156,6 @@ public class ShotController implements Serializable {
                                 weaponShot = createInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(), weaponShots,weapon.getEffect()[i]);
                                 weapon.getWeaponShots().add(weaponShot);
                             }
-
-                            System.out.println(visiblePlayers);
                             break;
                         }
                         case "CanSeeRoom": {
@@ -185,7 +176,6 @@ public class ShotController implements Serializable {
                                 weaponShot = createInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(), weaponShots,weapon.getEffect()[i]);
                                 weapon.getWeaponShots().add(weaponShot);
                             }
-                            System.out.println(visiblePlayers);
                             break;
                         }
                         case "CanSeeRoomNotIn": {
@@ -211,7 +201,6 @@ public class ShotController implements Serializable {
                                 weaponShot = createInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(), weaponShots,weapon.getEffect()[i]);
                                 weapon.getWeaponShots().add(weaponShot);
                             }
-                            System.out.println(visiblePlayers);
                             break;
                         }
                         case "DistanceFromAPosition": {
@@ -238,7 +227,6 @@ public class ShotController implements Serializable {
                                 weaponShot = createInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(), weaponShots,weapon.getEffect()[i]);
                                 weapon.getWeaponShots().add(weaponShot);
                             }
-                            System.out.println(visiblePlayers);
                             break;
                         }
                         case "Cardinal" : {
@@ -248,7 +236,7 @@ public class ShotController implements Serializable {
                             cardinalSquares.addAll(movementChecker.getAllRightSquares());
                             cardinalSquares.addAll(movementChecker.getAllDownwardsSquares());
                             cardinalSquares.addAll(movementChecker.getAllLeftSquares());
-
+                            cardinalSquares.add(match.getMap().getAllSquare()[currentPlayer.getPosition()]);
                             for(Square square : cardinalSquares){
                                 for(Player player : match.getAllPlayers()){
                                     if(player.getPosition() == square.getPosition())
@@ -262,7 +250,6 @@ public class ShotController implements Serializable {
                                 weaponShot = createInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(), weaponShots,weapon.getEffect()[i]);
                                 weapon.getWeaponShots().add(weaponShot);
                             }
-                            System.out.println(visiblePlayers);
                             break;
                         }
                         case "InitiallyCantSee" : {
@@ -299,7 +286,6 @@ public class ShotController implements Serializable {
                                 weaponShot = createInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(), weaponShots,weapon.getEffect()[i]);
                                 weapon.getWeaponShots().add(weaponShot);
                             }
-                            System.out.println(visiblePlayers);
                             break;
                         }
                         case "Cardinal2" : {
@@ -332,7 +318,14 @@ public class ShotController implements Serializable {
                                         weaponShot.getWestTargets().add(player);
                                 }
                             }
-
+                            for(Player player : match.getAllPlayers()){
+                                if(player.getPosition() == currentPlayer.getPosition() && !player.getClientName().equals(currentPlayer.getClientName())){
+                                    weaponShot.getNorthTargets().add(player);
+                                    weaponShot.getEastTargets().add(player);
+                                    weaponShot.getSouthTargets().add(player);
+                                    weaponShot.getWestTargets().add(player);
+                                }
+                            }
                             if(weaponShot.getNorthTargets().isEmpty() && weaponShot.getEastTargets().isEmpty() && weaponShot.getSouthTargets().isEmpty() &&
                                     weaponShot.getWestTargets().isEmpty())
                                 weapon.getEffect()[i] = null;
@@ -343,14 +336,21 @@ public class ShotController implements Serializable {
                                 weaponShot.setChosenEffect(weapon.getEffect()[i]);
                                 weapon.getWeaponShots().add(weaponShot);
                             }
-                            System.out.println(visiblePlayers);
                             break;
                         }
                         case "Cascade" :{
+                            RoomChecker roomChecker = new RoomChecker(match.getMap(), currentPlayer.getPosition());
+                            visiblePlayers = roomChecker.getVisiblePlayers(match, currentPlayer);
+                            if (visiblePlayers.isEmpty()) {
+                                weapon.getEffect()[i] = null;
+                            } else{
+                                weaponShot = createInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(), weaponShots,weapon.getEffect()[i]);
+                                weapon.getWeaponShots().add(weaponShot);
+                            }
+                            visiblePlayers.clear();
+                            break;
                         }
-                        case "Cascade2" : {
 
-                        }
                         case "Vortex": {
                             RoomChecker roomChecker = new RoomChecker(match.getMap(),currentPlayer.getPosition());
                             ArrayList<Square> squares = new ArrayList<>();

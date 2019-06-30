@@ -21,7 +21,7 @@
          },
          "maxTarget": 1,
          "peekingRequired": true,
-         "typeVisibility": "CanSee",
+         "typeVisibility": "Cascade",
          "cardinalDirection": false,
          "sameDamage": true,
          "damage": [2],

@@ -452,7 +452,6 @@ public class Player implements Serializable {
                 reloadableWeapons.add(weapon);
             }
         }
-        System.out.println("ReloadableWeapons: " + reloadableWeapons);
         return reloadableWeapons;
     }
 

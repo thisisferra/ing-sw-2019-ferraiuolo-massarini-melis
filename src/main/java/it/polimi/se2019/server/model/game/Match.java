@@ -87,7 +87,6 @@ public class Match extends Observable implements Serializable {
             //pUS = gson.fromJson(new FileReader("./src/main/resources/powerups.json"),PowerUp[].class);
 
             weaponStack.add(gson.fromJson(new FileReader("src/main/resources/plasma_gun.json"), PlasmaGun.class));
-            weaponStack.add(gson.fromJson(new FileReader("src/main/resources/thor.json"), Thor.class));
             weaponStack.add(gson.fromJson(new FileReader("src/main/resources/electroscythe.json"), Electroscythe.class));
             weaponStack.add(gson.fromJson(new FileReader("src/main/resources/lock_rifle.json"), LockRifle.class));
             weaponStack.add(gson.fromJson(new FileReader("src/main/resources/whisper.json"), Whisper.class));
@@ -107,6 +106,7 @@ public class Match extends Observable implements Serializable {
             weaponStack.add(gson.fromJson(new FileReader("src/main/resources/cyberblade.json"), Cyberblade.class));
             weaponStack.add(gson.fromJson(new FileReader("src/main/resources/rocket_launcher.json"), RocketLauncher.class));
             weaponStack.add(gson.fromJson(new FileReader("src/main/resources/grenade_launcher.json"), GrenadeLauncher.class));
+            weaponStack.add(gson.fromJson(new FileReader("src/main/resources/thor.json"), Thor.class));
 
 
             for (int i = 0; i < 2; i++) {
@@ -126,7 +126,7 @@ public class Match extends Observable implements Serializable {
             //powerUpStack = new ArrayList<>(Arrays.asList(pUS));
             ammoStack = new ArrayList<>(Arrays.asList(aS));
 
-            Collections.shuffle(weaponStack);
+            //Collections.shuffle(weaponStack);
             Collections.shuffle(powerUpStack);
             Collections.shuffle(ammoStack);
 

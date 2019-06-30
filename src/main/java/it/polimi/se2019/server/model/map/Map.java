@@ -45,8 +45,6 @@ public class Map implements Serializable {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-
-        // for(int i =0;i<allSquare.length;i++) System.out.println(allSquare[i].toString());
     }
 
     //fills roomSquare with the reference of all map squares, sorted based on their colours

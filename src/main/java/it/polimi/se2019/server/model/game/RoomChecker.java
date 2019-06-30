@@ -67,62 +67,13 @@ public class RoomChecker {
         return visiblePlayers;
     }
 
-    public ArrayList<Player> getOtherRoomsVisiblePlayers(Match match,Player owner) {
-        ArrayList<Square> visibleSquares = this.getAccessibleRooms();
-        ArrayList<Player> visiblePlayer = new ArrayList<>();
-        String squareColor = match.getMap().getSpecificSquare(owner.getPosition()).getColor();
-        visibleSquares = visibleSquares.stream().filter(x-> !x.getColor().equals(squareColor)).collect(Collectors.toCollection(ArrayList::new));
-        for (Square square : visibleSquares) {
-            for (Player player : match.getAllPlayers()) {
-                if (player.getPosition() == square.getPosition()) visiblePlayer.add(player);
-            }
-        }
-        return  visiblePlayer;
-    }
-
     //return the list of players you cannot see
     public ArrayList<Player> getNonVisiblePlayers(Match match, Player owner){
         ArrayList<Player> nonVisiblePlayers = new ArrayList<>();
         nonVisiblePlayers.addAll(match.getAllPlayers());
-        System.out.println("Before " + nonVisiblePlayers);
         nonVisiblePlayers.removeAll(getVisiblePlayers(match,owner));
-        System.out.println("After" + nonVisiblePlayers);
         nonVisiblePlayers.remove(owner);
         return nonVisiblePlayers;
-    }
-
-
-    // return the list of players you can see, ignoring all players sitting in a square near you based on
-    // the distance parameter.
-    public ArrayList<Player> getFarAwayPlayers(Match match,Player owner,int distance){
-        ArrayList<Player> playerList = new ArrayList<>();
-        ArrayList<Square> legitSquares = new ArrayList<>();
-        ArrayList<Square> resultSquares = new ArrayList<>();
-
-        MovementChecker ignoredSquares = new MovementChecker(match.getMap().getAllSquare(),distance,owner.getPosition());
-
-
-        System.out.println("ignored: " + ignoredSquares.getReachableSquares());
-        legitSquares.addAll(this.visibleRooms);
-        resultSquares.addAll(this.visibleRooms);
-        for(Square square1: legitSquares){
-            for(Square square2: ignoredSquares.getReachableSquares()){
-                if(square1.getPosition() == square2.getPosition())
-                    resultSquares.remove(square1);
-            }
-        }
-        System.out.println("legit: "+ legitSquares);
-        System.out.println("result: " + resultSquares);
-
-        for(Square object: resultSquares){
-            for(Player player: match.getAllPlayers()){
-                if(player.getPosition() == object.getPosition()){
-                    playerList.add(player);
-                }
-            }
-        }
-        playerList.remove(owner);
-        return playerList;
     }
 
 }

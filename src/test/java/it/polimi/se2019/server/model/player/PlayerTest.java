@@ -67,7 +67,6 @@ public class PlayerTest {
         Assert.assertEquals(0, p1.getHand().getWeapons().size());
         Assert.assertEquals(0, p1.getHand().getPowerUps().size());
         PowerUp pu1 = m1.getPowerUpStack().get(0);
-        System.out.println(pu1);
         p1.getHand().addPowerUp(pu1);
         String namePowerUp = pu1.getType();
         String colorPowerUp = pu1.getColor();

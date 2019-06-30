@@ -19,7 +19,7 @@
            "yellows": 0,
            "blues": 0
          },
-         "maxTarget": 2,
+         "maxTarget": 1,
          "peekingRequired": true,
          "typeVisibility": "Vortex",
          "cardinalDirection": false,

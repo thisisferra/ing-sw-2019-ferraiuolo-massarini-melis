@@ -118,6 +118,7 @@ public class GUIController implements GUIControllerInterface {
     }
 
     public void notifyClient(){
+        /*
         out.flush();
         out.println("Informazioni di gioco:");
         for (RemoteView remoteView : allViews) {
@@ -154,6 +155,7 @@ public class GUIController implements GUIControllerInterface {
             out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
             out.println();
         }
+         */
     }
 
     //TODO check this

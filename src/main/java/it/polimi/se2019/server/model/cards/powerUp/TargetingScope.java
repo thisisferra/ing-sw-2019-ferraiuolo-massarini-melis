@@ -18,9 +18,6 @@ public class TargetingScope extends PowerUp implements Serializable {
     public void applyEffect(PowerUpShot powerUpShot) {
         Player targetPlayer = powerUpShot.getTargetingPlayer();
         Player damagingPlayer = powerUpShot.getDamagingPlayer();
-        System.out.println(targetPlayer.getPlayerBoard());
         targetPlayer.getPlayerBoard().dealDamage(damagingPlayer, 1);
-        System.out.println(damagingPlayer +" deals 1 damage to "+ targetPlayer);
-        System.out.println("Damage of " + targetPlayer.getClientName() + ": " + targetPlayer.getPlayerBoard().getEnemyDamages().get(0).getDamage());
     }
 }

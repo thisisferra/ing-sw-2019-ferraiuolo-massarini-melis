@@ -88,5 +88,7 @@ public interface RMIServerInterface extends Remote {
 
     ArrayList<Player> getLocalTargets(String currentPlayer, int position) throws RemoteException;
 
+    WeaponShot getThorTargets(WeaponShot weaponShot,int targetsSize) throws RemoteException;
+
     void reconnect(String usernameTyped, GUIControllerInterface guiController) throws RemoteException;
 }

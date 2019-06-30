@@ -192,8 +192,6 @@ public class PlayerBoard implements Serializable {
         int reds = this.ammoCubes.getReds() - cubesToPay.getReds();
         int yellows = this.ammoCubes.getYellows() - cubesToPay.getYellows();
         int blues = this.ammoCubes.getBlues() - cubesToPay.getBlues();
-        System.out.println("cubes before"+this.getAmmoCubes());
         this.setDeltaAmmoCubes(new Cubes(reds,yellows,blues));
-        System.out.println("cubes after"+this.getAmmoCubes());
     }
 }

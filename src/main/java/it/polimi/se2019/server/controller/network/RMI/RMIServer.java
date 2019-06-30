@@ -382,7 +382,7 @@ public class RMIServer extends Server implements RMIServerInterface {
         activePlayer.clearHitThisTurnPlayers();
         updateAllVirtualView();
         updateAllClient();
-        roundTime = 30;
+        roundTime = 300;
 }
 
     public void setSpecificActivePlayer(Player player) {
@@ -762,5 +762,25 @@ public class RMIServer extends Server implements RMIServerInterface {
         catch(RemoteException remException) {
             logger.log(Level.INFO, "Can't close the window");
         }
+    }
+
+    public WeaponShot getThorTargets(WeaponShot weaponShot,int targetsSize) throws RemoteException{
+        RoomChecker roomChecker = new RoomChecker(match.getMap(),weaponShot.getTargetPlayer().get(targetsSize).getPosition());
+        ArrayList<Player> trueTargets = new ArrayList<>();
+        ArrayList<Player> targetablePlayers = new ArrayList<>();
+        for(Player player : roomChecker.getVisiblePlayers(match,weaponShot.getTargetPlayer().get(targetsSize)))
+            if(!player.getClientName().equals(weaponShot.getDamagingPlayer().getClientName()))
+                targetablePlayers.add(player);
+        ArrayList<Player> alreadyTargets = new ArrayList<>();
+        for(Player already : weaponShot.getAlreadyTarget()){
+            alreadyTargets.add(match.searchPlayerByClientName(already.getClientName()));
+        }
+        targetablePlayers.removeAll(alreadyTargets);
+        trueTargets.addAll(targetablePlayers);
+        trueTargets.remove(match.searchPlayerByClientName(weaponShot.getDamagingPlayer().getClientName()));
+        weaponShot.getTargetablePlayer().clear();
+        weaponShot.getTargetablePlayer().addAll(trueTargets);
+
+        return weaponShot;
     }
 }

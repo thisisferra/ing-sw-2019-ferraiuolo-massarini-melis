@@ -30,6 +30,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -1586,7 +1587,6 @@ public class GUI extends Application {
         BorderPane availableEffectPane = new BorderPane();
         availableEffectPane.setStyle(BACKGROUND_STYLE);
         String effect;
-        System.out.println("chosen Weapon"+chosenWeapon);
         for(int i = 0; i < chosenWeapon.getWeaponShots().size(); i++){
 
             effect = chosenWeapon.getWeaponShots().get(i).getNameEffect();
@@ -1650,7 +1650,7 @@ public class GUI extends Application {
         comboBox.setPadding(new Insets(10,10,10,10));
 
         try{
-            System.out.println("TargetablePlayers: "+ weaponShot.getTargetablePlayer());
+            //per ogni giocatore bersagliabile aggiungo il target se diverso da quello che sta attaccando
             for(Player target : weaponShot.getTargetablePlayer()){
                 if(!target.getClientName().equals(this.username))
                     comboBox.getItems().add(target.getClientName());
@@ -1663,38 +1663,45 @@ public class GUI extends Application {
         confirmButton.setOnAction(e-> {
             if(comboBox.getValue()!=null){
                 try{
-                    Shot currentEffect = null;
-                    for(int i=0 ; i< weaponShot.getWeapon().getEffect().length; i++)
-                        if( weaponShot.getWeapon().getEffect()[i] != null
-                                && weaponShot.getWeapon().getEffect()[i].getNameEffect().equals(weaponShot.getNameEffect()))
-                            currentEffect = weaponShot.getWeapon().getEffect()[i];
-
                     weaponShot.getTargetPlayer().add(guiController.getRmiStub().getMatch().searchPlayerByClientName((String) comboBox.getValue()));
                     Player justHitTarget = null;
                     for(Player targetablePlayer : weaponShot.getTargetablePlayer()){
                         if(targetablePlayer.getClientName().equals(guiController.getRmiStub().getMatch().searchPlayerByClientName((String) comboBox.getValue()).getClientName()))
                             justHitTarget = targetablePlayer;
                     }
-                    if(justHitTarget!= null)
+                    if(justHitTarget!= null){
+                        weaponShot.getAlreadyTarget().add(justHitTarget);
                         weaponShot.getTargetablePlayer().remove(justHitTarget);
+                    }
+                    weaponShot.getChosenEffect().setMaxTarget(weaponShot.getChosenEffect().getMaxTarget()-1);
 
-                    currentEffect.setMaxTarget(currentEffect.getMaxTarget()-1);
+                    if(weaponShot.getChosenEffect().getMaxTarget()>0 && (!weaponShot.getTargetablePlayer().isEmpty() || weaponShot.getChosenEffect().getTypeVisibility().equals("Cascade"))){
+                        if(weaponShot.getChosenEffect().getTypeVisibility().equals("Cascade")){
+                            WeaponShot weaponShot1;
+                            weaponShot1 = guiController.getRmiStub().getThorTargets(weaponShot,weaponShot.getTargetPlayer().size()-1);
 
-                    if(currentEffect.getMaxTarget()>0 && !weaponShot.getTargetablePlayer().isEmpty()){
-                        displayTargets(weaponShot);
+                            if(!weaponShot1.getTargetablePlayer().isEmpty())
+                                displayTargets(weaponShot1);
+                            else {
+                                guiController.getRmiStub().applyEffectWeapon(weaponShot1);
+                                guiController.getRmiStub().useAction(this.username);
+                                weaponTargetWindow.close();
+                            }
+                        } else{
+                            displayTargets(weaponShot);
+                        }
+
                         weaponTargetWindow.close();
-                    } else if(currentEffect.getMaxMovementTarget()>0) {
-                        System.out.println("MaxMovement: " + currentEffect.getMaxMovementTarget());
+                    } else if(weaponShot.getChosenEffect().getMaxMovementTarget()>0) {
                         guiController.getRmiStub().getMatch().searchPlayerByClientName(this.username).setCanMove(true);
                         setPushSquares(weaponShot);
                         weaponTargetWindow.close();
                     } else {
                         guiController.getRmiStub().applyEffectWeapon(weaponShot);
                         guiController.getRmiStub().useAction(this.username);
-                        if(currentEffect.getMaxMovementPlayer()>0){
+                        if(weaponShot.getChosenEffect().getMaxMovementPlayer()>0){
                             guiController.getRmiStub().giftAction(this.username);
-                            moveAction(currentEffect.getMaxMovementPlayer());
-
+                            moveAction(weaponShot.getChosenEffect().getMaxMovementPlayer());
                         }
                         weaponTargetWindow.close();
                     }
@@ -1802,7 +1809,6 @@ public class GUI extends Application {
         ArrayList<Player> allTargets = new ArrayList<>();
         try{
             allTargets.addAll(guiController.getRmiStub().getMatch().searchPlayerByClientName(this.username).getHitThisTurnPlayers());
-            System.out.println(allTargets);
             for(Player target : allTargets){
                 if(!target.getClientName().equals(this.username))
                     comboBox.getItems().add(target.getClientName());
@@ -1880,7 +1886,6 @@ public class GUI extends Application {
 
         try{
             allTargets.addAll(guiController.getRmiStub().getMatch().getAllPlayers());
-            System.out.println(allTargets);
             for(Player target : allTargets){
                 if(!target.getClientName().equals(this.username))
                     comboBox.getItems().add(target.getClientName());
@@ -1916,7 +1921,6 @@ public class GUI extends Application {
                                         Player targetingPlayer = guiController.getRmiStub().getMatch().searchPlayerByClientName((String) comboBox.getValue());
                                         powerUpShot.setTargetingPlayer(targetingPlayer);
                                         powerUpShot.setNewPosition(Integer.parseInt(rectangle.getId()));
-                                        System.out.println("\nPowerUpShot: "+powerUpShot.toString());
                                         guiController.getRmiStub().usePowerUp(this.username,index,powerUpShot);
                                     } catch (Exception exc) {
                                         logger.log(Level.INFO,"setMovementSquare() Error",exc);
