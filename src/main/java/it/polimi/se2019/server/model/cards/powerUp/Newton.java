@@ -1,6 +1,5 @@
 package it.polimi.se2019.server.model.cards.powerUp;
 
-
 import it.polimi.se2019.server.controller.PowerUpShot;
 import it.polimi.se2019.server.model.player.Player;
 

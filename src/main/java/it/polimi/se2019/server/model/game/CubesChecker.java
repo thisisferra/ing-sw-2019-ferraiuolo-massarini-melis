@@ -2,8 +2,8 @@ package it.polimi.se2019.server.model.game;
 
 public class CubesChecker {
 
-    Cubes cubesStored;
-    Cubes cubesBeingPayed;
+    private Cubes cubesStored;
+    private Cubes cubesBeingPayed;
 
     public CubesChecker(Cubes cubesStored, Cubes cubesBeingPayed){
         this.cubesStored = cubesStored;
@@ -14,12 +14,12 @@ public class CubesChecker {
     // has to pay
     // if the player can pay it return true, else it return false
     public boolean check(){
-        if(cubesStored.getReds() >= cubesBeingPayed.getReds() &&
+        return(cubesStored.getReds() >= cubesBeingPayed.getReds() &&
                 cubesStored.getYellows() >= cubesBeingPayed.getYellows() &&
-                    cubesStored.getBlues() >= cubesBeingPayed.getBlues() )
-            return true;
-        else return false;
+                    cubesStored.getBlues() >= cubesBeingPayed.getBlues() );
+
     }
+    /*
     public Cubes subtract(){
         if(this.check()){
             return new Cubes((this.cubesStored.getReds()-this.cubesBeingPayed.getReds()),
@@ -27,6 +27,6 @@ public class CubesChecker {
                     (cubesStored.getBlues()-cubesBeingPayed.getBlues()));
         }
         else return null;
-
     }
+     */
 }

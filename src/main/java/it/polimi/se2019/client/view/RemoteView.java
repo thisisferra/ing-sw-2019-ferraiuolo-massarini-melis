@@ -382,10 +382,6 @@ public class RemoteView {
         this.numberOfActions = numberOfActions;
     }
 
-    private void setWeaponShot(WeaponShot weaponShot){
-        this.weaponShot = weaponShot;
-    }
-
     private void setWeapons(ArrayList<Weapon> weapons){
         this.weapons = weapons;
     }
@@ -424,11 +420,6 @@ public class RemoteView {
     }
 
     /* * *   OTHER   * * */
-
-    public void notifyNewClient(String newClient) {
-
-    }
-
 
     /**
      * Updates the status of this class object attributes with
