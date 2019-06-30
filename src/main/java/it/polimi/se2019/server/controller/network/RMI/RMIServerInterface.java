@@ -80,6 +80,10 @@ public interface RMIServerInterface extends Remote {
 
     void notifyAllClientMovement(String username, Integer newPosition) throws RemoteException;
 
+    void notifyAllClientPickUpWeapon(String username) throws RemoteException;
+
+    void notifyAllClientPickUpAmmo(String username, String lastAmmo) throws RemoteException;
+
     void toggleAction(String username) throws RemoteException;
 
     void payCubes(String username,int reds,int yellows,int blues) throws RemoteException;
@@ -91,4 +95,6 @@ public interface RMIServerInterface extends Remote {
     WeaponShot getThorTargets(WeaponShot weaponShot,int targetsSize) throws RemoteException;
 
     void reconnect(String usernameTyped, GUIControllerInterface guiController) throws RemoteException;
+
+    void setFirstSpawnPlayer(String username) throws RemoteException;
 }

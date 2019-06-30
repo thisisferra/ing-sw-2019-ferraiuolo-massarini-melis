@@ -42,6 +42,7 @@ public class VirtualView implements Serializable {
     private int numberOfActions;
     private ArrayList<Weapon> availableWeapons = new ArrayList<>();
     private int typePlayerBoard;
+    private boolean suspended;
 
 
     //COSTRUTTORE
@@ -151,6 +152,10 @@ public class VirtualView implements Serializable {
         return this.typePlayerBoard;
     }
 
+    public boolean getSuspended() {
+        return this.suspended;
+    }
+
     //SETTER
 
     public void setClientReference(GUIControllerInterface  clientReference) {
@@ -249,6 +254,10 @@ public class VirtualView implements Serializable {
         this.typePlayerBoard = typePlayerBoard;
     }
 
+    public void setSuspended(boolean suspended) {
+        this.suspended = suspended;
+    }
+
     //ALTRO
 
     public void updateVirtualView(Player player, Match match) {
@@ -271,6 +280,7 @@ public class VirtualView implements Serializable {
         this.setDeathsPlayerBoard(player.getPlayerBoard().getDeaths());
         this.setNumberOfActions(player.getNumberOfAction());
         this.setTypePlayerBoard(player.getTypePlayerBoard());
+        this.setSuspended(player.getSuspended());
     }
 
 }

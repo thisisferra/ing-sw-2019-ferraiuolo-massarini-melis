@@ -178,7 +178,7 @@ public class GUIController implements GUIControllerInterface {
     }
 
     @Override
-    public void showMessageMovement(String message) throws RemoteException {
+    public void showMessage(String message) throws RemoteException {
         TextArea textArea = guiObject.getTextArea();
         textArea.setText(message + "\n" + textArea.getText());
 

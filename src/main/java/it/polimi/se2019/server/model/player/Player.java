@@ -41,6 +41,7 @@ public class Player implements Serializable {
     private boolean canMove;
     private boolean playerDead;
     private int typePlayerBoard;
+    private boolean firstSpawn;
 
     public Player(String clientName, Match match) {
         this.clientName = clientName;
@@ -59,6 +60,7 @@ public class Player implements Serializable {
         this.finalFrenzy = 0;       //It will be 0 if final frenzy is disabled, 1 if player will have 1 action, 2 if player will have 2 actions
         this.phaseAction = 0;
         this.typePlayerBoard = 0;
+        this.firstSpawn = true;
     }
 
     public String getCharacter() {
@@ -254,9 +256,10 @@ public class Player implements Serializable {
         }
     }
 
-    public void pickUpPowerUpToRespawn() {
+    public PowerUp pickUpPowerUpToRespawn() {
         PowerUp powerUp = match.pickUpPowerUp();
         playerHand.addPowerUp(powerUp);
+        return powerUp;
     }
 
     /**
@@ -473,6 +476,14 @@ public class Player implements Serializable {
 
     public void setTypePlayerBoard(int typePlayerBoard) {
         this.typePlayerBoard = typePlayerBoard;
+    }
+
+    public boolean getFirstSpawn() {
+        return this.firstSpawn;
+    }
+
+    public void setFirstSpawn(boolean firstSpawn) {
+        this.firstSpawn = firstSpawn;
     }
 
 }

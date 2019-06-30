@@ -12,6 +12,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -339,7 +340,9 @@ public class GUI extends Application {
     private void closeProgram() {
         boolean closeAnswer = ConfirmBox.display("Exit Adrenaline", "Are you sure?");
         if (closeAnswer) {
-            window.close();
+            Platform.exit();
+            System.exit(0);
+            //window.close();
         }
     }
 
@@ -1178,11 +1181,12 @@ public class GUI extends Application {
         window.show();
         logger.log(Level.INFO,"Fine Creazione Scena di gioco");
 
+        ///////
         Timeline fiveSecondsWonder = new Timeline(new KeyFrame(Duration.seconds(1), o-> {
             try{
-                if(guiController.getRmiStub().getActivePlayer().equals(username) && firstSpawn){
+                if(guiController.getRmiStub().getActivePlayer().equals(username) && guiController.getRmiStub().getMatch().searchPlayerByClientName(this.username).getFirstSpawn()){
                     startingDraw(FIRST_SPAWN_TEXT);
-                    firstSpawn = !firstSpawn;
+                    guiController.getRmiStub().setFirstSpawnPlayer(this.username);
                 }
             } catch (Exception exception){
                 logger.log(Level.INFO,"startingDraw Error",exception);
@@ -1190,6 +1194,7 @@ public class GUI extends Application {
         }));
         fiveSecondsWonder.setCycleCount(Timeline.INDEFINITE);
         fiveSecondsWonder.play();
+        ////////
 
     }
 
@@ -2126,9 +2131,7 @@ public class GUI extends Application {
                     rectangle.setOnMouseClicked(o -> {
                         try {
                             guiController.getRmiStub().setNewPosition(guiController.getRmiStub().getMatch().searchPlayerByClientName(username).getClientName(), Integer.parseInt(rectangle.getId()));
-                            //PROVA OGGETTO GUI
-                            //guiController.getRmiStub().notifyAllClientMovement(this.username, Integer.parseInt(rectangle.getId()));
-                            textArea.setText("New position: " + rectangle.getId()+"\n" + textArea.getText());
+                            guiController.getRmiStub().notifyAllClientMovement(this.username, Integer.parseInt(rectangle.getId()));
                             guiController.getRmiStub().useAction(this.username);
                             guiController.getRmiStub().toggleAction(this.username);
                             updateAllGUI();
@@ -2155,13 +2158,15 @@ public class GUI extends Application {
                     rectangle.setOnMouseClicked(o -> {
                         try {
                             guiController.getRmiStub().setNewPosition(guiController.getRmiStub().getMatch().searchPlayerByClientName(username).getClientName(), Integer.parseInt(rectangle.getId()));
-                            textArea.setText("New position: " + rectangle.getId() + "\n" + textArea.getText());
+                            guiController.getRmiStub().notifyAllClientMovement(this.username, Integer.parseInt(rectangle.getId()));
+                            //textArea.setText("New position: " + rectangle.getId() + "\n" + textArea.getText());
                             ammoSet.getChildren().get(Integer.parseInt(rectangle.getId())).setTranslateX(-350);
                             ammoSet.getChildren().get(Integer.parseInt(rectangle.getId())).setTranslateY(250);
                             boolean isSpawn = guiController.getRmiStub().isSpawnPoint(myRemoteView.getPosition());
                             if (!isSpawn) {
                                 guiController.getRmiStub().pickUpAmmo(myRemoteView.getUsername());
-                                textArea.setText("You have picked up an ammo:\n"+guiController.getRmiStub().showLastAmmo().toString()+"\n" + textArea.getText());
+                                guiController.getRmiStub().notifyAllClientPickUpAmmo(username, guiController.getRmiStub().showLastAmmo().toString());
+                                //textArea.setText("You have picked up an ammo:\n"+guiController.getRmiStub().showLastAmmo().toString()+"\n" + textArea.getText());
                             }
                             else {
                                 //indexToPickUp e indexToSwitch sono due input dell'utente
@@ -2178,6 +2183,7 @@ public class GUI extends Application {
                                     } else {
                                         throw new RemoteException("You have more than three weapons in your hand\n");
                                     }
+                                    guiController.getRmiStub().notifyAllClientPickUpWeapon(this.username);
                                 }
                             }
                             guiController.getRmiStub().useAction(this.username);
@@ -2210,7 +2216,7 @@ public class GUI extends Application {
                             guiController.getRmiStub().notifyAllClientMovement(this.username, Integer.parseInt(rectangle.getId()));
                             ArrayList<Weapon> newUsableWeapons = guiController.getRmiStub().verifyWeapons(this.username);
                             displayUsableWeapons(newUsableWeapons);
-                            textArea.setText("New position: " + rectangle.getId()+"\n" + textArea.getText());
+                            //textArea.setText("New position: " + rectangle.getId()+"\n" + textArea.getText());
                             guiController.getRmiStub().toggleAction(this.username);
                             restoreSquares();
                             updateAllGUI();
@@ -2355,6 +2361,8 @@ public class GUI extends Application {
     }
 
     public void closeWindow() {
-        this.window.close();
+        Platform.exit();
+        System.exit(0);
+        //this.window.close();
     }
 }

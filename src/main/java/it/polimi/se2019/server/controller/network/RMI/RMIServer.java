@@ -573,10 +573,18 @@ public class RMIServer extends Server implements RMIServerInterface {
 
     public void respawnPlayer() throws  RemoteException{
         for (Player playerToRespawn : this.match.getAllPlayers()) {
-            if (playerToRespawn.getPlayerDead()) {
+            if (playerToRespawn.getPlayerDead() && !playerToRespawn.getSuspended()) {
                 this.setSpecificActivePlayer(playerToRespawn);
                 playerToRespawn.pickUpPowerUpToRespawn();
                 getMyVirtualView(playerToRespawn.getClientName()).getClientReference().respawnDialog();
+                playerToRespawn.setPlayerDead(false);
+            }
+            if (playerToRespawn.getPlayerDead() && playerToRespawn.getSuspended()) {
+                playerToRespawn.pickUpPowerUpToRespawn();
+                int sizePowerUp = playerToRespawn.getHand().getPowerUps().size();
+                double randomNumber = (int) (Math.random() * sizePowerUp);
+                int intRandomNumber = (int) randomNumber;
+                this.discardAndSpawn(playerToRespawn.getClientName(), intRandomNumber);
                 playerToRespawn.setPlayerDead(false);
             }
         }
@@ -585,10 +593,43 @@ public class RMIServer extends Server implements RMIServerInterface {
     }
 
     public void notifyAllClientMovement(String username, Integer newPosition) throws  RemoteException{
-        String movementMessage = username + "si è spostato in posizione " + newPosition;
+        String movementMessage = username + " new position is " + newPosition;
+        for (VirtualView virtualView : allVirtualViews) {
+            if (!virtualView.getSuspended()) {
+                GUIControllerInterface clientRef = virtualView.getClientReference();
+                clientRef.showMessage(movementMessage);
+            }
+        }
+    }
+
+    public void notifyAllClientPickUpWeapon(String username) throws RemoteException{
+        String pickUpWeaponMessage = username + " pick up a weapon";
+        for (VirtualView virtualView : allVirtualViews) {
+            if (!virtualView.getSuspended()) {
+                GUIControllerInterface clientRef = virtualView.getClientReference();
+                clientRef.showMessage(pickUpWeaponMessage);
+            }
+        }
+
+    }
+
+    public void notifyAllClientPickUpAmmo(String username, String lastAmmo) throws RemoteException {
+        String pickUpWeaponMessage = username + " picked up an ammo:\n" + lastAmmo;
         for (VirtualView virtualView : allVirtualViews) {
             GUIControllerInterface clientRef = virtualView.getClientReference();
-            clientRef.showMessageMovement(movementMessage);
+            clientRef.showMessage(pickUpWeaponMessage);
+        }
+
+    }
+
+    public void notifyAllClientUserDisconnect(String username) throws RemoteException{
+        String clientDisconnect = username + " disconnected from the match\n";
+        for (VirtualView virtualView : allVirtualViews) {
+            if (!virtualView.getSuspended()) {
+                GUIControllerInterface clientRef = virtualView.getClientReference();
+                clientRef.showMessage(clientDisconnect);
+            }
+
         }
     }
 
@@ -690,7 +731,7 @@ public class RMIServer extends Server implements RMIServerInterface {
         return --interval;
     }
 
-    public void passRoundTimer() {
+    public void passRoundTimer() throws RemoteException{
         String usernameLastPlayer = activePlayer.getClientName();
         GUIControllerInterface clientRef = getMyVirtualView(usernameLastPlayer).getClientReference();
         try {
@@ -705,24 +746,27 @@ public class RMIServer extends Server implements RMIServerInterface {
         } catch (RemoteException remException1) {
             logger.log(Level.INFO, "Errore nella chiamata");
         }
-        //STAMPA DI CONTROLLO
-        System.out.println("Giocatore " + usernameLastPlayer + " sospeso!");
+        this.notifyAllClientUserDisconnect(usernameLastPlayer);
         this.closeClient(clientRef);
-        //STAMPA DI CONTROLLO
 
     }
 
-    public void setResetTimer(){
+    public void setResetTimer() throws RemoteException{
         Timer resetTimer = new Timer();
         resetTimer.scheduleAtFixedRate(new TimerTask() {
             @Override
-            public void run() {
-                countSeconds();
+            public void run(){
+                try {
+                    countSeconds();
+                }
+                catch(RemoteException remException) {
+                    remException.printStackTrace();
+                }
             }
         }, 0, 1000);
     }
 
-    public final int countSeconds() {
+    public final int countSeconds() throws RemoteException{
         if (roundTime == 1) {
             passRoundTimer();
             roundTime = 30;
@@ -754,7 +798,6 @@ public class RMIServer extends Server implements RMIServerInterface {
         return targets;
     }
 
-
     public void closeClient(GUIControllerInterface clientRef){
         try {
             clientRef.closeGUI();
@@ -782,5 +825,9 @@ public class RMIServer extends Server implements RMIServerInterface {
         weaponShot.getTargetablePlayer().addAll(trueTargets);
 
         return weaponShot;
+    }
+
+    public void setFirstSpawnPlayer(String username) {
+        this.match.searchPlayerByClientName(username).setFirstSpawn(false);
     }
 }
