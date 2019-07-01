@@ -916,7 +916,14 @@ public class RMIServer extends Server implements RMIServerInterface {
         try (FileWriter fw = new FileWriter("./AdrenalinaMatchData.json")) {
             fw.write(prettyMatchData);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Match NOT saved!!");
+        }
+        for (VirtualView virtualView : this.allVirtualViews) {
+            try {
+                virtualView.getClientReference().closeGUI();
+            } catch (Exception e) {
+                logger.log(Level.WARNING, "Cannot be able to close GUI of "+ virtualView.getUsername());
+            }
         }
     }
 
