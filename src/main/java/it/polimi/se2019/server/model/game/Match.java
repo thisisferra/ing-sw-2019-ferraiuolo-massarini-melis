@@ -39,6 +39,8 @@ public class Match extends Observable implements Serializable {
     private ArrayList<Player> playersDead = new ArrayList<>();
     private boolean openConnection;
 
+    private boolean finalFrenzyStatus;
+
     public Match(int chosenMap){
         this.chosenMap=chosenMap;
         //this.numberOfPlayers = numberOfPlayers;
@@ -47,6 +49,7 @@ public class Match extends Observable implements Serializable {
         this.discardedPowerUps = new ArrayList<>();
         this.players = new ArrayList<>();
         this.openConnection = true;
+        this.finalFrenzyStatus = false;
 
     }
 
@@ -244,5 +247,13 @@ public class Match extends Observable implements Serializable {
 
     public boolean getOpenConnection() {
         return this.openConnection;
+    }
+
+    public void setFinalFrenzyStatus(boolean finalFrenzyStatus) {
+        this.finalFrenzyStatus =finalFrenzyStatus;
+    }
+
+    public boolean isFinalFrenzyStatus() {
+        return this.finalFrenzyStatus;
     }
 }

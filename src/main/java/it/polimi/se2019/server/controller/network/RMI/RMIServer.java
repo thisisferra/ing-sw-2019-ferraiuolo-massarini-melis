@@ -533,9 +533,13 @@ public class RMIServer extends Server implements RMIServerInterface {
                 assignPoints(player);
                 player.getPlayerBoard().setDeaths();
                 player.setPhaseAction(0);
+                if (this.match.isFinalFrenzyStatus()) {
+                    player.setTypePlayerBoard(1);
+                }
             }
         }
-        if (this.match.getKillShotTrack().size() == 8) {
+        if (this.match.getKillShotTrack().size() == 1) {
+            this.match.setFinalFrenzyStatus(true);
             this.enableFinalFrenzy(username);
         }
         updateAllVirtualView();
@@ -642,15 +646,15 @@ public class RMIServer extends Server implements RMIServerInterface {
     public void  enableFinalFrenzy(String username) throws RemoteException {
         boolean flag = false;
         for (Player player : match.getAllPlayers()) {
+            if (flag) {
+                player.setFinalFrenzy(2);
+            } else
+                player.setFinalFrenzy(1);
             if (player.getPlayerBoard().getDamage().isEmpty())
                 player.setTypePlayerBoard(1);
             if (player.getClientName().equals(username)) {
                 flag = true;
             }
-            if (flag) {
-                player.setFinalFrenzy(2);
-            } else
-                player.setFinalFrenzy(1);
         }
         updateAllVirtualView();
         updateAllClient();

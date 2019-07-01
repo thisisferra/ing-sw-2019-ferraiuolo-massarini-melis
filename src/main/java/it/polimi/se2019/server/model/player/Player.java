@@ -475,7 +475,10 @@ public class Player implements Serializable {
     }
 
     public void setTypePlayerBoard(int typePlayerBoard) {
+        this.getPlayerBoard().setFinalFrenzyPointDeaths();
+        this.getPlayerBoard().resetDeaths();
         this.typePlayerBoard = typePlayerBoard;
+
     }
 
     public boolean getFirstSpawn() {

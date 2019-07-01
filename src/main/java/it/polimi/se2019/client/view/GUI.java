@@ -1091,7 +1091,7 @@ public class GUI extends Application {
                 if (guiController.getRmiStub().getActivePlayer().equals(this.username)) {
                     if (guiController.getRmiStub().checkNumberAction(username) && guiController.getRmiStub().checkSizeWeapon(this.username)) {
                         ArrayList<Weapon> usableWeapons = guiController.getRmiStub().verifyWeapons(this.username);
-                        if (!usableWeapons.isEmpty() && myRemoteView.getPhaseAction() != 2 ) {
+                        if (!usableWeapons.isEmpty() && myRemoteView.getPhaseAction() != 2 && myRemoteView.getFinalFrenzy() == 0) {
                             displayUsableWeapons(usableWeapons);
                         } else
                             if(myRemoteView.getPhaseAction() == 2){

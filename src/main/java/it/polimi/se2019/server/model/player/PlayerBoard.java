@@ -49,6 +49,14 @@ public class PlayerBoard implements Serializable {
         this.pointDeaths.add(1);
     }
 
+    public void setFinalFrenzyPointDeaths() {
+        this.pointDeaths.clear();
+        this.pointDeaths.add(2);
+        this.pointDeaths.add(1);
+        this.pointDeaths.add(1);
+        this.pointDeaths.add(1);
+    }
+
     //show damage taken from all players
     public ArrayList<Player> getDamage(){
         return this.damage;
@@ -67,6 +75,10 @@ public class PlayerBoard implements Serializable {
             throw new IllegalStateException();
 
         }
+    }
+
+    public void resetDeaths() {
+        this.deaths = 0;
     }
 
     public ArrayList<EnemyDamage> getEnemyDamages(){
