@@ -832,7 +832,6 @@ public class GUI extends Application {
      * Arrange the HBoxes around the game scene to match the background map.
      */
     private void setCabinets(){
-        System.out.println("RedCab: " + myRemoteView.getCabinetRed().getSlot().toString());
         setWeaponView(redBox, myRemoteView.getCabinetRed().getSlot());
         setWeaponView(yellowBox, myRemoteView.getCabinetYellow().getSlot());
         setWeaponView(blueBox, myRemoteView.getCabinetBlue().getSlot());
