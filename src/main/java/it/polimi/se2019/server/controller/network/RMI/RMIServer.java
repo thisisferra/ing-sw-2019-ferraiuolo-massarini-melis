@@ -105,12 +105,6 @@ public class RMIServer extends Server implements RMIServerInterface {
             UnicastRemoteObject.exportObject(this, port);
             rmiRegistry.bind(remObjName, this);
             System.out.println("Registry created and object exported");
-            /*
-            match = new Match(1);
-            match.initializeMatch();
-            System.out.println("Match created");
-            System.out.println("Client connessi: ");*/
-
         } catch (Exception e) {
             logger.log(Level.INFO,"Error starting the server",e);
         }
@@ -180,7 +174,6 @@ public class RMIServer extends Server implements RMIServerInterface {
         this.initAllClient();
         if (activePlayer == null) {
             activePlayer = match.getAllPlayers().get(0);
-            //TODO CHECKTHIS
             activePlayer.setFirstPlayer(true);
         }
         if (this.match.getOpenConnection()) {
@@ -477,7 +470,7 @@ public class RMIServer extends Server implements RMIServerInterface {
         activePlayer.clearHitThisTurnPlayers();
         updateAllVirtualView();
         updateAllClient();
-        roundTime = 30;
+        roundTime = 300;
 }
 
     public void setSpecificActivePlayer(Player player) {
@@ -853,7 +846,6 @@ public class RMIServer extends Server implements RMIServerInterface {
         }
         this.notifyAllClientUserDisconnect(usernameLastPlayer);
         this.closeClient(clientRef);
-
     }
 
     public void setResetTimer() throws RemoteException{

@@ -26,8 +26,6 @@ import java.util.logging.Logger;
 
 public class Match extends Observable implements Serializable {
     private ArrayList<Player> players;
-    private Player turn;
-    //private int numberOfPlayers;
     private ArrayList<PowerUp> powerUpStack;
     private ArrayList<Ammo> ammoStack;
     private ArrayList<Weapon> weaponStack;
@@ -146,10 +144,6 @@ public class Match extends Observable implements Serializable {
 
     public ArrayList<Player> getAllPlayers() {
         return this.players;
-    }
-
-    public void round(Player player){
-
     }
 
     //if the stack isn't empty, it return the ammo card from the last position (arraylist size -1)
