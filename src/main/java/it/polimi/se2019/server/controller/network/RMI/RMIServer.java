@@ -917,7 +917,7 @@ public class RMIServer extends Server implements RMIServerInterface {
             fw.write(prettyMatchData);
             System.out.println(" ...match saved!!!");
         } catch (Exception e) {
-            logger.log(Level.SEVERE, "Match NOT saved!!");
+            logger.log(Level.SEVERE, "\nMatch NOT saved!!");
         }
         for (VirtualView virtualView : this.allVirtualViews) {
             try {

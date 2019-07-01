@@ -362,7 +362,7 @@ public class VirtualView implements Serializable {
         virtualViewJson.put("availableWeapons", availableWeaponsJson);
 
         virtualViewJson.put("typePlayerBoard", this.getTypePlayerBoard());
-        virtualViewJson.put("suspended", this.getSuspended());
+        virtualViewJson.put("suspended", false);
 
         return virtualViewJson;
     }
