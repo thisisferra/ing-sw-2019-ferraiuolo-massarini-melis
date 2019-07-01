@@ -40,7 +40,7 @@
          },
          "maxTarget": 2,
          "peekingRequired": false,
-         "typeVisibility": "Cardinal",
+         "typeVisibility": "Cardinal2",
          "cardinalDirection": true,
          "sameDamage": true,
          "damage": [2],

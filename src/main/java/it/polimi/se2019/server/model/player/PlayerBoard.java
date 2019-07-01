@@ -113,6 +113,14 @@ public class PlayerBoard implements Serializable {
         this.pointDeaths.add(1);
     }
 
+    public void setFinalFrenzyPointDeaths() {
+        this.pointDeaths.clear();
+        this.pointDeaths.add(2);
+        this.pointDeaths.add(1);
+        this.pointDeaths.add(1);
+        this.pointDeaths.add(1);
+    }
+
     //show damage taken from all players
     public ArrayList<Player> getDamage(){
         return this.damage;
@@ -131,6 +139,10 @@ public class PlayerBoard implements Serializable {
             throw new IllegalStateException();
 
         }
+    }
+
+    public void resetDeaths() {
+        this.deaths = 0;
     }
 
     public ArrayList<EnemyDamage> getEnemyDamages(){
@@ -213,6 +225,7 @@ public class PlayerBoard implements Serializable {
         else if (this.damage.size() > 5 && this.damage.size() < 11 ) {
             owner.setPhaseAction(2);
         }
+        attacker.getHitThisTurnPlayers().add(owner);
         sortAggressor();
     }
 
@@ -255,9 +268,7 @@ public class PlayerBoard implements Serializable {
         int reds = this.ammoCubes.getReds() - cubesToPay.getReds();
         int yellows = this.ammoCubes.getYellows() - cubesToPay.getYellows();
         int blues = this.ammoCubes.getBlues() - cubesToPay.getBlues();
-        System.out.println("cubes before"+this.getAmmoCubes());
         this.setDeltaAmmoCubes(new Cubes(reds,yellows,blues));
-        System.out.println("cubes after"+this.getAmmoCubes());
     }
 
     public JSONObject toJSON() {

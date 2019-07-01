@@ -1,8 +1,10 @@
 package it.polimi.se2019.server.model.cards.weapons;
 
-import it.polimi.se2019.server.controller.InfoShot;
+import it.polimi.se2019.server.controller.WeaponShot;
 import it.polimi.se2019.server.model.cards.Shot;
 import it.polimi.se2019.server.model.game.Cubes;
+
+import java.util.ArrayList;
 
 public interface Weapon {
 
@@ -12,10 +14,7 @@ public interface Weapon {
     Cubes getBuyingCost();
     String getType();
     Shot[] getEffect();
-    int getMaxTarget();
-    void setMaxTarget(int maxTarget);
-    int getMaxMovementTarget();
-    int getMaxMovementPlayer();
-    void applyEffect(InfoShot infoShot);
+    ArrayList<WeaponShot> getWeaponShots();
+    void applyEffect(WeaponShot weaponShot);
     Weapon weaponFactory(Weapon weapon);
 }

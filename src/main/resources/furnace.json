@@ -19,9 +19,9 @@
            "yellows": 0,
            "blues": 0
          },
-         "maxTarget": 4,
+         "maxTarget": 1,
          "peekingRequired": true,
-         "typeVisibility": "CanSeeRoom",
+         "typeVisibility": "CanSeeRoomNotIn",
          "cardinalDirection": false,
          "sameDamage": true,
          "damage": [1],
@@ -38,7 +38,7 @@
            "yellows": 0,
            "blues": 0
          },
-         "maxTarget": 4,
+         "maxTarget": 1,
          "peekingRequired": true,
          "typeVisibility": "CanSeeDistance",
          "cardinalDirection": false,

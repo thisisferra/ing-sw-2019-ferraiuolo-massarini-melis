@@ -1,6 +1,6 @@
 package it.polimi.se2019.client.view;
 
-import it.polimi.se2019.server.controller.InfoShot;
+import it.polimi.se2019.server.controller.WeaponShot;
 import it.polimi.se2019.server.controller.PowerUpShot;
 import it.polimi.se2019.server.controller.VirtualView;
 import it.polimi.se2019.server.model.cards.powerUp.PowerUp;
@@ -27,7 +27,7 @@ public class RemoteView {
     private int position;
     private int points;
     private int phaseAction;        /*useful to know if the player has enhanced action*/
-    private boolean finalFrenzy;
+    private int finalFrenzy;
     private ArrayList<EnemyMark> markPlayerBoard = new ArrayList<>();      //Info useful for Player-board GUI
     private ArrayList<Player> damagePlayerBoard = new ArrayList<>();    //Info useful for Player-board GUI
     private int deathsPlayerBoard;                                      //Info useful for Player-board GUI
@@ -41,9 +41,10 @@ public class RemoteView {
     private WeaponSlot cabinetRed;
     private WeaponSlot cabinetYellow;
     private WeaponSlot cabinetBlue;
-    private InfoShot infoShot = new InfoShot();
+    private WeaponShot weaponShot = new WeaponShot();
     private PowerUpShot powerUpShot = new PowerUpShot();
     private ArrayList<Weapon> usableWeapon = new ArrayList<>();
+    private int typePlayerBoard;
 
     /**
      * Constructor of the class.
@@ -129,7 +130,7 @@ public class RemoteView {
      * @return a boolean that represents in which phase the game is.
      */
 
-    public boolean getFinalFrenzy() {
+    public int getFinalFrenzy() {
         return this.finalFrenzy;
     }
 
@@ -264,8 +265,8 @@ public class RemoteView {
         return this.cabinetBlue;
     }
 
-    public InfoShot getInfoShot() {
-        return this.infoShot;
+    public WeaponShot getWeaponShot() {
+        return this.weaponShot;
     }
 
     public ArrayList<Weapon> getUsableWeapon() {
@@ -280,7 +281,9 @@ public class RemoteView {
         return this.powerUpShot;
     }
 
-
+    public int getTypePlayerBoard(){
+        return this.typePlayerBoard;
+    }
 
     /* * *   SETTERS   * * */
 
@@ -308,7 +311,7 @@ public class RemoteView {
         this.phaseAction = phaseAction;
     }
 
-    private void setFinalFrenzy(boolean finalFrenzy) {
+    private void setFinalFrenzy(int finalFrenzy) {
         this.finalFrenzy = finalFrenzy;
     }
 
@@ -334,9 +337,7 @@ public class RemoteView {
      *                 of the user to move or not.
      */
 
-    //TODO this shouldn't be public!
-
-    public void setCanMove(boolean canMove) {
+    private void setCanMove(boolean canMove) {
         this.canMove = canMove;
     }
 
@@ -381,10 +382,6 @@ public class RemoteView {
         this.numberOfActions = numberOfActions;
     }
 
-    private void setInfoShot(InfoShot infoShot){
-        this.infoShot = infoShot;
-    }
-
     private void setWeapons(ArrayList<Weapon> weapons){
         this.weapons = weapons;
     }
@@ -409,25 +406,20 @@ public class RemoteView {
         this.cabinetBlue = cabinetBlue;
     }
 
-
-    //TODO this shouldn't be public!
-    public void setAvailableWeapon(ArrayList<Weapon> availableWeapon) {
+    private void setAvailableWeapon(ArrayList<Weapon> availableWeapon) {
         this.usableWeapon.clear();
-        System.out.println("Usable weapon in setAvailableWeapon RemoteView: "+ this.usableWeapon);
         this.usableWeapon = availableWeapon;
-        System.out.println("Usable weapon in setAvailableWeapon RemoteView: "+ this.usableWeapon);
     }
 
     private void setUsername(String username){
         this.username = username;
     }
 
-    /* * *   OTHER   * * */
-
-    public void notifyNewClient(String newClient) {
-
+    private void setTypePlayerBoard(int typePlayerBoard) {
+        this.typePlayerBoard = typePlayerBoard;
     }
 
+    /* * *   OTHER   * * */
 
     /**
      * Updates the status of this class object attributes with
@@ -459,10 +451,10 @@ public class RemoteView {
         setKillShotTrack(virtualView.getKillShotTrack());
 
         setCanMove(virtualView.getCanMove());
-        setInfoShot(virtualView.getInfoShot());  //FORSE DA TOGLIERE
-
         setPhaseAction(virtualView.getPhaseAction());
         setFinalFrenzy(virtualView.getFinalFrenzy());
+        setTypePlayerBoard(virtualView.getTypePlayerBoard());
+
         if (getUsername().equals(virtualView.getUsername())) {
             // private infos
             setNumberOfActions(virtualView.getNumberOfActions());

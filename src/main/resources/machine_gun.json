@@ -70,7 +70,7 @@
          "maxDistanceTarget": -1
        },
        {
-         "nameEffect": "BasciEffect+Extra1+Extra2",
+         "nameEffect": "BasicEffect+Extra1+Extra2",
          "extraCost": {
            "reds": 0,
            "yellows": 1,

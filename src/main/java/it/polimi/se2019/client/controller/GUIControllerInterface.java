@@ -14,8 +14,6 @@ public interface GUIControllerInterface extends Remote {
 
     String ping() throws RemoteException;
 
-    void showMessageMovement(String message) throws RemoteException;
-
     void respawnDialog() throws RemoteException;
 
     void restoreGUI() throws RemoteException;
@@ -23,4 +21,15 @@ public interface GUIControllerInterface extends Remote {
     void recallLoginScene() throws RemoteException;
 
     void restoreRemoteView(VirtualView virtualViewToRestore) throws RemoteException;
+
+    int pingClient() throws RemoteException;
+
+    void waitPlayers() throws RemoteException;
+
+    void startingMatch() throws RemoteException;
+
+    void closeGUI() throws RemoteException;
+
+    void showMessage(String message) throws RemoteException;
+
 }

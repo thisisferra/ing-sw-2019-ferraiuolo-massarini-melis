@@ -10,8 +10,10 @@ import it.polimi.se2019.server.model.map.Square;
 import it.polimi.se2019.server.model.map.WeaponSlot;
 import org.json.simple.JSONObject;
 
+import javax.net.ssl.SSLEngineResult;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 
 /**
@@ -33,10 +35,14 @@ public class Player implements Serializable {
     private PlayerBoard playerBoard;
     private Match match;
     private int numberOfAction;
-    private boolean finalFrenzy;
+    private ShotController shotController;
+    private HashSet<Player> hitThisTurnPlayers = new HashSet<>();
+    private int finalFrenzy;
     private int phaseAction;
     private boolean canMove;
     private boolean playerDead;
+    private int typePlayerBoard;
+    private boolean firstSpawn;
 
     public Player(String clientName, Match match) {
         this.clientName = clientName;
@@ -51,8 +57,10 @@ public class Player implements Serializable {
         this.numberOfAction=2;
         this.playerDead = false;
         this.canMove = false;
-        this.finalFrenzy = false;
+        this.finalFrenzy = 0;       //It will be 0 if final frenzy is disabled, 1 if player will have 1 action, 2 if player will have 2 actions
         this.phaseAction = 0;
+        this.typePlayerBoard = 0;
+        this.firstSpawn = true;
     }
 /*
     public Player() {
@@ -76,10 +84,12 @@ public class Player implements Serializable {
         resumedPlayer.suspended = (boolean) playerToResume.get("suspended");
         resumedPlayer.playerHand = Hand.resumeHand((JSONObject) playerToResume.get("playerHand"));
         resumedPlayer.numberOfAction = ((Number) playerToResume.get("numberOfAction")).intValue();
-        resumedPlayer.finalFrenzy = (boolean) playerToResume.get("finalFrenzy");
+        resumedPlayer.finalFrenzy = ((Number) playerToResume.get("finalFrenzy")).intValue();
         resumedPlayer.phaseAction = ((Number) playerToResume.get("phaseAction")).intValue();
         resumedPlayer.canMove = (boolean) playerToResume.get("canMove");
         resumedPlayer.playerDead = (boolean) playerToResume.get("playerDead");
+        resumedPlayer.typePlayerBoard = ((Number) playerToResume.get("typePlayerBoard")).intValue();
+        resumedPlayer.firstSpawn = (boolean) playerToResume.get("firstSpawn");
 
         return resumedPlayer;
     }
@@ -142,11 +152,11 @@ public class Player implements Serializable {
         return this.color;
     }
 
-    public boolean getFinalFrenzy(){
+    public int getFinalFrenzy(){
         return this.finalFrenzy;
     }
 
-    public void setFinalFrenzy(boolean finalFrenzy){
+    public void setFinalFrenzy(int finalFrenzy){
         this.finalFrenzy=finalFrenzy;
     }
 
@@ -154,9 +164,12 @@ public class Player implements Serializable {
         return this.canMove;
     }
 
+    public void setFirstPlayer(boolean firstPlayer){
+        this.firstPlayer = firstPlayer;
+    }
+
     public void setCanMove(boolean canMove){
         this.canMove=canMove;
-        System.out.println("Player setcanmove "+this.canMove);
     }
 
     /**
@@ -207,8 +220,8 @@ public class Player implements Serializable {
      * Specify if the player has disconnected from the match
      * @return true if the player has disconnected, false otherwise
      */
-    public boolean isSuspended() {
-        return suspended;
+    public boolean getSuspended() {
+        return this.suspended;
     }
 
     /**
@@ -218,6 +231,14 @@ public class Player implements Serializable {
      */
     public void setPosition(int position){
         this.position = position;
+    }
+
+    public HashSet<Player> getHitThisTurnPlayers(){
+        return this.hitThisTurnPlayers;
+    }
+
+    public void clearHitThisTurnPlayers(){
+        this.hitThisTurnPlayers.clear();
     }
 
     public int getNumberOfAction() {
@@ -237,7 +258,12 @@ public class Player implements Serializable {
     }
 
     public void resetNumberOfAction() {
-        this.numberOfAction = 2;
+        if (this.getFinalFrenzy() == 0)
+            this.numberOfAction = 2;
+        if (this.getFinalFrenzy() == 1)
+            this.numberOfAction = 1;
+        if (this.getFinalFrenzy() == 2)
+            this.numberOfAction = 2;
     }
 
 
@@ -284,9 +310,10 @@ public class Player implements Serializable {
         }
     }
 
-    public void pickUpPowerUpToRespawn() {
+    public PowerUp pickUpPowerUpToRespawn() {
         PowerUp powerUp = match.pickUpPowerUp();
         playerHand.addPowerUp(powerUp);
+        return powerUp;
     }
 
     /**
@@ -405,7 +432,7 @@ public class Player implements Serializable {
                 break;
             }
             case "blue": {
-                cubeObtained = new Cubes(1, 0, 1);
+                cubeObtained = new Cubes(0, 0, 1);
                 this.match.getDiscardedPowerUps().add(powerUp);
                 break;
 
@@ -466,7 +493,6 @@ public class Player implements Serializable {
         int intRandomNumber = (int) randomNumber;
         return this.match.getCharacterAvailable().remove(intRandomNumber);
     }
-
     //return the list of weapons the player owns if he has enough cubes for each of them and if the weapons
     // is unloaded.
     // (E.G. if the player has 1 red cube and three weapons whose reload cost is 1 red cube each, this method will
@@ -482,7 +508,6 @@ public class Player implements Serializable {
                 reloadableWeapons.add(weapon);
             }
         }
-        System.out.println("ReloadableWeapons: " + reloadableWeapons);
         return reloadableWeapons;
     }
 
@@ -503,7 +528,7 @@ public class Player implements Serializable {
         playerJson.put("position", this.getPosition());
         playerJson.put("score", this.getScore());
         playerJson.put("firstPlayer", this.isFirstPlayer());
-        playerJson.put("suspended", this.isSuspended());
+        playerJson.put("suspended", true);  //For resume game, all players have to reconnect --> not suspended
 
         playerJson.put("playerHand", this.getHand().toJSON());
         playerJson.put("playerBoard", this.getPlayerBoard().toJSON());
@@ -513,8 +538,34 @@ public class Player implements Serializable {
         playerJson.put("phaseAction", this.getPhaseAction());
         playerJson.put("canMove", this.getCanMove());
         playerJson.put("playerDead", this.getPlayerDead());
+        playerJson.put("typePlayerBoard", this.getTypePlayerBoard());
+        playerJson.put("firstSpawn", this.getFirstSpawn());
 
 
         return playerJson;
     }
+
+    public void setSuspended(boolean suspended) {
+        this.suspended = suspended;
+    }
+
+    public int getTypePlayerBoard() {
+        return this.typePlayerBoard;
+    }
+
+    public void setTypePlayerBoard(int typePlayerBoard) {
+        this.getPlayerBoard().setFinalFrenzyPointDeaths();
+        this.getPlayerBoard().resetDeaths();
+        this.typePlayerBoard = typePlayerBoard;
+
+    }
+
+    public boolean getFirstSpawn() {
+        return this.firstSpawn;
+    }
+
+    public void setFirstSpawn(boolean firstSpawn) {
+        this.firstSpawn = firstSpawn;
+    }
+
 }

@@ -4,28 +4,23 @@ import it.polimi.se2019.server.model.player.Player;
 import org.json.simple.JSONObject;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 public class Square implements Serializable {
     // position and the four cardinal direction indicates squares they're adjacent with, in the square array.
-    private int position = -1;
-    private int north = -1;
-    private int east = -1;
-    private int south = -1;
-    private int west = -1;
-    private int northWall = -1;
-    private int eastWall = -1;
-    private int southWall = -1;
-    private int westWall = -1;
+    private int position;
+    private int north;
+    private int east;
+    private int south;
+    private int west;
+    private int northWall;
+    private int eastWall;
+    private int southWall;
+    private int westWall;
     private int step=0;
     private String color;
     private boolean full;          //bool that indicates if square is full or not
     private boolean spawnPoint;      //bool that indicates if square is a spawn point or not
     private boolean visited;
-    private ArrayList<Square> hammingSquare;
-    private ArrayList<Square> axialSquares;
-    private ArrayList<Square> doors;
-    private ArrayList<Player> playersOn;
 
     public void setVisited(boolean visited){
         this.visited= visited;
@@ -111,10 +106,6 @@ public class Square implements Serializable {
         this.westWall=westWall;
     }
 
-    public void setSpawnPoint(boolean spawnPoint){
-        this.spawnPoint=spawnPoint;
-    }
-
     public Square(Square square){
         this.spawnPoint=square.spawnPoint;
         this.position=square.position;
@@ -158,6 +149,11 @@ public class Square implements Serializable {
         Square square = (Square) o;
 
         return this.getPosition() == ((Square) o).getPosition();
+    }
+    //TODO CHECKTHIS
+    @Override
+    public int hashCode() {
+        return hashCode();
     }
 
     public JSONObject toJSON() {

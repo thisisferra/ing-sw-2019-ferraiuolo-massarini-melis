@@ -39,6 +39,9 @@ public class Match extends Observable implements Serializable {
     private ArrayList<WeaponSlot> arsenal;
     private ArrayList<String> characterAvailable = new ArrayList<>();
     private ArrayList<Player> playersDead = new ArrayList<>();
+    private boolean openConnection;
+
+    private boolean finalFrenzyStatus;
 
     public Match(int chosenMap){
         this.chosenMap=chosenMap;
@@ -47,12 +50,13 @@ public class Match extends Observable implements Serializable {
         this.discardedAmmos = new ArrayList<>();
         this.discardedPowerUps = new ArrayList<>();
         this.players = new ArrayList<>();
+        this.openConnection = true;
+        this.finalFrenzyStatus = false;
 
     }
 
     public void initializeMatch(){
         this.initGameField();
-        //this.initPlayers();
         this.initCabinets();
         this.initializeCharacterAvailable();
     }
@@ -85,10 +89,8 @@ public class Match extends Observable implements Serializable {
         Logger logger = Logger.getAnonymousLogger();
         try {
             aS = gson.fromJson(new FileReader("./src/main/resources/ammo.json"), Ammo[].class);
-            //pUS = gson.fromJson(new FileReader("./src/main/resources/powerups.json"),PowerUp[].class);
 
             weaponStack.add(gson.fromJson(new FileReader("src/main/resources/plasma_gun.json"), PlasmaGun.class));
-            weaponStack.add(gson.fromJson(new FileReader("src/main/resources/thor.json"), Thor.class));
             weaponStack.add(gson.fromJson(new FileReader("src/main/resources/electroscythe.json"), Electroscythe.class));
             weaponStack.add(gson.fromJson(new FileReader("src/main/resources/lock_rifle.json"), LockRifle.class));
             weaponStack.add(gson.fromJson(new FileReader("src/main/resources/whisper.json"), Whisper.class));
@@ -108,6 +110,7 @@ public class Match extends Observable implements Serializable {
             weaponStack.add(gson.fromJson(new FileReader("src/main/resources/cyberblade.json"), Cyberblade.class));
             weaponStack.add(gson.fromJson(new FileReader("src/main/resources/rocket_launcher.json"), RocketLauncher.class));
             weaponStack.add(gson.fromJson(new FileReader("src/main/resources/grenade_launcher.json"), GrenadeLauncher.class));
+            weaponStack.add(gson.fromJson(new FileReader("src/main/resources/thor.json"), Thor.class));
 
 
             for (int i = 0; i < 2; i++) {
@@ -124,7 +127,6 @@ public class Match extends Observable implements Serializable {
                 powerUpStack.add(gson.fromJson(new FileReader("./src/main/resources/newtonYellow.json"), Newton.class));
                 powerUpStack.add(gson.fromJson(new FileReader("./src/main/resources/newtonBlue.json"), Newton.class));
             }
-            //powerUpStack = new ArrayList<>(Arrays.asList(pUS));
             ammoStack = new ArrayList<>(Arrays.asList(aS));
 
             Collections.shuffle(weaponStack);
@@ -306,6 +308,8 @@ public class Match extends Observable implements Serializable {
         }
         matchJson.put("playersDead", playersDeadJson);
 
+        matchJson.put("finalFrenzyStatus", this.isFinalFrenzyStatus());
+
         return matchJson;
     }
 
@@ -366,7 +370,7 @@ public class Match extends Observable implements Serializable {
         for (Player player : resumedMatch.players) {
             boolean foundPlayerBoard = false;
             for (int i = 0; i < playersToResume.size() && !foundPlayerBoard; i++) {
-                if (player.getClientName().equals( ((JSONObject) playersToResume.get(i)).get("clientName") )) {
+                if (player.getClientName().equals(((JSONObject) playersToResume.get(i)).get("clientName"))) {
                     player.reSetPlayerBoard((JSONObject) ((JSONObject) playersToResume.get(i)).get("playerBoard"), resumedMatch);
                     foundPlayerBoard = true;
                 }
@@ -385,6 +389,26 @@ public class Match extends Observable implements Serializable {
             resumedMatch.playersDead.add(resumedMatch.searchPlayerByClientName((String) playerDeadToResume));
         }
 
+        resumedMatch.finalFrenzyStatus = (boolean) matchToResume.get("finalFrenzyStatus");
+
         return resumedMatch;
+
+    }
+
+    public void setOpenConnection(boolean openConnection) {
+        this.openConnection = openConnection;
+    }
+
+    public boolean getOpenConnection() {
+        return this.openConnection;
+    }
+
+    public void setFinalFrenzyStatus(boolean finalFrenzyStatus) {
+        this.finalFrenzyStatus =finalFrenzyStatus;
+    }
+
+    public boolean isFinalFrenzyStatus() {
+        return this.finalFrenzyStatus;
+
     }
 }

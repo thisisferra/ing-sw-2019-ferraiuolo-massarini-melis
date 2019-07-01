@@ -1,6 +1,8 @@
 package it.polimi.se2019.server.controller;
 
+import it.polimi.se2019.server.model.cards.Shot;
 import it.polimi.se2019.server.model.cards.weapons.Weapon;
+import it.polimi.se2019.server.model.map.Square;
 import it.polimi.se2019.server.model.player.Player;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -8,7 +10,7 @@ import org.json.simple.JSONObject;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class InfoShot implements Serializable {
+public class WeaponShot implements Serializable {
 
     private Weapon weapon;
     private String nameEffect;
@@ -16,20 +18,24 @@ public class InfoShot implements Serializable {
     private ArrayList<Player> targetablePlayer = new ArrayList<>();      //Other players I can view from my position
     private ArrayList<Player> targetPlayers = new ArrayList<>();        //ArrayLists of player i want to damage
     private ArrayList<Player> alreadyTarget = new ArrayList<>();        //Player that in my round I've already hit
+    private ArrayList<Player> northTargets = new ArrayList<>();
+    private ArrayList<Player> eastTargets = new ArrayList<>();
+    private ArrayList<Player> southTargets = new ArrayList<>();
+    private ArrayList<Player> westTargets = new ArrayList<>();
+    private ArrayList<Square> squares= new ArrayList<>();
     private String cardinalDirection;                                           //String that represent the cardinal direction in effects that pull/push enemy or player have to move
     private int numberOfMoves;                                                  //Integer that represents th number of movement
     private int newPosition;
+    private Shot chosenEffect;
 
-    public InfoShot(Weapon weapon, String nameEffect) {
+    public WeaponShot(Weapon weapon, String nameEffect) {
         this.weapon = weapon;
         setNameEffect(nameEffect);
-
     }
 
-    public InfoShot() {
+    public WeaponShot() {
 
     }
-
 
     /* * *   GETTERS   * * */
 
@@ -69,6 +75,30 @@ public class InfoShot implements Serializable {
         return this.newPosition;
     }
 
+    public Shot getChosenEffect(){
+        return  this.chosenEffect;
+    }
+
+    public ArrayList<Square> getSquares() {
+        return this.squares;
+    }
+
+    public ArrayList<Player> getNorthTargets(){
+        return this.northTargets;
+    }
+
+    public ArrayList<Player> getEastTargets(){
+        return this.eastTargets;
+    }
+
+    public ArrayList<Player> getSouthTargets(){
+        return this.southTargets;
+    }
+
+    public ArrayList<Player> getWestTargets(){
+        return this.westTargets;
+    }
+
     /* * *   SETTERS   * * */
 
     public void setWeapon(Weapon weapon) {
@@ -105,6 +135,10 @@ public class InfoShot implements Serializable {
 
     public void setNewPosition(int newPosition) {
         this.newPosition = newPosition;
+    }
+
+    public void setChosenEffect(Shot chosenEffect){
+        this.chosenEffect = chosenEffect;
     }
 
     @Override

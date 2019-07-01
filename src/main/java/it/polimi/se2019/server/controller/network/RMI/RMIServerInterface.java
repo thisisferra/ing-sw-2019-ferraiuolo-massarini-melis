@@ -1,7 +1,7 @@
 package it.polimi.se2019.server.controller.network.RMI;
 
 import it.polimi.se2019.client.controller.GUIControllerInterface;
-import it.polimi.se2019.server.controller.InfoShot;
+import it.polimi.se2019.server.controller.WeaponShot;
 import it.polimi.se2019.server.controller.PowerUpShot;
 import it.polimi.se2019.server.model.cards.Ammo;
 import it.polimi.se2019.server.model.cards.weapons.Weapon;
@@ -9,6 +9,7 @@ import it.polimi.se2019.server.model.game.Match;
 import it.polimi.se2019.server.model.map.Square;
 import it.polimi.se2019.server.model.player.Player;
 
+import javax.management.relation.RelationNotFoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -19,6 +20,8 @@ public interface RMIServerInterface extends Remote {
     void login(String username, GUIControllerInterface guiController) throws RemoteException;
 
     boolean checkUsername(String username) throws Exception;
+
+    String checkUsername2(String username) throws Exception;
 
     void register(String username, GUIControllerInterface guiController,int mapId) throws RemoteException;
 
@@ -56,9 +59,9 @@ public interface RMIServerInterface extends Remote {
 
     ArrayList<Player> getKillShotTrack() throws RemoteException;
 
-    ArrayList<InfoShot> verifyWeapons(String username) throws RemoteException;
+    ArrayList<Weapon> verifyWeapons(String username) throws RemoteException;
 
-    void applyEffectWeapon(InfoShot infoShot) throws RemoteException;
+    void applyEffectWeapon(WeaponShot weaponShot) throws RemoteException;
 
     void tradeCube(int index) throws  RemoteException;
 
@@ -72,15 +75,33 @@ public interface RMIServerInterface extends Remote {
 
     void usePowerUp(String username, int index, PowerUpShot powerUpShot) throws RemoteException;
 
-    boolean deathPlayer() throws RemoteException;
+    boolean deathPlayer(String username) throws RemoteException;
 
     void respawnPlayer() throws RemoteException;
 
     void notifyAllClientMovement(String username, Integer newPosition) throws RemoteException;
+
+    void notifyAllClientPickUpWeapon(String username) throws RemoteException;
+
+    void notifyAllClientPickUpAmmo(String username, String lastAmmo) throws RemoteException;
 
     void toggleAction(String username) throws RemoteException;
 
     void payCubes(String username,int reds,int yellows,int blues) throws RemoteException;
 
     void save() throws RemoteException;
+
+    ArrayList<Square> getCardinalDirectionsSquares(int steps,int position) throws RemoteException;
+
+    ArrayList<Player> getLocalTargets(String currentPlayer, int position) throws RemoteException;
+
+    WeaponShot getThorTargets(WeaponShot weaponShot,int targetsSize) throws RemoteException;
+
+    boolean isFirstPlayer(String username) throws RemoteException;
+
+    void reconnect(String usernameTyped, GUIControllerInterface guiController) throws RemoteException;
+
+    void setFirstSpawnPlayer(String username) throws RemoteException;
+
+    boolean checkExistFile() throws RemoteException;
 }

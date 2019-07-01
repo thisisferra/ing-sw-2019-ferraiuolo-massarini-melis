@@ -28,14 +28,14 @@ public class VirtualView implements Serializable {
     private int damage;
     private int points;
     private int phaseAction;
-    private boolean finalFrenzy;
+    private int finalFrenzy;
     private ArrayList<Weapon> weapons = new ArrayList<>();
     private ArrayList<PowerUp> powerUps = new ArrayList<>();
     private Cubes cubes;
     private WeaponSlot cabinetRed;
     private WeaponSlot cabinetYellow;
     private WeaponSlot cabinetBlue;
-    private InfoShot infoShot;
+    private WeaponShot weaponShot;
     private ArrayList<EnemyMark> markPlayerBoard = new ArrayList<>();      //Info useful for Player-board GUI
     private ArrayList<Player> damagePlayerBoard = new ArrayList<>();    //Info useful for Player-board GUI
     private int deathsPlayerBoard;                                      //Info useful for Player-board GUI
@@ -44,6 +44,8 @@ public class VirtualView implements Serializable {
     private ArrayList<Square> reachableSquare = new ArrayList<>();
     private int numberOfActions;
     private ArrayList<Weapon> availableWeapons = new ArrayList<>();
+    private int typePlayerBoard;
+    private boolean suspended;
 
 
     //COSTRUTTORE
@@ -101,7 +103,7 @@ public class VirtualView implements Serializable {
         return phaseAction;
     }
 
-    public boolean getFinalFrenzy(){
+    public int getFinalFrenzy(){
         return this.finalFrenzy;
     }
 
@@ -141,8 +143,8 @@ public class VirtualView implements Serializable {
         return this.cabinetBlue;
     }
 
-    public InfoShot getInfoShot() { return
-            this.infoShot;
+    public WeaponShot getWeaponShot() { return
+            this.weaponShot;
     }
 
     public ArrayList<Weapon> getAvailableWeapons(){
@@ -153,7 +155,19 @@ public class VirtualView implements Serializable {
         return this.canMove;
     }
 
+    public int getTypePlayerBoard(){
+        return this.typePlayerBoard;
+    }
+
+    public boolean getSuspended() {
+        return this.suspended;
+    }
+
     //SETTER
+
+    public void setClientReference(GUIControllerInterface  clientReference) {
+        this.clientReference = clientReference;
+    }
 
     public void setUsername(String username) {
         this.username = username;
@@ -203,7 +217,7 @@ public class VirtualView implements Serializable {
         this.deathsPlayerBoard = deathsPlayerBoard;
     }
 
-    public void setFinalFrenzy(boolean finalFrenzy){
+    public void setFinalFrenzy(int finalFrenzy){
         this.finalFrenzy = finalFrenzy;
     }
 
@@ -223,8 +237,8 @@ public class VirtualView implements Serializable {
         this.cabinetBlue = cabinetBlue;
     }
 
-    public void setInfoShot(InfoShot infoShot) {
-        this.infoShot = infoShot;
+    public void setWeaponShot(WeaponShot weaponShot) {
+        this.weaponShot = weaponShot;
     }
 
     public void setAvailableWeapons(ArrayList<Weapon> availableWeapons){
@@ -241,6 +255,14 @@ public class VirtualView implements Serializable {
 
     public void setKillShotTrack(ArrayList<Player> killShotTrack ){
         this.killShotTrack = killShotTrack;
+    }
+
+    public void setTypePlayerBoard(int typePlayerBoard) {
+        this.typePlayerBoard = typePlayerBoard;
+    }
+
+    public void setSuspended(boolean suspended) {
+        this.suspended = suspended;
     }
 
     //ALTRO
@@ -268,6 +290,8 @@ public class VirtualView implements Serializable {
         this.setKillShotTrack(match.getKillShotTrack());
         this.setDeathsPlayerBoard(player.getPlayerBoard().getDeaths());
         this.setNumberOfActions(player.getNumberOfAction());
+        this.setTypePlayerBoard(player.getTypePlayerBoard());
+        this.setSuspended(player.getSuspended());
     }
 
     public JSONObject toJSON() {
@@ -337,6 +361,9 @@ public class VirtualView implements Serializable {
         }
         virtualViewJson.put("availableWeapons", availableWeaponsJson);
 
+        virtualViewJson.put("typePlayerBoard", this.getTypePlayerBoard());
+        virtualViewJson.put("suspended", this.getSuspended());
+
         return virtualViewJson;
     }
 
@@ -349,7 +376,9 @@ public class VirtualView implements Serializable {
         resumedVirtualView.damage = ((Number) virtualViewToResume.get("damage")).intValue();
         resumedVirtualView.points = ((Number) virtualViewToResume.get("points")).intValue();
         resumedVirtualView.phaseAction = ((Number) virtualViewToResume.get("phaseAction")).intValue();
-        resumedVirtualView.finalFrenzy = (boolean) virtualViewToResume.get("finalFrenzy");
+        resumedVirtualView.finalFrenzy = ((Number) virtualViewToResume.get("finalFrenzy")).intValue();
+        resumedVirtualView.typePlayerBoard = ((Number) virtualViewToResume.get("typePlayerBoard")).intValue();
+        resumedVirtualView.suspended = (boolean) virtualViewToResume.get("suspended");
 
         JSONArray weaponsToResume = (JSONArray) virtualViewToResume.get("weapons");
         for (Object weaponToResume : weaponsToResume) {

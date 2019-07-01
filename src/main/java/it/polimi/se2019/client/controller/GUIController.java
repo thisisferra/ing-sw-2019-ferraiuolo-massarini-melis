@@ -2,7 +2,7 @@ package it.polimi.se2019.client.controller;
 
 import it.polimi.se2019.client.view.GUI;
 import it.polimi.se2019.client.view.RemoteView;
-import it.polimi.se2019.server.controller.InfoShot;
+import it.polimi.se2019.server.controller.WeaponShot;
 import it.polimi.se2019.server.controller.VirtualView;
 import it.polimi.se2019.server.controller.network.RMI.RMIServerInterface;
 import javafx.application.Platform;
@@ -18,7 +18,7 @@ import java.util.ArrayList;
 //ritorno
 public class GUIController implements GUIControllerInterface {
 
-    GUI guiObject;
+    private GUI guiObject;
 
     PrintStream out;
 
@@ -102,7 +102,6 @@ public class GUIController implements GUIControllerInterface {
         Platform.runLater(()->{
             guiObject.getWindow().close();
             guiObject.setGameScene();
-            guiObject.setFirstSpawnFalse();
             guiObject.getWindow().setScene(guiObject.getScene());
             guiObject.getWindow().show();
         });
@@ -141,6 +140,7 @@ public class GUIController implements GUIControllerInterface {
     }
 
     public void notifyClient(){
+        /*
         out.flush();
         out.println("Informazioni di gioco:");
         for (RemoteView remoteView : allViews) {
@@ -177,6 +177,7 @@ public class GUIController implements GUIControllerInterface {
             out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
             out.println();
         }
+         */
     }
 
     //TODO check this
@@ -188,8 +189,8 @@ public class GUIController implements GUIControllerInterface {
     }
      */
 
-    public void applyEffect(InfoShot infoShot) throws RemoteException{
-        this.getRmiStub().applyEffectWeapon(infoShot);
+    public void applyEffect(WeaponShot weaponShot) throws RemoteException{
+        this.getRmiStub().applyEffectWeapon(weaponShot);
     }
 
     @Override
@@ -198,18 +199,31 @@ public class GUIController implements GUIControllerInterface {
         return this.username;
     }
 
-    public void showrespawn() {
-        this.guiObject.startingDraw();
-    }
-
     @Override
-    public void showMessageMovement(String message) throws RemoteException {
+    public void showMessage(String message) throws RemoteException {
         TextArea textArea = guiObject.getTextArea();
         textArea.setText(message + "\n" + textArea.getText());
 
     }
 
     public void respawnDialog() {
-        Platform.runLater(() -> this.guiObject.startingDraw());
+        Platform.runLater(() -> this.guiObject.startingDraw("Choose one power ups to discard.\nIt determines your spawn location, based on its color."));
+    }
+
+    public int pingClient() {
+        return 13;
+        //System.out.println("Client " +this.username + " connesso");
+    }
+
+    public void waitPlayers() throws RemoteException {
+        Platform.runLater(() -> this.guiObject.setWaitScene());
+    }
+
+    public void startingMatch() throws RemoteException {
+        Platform.runLater(() -> this.guiObject.startMatch());
+    }
+
+    public void closeGUI() throws RemoteException{
+        Platform.runLater(() -> this.guiObject.closeWindow());
     }
 }

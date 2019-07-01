@@ -1,5 +1,6 @@
 package it.polimi.se2019.server.controller;
 
+import it.polimi.se2019.server.model.cards.Shot;
 import it.polimi.se2019.server.model.cards.weapons.Weapon;
 import it.polimi.se2019.server.model.game.CubesChecker;
 import it.polimi.se2019.server.model.game.Match;
@@ -22,21 +23,21 @@ public class ShotController implements Serializable {
         this.match = match;
     }
 
-    public ArrayList<InfoShot> checkAll(Player currentPlayer) {
+    public ArrayList<Weapon> checkAll(Player currentPlayer) {
         ArrayList<Weapon> loadedWeapon = checkIsLoad(currentPlayer);
         ArrayList<Weapon> checkedWeapon;
         ArrayList<Weapon> usableWeapon;
         ArrayList<Weapon> purgedWeapons;
-        ArrayList<InfoShot> infoShots = new ArrayList<>();
+        ArrayList<WeaponShot> weaponShots = new ArrayList<>();
         if (loadedWeapon.isEmpty()) {
             return new ArrayList<>();
         }
         else {
             checkedWeapon = checkCubes(currentPlayer, loadedWeapon);
-            infoShots = checkVisibility(currentPlayer, checkedWeapon);
+            usableWeapon = checkVisibility(currentPlayer,checkedWeapon);
+            purgedWeapons = purgeUselessWeapons(usableWeapon);
         }
-        System.out.println("InfoShots: "+ infoShots);
-        return infoShots;
+        return purgedWeapons;
     }
 
     private ArrayList<Weapon> checkIsLoad(Player currentPlayer) {
@@ -57,24 +58,28 @@ public class ShotController implements Serializable {
                 cubesChecker = new CubesChecker(currentPlayer.getPlayerBoard().getAmmoCubes(), currentWeapon.getEffect()[i].getExtraCost());
                 if(!cubesChecker.check()){
                     currentWeapon.getEffect()[i] = null;
-
                 }
             }
         }
         return loadedWeapon;
     }
 
-    private ArrayList<InfoShot> checkVisibility(Player currentPlayer, ArrayList<Weapon> checkedWeapon) {
+    private ArrayList<Weapon> checkVisibility(Player currentPlayer, ArrayList<Weapon> checkedWeapon) {
 
         ArrayList<Player> visiblePlayers = new ArrayList<>();
         ArrayList<Player> notVisiblePlayers = new ArrayList<>();
-        ArrayList<InfoShot> infoShots = new ArrayList<>();
+        ArrayList<WeaponShot> weaponShots = new ArrayList<>();
 
+        //per ogni arma del giocatore
         for (Weapon weapon : checkedWeapon) {
+            //per ogni effetto dell'arma
             for (int i = 0; i < weapon.getEffect().length; i++) {
                 visiblePlayers.clear();
                 notVisiblePlayers.clear();
+                //se l'effetto è diverso da null ( posso pagarlo e l'arma e carica)
                 if(weapon.getEffect()[i] != null){
+                    //controllo il tipo di visibilità dell'effetto
+                    WeaponShot weaponShot;
                     switch(weapon.getEffect()[i].getTypeVisibility()) {
                         case "CanSee": {
                             //Create a RoomChecker object
@@ -86,22 +91,23 @@ public class ShotController implements Serializable {
                             //If i can't view anyone i can't use this effect
                             if (visiblePlayers.isEmpty()) {
                                 weapon.getEffect()[i] = null;
-                            } else
-                                addInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(),infoShots);
-                            System.out.println(visiblePlayers);
+                            } else{
+                                weaponShot = createInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(), weaponShots,weapon.getEffect()[i]);
+                                weapon.getWeaponShots().add(weaponShot);
+                            }
                             visiblePlayers.clear();
                             break;
                         }
                         case "CantSee": {
                             RoomChecker roomChecker = new RoomChecker(match.getMap(), currentPlayer.getPosition());
                             notVisiblePlayers = roomChecker.getNonVisiblePlayers(match,currentPlayer);
-                            System.out.println(notVisiblePlayers);
                             notVisiblePlayers.remove(currentPlayer);
                             if (notVisiblePlayers.isEmpty()) {
                                 weapon.getEffect()[i] = null;
-                            } else
-                                addInfoShot(currentPlayer,notVisiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(),infoShots);
-                            System.out.println(notVisiblePlayers);
+                            } else{
+                                weaponShot = createInfoShot(currentPlayer,notVisiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(), weaponShots,weapon.getEffect()[i]);
+                                weapon.getWeaponShots().add(weaponShot);
+                            }
                             break;
                         }
                         case "CanSeeDistance": {
@@ -122,13 +128,12 @@ public class ShotController implements Serializable {
                             }
                             else if(maxDistanceTarget == minDistanceTarget && maxDistanceTarget == 0) {
                                 for (Player player : match.getAllPlayers()) {
-                                    if (player.getPosition() == currentPlayer.getPosition() && player.getClientName() != currentPlayer.getClientName()) {
+                                    if (player.getPosition() == currentPlayer.getPosition() && !player.getClientName().equals(currentPlayer.getClientName())) {
                                         visiblePlayers.add(player);
                                     }
                                 }
                             }
                             else {
-                                int distance = maxDistanceTarget - minDistanceTarget;
                                 ArrayList<Square> reacheableSquare;
                                 ArrayList<Square> cantShootSquare;
                                 MovementChecker maxMovementChecker = new MovementChecker(match.getMap().getAllSquare(), maxDistanceTarget, currentPlayer.getPosition());
@@ -147,9 +152,10 @@ public class ShotController implements Serializable {
                             visiblePlayers.remove(currentPlayer);
                             if(visiblePlayers.isEmpty())
                                 weapon.getEffect()[i] = null;
-                            else
-                                addInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(),infoShots);
-                            System.out.println(visiblePlayers);
+                            else{
+                                weaponShot = createInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(), weaponShots,weapon.getEffect()[i]);
+                                weapon.getWeaponShots().add(weaponShot);
+                            }
                             break;
                         }
                         case "CanSeeRoom": {
@@ -166,9 +172,35 @@ public class ShotController implements Serializable {
                             visiblePlayers.remove(currentPlayer);
                             if(visiblePlayers.isEmpty())
                                 weapon.getEffect()[i] = null;
-                            else
-                                addInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(),infoShots);
-                            System.out.println(visiblePlayers);
+                            else{
+                                weaponShot = createInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(), weaponShots,weapon.getEffect()[i]);
+                                weapon.getWeaponShots().add(weaponShot);
+                            }
+                            break;
+                        }
+                        case "CanSeeRoomNotIn": {
+                            RoomChecker roomChecker = new RoomChecker(match.getMap(),currentPlayer.getPosition());
+                            Square[] allSquares = match.getMap().getAllSquare();
+                            ArrayList<Square> roomSquares = new ArrayList<>();
+                            String currentPlayerColor = allSquares[currentPlayer.getPosition()].getColor();
+                            for(Square square : roomChecker.getAccessibleRooms()){
+                                if(!square.getColor().equals(currentPlayerColor))
+                                    roomSquares.add(square);
+                            }
+                            for(Square square : roomSquares){
+                                for(Player player : match.getAllPlayers()){
+                                    if(player.getPosition() == square.getPosition()){
+                                        visiblePlayers.add(player);
+                                    }
+                                }
+                            }
+                            visiblePlayers.remove(currentPlayer);
+                            if(visiblePlayers.isEmpty())
+                                weapon.getEffect()[i] = null;
+                            else{
+                                weaponShot = createInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(), weaponShots,weapon.getEffect()[i]);
+                                weapon.getWeaponShots().add(weaponShot);
+                            }
                             break;
                         }
                         case "DistanceFromAPosition": {
@@ -191,9 +223,10 @@ public class ShotController implements Serializable {
                             visiblePlayers.addAll(targetPlayer);
                             if(visiblePlayers.isEmpty())
                                 weapon.getEffect()[i] = null;
-                            else
-                                addInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(),infoShots);
-                            System.out.println(visiblePlayers);
+                            else{
+                                weaponShot = createInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(), weaponShots,weapon.getEffect()[i]);
+                                weapon.getWeaponShots().add(weaponShot);
+                            }
                             break;
                         }
                         case "Cardinal" : {
@@ -203,7 +236,7 @@ public class ShotController implements Serializable {
                             cardinalSquares.addAll(movementChecker.getAllRightSquares());
                             cardinalSquares.addAll(movementChecker.getAllDownwardsSquares());
                             cardinalSquares.addAll(movementChecker.getAllLeftSquares());
-
+                            cardinalSquares.add(match.getMap().getAllSquare()[currentPlayer.getPosition()]);
                             for(Square square : cardinalSquares){
                                 for(Player player : match.getAllPlayers()){
                                     if(player.getPosition() == square.getPosition())
@@ -213,12 +246,12 @@ public class ShotController implements Serializable {
                             visiblePlayers.remove(currentPlayer);
                             if(visiblePlayers.isEmpty())
                                 weapon.getEffect()[i] = null;
-                            else
-                                addInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(),infoShots);
-                            System.out.println(visiblePlayers);
+                            else {
+                                weaponShot = createInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(), weaponShots,weapon.getEffect()[i]);
+                                weapon.getWeaponShots().add(weaponShot);
+                            }
                             break;
                         }
-
                         case "InitiallyCantSee" : {
 
                             ArrayList<Square> visibleSquares = new ArrayList<>();
@@ -249,8 +282,92 @@ public class ShotController implements Serializable {
                             visiblePlayers.addAll(playersSet);
                             if(visiblePlayers.isEmpty())
                                 weapon.getEffect()[i] = null;
-                            System.out.println(visiblePlayers);
+                            else {
+                                weaponShot = createInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(), weaponShots,weapon.getEffect()[i]);
+                                weapon.getWeaponShots().add(weaponShot);
+                            }
                             break;
+                        }
+                        case "Cardinal2" : {
+                            MovementChecker movementChecker = new MovementChecker(match.getMap().getAllSquare(),5,currentPlayer.getPosition());
+                            weaponShot = new WeaponShot();
+                            for(Square square : movementChecker.getAllUpwardsSquares()){
+                                for(Player player : match.getAllPlayers()){
+                                    if(player.getPosition() == square.getPosition() && !player.equals(currentPlayer))
+                                        weaponShot.getNorthTargets().add(player);
+                                }
+                            }
+
+                            for(Square square : movementChecker.getAllRightSquares()){
+                                for(Player player : match.getAllPlayers()){
+                                    if(player.getPosition() == square.getPosition() && !player.equals(currentPlayer))
+                                        weaponShot.getEastTargets().add(player);
+                                }
+                            }
+
+                            for(Square square : movementChecker.getAllDownwardsSquares()){
+                                for(Player player : match.getAllPlayers()){
+                                    if(player.getPosition() == square.getPosition() && !player.equals(currentPlayer))
+                                        weaponShot.getSouthTargets().add(player);
+                                }
+                            }
+
+                            for(Square square : movementChecker.getAllLeftSquares()){
+                                for(Player player : match.getAllPlayers()){
+                                    if(player.getPosition() == square.getPosition() && !player.equals(currentPlayer))
+                                        weaponShot.getWestTargets().add(player);
+                                }
+                            }
+                            for(Player player : match.getAllPlayers()){
+                                if(player.getPosition() == currentPlayer.getPosition() && !player.getClientName().equals(currentPlayer.getClientName())){
+                                    weaponShot.getNorthTargets().add(player);
+                                    weaponShot.getEastTargets().add(player);
+                                    weaponShot.getSouthTargets().add(player);
+                                    weaponShot.getWestTargets().add(player);
+                                }
+                            }
+                            if(weaponShot.getNorthTargets().isEmpty() && weaponShot.getEastTargets().isEmpty() && weaponShot.getSouthTargets().isEmpty() &&
+                                    weaponShot.getWestTargets().isEmpty())
+                                weapon.getEffect()[i] = null;
+                            else {
+                                weaponShot.setDamagingPlayer(currentPlayer);
+                                weaponShot.setWeapon(weapon);
+                                weaponShot.setNameEffect(weapon.getEffect()[i].getNameEffect());
+                                weaponShot.setChosenEffect(weapon.getEffect()[i]);
+                                weapon.getWeaponShots().add(weaponShot);
+                            }
+                            break;
+                        }
+                        case "Cascade" :{
+                            RoomChecker roomChecker = new RoomChecker(match.getMap(), currentPlayer.getPosition());
+                            visiblePlayers = roomChecker.getVisiblePlayers(match, currentPlayer);
+                            if (visiblePlayers.isEmpty()) {
+                                weapon.getEffect()[i] = null;
+                            } else{
+                                weaponShot = createInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(), weaponShots,weapon.getEffect()[i]);
+                                weapon.getWeaponShots().add(weaponShot);
+                            }
+                            visiblePlayers.clear();
+                            break;
+                        }
+
+                        case "Vortex": {
+                            RoomChecker roomChecker = new RoomChecker(match.getMap(),currentPlayer.getPosition());
+                            ArrayList<Square> squares = new ArrayList<>();
+                            for(Square square : roomChecker.getAccessibleRooms()){
+                                if(square.getPosition() != currentPlayer.getPosition()){
+                                    squares.add(square);
+                                }
+                            }
+                            weaponShot = new WeaponShot();
+                            weaponShot.setDamagingPlayer(currentPlayer);
+                            weaponShot.setWeapon(weapon);
+                            weaponShot.setNameEffect(weapon.getEffect()[i].getNameEffect());
+                            weaponShot.setChosenEffect(weapon.getEffect()[i]);
+                            weaponShot.getSquares().addAll(squares);
+                            weapon.getWeaponShots().add(weaponShot);
+                            break;
+
                         }
                         default: {
                             System.out.println(weapon + " not yet implemented");
@@ -260,35 +377,27 @@ public class ShotController implements Serializable {
                 }
             }
         }
-        return infoShots;
+        return checkedWeapon;
         }
 
     private ArrayList<Weapon> purgeUselessWeapons(ArrayList<Weapon> usableWeapon){
-        int flag = 0;
         ArrayList<Weapon> purgedWeapon = new ArrayList<>();
         for(Weapon weapon : usableWeapon){
-
-            for(int i=0 ; i < weapon.getEffect().length; i++){
-                if(weapon.getEffect()[i] != null){
-                    flag = 1;
-                }
-            }
-            if(flag == 1){
+            if(!weapon.getWeaponShots().isEmpty())
                 purgedWeapon.add(weapon);
-            }
-            flag = 0;
         }
         return purgedWeapon;
     }
 
-    private void addInfoShot(Player damagingPlayer,ArrayList<Player> targetablePlayers,Weapon weapon, String nameEffect,ArrayList<InfoShot> infoShots){
-        InfoShot infoShot = new InfoShot();
-        infoShot.setDamagingPlayer(damagingPlayer);
-        infoShot.setWeapon(weapon);
-        infoShot.getTargetablePlayer().addAll(targetablePlayers);
-        infoShot.setNameEffect(nameEffect);
+    private WeaponShot createInfoShot(Player damagingPlayer, ArrayList<Player> targetablePlayers, Weapon weapon, String nameEffect, ArrayList<WeaponShot> weaponShots, Shot chosenEffect){
+        WeaponShot weaponShot = new WeaponShot();
+        weaponShot.setDamagingPlayer(damagingPlayer);
+        weaponShot.setWeapon(weapon);
+        weaponShot.getTargetablePlayer().addAll(targetablePlayers);
+        weaponShot.setNameEffect(nameEffect);
+        weaponShot.setChosenEffect(chosenEffect);
 
-        infoShots.add(infoShot);
+        return weaponShot;
     }
 
 }

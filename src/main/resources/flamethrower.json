@@ -13,15 +13,15 @@
      },
      "effect": [
        {
-         "nameEffect": "BasicEffect",
+         "nameEffect": "Optional1",
          "extraCost": {
            "reds": 0,
            "yellows": 0,
            "blues": 0
          },
-         "maxTarget": 2,
+         "maxTarget": 1,
          "peekingRequired": true,
-         "typeVisibility": "??????",
+         "typeVisibility": "CanSeeDistance",
          "cardinalDirection": false,
          "sameDamage": true,
          "damage": [1],
@@ -29,18 +29,18 @@
          "maxMovementTarget": 0,
          "maxMovementPlayer": 0,
          "minDistanceTarget": 1,
-         "maxDistanceTarget": 2
+         "maxDistanceTarget": 1
        },
        {
-         "nameEffect": "BasicEffect+Extra1",
+         "nameEffect": "Optional2",
          "extraCost": {
            "reds": 0,
            "yellows": 2,
            "blues": 0
          },
-         "maxTarget": 4,
+         "maxTarget": 1,
          "peekingRequired": true,
-         "typeVisibility": "??????",
+         "typeVisibility": "CanSeeDistance",
          "cardinalDirection": false,
          "sameDamage": false,
          "damage": [2, 1],
@@ -48,7 +48,7 @@
          "maxMovementTarget": 0,
          "maxMovementPlayer": 0,
          "minDistanceTarget": 1,
-         "maxDistanceTarget": 2
+         "maxDistanceTarget": 1
        }
      ]
    }

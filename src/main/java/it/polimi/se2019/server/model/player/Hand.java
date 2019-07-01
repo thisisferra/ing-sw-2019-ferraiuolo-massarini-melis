@@ -62,8 +62,6 @@ public class Hand implements Serializable {
         }
         else{
             this.powerUps.add( currentPowerUp);
-            System.out.println("You already have three powerUp cards.");
-            System.out.println("Choose one to discard!");
             int index = indexToDiscard();
             this.chooseToDiscard(index);
 
