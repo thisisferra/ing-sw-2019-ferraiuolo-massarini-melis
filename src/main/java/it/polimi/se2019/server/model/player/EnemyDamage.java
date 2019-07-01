@@ -1,6 +1,8 @@
 package it.polimi.se2019.server.model.player;
 
 
+import org.json.simple.JSONObject;
+
 import java.io.Serializable;
 
 public class EnemyDamage implements Serializable {
@@ -36,4 +38,12 @@ public class EnemyDamage implements Serializable {
         return this.getAggressorPlayer()+ "" + " " + this.getDamage();
     }
 
+    public JSONObject toJSON() {
+        JSONObject enemyDamageJson = new JSONObject();
+
+        enemyDamageJson.put("aggressorPlayer", this.getAggressorPlayer().getClientName());
+        enemyDamageJson.put("damage", this.getDamage());
+
+        return enemyDamageJson;
+    }
 }

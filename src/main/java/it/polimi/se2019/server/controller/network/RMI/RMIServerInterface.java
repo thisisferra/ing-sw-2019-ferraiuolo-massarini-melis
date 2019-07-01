@@ -16,6 +16,7 @@ import java.util.ArrayList;
 //ritorno
 public interface RMIServerInterface extends Remote {
 
+    void login(String username, GUIControllerInterface guiController) throws RemoteException;
 
     boolean checkUsername(String username) throws Exception;
 
@@ -80,4 +81,6 @@ public interface RMIServerInterface extends Remote {
     void toggleAction(String username) throws RemoteException;
 
     void payCubes(String username,int reds,int yellows,int blues) throws RemoteException;
+
+    void save() throws RemoteException;
 }

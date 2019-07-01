@@ -1,6 +1,9 @@
 package it.polimi.se2019.server.model.player;
 
 import it.polimi.se2019.server.model.game.Cubes;
+import it.polimi.se2019.server.model.game.Match;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -38,6 +41,67 @@ public class PlayerBoard implements Serializable {
         this.setPointDeaths();
         this.owner = owner;
     }
+
+    public static PlayerBoard resumePlayerBoard(JSONObject playerBoardToResume, Match resumedMatch) {
+        PlayerBoard resumedPlayerBoard;
+        resumedPlayerBoard = new PlayerBoard(resumedMatch.searchPlayerByClientName((String) playerBoardToResume.get("owner")));
+
+        JSONArray damageToResume = (JSONArray) playerBoardToResume.get("damage");
+        for (Object damage : damageToResume) {
+            resumedPlayerBoard.damage.add(resumedMatch.searchPlayerByClientName((String) damage));
+        }
+
+        JSONArray enemyDamagesToResume = (JSONArray) playerBoardToResume.get("enemyDamages");
+        for (Object enemyDamageToResume : enemyDamagesToResume) {
+            Player aggressorPlayerToResume = resumedMatch.searchPlayerByClientName((String) ((JSONObject) enemyDamageToResume).get("aggressorPlayer"));
+            int aggressorDamageToResume = ((Number) ((JSONObject) enemyDamageToResume).get("damage")).intValue();
+            resumedPlayerBoard.enemyDamages.add(new EnemyDamage(aggressorPlayerToResume, aggressorDamageToResume));
+        }
+
+        JSONArray enemyMarksToResume = (JSONArray) playerBoardToResume.get("enemyMarks");
+        for (Object enemyMarkToResume : enemyMarksToResume) {
+            Player aggressorPlayerToResume = resumedMatch.searchPlayerByClientName((String) ((JSONObject) enemyMarkToResume).get("aggressorPlayer"));
+            int marksToResume = ((Number) ((JSONObject) enemyMarkToResume).get("marks")).intValue();
+            resumedPlayerBoard.enemyMarks.add(new EnemyMark(aggressorPlayerToResume, marksToResume));
+        }
+
+        resumedPlayerBoard.deaths = ((Number) playerBoardToResume.get("deaths")).intValue();
+
+        JSONArray pointDeathsToResume = (JSONArray) playerBoardToResume.get("pointDeaths");
+        while (resumedPlayerBoard.pointDeaths.size() != pointDeathsToResume.size()) {
+            resumedPlayerBoard.pointDeaths.remove(0);
+        }
+
+        resumedPlayerBoard.ammoCubes = Cubes.resumeCubes((JSONObject) playerBoardToResume.get("ammoCubes"));
+
+
+        return resumedPlayerBoard;
+    }
+
+/*
+    public static PlayerBoard resumePlayerBoard(JSONObject playerBoardToResume, PlayerBoard resumedPlayerBoard) {
+        //PlayerBoard resumedPlayerBoard = new PlayerBoard();
+
+        JSONArray damageToResume = (JSONArray) playerBoardToResume.get("damage");
+        for (Object damage : damageToResume) {
+            resumedPlayerBoard.damage.add(new Player()).setClientName((String) damage);
+        }
+
+
+        resumedPlayerBoard.deaths = (int) playerBoardToResume.get("deaths");
+
+        JSONArray pointDeathsToResume = (JSONArray) playerBoardToResume.get("pointDeaths");
+        for (Object pointDeath : pointDeathsToResume) {
+            if (resumedPlayerBoard.pointDeaths.get(0) == pointDeath)
+            resumedPlayerBoard.pointDeaths.remove(0);
+        }
+        resumedPlayerBoard.pointDeaths = ;
+
+        resumedPlayerBoard.ammoCubes = Cubes.resumeCubes((JSONObject) playerBoardToResume.get("ammoCubes"));
+
+        return resumedPlayerBoard;
+    }
+*/
 
     // init pointDeath arrayList at the beginning of the match
     private void setPointDeaths() {
@@ -194,5 +258,41 @@ public class PlayerBoard implements Serializable {
         System.out.println("cubes before"+this.getAmmoCubes());
         this.setDeltaAmmoCubes(new Cubes(reds,yellows,blues));
         System.out.println("cubes after"+this.getAmmoCubes());
+    }
+
+    public JSONObject toJSON() {
+        JSONObject playerBoardJson = new JSONObject();
+
+        JSONArray damageJson = new JSONArray();
+        for (Player player : this.getDamage()) {
+            damageJson.add(player.getClientName());
+        }
+        playerBoardJson.put("damage", damageJson);
+
+        JSONArray enemyDamagesJson = new JSONArray();
+        for (EnemyDamage enemyDamage : this.getEnemyDamages()) {
+            enemyDamagesJson.add(enemyDamage.toJSON());
+        }
+        playerBoardJson.put("enemyDamages", enemyDamagesJson);
+
+        JSONArray enemyMarksJson = new JSONArray();
+        for (EnemyMark enemyMark : this.getEnemyMarks()) {
+            enemyMarksJson.add(enemyMark.toJSON());
+        }
+        playerBoardJson.put("enemyMarks", enemyMarksJson);
+
+        playerBoardJson.put("deaths", this.getDeaths());
+
+        JSONArray pointDeathsJson = new JSONArray();
+        for (Integer integer : this.getPointDeaths()) {
+            pointDeathsJson.add(integer.intValue());
+        }
+        playerBoardJson.put("pointDeaths", pointDeathsJson);
+
+        playerBoardJson.put("ammoCubes", this.getAmmoCubes().toJSON());
+
+        playerBoardJson.put("owner", this.owner.getClientName());
+
+        return playerBoardJson;
     }
 }

@@ -11,6 +11,8 @@ import it.polimi.se2019.server.model.map.WeaponSlot;
 import it.polimi.se2019.server.model.player.Player;
 import it.polimi.se2019.server.model.player.PlayerBoard;
 import it.polimi.se2019.utils.Observable;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -235,5 +237,154 @@ public class Match extends Observable implements Serializable {
 
     public ArrayList<Player> getPlayersDead() {
         return this.playersDead;
+    }
+
+    public JSONObject toJSON() {
+        JSONObject matchJson = new JSONObject();
+
+        JSONArray playersJson = new JSONArray();
+        for (Player player : this.getAllPlayers()) {
+            playersJson.add(player.toJSON());
+        }
+        matchJson.put("players", playersJson);
+
+        JSONArray powerUpStackJson = new JSONArray();
+        for (PowerUp powerUp : powerUpStack) {
+            powerUpStackJson.add(powerUp.toJSON());
+        }
+        matchJson.put("powerUpStack", powerUpStackJson);
+
+        JSONArray ammoStackJson = new JSONArray();
+        for (Ammo ammo : ammoStack) {
+            ammoStackJson.add(ammo.toJSON());
+        }
+        matchJson.put("ammoStack", ammoStackJson);
+
+        JSONArray weaponStackJson = new JSONArray();
+        for (Weapon weapon : this.getWeaponStack()) {
+            weaponStackJson.add(weapon.getType());
+        }
+        matchJson.put("weaponStack", weaponStackJson);
+
+        JSONArray discardedPowerUpsJson = new JSONArray();
+        for (PowerUp powerUp : this.getDiscardedPowerUps()) {
+            discardedPowerUpsJson.add(powerUp.toJSON());
+        }
+        matchJson.put("discardedPowerUps", discardedPowerUpsJson);
+
+        JSONArray discardedAmmosJson = new JSONArray();
+        for (Ammo ammo : this.getDiscardedAmmos()) {
+            discardedAmmosJson.add(ammo.toJSON());
+        }
+        matchJson.put("discardedAmmos", discardedAmmosJson);
+
+        matchJson.put("chosenMap", this.getMap().getMapID());
+
+        matchJson.put("map", this.getMap().toJSON());
+
+        JSONArray killShotTrackJson = new JSONArray();
+        for (Player player : this.getKillShotTrack()) {
+            killShotTrackJson.add(player.toJSON());
+        }
+        matchJson.put("killShotTrack", killShotTrackJson);
+
+        JSONArray arsenalJson = new JSONArray();
+        for (WeaponSlot weaponSlot : this.getArsenal()) {
+            arsenalJson.add(weaponSlot.toJSON());
+        }
+        matchJson.put("arsenal", arsenalJson);
+
+        JSONArray characterAvailableJson = new JSONArray();
+        for (String playerName : this.getCharacterAvailable()) {
+            characterAvailableJson.add(playerName);
+        }
+        matchJson.put("characterAvailable", characterAvailableJson);
+
+        JSONArray playersDeadJson = new JSONArray();
+        for (Player player : this.getPlayersDead()) {
+            playersDeadJson.add(player.getClientName());
+        }
+        matchJson.put("playersDead", playersDeadJson);
+
+        return matchJson;
+    }
+
+    //public static Match resumeMatch(JSONObject matchToResume, int chosenMap, Match resumedMatch) {
+    public static Match resumeMatch(JSONObject matchToResume, int chosenMap) {
+        Match resumedMatch = new Match(chosenMap);
+        //Se ragionamento corretto, rinominare resumedMatch in resumingMatch
+
+        JSONArray discardedPowerUpsToResume = (JSONArray) matchToResume.get("discardedPowerUps");
+        for (Object discardedPowerUpToResume : discardedPowerUpsToResume) {
+            resumedMatch.discardedPowerUps.add(PowerUp.resumePowerUp((JSONObject) discardedPowerUpToResume));
+        }
+
+        JSONArray discardedAmmosToResume = (JSONArray) matchToResume.get("discardedAmmos");
+        for (Object discardedAmmoToResume : discardedAmmosToResume) {
+            resumedMatch.discardedAmmos.add(Ammo.resumeAmmo((JSONObject) discardedAmmoToResume));
+        }
+
+        JSONArray weaponStackToResume = (JSONArray) matchToResume.get("weaponStack");
+        resumedMatch.weaponStack = new ArrayList<>();
+        for (Object weaponToResume : weaponStackToResume) {
+            resumedMatch.weaponStack.add(AbstractWeapon.resumeWeapon((String) weaponToResume));
+        }
+
+        JSONArray powerUpStackToResume = (JSONArray) matchToResume.get("powerUpStack");
+        resumedMatch.powerUpStack = new ArrayList<>();
+        for (Object powerUpToResume : powerUpStackToResume) {
+            resumedMatch.powerUpStack.add(PowerUp.resumePowerUp((JSONObject) powerUpToResume));
+        }
+
+        JSONArray ammoStackToResume = (JSONArray) matchToResume.get("ammoStack");
+        resumedMatch.ammoStack = new ArrayList<>();
+        for (Object ammoToResume : ammoStackToResume) {
+            resumedMatch.ammoStack.add(Ammo.resumeAmmo((JSONObject) ammoToResume));
+        }
+
+        resumedMatch.map = Map.resumeMap((JSONObject) matchToResume.get("map"), chosenMap);
+
+        JSONArray arsenalToResume = (JSONArray) matchToResume.get("arsenal");
+        for (Object weaponSlotToResume : arsenalToResume) {
+            resumedMatch.arsenal.add(WeaponSlot.resumeWeaponSlot((JSONObject) weaponSlotToResume, resumedMatch));
+        }
+
+        JSONArray characterAvailableToResume = (JSONArray) matchToResume.get("characterAvailable");
+        for (Object character : characterAvailableToResume) {
+            resumedMatch.characterAvailable.add((String) character);
+        }
+
+        JSONArray playersToResume = (JSONArray) matchToResume.get("players");
+        for (Object playerToResume : playersToResume) {
+            //Dopo (JSONObject) playerToResume aggiungere ", new Player()" (stesso ragionamento fatto per resumeMatch())
+            resumedMatch.players.add(Player.resumePlayer((JSONObject) playerToResume, resumedMatch));
+        }
+
+        //HERE ALL PLAYERS HAVE BEEN RESUMED EXCEPT FOR THEIR PLAYERBOARD!!
+
+        //For each player, take his json playerBoard according to the clientName of the player and populate
+        for (Player player : resumedMatch.players) {
+            boolean foundPlayerBoard = false;
+            for (int i = 0; i < playersToResume.size() && !foundPlayerBoard; i++) {
+                if (player.getClientName().equals( ((JSONObject) playersToResume.get(i)).get("clientName") )) {
+                    player.reSetPlayerBoard((JSONObject) ((JSONObject) playersToResume.get(i)).get("playerBoard"), resumedMatch);
+                    foundPlayerBoard = true;
+                }
+            }
+        }
+
+        //HERE ALL PLAYERS ARE READY!!
+
+        JSONArray killShotTrackToResume = (JSONArray) matchToResume.get("killShotTrack");
+        for (Object killToResume : killShotTrackToResume) {
+            resumedMatch.killShotTrack.add(resumedMatch.searchPlayerByClientName((String) killToResume));
+        }
+
+        JSONArray playersDeadToResume = (JSONArray) matchToResume.get("playersDead");
+        for (Object playerDeadToResume : playersDeadToResume) {
+            resumedMatch.playersDead.add(resumedMatch.searchPlayerByClientName((String) playerDeadToResume));
+        }
+
+        return resumedMatch;
     }
 }

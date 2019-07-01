@@ -322,7 +322,13 @@ public class GUI extends Application {
 
     private void closeProgram() {
         boolean closeAnswer = ConfirmBox.display("Exit Adrenaline", "Are you sure?");
+
         if (closeAnswer) {
+            try {
+                guiController.getRmiStub().save();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             window.close();
         }
     }
@@ -341,95 +347,7 @@ public class GUI extends Application {
         return newButton;
     }
 
-    private Scene setLoginScene() {
-
-        GridPane layout = new GridPane();
-        layout.setPadding(new Insets(50, 75, 50, 25));
-        layout.setVgap(10);
-
-        //Name input
-        TextField nameInput = new TextField();
-        nameInput.setPromptText("Username");
-        nameInput.setStyle(TEXT_FIELD_STYLE);
-        GridPane.setConstraints(nameInput, 0, 0);
-
-        //Password input
-        PasswordField passInput = new PasswordField();
-        passInput.setStyle(TEXT_FIELD_STYLE);
-        passInput.setPromptText("Password");
-        GridPane.setConstraints(passInput, 0, 1);
-
-        //IP input
-        TextField ipInput = new TextField();
-        ipInput.setPromptText("Server IP");
-        ipInput.setStyle(TEXT_FIELD_STYLE);
-        ipInput.setPromptText("xxx.xxx.xxx.xxx");
-        GridPane.setConstraints(ipInput, 0, 2);
-
-        //login button
-        Button loginButton = new Button("Log in");
-        GridPane.setConstraints(loginButton, 0, 3);
-        loginButton.setOnAction(e -> {
-            try {
-                 guiController = new GUIController(ipInput.getText(), this);
-                String usernameTyped = nameInput.getText();
-                boolean check = guiController.getRmiStub().checkUsername(usernameTyped);
-                if (!check) {
-                    Label errorLabel = new Label("Selected name already taken, please retry.");
-                    errorLabel.setStyle("-fx-text-fill: #ff0000");
-                    Button exitButton = new Button("Back");
-                    exitButton.setStyle(BUTTON_STYLE);
-                    exitButton.setOnMouseExited(exit ->
-                        exitButton.setStyle(BUTTON_STYLE)
-                    );
-                    exitButton.setOnMouseEntered(enter ->
-                        exitButton.setStyle(HIGHLIGHT_BUTTON_STYLE)
-                    );
-                    exitButton.setOnAction(o -> {
-                        Scene backScene;
-                        backScene = setLoginScene();
-                        window.setScene(backScene);
-                    });
-                    VBox vBox = new VBox();
-                    vBox.getChildren().addAll(errorLabel, exitButton);
-                    vBox.setSpacing(20);
-                    vBox.setStyle(BACKGROUND_STYLE);
-                    vBox.setAlignment(Pos.CENTER);
-                    exitButton.setAlignment(Pos.CENTER);
-                    errorLabel.setAlignment(Pos.CENTER);
-                    Scene errorScene = new Scene(vBox, 300, 200);
-                    window.setScene(errorScene);
-                }
-                else {
-
-                    RadioButton mapChoice = (RadioButton) mapSelector.getSelectedToggle();
-                    guiController.setUsername(usernameTyped);
-                    this.username = usernameTyped;
-                    guiController.getRmiStub().register(usernameTyped, guiController,Integer.parseInt(mapChoice.getText()));
-                    myRemoteView = guiController.getMyRemoteView();
-                    textArea.setText(usernameTyped + "\n" + textArea.getText());
-                    setWaitScene();
-                }
-            } catch (Exception ex) {
-                logger.log(Level.INFO,"Failed to load login window",ex);
-            }
-
-        });
-        BorderPane pane = new BorderPane();
-        HBox sideBox = setMapSelector();
-        pane.setLeft(sideBox);
-        pane.setCenter(layout);
-        pane.setPadding(new Insets(10, 10, 10, 10));
-        loginButton.setStyle(BUTTON_STYLE);
-        loginButton.setOnMouseEntered(e -> loginButton.setStyle(HIGHLIGHT_BUTTON_STYLE));
-        loginButton.setOnMouseExited(e -> loginButton.setStyle(BUTTON_STYLE));
-        loginButton.setAlignment(Pos.CENTER);
-        layout.getChildren().addAll(nameInput, passInput, ipInput, loginButton);
-        layout.setAlignment(Pos.CENTER_LEFT);
-        Scene newScene = new Scene(pane, 500, 400);
-        pane.setStyle(BACKGROUND_STYLE);
-        return newScene;
-    }
+    //HERE I CUTTED PREVIOUS LOGIN SCENE
 
     private void setWaitScene(){
         waitLabel = new Label("Waiting for the: " + (guiController.getAllViews().size()+1) + "° player.\nPlease wait...");
@@ -480,6 +398,80 @@ public class GUI extends Application {
         waitMinimumPlayers.setCycleCount(1);
         waitMinimumPlayers.play();
 
+    }
+
+    public Scene setLoginScene() {
+
+        GridPane layout = new GridPane();
+        layout.setPadding(new Insets(50, 75, 50, 25));
+        layout.setVgap(10);
+
+        //Name input
+        TextField nameInput = new TextField();
+        nameInput.setPromptText("Username");
+        nameInput.setStyle(TEXT_FIELD_STYLE);
+        GridPane.setConstraints(nameInput, 0, 0);
+
+        //Password input
+        PasswordField passInput = new PasswordField();
+        passInput.setStyle(TEXT_FIELD_STYLE);
+        passInput.setPromptText("Password");
+        GridPane.setConstraints(passInput, 0, 1);
+
+        //IP input
+        TextField ipInput = new TextField();
+        ipInput.setPromptText("Server IP");
+        ipInput.setStyle(TEXT_FIELD_STYLE);
+        ipInput.setPromptText("xxx.xxx.xxx.xxx");
+        GridPane.setConstraints(ipInput, 0, 2);
+
+        //login button
+        Button loginButton = new Button("Log in");
+        GridPane.setConstraints(loginButton, 0, 3);
+        loginButton.setOnAction(e -> {
+            try {
+                guiController = new GUIController(ipInput.getText(), this);
+                String usernameTyped = nameInput.getText();
+                guiController.setUsername(usernameTyped);
+                this.username = usernameTyped;
+                guiController.getRmiStub().login(usernameTyped, guiController);
+                myRemoteView = guiController.getMyRemoteView();
+                textArea.setText(usernameTyped + "\n" + textArea.getText());
+                setWaitingScene();
+            } catch (Exception ex) {
+                logger.log(Level.INFO,"Failed to load login window",ex);
+            }
+        });
+        BorderPane pane = new BorderPane();
+        HBox sideBox = setMapSelector();
+        pane.setLeft(sideBox);
+        pane.setCenter(layout);
+        pane.setPadding(new Insets(10, 10, 10, 10));
+        loginButton.setStyle(BUTTON_STYLE);
+        loginButton.setOnMouseEntered(e -> loginButton.setStyle(HIGHLIGHT_BUTTON_STYLE));
+        loginButton.setOnMouseExited(e -> loginButton.setStyle(BUTTON_STYLE));
+        loginButton.setAlignment(Pos.CENTER);
+        layout.getChildren().addAll(nameInput, passInput, ipInput, loginButton);
+        layout.setAlignment(Pos.CENTER_LEFT);
+        Scene newScene = new Scene(pane, 500, 400);
+        pane.setStyle(BACKGROUND_STYLE);
+        return newScene;
+    }
+
+    private void setWaitingScene(){
+        waitLabel = new Label("Waiting for all users to reconnect.\nPlease wait...");
+        waitLabel.setStyle(LABEL_STYLE);
+        waitPane = new BorderPane();
+        waitPane.setStyle(BACKGROUND_STYLE);
+        waitPane.setCenter(waitLabel);
+        waitLabel.setAlignment(Pos.CENTER);
+        Scene waitScene = new Scene(waitPane,300,200);
+        window.setScene(waitScene);
+
+    }
+
+    public Stage getWindow() {
+        return this.window;
     }
 
     private HBox setMapSelector() {
@@ -700,6 +692,7 @@ public class GUI extends Application {
     }
 
     private void setCabinets(){
+        System.out.println("RedCab: " + myRemoteView.getCabinetRed().getSlot().toString());
         setWeaponView(redBox, myRemoteView.getCabinetRed().getSlot());
         setWeaponView(yellowBox, myRemoteView.getCabinetYellow().getSlot());
         setWeaponView(blueBox, myRemoteView.getCabinetBlue().getSlot());
@@ -1103,7 +1096,7 @@ public class GUI extends Application {
         weaponHandWindow.showAndWait();
     }
 
-    private void setGameScene(){
+    public void setGameScene(){
 
         try{
             mapNumber = guiController.getRmiStub().getMatch().getMap().getMapID();
@@ -1263,6 +1256,10 @@ public class GUI extends Application {
 
     }
 
+    public void setFirstSpawnFalse() {
+        this.firstSpawn = false;
+    }
+
     private void powerUpAlert(int index){
         Stage powerUpAlert = new Stage();
         GridPane gridPane = new GridPane();
@@ -1375,7 +1372,7 @@ public class GUI extends Application {
         BorderPane weaponsPane = new BorderPane();
 
         ImageView weaponView;
-        Image weaponImage = new Image("");
+        Image weaponImage;
         for (Weapon obj : myRemoteView.getWeapons()) {
             weaponImage = createImage(WEAPONS_PATH + obj.getType() + ".png");
             if(!obj.getLoad())

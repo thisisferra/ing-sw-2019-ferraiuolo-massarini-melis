@@ -98,6 +98,29 @@ public class GUIController implements GUIControllerInterface {
 
     }
 
+    public void restoreGUI() {
+        Platform.runLater(()->{
+            guiObject.getWindow().close();
+            guiObject.setGameScene();
+            guiObject.setFirstSpawnFalse();
+            guiObject.getWindow().setScene(guiObject.getScene());
+            guiObject.getWindow().show();
+        });
+    }
+
+    public void recallLoginScene() {
+        Platform.runLater(()->{
+            guiObject.getWindow().close();
+            guiObject.getWindow().setScene(guiObject.setLoginScene());
+            guiObject.getWindow().show();
+        });
+    }
+
+    public void restoreRemoteView(VirtualView virtualViewToRestore) {
+        allViews.add(new RemoteView(virtualViewToRestore.getUsername()));
+        getMyRemoteView().updateRemoteView(virtualViewToRestore);
+    }
+
     //Find the corrispondence between VirtualView and RemoteView and update its data
     @Override
     public void update(ArrayList<VirtualView> allVirtualView) throws RemoteException {

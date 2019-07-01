@@ -1,6 +1,8 @@
 package it.polimi.se2019.server.model.map;
 
 import com.google.gson.Gson;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -9,7 +11,7 @@ import java.util.*;
 
 public class Map implements Serializable {
     private int mapID;
-    private  Square[] allSquare;
+    private Square[] allSquare;
     private ArrayList<ArrayList<Square>> roomSquare;
 
     public void setMapID(int mapID){
@@ -106,5 +108,56 @@ public class Map implements Serializable {
     }
     public Square getSpecificSquare(int indexSquare) {
         return allSquare[indexSquare];
+    }
+
+    public JSONObject toJSON() {
+        JSONObject mapJson = new JSONObject();
+
+        mapJson.put("mapID", this.getMapID());
+
+        JSONArray allSquareJson = new JSONArray();
+        for (Square square : this.getAllSquare()) {
+            allSquareJson.add(square.toJSON());
+        }
+        mapJson.put("allSquare", allSquareJson);
+
+        JSONArray roomSquareJson = new JSONArray();
+        for (ArrayList<Square> room : this.getRoomSquare()) {
+            JSONArray squaresJson = new JSONArray();
+            for (Square square : room) {
+                squaresJson.add(square.toJSON());
+            }
+            roomSquareJson.add(squaresJson);
+        }
+        mapJson.put("roomSquare", roomSquareJson);
+
+        return mapJson;
+    }
+
+    public static Map resumeMap(JSONObject mapToResume, int chosenMap) {
+        Map resumedMap = new Map(chosenMap);
+
+        JSONArray allSquareToResume = (JSONArray) mapToResume.get("allSquare");
+        resumedMap.allSquare = new Square[allSquareToResume.size()];
+        for (int i = 0; i < allSquareToResume.size(); i++) {
+            resumedMap.allSquare[i] = Square.resumeSquare((JSONObject) allSquareToResume.get(i));
+        }
+
+        JSONArray roomSquareToResume = (JSONArray) mapToResume.get("roomSquare");
+        resumedMap.roomSquare = new ArrayList<>();
+        int roomNumber = 0;
+        for (Object room : roomSquareToResume) {
+
+            JSONArray squaresToResume = (JSONArray) room;
+            resumedMap.roomSquare.add(new ArrayList<>());
+
+            for (Object square : squaresToResume) {
+                resumedMap.roomSquare.get(roomNumber).add(Square.resumeSquare((JSONObject) square));
+            }
+
+            roomNumber++;
+        }
+
+        return resumedMap;
     }
 }

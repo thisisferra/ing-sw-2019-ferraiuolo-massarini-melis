@@ -1,6 +1,7 @@
 package it.polimi.se2019.server.model.map;
 
 import it.polimi.se2019.server.model.player.Player;
+import org.json.simple.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -130,6 +131,11 @@ public class Square implements Serializable {
         this.southWall = square.southWall;
         this.westWall = square.westWall;
     }
+
+    public Square() {
+        //Needed for resuming a square from saved match
+    }
+
     public int getStep(){
         return this.step;
     }
@@ -154,4 +160,49 @@ public class Square implements Serializable {
         return this.getPosition() == ((Square) o).getPosition();
     }
 
+    public JSONObject toJSON() {
+        JSONObject squareJson = new JSONObject();
+
+        squareJson.put("position", this.getPosition());
+        squareJson.put("north", this.getNorth());
+        squareJson.put("east", this.getEast());
+        squareJson.put("south", this.getSouth());
+        squareJson.put("west", this.getWest());
+
+        squareJson.put("northWall", this.getNorthWall());
+        squareJson.put("eastWall", this.getEastWall());
+        squareJson.put("southWall", this.getSouthWall());
+        squareJson.put("westWall", this.getWestWall());
+
+        squareJson.put("step", this.getStep());
+        squareJson.put("color", this.getColor());
+        squareJson.put("full", this.isFull());
+        squareJson.put("spawnPoint", this.isSpawnPoint());
+        squareJson.put("visited", this.getVisited());
+
+        return squareJson;
+    }
+
+    public static Square resumeSquare(JSONObject squareToResume) {
+        Square resumedSquare = new Square();
+
+        resumedSquare.position = ((Number) squareToResume.get("position")).intValue();
+        resumedSquare.north = ((Number) squareToResume.get("north")).intValue();
+        resumedSquare.east = ((Number) squareToResume.get("east")).intValue();
+        resumedSquare.south = ((Number) squareToResume.get("south")).intValue();
+        resumedSquare.west = ((Number) squareToResume.get("west")).intValue();
+
+        resumedSquare.northWall = ((Number) squareToResume.get("northWall")).intValue();
+        resumedSquare.eastWall = ((Number) squareToResume.get("eastWall")).intValue();
+        resumedSquare.southWall = ((Number) squareToResume.get("southWall")).intValue();
+        resumedSquare.westWall = ((Number) squareToResume.get("westWall")).intValue();
+
+        resumedSquare.step = ((Number) squareToResume.get("step")).intValue();
+        resumedSquare.color = (String) squareToResume.get("color");
+        resumedSquare.full = (boolean) squareToResume.get("full");
+        resumedSquare.spawnPoint = (boolean) squareToResume.get("spawnPoint");
+        resumedSquare.visited = (boolean) squareToResume.get("visited");
+
+        return resumedSquare;
+    }
 }

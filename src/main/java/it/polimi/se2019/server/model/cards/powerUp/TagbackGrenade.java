@@ -14,6 +14,13 @@ public class TagbackGrenade extends PowerUp implements Serializable {
         this.color = powerUp.getColor();
     }
 
+    public TagbackGrenade(String type, String color) {
+        //Needed for resuming a powerup from saved match
+        super();
+        this.type = type;
+        this.color = color;
+    }
+
     @Override
     public void applyEffect(PowerUpShot powerUpShot) {
         Player damagingPlayer = powerUpShot.getDamagingPlayer();

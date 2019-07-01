@@ -8,6 +8,7 @@ import it.polimi.se2019.server.model.game.Cubes;
 import it.polimi.se2019.server.model.game.Match;
 import it.polimi.se2019.server.model.map.Square;
 import it.polimi.se2019.server.model.map.WeaponSlot;
+import org.json.simple.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -32,7 +33,6 @@ public class Player implements Serializable {
     private PlayerBoard playerBoard;
     private Match match;
     private int numberOfAction;
-    private ShotController shotController;
     private boolean finalFrenzy;
     private int phaseAction;
     private boolean canMove;
@@ -47,7 +47,6 @@ public class Player implements Serializable {
         this.firstPlayer = false;
         this.playerBoard = new PlayerBoard(this);
         this.playerHand = new Hand();
-        this.shotController = new ShotController(match);
         this.position = -1;
         this.numberOfAction=2;
         this.playerDead = false;
@@ -55,7 +54,58 @@ public class Player implements Serializable {
         this.finalFrenzy = false;
         this.phaseAction = 0;
     }
+/*
+    public Player() {
+        //Needed for resuming a player from saved match
+    }
+*/
 
+    public Player(Match resumedMatch) {
+        this.match = resumedMatch;
+    }
+
+    public static Player resumePlayer(JSONObject playerToResume, Match resumedMatch) {
+        Player resumedPlayer = new Player(resumedMatch);
+
+        resumedPlayer.character = (String) playerToResume.get("character");
+        resumedPlayer.clientName = (String) playerToResume.get("clientName");
+        resumedPlayer.color = (String) playerToResume.get("color");
+        resumedPlayer.position = ((Number) playerToResume.get("position")).intValue();
+        resumedPlayer.score = ((Number) playerToResume.get("score")).intValue();
+        resumedPlayer.firstPlayer = (boolean) playerToResume.get("firstPlayer");
+        resumedPlayer.suspended = (boolean) playerToResume.get("suspended");
+        resumedPlayer.playerHand = Hand.resumeHand((JSONObject) playerToResume.get("playerHand"));
+        resumedPlayer.numberOfAction = ((Number) playerToResume.get("numberOfAction")).intValue();
+        resumedPlayer.finalFrenzy = (boolean) playerToResume.get("finalFrenzy");
+        resumedPlayer.phaseAction = ((Number) playerToResume.get("phaseAction")).intValue();
+        resumedPlayer.canMove = (boolean) playerToResume.get("canMove");
+        resumedPlayer.playerDead = (boolean) playerToResume.get("playerDead");
+
+        return resumedPlayer;
+    }
+
+/*
+    public static Player resumePlayer(JSONObject playerToResume, Player resumedPlayer) {
+        //Player resumedPlayer = new Player();
+
+        resumedPlayer.character = (String) playerToResume.get("character");
+        resumedPlayer.clientName = (String) playerToResume.get("clientName");
+        resumedPlayer.color = (String) playerToResume.get("color");
+        resumedPlayer.position = (int) playerToResume.get("position");
+        resumedPlayer.score = (int) playerToResume.get("score");
+        resumedPlayer.firstPlayer = (boolean) playerToResume.get("firstPlayer");
+        resumedPlayer.suspended = (boolean) playerToResume.get("suspended");
+        resumedPlayer.playerHand = Hand.resumeHand((JSONObject) playerToResume.get("playerHand"));
+        resumedPlayer.playerBoard = PlayerBoard.resumePlayerBoard((JSONObject) playerToResume.get("playerBoard"), new PlayerBoard(resumedPlayer));
+        resumedPlayer.numberOfAction = (int) playerToResume.get("numberOfAction");
+        resumedPlayer.finalFrenzy = (boolean) playerToResume.get("finalFrenzy");
+        resumedPlayer.phaseAction = (int) playerToResume.get("phaseAction");
+        resumedPlayer.canMove = (boolean) playerToResume.get("canMove");
+        resumedPlayer.playerDead = (boolean) playerToResume.get("playerDead");
+
+        return resumedPlayer;
+    }
+*/
     public String getCharacter() {
         return this.character;
     }
@@ -141,6 +191,10 @@ public class Player implements Serializable {
         return this.playerBoard;
     }
 
+    public void reSetPlayerBoard(JSONObject playerBoardToResume, Match resumedMatch) {
+        this.playerBoard = PlayerBoard.resumePlayerBoard(playerBoardToResume, resumedMatch);
+    }
+
     /**
      * Specify if the player is the first who has played in the match
      * @return true if the player is the first who has played, false otherwise
@@ -186,9 +240,6 @@ public class Player implements Serializable {
         this.numberOfAction = 2;
     }
 
-    public ShotController getShotController() {
-        return this.shotController;
-    }
 
     /**
      * Modify the {@link Hand} of the player adding cubes and, if necessary, a powerup.
@@ -441,5 +492,29 @@ public class Player implements Serializable {
 
     public void setPlayerDead(boolean playerDead) {
         this.playerDead = playerDead;
+    }
+
+    public JSONObject toJSON() {
+        JSONObject playerJson = new JSONObject();
+
+        playerJson.put("character", this.getCharacter());
+        playerJson.put("clientName", this.getClientName());
+        playerJson.put("color", this.getColor());
+        playerJson.put("position", this.getPosition());
+        playerJson.put("score", this.getScore());
+        playerJson.put("firstPlayer", this.isFirstPlayer());
+        playerJson.put("suspended", this.isSuspended());
+
+        playerJson.put("playerHand", this.getHand().toJSON());
+        playerJson.put("playerBoard", this.getPlayerBoard().toJSON());
+
+        playerJson.put("numberOfAction", this.getNumberOfAction());
+        playerJson.put("finalFrenzy", this.getFinalFrenzy());
+        playerJson.put("phaseAction", this.getPhaseAction());
+        playerJson.put("canMove", this.getCanMove());
+        playerJson.put("playerDead", this.getPlayerDead());
+
+
+        return playerJson;
     }
 }

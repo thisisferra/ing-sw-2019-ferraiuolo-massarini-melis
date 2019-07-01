@@ -1,5 +1,7 @@
 package it.polimi.se2019.server.model.player;
 
+import org.json.simple.JSONObject;
+
 import java.io.Serializable;
 
 public class EnemyMark implements Serializable {
@@ -29,5 +31,14 @@ public class EnemyMark implements Serializable {
     @Override
     public String toString(){
         return this.getAggressorPlayer() +" "+ this.getMarks();
+    }
+
+    public JSONObject toJSON() {
+        JSONObject enemyMarkJson = new JSONObject();
+
+        enemyMarkJson.put("aggressorPlayer", this.getAggressorPlayer().getClientName());
+        enemyMarkJson.put("marks", this.getMarks());
+
+        return enemyMarkJson;
     }
 }

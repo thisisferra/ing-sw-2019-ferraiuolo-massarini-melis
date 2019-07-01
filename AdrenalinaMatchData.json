@@ -1,0 +1,1584 @@
+{
+  "match": {
+    "players": [
+      {
+        "canMove": false,
+        "playerDead": false,
+        "firstPlayer": false,
+        "clientName": "Vizzuorio",
+        "numberOfAction": 2,
+        "finalFrenzy": false,
+        "suspended": false,
+        "score": 1,
+        "character": "sprog",
+        "phaseAction": 1,
+        "playerHand": {
+          "weapons": [
+            "whisper"
+          ],
+          "powerUps": [
+            {
+              "color": "yellow",
+              "type": "teleporter"
+            },
+            {
+              "color": "red",
+              "type": "targeting_scope"
+            }
+          ]
+        },
+        "position": 10,
+        "playerBoard": {
+          "owner": "Vizzuorio",
+          "damage": [
+            "Raviuoujo",
+            "Frabisius",
+            "Frabisius",
+            "Frabisius"
+          ],
+          "ammoCubes": {
+            "reds": 1,
+            "blues": 0,
+            "yellows": 2
+          },
+          "enemyMarks": [
+            {
+              "marks": 2,
+              "aggressorPlayer": "Raviuoujo"
+            }
+          ],
+          "enemyDamages": [
+            {
+              "damage": 3,
+              "aggressorPlayer": "Frabisius"
+            },
+            {
+              "damage": 1,
+              "aggressorPlayer": "Raviuoujo"
+            }
+          ],
+          "pointDeaths": [
+            8,
+            6,
+            4,
+            2,
+            1,
+            1
+          ],
+          "deaths": 0
+        }
+      },
+      {
+        "canMove": false,
+        "playerDead": false,
+        "firstPlayer": false,
+        "clientName": "Frabisius",
+        "numberOfAction": 2,
+        "finalFrenzy": false,
+        "suspended": false,
+        "score": 0,
+        "character": "violet",
+        "phaseAction": 1,
+        "playerHand": {
+          "weapons": [
+            "plasma_gun"
+          ],
+          "powerUps": [
+            {
+              "color": "red",
+              "type": "tagback_grenade"
+            }
+          ]
+        },
+        "position": 0,
+        "playerBoard": {
+          "owner": "Frabisius",
+          "damage": [
+            "Vizzuorio",
+            "Vizzuorio",
+            "Vizzuorio"
+          ],
+          "ammoCubes": {
+            "reds": 3,
+            "blues": 0,
+            "yellows": 3
+          },
+          "enemyMarks": [
+            {
+              "marks": 1,
+              "aggressorPlayer": "Vizzuorio"
+            }
+          ],
+          "enemyDamages": [
+            {
+              "damage": 3,
+              "aggressorPlayer": "Vizzuorio"
+            }
+          ],
+          "pointDeaths": [
+            8,
+            6,
+            4,
+            2,
+            1,
+            1
+          ],
+          "deaths": 0
+        }
+      },
+      {
+        "canMove": false,
+        "playerDead": false,
+        "firstPlayer": false,
+        "clientName": "Raviuoujo",
+        "numberOfAction": 2,
+        "finalFrenzy": false,
+        "suspended": false,
+        "score": 1,
+        "character": "distructor",
+        "phaseAction": 0,
+        "playerHand": {
+          "weapons": [
+            "zx-2"
+          ],
+          "powerUps": [
+            {
+              "color": "red",
+              "type": "teleporter"
+            }
+          ]
+        },
+        "position": 11,
+        "playerBoard": {
+          "owner": "Raviuoujo",
+          "damage": [],
+          "ammoCubes": {
+            "reds": 0,
+            "blues": 1,
+            "yellows": 1
+          },
+          "enemyMarks": [],
+          "enemyDamages": [],
+          "pointDeaths": [
+            8,
+            6,
+            4,
+            2,
+            1,
+            1
+          ],
+          "deaths": 0
+        }
+      }
+    ],
+    "weaponStack": [
+      "rocket_launcher",
+      "railgun",
+      "grenade_launcher",
+      "cyberblade",
+      "flamethrower",
+      "vortex_cannon",
+      "sledgehammer",
+      "shotgun",
+      "tractor_beam"
+    ],
+    "discardedPowerUps": [
+      {
+        "color": "yellow",
+        "type": "tagback_grenade"
+      },
+      {
+        "color": "red",
+        "type": "newton"
+      },
+      {
+        "color": "yellow",
+        "type": "teleporter"
+      }
+    ],
+    "discardedAmmos": [
+      {
+        "ammoCubes": {
+          "reds": 0,
+          "blues": 0,
+          "yellows": 2
+        },
+        "powerUpCard": true
+      },
+      {
+        "ammoCubes": {
+          "reds": 1,
+          "blues": 0,
+          "yellows": 2
+        },
+        "powerUpCard": false
+      },
+      {
+        "ammoCubes": {
+          "reds": 2,
+          "blues": 0,
+          "yellows": 1
+        },
+        "powerUpCard": false
+      }
+    ],
+    "powerUpStack": [
+      {
+        "color": "blue",
+        "type": "tagback_grenade"
+      },
+      {
+        "color": "blue",
+        "type": "targeting_scope"
+      },
+      {
+        "color": "blue",
+        "type": "newton"
+      },
+      {
+        "color": "yellow",
+        "type": "newton"
+      },
+      {
+        "color": "yellow",
+        "type": "tagback_grenade"
+      },
+      {
+        "color": "yellow",
+        "type": "targeting_scope"
+      },
+      {
+        "color": "red",
+        "type": "targeting_scope"
+      },
+      {
+        "color": "yellow",
+        "type": "targeting_scope"
+      },
+      {
+        "color": "red",
+        "type": "tagback_grenade"
+      },
+      {
+        "color": "red",
+        "type": "teleporter"
+      },
+      {
+        "color": "yellow",
+        "type": "newton"
+      },
+      {
+        "color": "blue",
+        "type": "teleporter"
+      },
+      {
+        "color": "blue",
+        "type": "teleporter"
+      },
+      {
+        "color": "blue",
+        "type": "tagback_grenade"
+      },
+      {
+        "color": "blue",
+        "type": "newton"
+      },
+      {
+        "color": "blue",
+        "type": "targeting_scope"
+      },
+      {
+        "color": "red",
+        "type": "newton"
+      }
+    ],
+    "ammoStack": [
+      {
+        "ammoCubes": {
+          "reds": 1,
+          "blues": 2,
+          "yellows": 0
+        },
+        "powerUpCard": false
+      },
+      {
+        "ammoCubes": {
+          "reds": 0,
+          "blues": 1,
+          "yellows": 1
+        },
+        "powerUpCard": true
+      },
+      {
+        "ammoCubes": {
+          "reds": 1,
+          "blues": 1,
+          "yellows": 0
+        },
+        "powerUpCard": true
+      },
+      {
+        "ammoCubes": {
+          "reds": 0,
+          "blues": 2,
+          "yellows": 1
+        },
+        "powerUpCard": false
+      },
+      {
+        "ammoCubes": {
+          "reds": 0,
+          "blues": 1,
+          "yellows": 2
+        },
+        "powerUpCard": false
+      },
+      {
+        "ammoCubes": {
+          "reds": 1,
+          "blues": 0,
+          "yellows": 2
+        },
+        "powerUpCard": false
+      },
+      {
+        "ammoCubes": {
+          "reds": 2,
+          "blues": 0,
+          "yellows": 1
+        },
+        "powerUpCard": false
+      },
+      {
+        "ammoCubes": {
+          "reds": 2,
+          "blues": 1,
+          "yellows": 0
+        },
+        "powerUpCard": false
+      },
+      {
+        "ammoCubes": {
+          "reds": 0,
+          "blues": 1,
+          "yellows": 2
+        },
+        "powerUpCard": false
+      },
+      {
+        "ammoCubes": {
+          "reds": 1,
+          "blues": 0,
+          "yellows": 1
+        },
+        "powerUpCard": true
+      },
+      {
+        "ammoCubes": {
+          "reds": 0,
+          "blues": 2,
+          "yellows": 1
+        },
+        "powerUpCard": false
+      },
+      {
+        "ammoCubes": {
+          "reds": 1,
+          "blues": 0,
+          "yellows": 1
+        },
+        "powerUpCard": true
+      },
+      {
+        "ammoCubes": {
+          "reds": 1,
+          "blues": 0,
+          "yellows": 1
+        },
+        "powerUpCard": true
+      },
+      {
+        "ammoCubes": {
+          "reds": 1,
+          "blues": 0,
+          "yellows": 2
+        },
+        "powerUpCard": false
+      },
+      {
+        "ammoCubes": {
+          "reds": 1,
+          "blues": 1,
+          "yellows": 0
+        },
+        "powerUpCard": true
+      },
+      {
+        "ammoCubes": {
+          "reds": 1,
+          "blues": 0,
+          "yellows": 1
+        },
+        "powerUpCard": true
+      },
+      {
+        "ammoCubes": {
+          "reds": 2,
+          "blues": 0,
+          "yellows": 0
+        },
+        "powerUpCard": true
+      },
+      {
+        "ammoCubes": {
+          "reds": 1,
+          "blues": 1,
+          "yellows": 0
+        },
+        "powerUpCard": true
+      },
+      {
+        "ammoCubes": {
+          "reds": 1,
+          "blues": 2,
+          "yellows": 0
+        },
+        "powerUpCard": false
+      },
+      {
+        "ammoCubes": {
+          "reds": 0,
+          "blues": 0,
+          "yellows": 2
+        },
+        "powerUpCard": true
+      },
+      {
+        "ammoCubes": {
+          "reds": 0,
+          "blues": 2,
+          "yellows": 0
+        },
+        "powerUpCard": true
+      },
+      {
+        "ammoCubes": {
+          "reds": 1,
+          "blues": 1,
+          "yellows": 0
+        },
+        "powerUpCard": true
+      },
+      {
+        "ammoCubes": {
+          "reds": 2,
+          "blues": 1,
+          "yellows": 0
+        },
+        "powerUpCard": false
+      },
+      {
+        "ammoCubes": {
+          "reds": 0,
+          "blues": 2,
+          "yellows": 0
+        },
+        "powerUpCard": true
+      },
+      {
+        "ammoCubes": {
+          "reds": 2,
+          "blues": 0,
+          "yellows": 1
+        },
+        "powerUpCard": false
+      },
+      {
+        "ammoCubes": {
+          "reds": 2,
+          "blues": 1,
+          "yellows": 0
+        },
+        "powerUpCard": false
+      },
+      {
+        "ammoCubes": {
+          "reds": 0,
+          "blues": 1,
+          "yellows": 1
+        },
+        "powerUpCard": true
+      },
+      {
+        "ammoCubes": {
+          "reds": 0,
+          "blues": 1,
+          "yellows": 1
+        },
+        "powerUpCard": true
+      },
+      {
+        "ammoCubes": {
+          "reds": 1,
+          "blues": 2,
+          "yellows": 0
+        },
+        "powerUpCard": false
+      },
+      {
+        "ammoCubes": {
+          "reds": 0,
+          "blues": 1,
+          "yellows": 1
+        },
+        "powerUpCard": true
+      },
+      {
+        "ammoCubes": {
+          "reds": 2,
+          "blues": 0,
+          "yellows": 0
+        },
+        "powerUpCard": true
+      },
+      {
+        "ammoCubes": {
+          "reds": 0,
+          "blues": 1,
+          "yellows": 2
+        },
+        "powerUpCard": false
+      },
+      {
+        "ammoCubes": {
+          "reds": 0,
+          "blues": 2,
+          "yellows": 1
+        },
+        "powerUpCard": false
+      }
+    ],
+    "map": {
+      "allSquare": [
+        {
+          "spawnPoint": false,
+          "color": "red",
+          "south": 4,
+          "north": -1,
+          "northWall": -1,
+          "east": 1,
+          "westWall": -1,
+          "west": -1,
+          "visited": false,
+          "southWall": 4,
+          "step": 0,
+          "position": 0,
+          "eastWall": 1,
+          "full": true
+        },
+        {
+          "spawnPoint": false,
+          "color": "blue",
+          "south": 5,
+          "north": -1,
+          "northWall": -1,
+          "east": 2,
+          "westWall": 0,
+          "west": 0,
+          "visited": false,
+          "southWall": 5,
+          "step": 0,
+          "position": 1,
+          "eastWall": 2,
+          "full": true
+        },
+        {
+          "spawnPoint": true,
+          "color": "blue",
+          "south": 6,
+          "north": -1,
+          "northWall": -1,
+          "east": -1,
+          "westWall": 1,
+          "west": 1,
+          "visited": false,
+          "southWall": 6,
+          "step": 0,
+          "position": 2,
+          "eastWall": -1,
+          "full": true
+        },
+        {
+          "spawnPoint": false,
+          "color": "",
+          "south": -1,
+          "north": -1,
+          "northWall": -1,
+          "east": -1,
+          "westWall": -1,
+          "west": -1,
+          "visited": false,
+          "southWall": -1,
+          "step": 0,
+          "position": 3,
+          "eastWall": -1,
+          "full": true
+        },
+        {
+          "spawnPoint": true,
+          "color": "red",
+          "south": 8,
+          "north": 0,
+          "northWall": 0,
+          "east": -1,
+          "westWall": -1,
+          "west": -1,
+          "visited": false,
+          "southWall": 8,
+          "step": 0,
+          "position": 4,
+          "eastWall": 5,
+          "full": true
+        },
+        {
+          "spawnPoint": false,
+          "color": "purple",
+          "south": 9,
+          "north": 1,
+          "northWall": 1,
+          "east": 6,
+          "westWall": 4,
+          "west": -1,
+          "visited": false,
+          "southWall": 9,
+          "step": 0,
+          "position": 5,
+          "eastWall": 6,
+          "full": true
+        },
+        {
+          "spawnPoint": false,
+          "color": "purple",
+          "south": -1,
+          "north": 2,
+          "northWall": 2,
+          "east": 7,
+          "westWall": 5,
+          "west": 5,
+          "visited": false,
+          "southWall": 10,
+          "step": 0,
+          "position": 6,
+          "eastWall": 7,
+          "full": true
+        },
+        {
+          "spawnPoint": false,
+          "color": "yellow",
+          "south": 11,
+          "north": -1,
+          "northWall": -1,
+          "east": -1,
+          "westWall": 6,
+          "west": 6,
+          "visited": false,
+          "southWall": 11,
+          "step": 0,
+          "position": 7,
+          "eastWall": -1,
+          "full": true
+        },
+        {
+          "spawnPoint": false,
+          "color": "white",
+          "south": -1,
+          "north": 4,
+          "northWall": 4,
+          "east": 9,
+          "westWall": -1,
+          "west": -1,
+          "visited": false,
+          "southWall": -1,
+          "step": 0,
+          "position": 8,
+          "eastWall": 9,
+          "full": true
+        },
+        {
+          "spawnPoint": false,
+          "color": "white",
+          "south": -1,
+          "north": 5,
+          "northWall": 5,
+          "east": 10,
+          "westWall": 8,
+          "west": 8,
+          "visited": false,
+          "southWall": -1,
+          "step": 0,
+          "position": 9,
+          "eastWall": 10,
+          "full": true
+        },
+        {
+          "spawnPoint": false,
+          "color": "white",
+          "south": -1,
+          "north": -1,
+          "northWall": 6,
+          "east": 11,
+          "westWall": 9,
+          "west": 9,
+          "visited": false,
+          "southWall": -1,
+          "step": 0,
+          "position": 10,
+          "eastWall": 11,
+          "full": true
+        },
+        {
+          "spawnPoint": true,
+          "color": "yellow",
+          "south": -1,
+          "north": 7,
+          "northWall": 7,
+          "east": -1,
+          "westWall": 10,
+          "west": 10,
+          "visited": false,
+          "southWall": -1,
+          "step": 0,
+          "position": 11,
+          "eastWall": -1,
+          "full": true
+        }
+      ],
+      "roomSquare": [
+        [
+          {
+            "spawnPoint": false,
+            "color": "red",
+            "south": 4,
+            "north": -1,
+            "northWall": -1,
+            "east": 1,
+            "westWall": -1,
+            "west": -1,
+            "visited": false,
+            "southWall": 4,
+            "step": 0,
+            "position": 0,
+            "eastWall": 1,
+            "full": true
+          },
+          {
+            "spawnPoint": true,
+            "color": "red",
+            "south": 8,
+            "north": 0,
+            "northWall": 0,
+            "east": -1,
+            "westWall": -1,
+            "west": -1,
+            "visited": false,
+            "southWall": 8,
+            "step": 0,
+            "position": 4,
+            "eastWall": 5,
+            "full": true
+          }
+        ],
+        [
+          {
+            "spawnPoint": false,
+            "color": "blue",
+            "south": 5,
+            "north": -1,
+            "northWall": -1,
+            "east": 2,
+            "westWall": 0,
+            "west": 0,
+            "visited": false,
+            "southWall": 5,
+            "step": 0,
+            "position": 1,
+            "eastWall": 2,
+            "full": true
+          },
+          {
+            "spawnPoint": true,
+            "color": "blue",
+            "south": 6,
+            "north": -1,
+            "northWall": -1,
+            "east": -1,
+            "westWall": 1,
+            "west": 1,
+            "visited": false,
+            "southWall": 6,
+            "step": 0,
+            "position": 2,
+            "eastWall": -1,
+            "full": true
+          }
+        ],
+        [
+          {
+            "spawnPoint": false,
+            "color": "purple",
+            "south": 9,
+            "north": 1,
+            "northWall": 1,
+            "east": 6,
+            "westWall": 4,
+            "west": -1,
+            "visited": false,
+            "southWall": 9,
+            "step": 0,
+            "position": 5,
+            "eastWall": 6,
+            "full": true
+          },
+          {
+            "spawnPoint": false,
+            "color": "purple",
+            "south": -1,
+            "north": 2,
+            "northWall": 2,
+            "east": 7,
+            "westWall": 5,
+            "west": 5,
+            "visited": false,
+            "southWall": 10,
+            "step": 0,
+            "position": 6,
+            "eastWall": 7,
+            "full": true
+          }
+        ],
+        [
+          {
+            "spawnPoint": false,
+            "color": "yellow",
+            "south": 11,
+            "north": -1,
+            "northWall": -1,
+            "east": -1,
+            "westWall": 6,
+            "west": 6,
+            "visited": false,
+            "southWall": 11,
+            "step": 0,
+            "position": 7,
+            "eastWall": -1,
+            "full": true
+          },
+          {
+            "spawnPoint": true,
+            "color": "yellow",
+            "south": -1,
+            "north": 7,
+            "northWall": 7,
+            "east": -1,
+            "westWall": 10,
+            "west": 10,
+            "visited": false,
+            "southWall": -1,
+            "step": 0,
+            "position": 11,
+            "eastWall": -1,
+            "full": true
+          }
+        ],
+        [
+          {
+            "spawnPoint": false,
+            "color": "white",
+            "south": -1,
+            "north": 4,
+            "northWall": 4,
+            "east": 9,
+            "westWall": -1,
+            "west": -1,
+            "visited": false,
+            "southWall": -1,
+            "step": 0,
+            "position": 8,
+            "eastWall": 9,
+            "full": true
+          },
+          {
+            "spawnPoint": false,
+            "color": "white",
+            "south": -1,
+            "north": 5,
+            "northWall": 5,
+            "east": 10,
+            "westWall": 8,
+            "west": 8,
+            "visited": false,
+            "southWall": -1,
+            "step": 0,
+            "position": 9,
+            "eastWall": 10,
+            "full": true
+          },
+          {
+            "spawnPoint": false,
+            "color": "white",
+            "south": -1,
+            "north": -1,
+            "northWall": 6,
+            "east": 11,
+            "westWall": 9,
+            "west": 9,
+            "visited": false,
+            "southWall": -1,
+            "step": 0,
+            "position": 10,
+            "eastWall": 11,
+            "full": true
+          }
+        ]
+      ],
+      "mapID": 1
+    },
+    "characterAvailable": [
+      "banshee",
+      "dozer"
+    ],
+    "chosenMap": 1,
+    "killShotTrack": [],
+    "arsenal": [
+      {
+        "slot": [
+          "heatseeker",
+          "shockwave",
+          "thor"
+        ],
+        "cabinetColor": "red"
+      },
+      {
+        "slot": [
+          "power_glove",
+          "hellion",
+          "machine_gun"
+        ],
+        "cabinetColor": "yellow"
+      },
+      {
+        "slot": [
+          "lock_rifle",
+          "electroscythe",
+          "furnace"
+        ],
+        "cabinetColor": "blue"
+      }
+    ],
+    "playersDead": []
+  },
+  "activePlayer": "Raviuoujo",
+  "mapId": 1,
+  "allVirtualViews": [
+    {
+      "canMove": false,
+      "damage": 0,
+      "finalFrenzy": false,
+      "reachableSquare": [],
+      "cabinetRed": {
+        "slot": [
+          "heatseeker",
+          "shockwave",
+          "thor"
+        ],
+        "cabinetColor": "red"
+      },
+      "markPlayerBoard": [
+        {
+          "marks": 2,
+          "aggressorPlayer": "Raviuoujo"
+        }
+      ],
+      "cabinetBlue": {
+        "slot": [
+          "lock_rifle",
+          "electroscythe",
+          "furnace"
+        ],
+        "cabinetColor": "blue"
+      },
+      "points": 1,
+      "killShotTrack": [],
+      "damagePlayerBoard": [
+        {
+          "canMove": false,
+          "playerDead": false,
+          "firstPlayer": false,
+          "clientName": "Raviuoujo",
+          "numberOfAction": 2,
+          "finalFrenzy": false,
+          "suspended": false,
+          "score": 1,
+          "character": "distructor",
+          "phaseAction": 0,
+          "playerHand": {
+            "weapons": [
+              "zx-2"
+            ],
+            "powerUps": [
+              {
+                "color": "red",
+                "type": "teleporter"
+              }
+            ]
+          },
+          "position": 11,
+          "playerBoard": {
+            "owner": "Raviuoujo",
+            "damage": [],
+            "ammoCubes": {
+              "reds": 0,
+              "blues": 1,
+              "yellows": 1
+            },
+            "enemyMarks": [],
+            "enemyDamages": [],
+            "pointDeaths": [
+              8,
+              6,
+              4,
+              2,
+              1,
+              1
+            ],
+            "deaths": 0
+          }
+        },
+        {
+          "canMove": false,
+          "playerDead": false,
+          "firstPlayer": false,
+          "clientName": "Frabisius",
+          "numberOfAction": 2,
+          "finalFrenzy": false,
+          "suspended": false,
+          "score": 0,
+          "character": "violet",
+          "phaseAction": 1,
+          "playerHand": {
+            "weapons": [
+              "plasma_gun"
+            ],
+            "powerUps": [
+              {
+                "color": "red",
+                "type": "tagback_grenade"
+              }
+            ]
+          },
+          "position": 0,
+          "playerBoard": {
+            "owner": "Frabisius",
+            "damage": [
+              "Vizzuorio",
+              "Vizzuorio",
+              "Vizzuorio"
+            ],
+            "ammoCubes": {
+              "reds": 3,
+              "blues": 0,
+              "yellows": 3
+            },
+            "enemyMarks": [
+              {
+                "marks": 1,
+                "aggressorPlayer": "Vizzuorio"
+              }
+            ],
+            "enemyDamages": [
+              {
+                "damage": 3,
+                "aggressorPlayer": "Vizzuorio"
+              }
+            ],
+            "pointDeaths": [
+              8,
+              6,
+              4,
+              2,
+              1,
+              1
+            ],
+            "deaths": 0
+          }
+        },
+        {
+          "canMove": false,
+          "playerDead": false,
+          "firstPlayer": false,
+          "clientName": "Frabisius",
+          "numberOfAction": 2,
+          "finalFrenzy": false,
+          "suspended": false,
+          "score": 0,
+          "character": "violet",
+          "phaseAction": 1,
+          "playerHand": {
+            "weapons": [
+              "plasma_gun"
+            ],
+            "powerUps": [
+              {
+                "color": "red",
+                "type": "tagback_grenade"
+              }
+            ]
+          },
+          "position": 0,
+          "playerBoard": {
+            "owner": "Frabisius",
+            "damage": [
+              "Vizzuorio",
+              "Vizzuorio",
+              "Vizzuorio"
+            ],
+            "ammoCubes": {
+              "reds": 3,
+              "blues": 0,
+              "yellows": 3
+            },
+            "enemyMarks": [
+              {
+                "marks": 1,
+                "aggressorPlayer": "Vizzuorio"
+              }
+            ],
+            "enemyDamages": [
+              {
+                "damage": 3,
+                "aggressorPlayer": "Vizzuorio"
+              }
+            ],
+            "pointDeaths": [
+              8,
+              6,
+              4,
+              2,
+              1,
+              1
+            ],
+            "deaths": 0
+          }
+        },
+        {
+          "canMove": false,
+          "playerDead": false,
+          "firstPlayer": false,
+          "clientName": "Frabisius",
+          "numberOfAction": 2,
+          "finalFrenzy": false,
+          "suspended": false,
+          "score": 0,
+          "character": "violet",
+          "phaseAction": 1,
+          "playerHand": {
+            "weapons": [
+              "plasma_gun"
+            ],
+            "powerUps": [
+              {
+                "color": "red",
+                "type": "tagback_grenade"
+              }
+            ]
+          },
+          "position": 0,
+          "playerBoard": {
+            "owner": "Frabisius",
+            "damage": [
+              "Vizzuorio",
+              "Vizzuorio",
+              "Vizzuorio"
+            ],
+            "ammoCubes": {
+              "reds": 3,
+              "blues": 0,
+              "yellows": 3
+            },
+            "enemyMarks": [
+              {
+                "marks": 1,
+                "aggressorPlayer": "Vizzuorio"
+              }
+            ],
+            "enemyDamages": [
+              {
+                "damage": 3,
+                "aggressorPlayer": "Vizzuorio"
+              }
+            ],
+            "pointDeaths": [
+              8,
+              6,
+              4,
+              2,
+              1,
+              1
+            ],
+            "deaths": 0
+          }
+        }
+      ],
+      "numberOfActions": 2,
+      "availableWeapons": [],
+      "character": "sprog",
+      "phaseAction": 1,
+      "deathsPlayerBoard": 0,
+      "cabinetYellow": {
+        "slot": [
+          "power_glove",
+          "hellion",
+          "machine_gun"
+        ],
+        "cabinetColor": "yellow"
+      },
+      "cubes": {
+        "reds": 1,
+        "blues": 0,
+        "yellows": 2
+      },
+      "position": 10,
+      "weapons": [
+        "whisper"
+      ],
+      "username": "Vizzuorio",
+      "powerUps": [
+        {
+          "color": "yellow",
+          "type": "teleporter"
+        },
+        {
+          "color": "red",
+          "type": "targeting_scope"
+        }
+      ]
+    },
+    {
+      "canMove": false,
+      "damage": 0,
+      "finalFrenzy": false,
+      "reachableSquare": [],
+      "cabinetRed": {
+        "slot": [
+          "heatseeker",
+          "shockwave",
+          "thor"
+        ],
+        "cabinetColor": "red"
+      },
+      "markPlayerBoard": [
+        {
+          "marks": 1,
+          "aggressorPlayer": "Vizzuorio"
+        }
+      ],
+      "cabinetBlue": {
+        "slot": [
+          "lock_rifle",
+          "electroscythe",
+          "furnace"
+        ],
+        "cabinetColor": "blue"
+      },
+      "points": 0,
+      "killShotTrack": [],
+      "damagePlayerBoard": [
+        {
+          "canMove": false,
+          "playerDead": false,
+          "firstPlayer": false,
+          "clientName": "Vizzuorio",
+          "numberOfAction": 2,
+          "finalFrenzy": false,
+          "suspended": false,
+          "score": 1,
+          "character": "sprog",
+          "phaseAction": 1,
+          "playerHand": {
+            "weapons": [
+              "whisper"
+            ],
+            "powerUps": [
+              {
+                "color": "yellow",
+                "type": "teleporter"
+              },
+              {
+                "color": "red",
+                "type": "targeting_scope"
+              }
+            ]
+          },
+          "position": 10,
+          "playerBoard": {
+            "owner": "Vizzuorio",
+            "damage": [
+              "Raviuoujo",
+              "Frabisius",
+              "Frabisius",
+              "Frabisius"
+            ],
+            "ammoCubes": {
+              "reds": 1,
+              "blues": 0,
+              "yellows": 2
+            },
+            "enemyMarks": [
+              {
+                "marks": 2,
+                "aggressorPlayer": "Raviuoujo"
+              }
+            ],
+            "enemyDamages": [
+              {
+                "damage": 3,
+                "aggressorPlayer": "Frabisius"
+              },
+              {
+                "damage": 1,
+                "aggressorPlayer": "Raviuoujo"
+              }
+            ],
+            "pointDeaths": [
+              8,
+              6,
+              4,
+              2,
+              1,
+              1
+            ],
+            "deaths": 0
+          }
+        },
+        {
+          "canMove": false,
+          "playerDead": false,
+          "firstPlayer": false,
+          "clientName": "Vizzuorio",
+          "numberOfAction": 2,
+          "finalFrenzy": false,
+          "suspended": false,
+          "score": 1,
+          "character": "sprog",
+          "phaseAction": 1,
+          "playerHand": {
+            "weapons": [
+              "whisper"
+            ],
+            "powerUps": [
+              {
+                "color": "yellow",
+                "type": "teleporter"
+              },
+              {
+                "color": "red",
+                "type": "targeting_scope"
+              }
+            ]
+          },
+          "position": 10,
+          "playerBoard": {
+            "owner": "Vizzuorio",
+            "damage": [
+              "Raviuoujo",
+              "Frabisius",
+              "Frabisius",
+              "Frabisius"
+            ],
+            "ammoCubes": {
+              "reds": 1,
+              "blues": 0,
+              "yellows": 2
+            },
+            "enemyMarks": [
+              {
+                "marks": 2,
+                "aggressorPlayer": "Raviuoujo"
+              }
+            ],
+            "enemyDamages": [
+              {
+                "damage": 3,
+                "aggressorPlayer": "Frabisius"
+              },
+              {
+                "damage": 1,
+                "aggressorPlayer": "Raviuoujo"
+              }
+            ],
+            "pointDeaths": [
+              8,
+              6,
+              4,
+              2,
+              1,
+              1
+            ],
+            "deaths": 0
+          }
+        },
+        {
+          "canMove": false,
+          "playerDead": false,
+          "firstPlayer": false,
+          "clientName": "Vizzuorio",
+          "numberOfAction": 2,
+          "finalFrenzy": false,
+          "suspended": false,
+          "score": 1,
+          "character": "sprog",
+          "phaseAction": 1,
+          "playerHand": {
+            "weapons": [
+              "whisper"
+            ],
+            "powerUps": [
+              {
+                "color": "yellow",
+                "type": "teleporter"
+              },
+              {
+                "color": "red",
+                "type": "targeting_scope"
+              }
+            ]
+          },
+          "position": 10,
+          "playerBoard": {
+            "owner": "Vizzuorio",
+            "damage": [
+              "Raviuoujo",
+              "Frabisius",
+              "Frabisius",
+              "Frabisius"
+            ],
+            "ammoCubes": {
+              "reds": 1,
+              "blues": 0,
+              "yellows": 2
+            },
+            "enemyMarks": [
+              {
+                "marks": 2,
+                "aggressorPlayer": "Raviuoujo"
+              }
+            ],
+            "enemyDamages": [
+              {
+                "damage": 3,
+                "aggressorPlayer": "Frabisius"
+              },
+              {
+                "damage": 1,
+                "aggressorPlayer": "Raviuoujo"
+              }
+            ],
+            "pointDeaths": [
+              8,
+              6,
+              4,
+              2,
+              1,
+              1
+            ],
+            "deaths": 0
+          }
+        }
+      ],
+      "numberOfActions": 2,
+      "availableWeapons": [],
+      "character": "violet",
+      "phaseAction": 1,
+      "deathsPlayerBoard": 0,
+      "cabinetYellow": {
+        "slot": [
+          "power_glove",
+          "hellion",
+          "machine_gun"
+        ],
+        "cabinetColor": "yellow"
+      },
+      "cubes": {
+        "reds": 3,
+        "blues": 0,
+        "yellows": 3
+      },
+      "position": 0,
+      "weapons": [
+        "plasma_gun"
+      ],
+      "username": "Frabisius",
+      "powerUps": [
+        {
+          "color": "red",
+          "type": "tagback_grenade"
+        }
+      ]
+    },
+    {
+      "canMove": false,
+      "damage": 0,
+      "finalFrenzy": false,
+      "reachableSquare": [],
+      "cabinetRed": {
+        "slot": [
+          "heatseeker",
+          "shockwave",
+          "thor"
+        ],
+        "cabinetColor": "red"
+      },
+      "markPlayerBoard": [],
+      "cabinetBlue": {
+        "slot": [
+          "lock_rifle",
+          "electroscythe",
+          "furnace"
+        ],
+        "cabinetColor": "blue"
+      },
+      "points": 1,
+      "killShotTrack": [],
+      "damagePlayerBoard": [],
+      "numberOfActions": 2,
+      "availableWeapons": [],
+      "character": "distructor",
+      "phaseAction": 0,
+      "deathsPlayerBoard": 0,
+      "cabinetYellow": {
+        "slot": [
+          "power_glove",
+          "hellion",
+          "machine_gun"
+        ],
+        "cabinetColor": "yellow"
+      },
+      "cubes": {
+        "reds": 0,
+        "blues": 1,
+        "yellows": 1
+      },
+      "position": 11,
+      "weapons": [
+        "zx-2"
+      ],
+      "username": "Raviuoujo",
+      "powerUps": [
+        {
+          "color": "red",
+          "type": "teleporter"
+        }
+      ]
+    }
+  ]
+}

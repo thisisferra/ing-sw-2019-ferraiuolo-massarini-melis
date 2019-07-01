@@ -1,7 +1,10 @@
 package it.polimi.se2019.server.model.map;
 
+import it.polimi.se2019.server.model.cards.weapons.AbstractWeapon;
 import it.polimi.se2019.server.model.cards.weapons.Weapon;
 import it.polimi.se2019.server.model.game.Match;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import java.io.Serializable;
 /*WeaponSlot represent one three slots array containing 3 weapons.
@@ -18,6 +21,26 @@ public class WeaponSlot implements Serializable {
             this.initSlot();
 
     }
+
+    public WeaponSlot(Match resumedMatch) {
+        //Needed for resuming a weaponSlot from saved match
+        this.match = resumedMatch;
+    }
+
+    public static WeaponSlot resumeWeaponSlot(JSONObject weaponSlotToResume, Match resumedMatch) {
+        WeaponSlot resumedWeaponSlot = new WeaponSlot(resumedMatch);
+
+        JSONArray slotToResume = (JSONArray) weaponSlotToResume.get("slot");
+        resumedWeaponSlot.slot = new Weapon[slotToResume.size()];
+        for (int i = 0; i < slotToResume.size(); i++) {
+            resumedWeaponSlot.slot[i] = AbstractWeapon.resumeWeapon((String) slotToResume.get(i));
+        }
+
+        resumedWeaponSlot.cabinetColor = (String) weaponSlotToResume.get("cabinetColor");
+
+        return resumedWeaponSlot;
+    }
+
     public void initSlot() {
         slot = new Weapon[3];
         slot[0] = this.match.pickUpWeapon();
@@ -33,5 +56,21 @@ public class WeaponSlot implements Serializable {
     }
     public void setCabinetColor(String color){
         this.cabinetColor= color;
+    }
+
+    public JSONObject toJSON() {
+        JSONObject weaponSlotJson = new JSONObject();
+
+        JSONArray slotJson = new JSONArray();
+        for (Weapon weapon : this.getSlot()) {
+            if (weapon != null) {
+                slotJson.add(weapon.getType());
+            }
+        }
+        weaponSlotJson.put("slot", slotJson);
+
+        weaponSlotJson.put("cabinetColor", this.getCabinetColor());
+
+        return weaponSlotJson;
     }
 }

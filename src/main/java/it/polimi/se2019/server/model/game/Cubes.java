@@ -1,5 +1,7 @@
 package it.polimi.se2019.server.model.game;
 
+import org.json.simple.JSONObject;
+
 import java.io.Serializable;
 
 public class Cubes implements Serializable {
@@ -11,6 +13,10 @@ public class Cubes implements Serializable {
         this.reds = reds;
         this.yellows = yellows;
         this.blues = blues;
+    }
+
+    public Cubes() {
+        //Needed for resuming cubes from saved match
     }
 
     public int getReds(){
@@ -73,5 +79,25 @@ public class Cubes implements Serializable {
     }
     public String toString(){
         return "Reds: "+ this.getReds() + " Blues: " + this.getBlues() + " Yellows: " + this.getYellows();
+    }
+
+    public JSONObject toJSON() {
+        JSONObject cubesJson = new JSONObject();
+
+        cubesJson.put("reds", this.getReds());
+        cubesJson.put("yellows", this.getYellows());
+        cubesJson.put("blues", this.getBlues());
+
+        return cubesJson;
+    }
+
+    public static Cubes resumeCubes(JSONObject ammoCubesToResume) {
+        Cubes resumedCubes = new Cubes();
+
+        resumedCubes.reds = ((Number) ammoCubesToResume.get("reds")).intValue();
+        resumedCubes.yellows = ((Number) ammoCubesToResume.get("yellows")).intValue();
+        resumedCubes.blues = ((Number) ammoCubesToResume.get("blues")).intValue();
+
+        return resumedCubes;
     }
 }

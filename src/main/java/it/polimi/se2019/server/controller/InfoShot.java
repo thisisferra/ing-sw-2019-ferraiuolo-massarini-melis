@@ -2,6 +2,8 @@ package it.polimi.se2019.server.controller;
 
 import it.polimi.se2019.server.model.cards.weapons.Weapon;
 import it.polimi.se2019.server.model.player.Player;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -108,6 +110,38 @@ public class InfoShot implements Serializable {
     @Override
     public String toString(){
         return "" + this.getTargetablePlayer();
+    }
+
+    public JSONObject toJSON() {
+        JSONObject infoShotJson = new JSONObject();
+
+        infoShotJson.put("weapon", this.getWeapon().getType());
+        infoShotJson.put("nameEffect", this.getNameEffect());
+        infoShotJson.put("damagingPlayer", this.getDamagingPlayer().toJSON());
+
+        JSONArray targetablePlayerJson = new JSONArray();
+        for (Player player : this.getTargetablePlayer()) {
+            targetablePlayerJson.add(player.toJSON());
+        }
+        infoShotJson.put("targetablePlayer", targetablePlayerJson);
+
+        JSONArray targetPlayersJson = new JSONArray();
+        for (Player player : this.getTargetPlayer()) {
+            targetPlayersJson.add(player.toJSON());
+        }
+        infoShotJson.put("targetPlayers", targetPlayersJson);
+
+        JSONArray alreadyTargetJson = new JSONArray();
+        for (Player player : this.getAlreadyTarget()) {
+            alreadyTargetJson.add(player.toJSON());
+        }
+        infoShotJson.put("alreadyTarget", alreadyTargetJson);
+
+        infoShotJson.put("cardinalDirection", this.getCardinalDirection());
+        infoShotJson.put("numberOfMoves", this.getNumberOfMoves());
+        infoShotJson.put("newPosition", this.getNewPosition());
+
+        return infoShotJson;
     }
 
 

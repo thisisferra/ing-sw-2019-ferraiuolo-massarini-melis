@@ -17,4 +17,10 @@ public interface GUIControllerInterface extends Remote {
     void showMessageMovement(String message) throws RemoteException;
 
     void respawnDialog() throws RemoteException;
+
+    void restoreGUI() throws RemoteException;
+
+    void recallLoginScene() throws RemoteException;
+
+    void restoreRemoteView(VirtualView virtualViewToRestore) throws RemoteException;
 }

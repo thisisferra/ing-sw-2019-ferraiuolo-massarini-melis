@@ -14,6 +14,7 @@ public class OneAboveAll {
     private OneAboveAll() {
         rmiServer = new RMIServer(this, rmiPort, remObjName);
         rmiServer.startServer();
+        rmiServer.checkSuspendedMatch();
     }
 
     public static void main(String args[]) {

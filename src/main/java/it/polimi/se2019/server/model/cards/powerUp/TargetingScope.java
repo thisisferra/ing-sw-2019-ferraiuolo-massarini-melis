@@ -14,6 +14,13 @@ public class TargetingScope extends PowerUp implements Serializable {
         this.color = powerUp.getColor();
     }
 
+    public TargetingScope(String type, String color) {
+        //Needed for resuming a powerup from saved match
+        super();
+        this.type = type;
+        this.color = color;
+    }
+
     @Override
     public void applyEffect(PowerUpShot powerUpShot) {
         Player targetPlayer = powerUpShot.getTargetingPlayer();

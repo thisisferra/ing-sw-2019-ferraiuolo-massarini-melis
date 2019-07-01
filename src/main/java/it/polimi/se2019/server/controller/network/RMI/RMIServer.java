@@ -1,5 +1,11 @@
 package it.polimi.se2019.server.controller.network.RMI;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONArray;
 import it.polimi.se2019.client.controller.GUIControllerInterface;
 import it.polimi.se2019.server.OneAboveAll;
 import it.polimi.se2019.server.controller.InfoShot;
@@ -18,7 +24,11 @@ import it.polimi.se2019.server.model.map.WeaponSlot;
 import it.polimi.se2019.server.model.player.EnemyDamage;
 import it.polimi.se2019.server.model.player.Player;
 import it.polimi.se2019.server.model.player.PlayerBoard;
+import org.json.simple.parser.JSONParser;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.PrintStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -91,6 +101,42 @@ public class RMIServer extends Server implements RMIServerInterface {
         }
     }
 
+    public void checkSuspendedMatch() {
+        File suspendedFile = new File("./AdrenalinaMatchData.json");
+
+        if (suspendedFile.exists()) {
+
+            System.out.println("Loading previous match data...");
+            resumeRMIServer(suspendedFile);
+
+        } else {
+            System.out.println("There is no previous match! Start new game...");
+        }
+    }
+
+    public void resumeRMIServer(File suspendedFile) {
+
+        try (FileReader fr = new FileReader(suspendedFile)) {
+            JSONParser parser = new JSONParser();
+            JSONObject jsonMatchData = (JSONObject) parser.parse(fr);
+
+            this.mapId = ((Number) jsonMatchData.get("mapId")).intValue();
+            //this.match = Match.resumeMatch((JSONObject) jsonMatchData.get("match"), this.mapId, new Match(this.mapId));
+            this.match = Match.resumeMatch((JSONObject) jsonMatchData.get("match"), this.mapId);
+            this.shotController = new ShotController(this.match);
+            this.activePlayer = this.match.searchPlayerByClientName((String) jsonMatchData.get("activePlayer"));
+
+            JSONArray allVirtualViewsToResume = (JSONArray) jsonMatchData.get("allVirtualViews");
+            for(Object virtualViewToResume : allVirtualViewsToResume) {
+                this.allVirtualViews.add(VirtualView.resumeVirtualView((JSONObject) virtualViewToResume, this.match));
+            }
+
+            logger.log(Level.INFO, "Match recovered! Latching all players...");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     /*
     private String getClientIP(GUIControllerInterface guiController){
         String ipClient = null;
@@ -119,6 +165,51 @@ public class RMIServer extends Server implements RMIServerInterface {
             activePlayer = match.getAllPlayers().get(0);
         }
         //this.pingClient();
+    }
+
+    public synchronized void login(String username, GUIControllerInterface guiControllerToResume) throws RemoteException {
+        ArrayList<Player> allPlayers = this.match.getAllPlayers();
+        boolean foundPlayer = false;
+        for (int i = 0; i < allPlayers.size() && !foundPlayer; i++) {
+            if (username.equals(allPlayers.get(i).getClientName())) {
+                searchVirtualViewByClientName(username).reSetVirtualView(guiControllerToResume);
+                guiControllerToResume.restoreRemoteView(searchVirtualViewByClientName(username));
+                foundPlayer = true;
+            }
+        }
+
+        if (!foundPlayer) {
+            guiControllerToResume.recallLoginScene();
+        }
+
+        //ALLVIRTUALVIEWS == MATCH.PLAYERS.SIZE? ALLORA CHIAMA METODO CHE AGGIORNA TUTTE LE REMOTE VIEW (GUI) !!
+        if (playersReconnected() == allVirtualViews.size()) {
+            for (VirtualView virtualView : allVirtualViews) {
+                virtualView.getClientReference().restoreGUI();
+            }
+            initAllClient();
+        }
+    }
+
+    public int playersReconnected() {
+        int reconnections = 0;
+        for (VirtualView virtualView : allVirtualViews) {
+            if (virtualView.getClientReference() != null) {
+                reconnections++;
+            }
+        }
+
+        return reconnections;
+    }
+
+    public VirtualView searchVirtualViewByClientName(String clientName) {
+        for (VirtualView virtualView : this.allVirtualViews) {
+            if (virtualView.getUsername().equals(clientName)) {
+                return virtualView;
+            }
+        }
+        logger.log(Level.WARNING, clientName+"'s virtualView not found!!");
+        return null;
     }
 
     public synchronized boolean checkUsername(String username) {
@@ -336,6 +427,10 @@ public class RMIServer extends Server implements RMIServerInterface {
     public void setSpecificActivePlayer(Player player) {
         this.activePlayer = player;
 
+    }
+
+    public Player getSpecificActivePlayer() {
+        return this.activePlayer;
     }
 
     public ArrayList<Player> getKillShotTrack() throws RemoteException{
@@ -561,5 +656,41 @@ public class RMIServer extends Server implements RMIServerInterface {
         } catch (RemoteException e){
             logger.log(Level.INFO,"ToggleAction error");
         }
+    }
+
+    public void save() {
+        String matchData = saveState();
+
+        JsonParser parser = new JsonParser();
+        JsonObject jsonMatchData = parser.parse(matchData).getAsJsonObject();
+        Gson gsonMatchData = new GsonBuilder().setPrettyPrinting().create();
+        String prettyMatchData = gsonMatchData.toJson(jsonMatchData);
+
+        System.out.println("Saving match data...");
+        try (FileWriter fw = new FileWriter("./AdrenalinaMatchData.json")) {
+            fw.write(prettyMatchData);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String saveState() {
+        JSONObject rmiserverJson = new JSONObject();
+
+
+        rmiserverJson.put("activePlayer", this.getSpecificActivePlayer().getClientName());
+
+        rmiserverJson.put("match", this.getMatch().toJSON());
+
+        rmiserverJson.put("mapId", this.getMatch().getMap().getMapID());
+
+        JSONArray allVirtualViewsJson = new JSONArray();
+        for (VirtualView virtualView : this.allVirtualViews) {
+            allVirtualViewsJson.add(virtualView.toJSON());
+        }
+        rmiserverJson.put("allVirtualViews", allVirtualViewsJson);
+
+
+        return rmiserverJson.toJSONString();
     }
 }
