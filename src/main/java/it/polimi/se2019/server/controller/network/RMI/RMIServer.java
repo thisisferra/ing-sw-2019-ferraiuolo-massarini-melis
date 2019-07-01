@@ -912,9 +912,10 @@ public class RMIServer extends Server implements RMIServerInterface {
         Gson gsonMatchData = new GsonBuilder().setPrettyPrinting().create();
         String prettyMatchData = gsonMatchData.toJson(jsonMatchData);
 
-        System.out.println("Saving match data...");
+        System.out.print("Saving match data...");
         try (FileWriter fw = new FileWriter("./AdrenalinaMatchData.json")) {
             fw.write(prettyMatchData);
+            System.out.println(" ...match saved!!!");
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Match NOT saved!!");
         }
