@@ -375,12 +375,12 @@ public class Match extends Observable implements Serializable {
 
         JSONArray killShotTrackToResume = (JSONArray) matchToResume.get("killShotTrack");
         for (Object killToResume : killShotTrackToResume) {
-            resumedMatch.killShotTrack.add(resumedMatch.searchPlayerByClientName((String) killToResume));
+            resumedMatch.killShotTrack.add(resumedMatch.searchPlayerByClientName((String) ((JSONObject) killToResume).get("clientName")));
         }
 
         JSONArray playersDeadToResume = (JSONArray) matchToResume.get("playersDead");
         for (Object playerDeadToResume : playersDeadToResume) {
-            resumedMatch.playersDead.add(resumedMatch.searchPlayerByClientName((String) playerDeadToResume));
+            resumedMatch.playersDead.add(resumedMatch.searchPlayerByClientName((String) ((JSONObject) playerDeadToResume).get("clientName")));
         }
 
         resumedMatch.finalFrenzyStatus = (boolean) matchToResume.get("finalFrenzyStatus");
