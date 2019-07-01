@@ -20,8 +20,4 @@ public class Teleporter extends PowerUp implements Serializable {
         Player player = powerUpShot.getTargetingPlayer();
         player.setPosition(newPosition);
     }
-
-    public void check(WeaponShot weaponShot) {
-        //You can always use this PowerUp
-    }
 }

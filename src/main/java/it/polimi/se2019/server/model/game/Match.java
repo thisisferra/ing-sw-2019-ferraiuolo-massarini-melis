@@ -87,7 +87,6 @@ public class Match extends Observable implements Serializable {
         Logger logger = Logger.getAnonymousLogger();
         try {
             aS = gson.fromJson(new FileReader("./src/main/resources/ammo.json"), Ammo[].class);
-            //pUS = gson.fromJson(new FileReader("./src/main/resources/powerups.json"),PowerUp[].class);
 
             weaponStack.add(gson.fromJson(new FileReader("src/main/resources/plasma_gun.json"), PlasmaGun.class));
             weaponStack.add(gson.fromJson(new FileReader("src/main/resources/electroscythe.json"), Electroscythe.class));
@@ -126,10 +125,9 @@ public class Match extends Observable implements Serializable {
                 powerUpStack.add(gson.fromJson(new FileReader("./src/main/resources/newtonYellow.json"), Newton.class));
                 powerUpStack.add(gson.fromJson(new FileReader("./src/main/resources/newtonBlue.json"), Newton.class));
             }
-            //powerUpStack = new ArrayList<>(Arrays.asList(pUS));
             ammoStack = new ArrayList<>(Arrays.asList(aS));
 
-            //Collections.shuffle(weaponStack);
+            Collections.shuffle(weaponStack);
             Collections.shuffle(powerUpStack);
             Collections.shuffle(ammoStack);
 

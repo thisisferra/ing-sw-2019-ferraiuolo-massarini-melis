@@ -111,6 +111,10 @@ public class Player implements Serializable {
         return this.canMove;
     }
 
+    public void setFirstPlayer(boolean firstPlayer){
+        this.firstPlayer = firstPlayer;
+    }
+
     public void setCanMove(boolean canMove){
         this.canMove=canMove;
     }
@@ -174,10 +178,6 @@ public class Player implements Serializable {
 
     public HashSet<Player> getHitThisTurnPlayers(){
         return this.hitThisTurnPlayers;
-    }
-
-    public void setHitThisTurnPlayers(HashSet<Player> hitThisTurnPlayers){
-        this.hitThisTurnPlayers = hitThisTurnPlayers;
     }
 
     public void clearHitThisTurnPlayers(){
@@ -378,7 +378,7 @@ public class Player implements Serializable {
                 break;
             }
             case "blue": {
-                cubeObtained = new Cubes(1, 0, 1);
+                cubeObtained = new Cubes(0, 0, 1);
                 this.match.getDiscardedPowerUps().add(powerUp);
                 break;
 
@@ -439,7 +439,6 @@ public class Player implements Serializable {
         int intRandomNumber = (int) randomNumber;
         return this.match.getCharacterAvailable().remove(intRandomNumber);
     }
-
     //return the list of weapons the player owns if he has enough cubes for each of them and if the weapons
     // is unloaded.
     // (E.G. if the player has 1 red cube and three weapons whose reload cost is 1 red cube each, this method will

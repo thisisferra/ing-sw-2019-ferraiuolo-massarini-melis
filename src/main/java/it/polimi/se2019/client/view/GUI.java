@@ -48,7 +48,7 @@ public class GUI extends Application {
     private GridPane pawnsGrid = new GridPane();
     private HBox redBox = new HBox();
     private HBox blueBox = new HBox();
-    private boolean firstSpawn = true;
+    //private boolean firstSpawn = true;
     private HBox yellowBox = new HBox();
     private StackPane cabinets = new StackPane();
     private HBox killShotTrack = new HBox();
@@ -89,6 +89,10 @@ public class GUI extends Application {
 
     }
 
+    /**
+     * It displays the grid showing coloured rectangles
+     * during the game progress.
+     */
     private void setMapGrid(){
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 4; col++) {
@@ -103,6 +107,12 @@ public class GUI extends Application {
         grid.setPickOnBounds(false);
     }
 
+    /**
+     * It shows an ImageView on the game scene while hovering on
+     * a weapon. Its purpose is to magnify the cards.
+     * @param cabinet the cabinet containing the weapon the player wants to zoom.
+     * @param weaponsArray the weapon array.
+     */
     private void setWeaponView(HBox cabinet, Weapon[] weaponsArray) {
         cabinet.getChildren().clear();
             for (int i = 0; i < 3; i++) {
@@ -139,6 +149,10 @@ public class GUI extends Application {
             }
     }
 
+    /**
+     * It creates the HBox containing skulls or tears, based on
+     * the number of death occured during the game.
+     */
     private void setKillShotTrack() {
         killShotTrack.getChildren().clear();
         Image skullImage = createImage("src/main/resources/images/icons/skull_icon.png");
@@ -177,6 +191,10 @@ public class GUI extends Application {
         killShotTrack.setPickOnBounds(false);
     }
 
+    /**
+     * It creates the Playerboards StackPanes.
+     * @return a VBox which include all the players boards.
+     */
     private VBox setPlayerBoardsStack(){
         VBox players = new VBox();
         HBox damageBar;
@@ -248,6 +266,10 @@ public class GUI extends Application {
         return players;
     }
 
+    /**
+     * It arranges the ammo tile images on the background map.
+     * @param map the number code of the map.
+     */
     private void setAmmo(int map) {
 
         Image ammoBack;
@@ -300,6 +322,10 @@ public class GUI extends Application {
         }
     }
 
+    /**
+     * It sets three labels showing the number of cubes
+     * the player has.
+     */
     private void setCubes() {
         cubeBox.getChildren().clear();
         ImageView cubeImage;
@@ -324,19 +350,36 @@ public class GUI extends Application {
         cubeBox.getChildren().addAll(redLabel, yellowLabel, blueLabel);
         cubeBox.setSpacing(2);
     }
-
+    /**
+     * It return the number of red cubes the player has.
+     * It's used to display the owner's cubes.
+     * @return the number of red cubes.
+     */
     private int getMyReds(){
         return myRemoteView.getCubes().getReds();
     }
-
+    /**
+     * It return the number of yellow cubes the player has.
+     * It's used to display the owner's cubes.
+     * @return the number of yellow cubes.
+     */
     private int getMyYellows(){
         return myRemoteView.getCubes().getYellows();
     }
 
+    /**
+     * It return the number of blue cubes the player has.
+     * It's used to display the owner's cubes.
+     * @return the number of blue cubes.
+     */
     private int getMyBlues(){
         return myRemoteView.getCubes().getBlues();
     }
 
+    /**
+     * After attempting to close the main window, asks the user to
+     * confirm his choice.
+     */
     private void closeProgram() {
         boolean closeAnswer = ConfirmBox.display("Exit Adrenaline", "Are you sure?");
         if (closeAnswer) {
@@ -346,6 +389,11 @@ public class GUI extends Application {
         }
     }
 
+    /**
+     * It creates a button with an image showing on it.
+     * @param path the image path.
+     * @return it return the button.
+     */
     private Button setImageButton(String path) {
         ImageView buttonView = new ImageView(createImage(path));
         buttonView.setFitWidth(50);
@@ -355,12 +403,26 @@ public class GUI extends Application {
         return newButton;
     }
 
+    /**
+     * It set the button to be color responsive on mouse hovering.
+     *
+     * @param button the button to be styled.
+     */
     private void setResponsiveButton(Button button){
         button.setStyle(BUTTON_STYLE);
         button.setOnMouseEntered(e -> button.setStyle(HIGHLIGHT_BUTTON_STYLE));
         button.setOnMouseExited(e -> button.setStyle(BUTTON_STYLE));
     }
 
+    /**
+     * It creates the login scene window including:
+     * -Username box
+     * -Password box
+     * -IP box
+     * -Map selector
+     * -Maps preview
+     * @return
+     */
     private Scene setLoginScene() {
 
         GridPane layout = new GridPane();
@@ -383,7 +445,7 @@ public class GUI extends Application {
         TextField ipInput = new TextField();
         ipInput.setPromptText("Server IP");
         ipInput.setStyle(TEXT_FIELD_STYLE);
-        ipInput.setPromptText("xxx.xxx.xxx.xxx");
+        ipInput.setPromptText("Server IP");
         GridPane.setConstraints(ipInput, 0, 2);
 
         //login button
@@ -457,10 +519,14 @@ public class GUI extends Application {
         return newScene;
     }
 
+    /**
+     * It creates a waiting scene, showing the number of players
+     * waiting for the game to start.
+     */
     public void setWaitScene(){
         Label waitLabel;
         BorderPane waitPane;
-        waitLabel = new Label("Waiting for the: " + (guiController.getAllViews().size()+1) + "° player.\nPlease wait...");
+        waitLabel = new Label("Number of players in the lobby: " + guiController.getAllViews().size() + "\nPlease wait...");
         waitLabel.setStyle(LABEL_STYLE);
         waitPane = new BorderPane();
         waitPane.setStyle(BACKGROUND_STYLE);
@@ -504,6 +570,10 @@ public class GUI extends Application {
 
     }
 
+    /**
+     * It shows a preview of the maps inside of the login window.
+     * @return the HBox containing the ImageViews.
+     */
     private HBox setMapSelector() {
         VBox sideBox = new VBox();
         VBox mapsBox = new VBox();
@@ -556,7 +626,7 @@ public class GUI extends Application {
         button4.setStyle(LABEL_STYLE);
         button4.setToggleGroup(mapSelector);
 
-        Label selectMap = new Label("Select map: ");
+        Label selectMap = new Label("Select map\npreference : ");
         selectMap.setStyle(LABEL_STYLE);
         sideBox.getChildren().addAll(selectMap,button1, button2, button3, button4);
         box1.getChildren().addAll(mapsBox,sideBox);
@@ -570,6 +640,10 @@ public class GUI extends Application {
         return box1;
     }
 
+    /**
+     * It creates the TextArea element used to display information
+     * during the game progress.
+     */
     private void setTextArea(){
         textArea.setPrefWidth(225);
         textArea.setPrefHeight(300);
@@ -580,6 +654,9 @@ public class GUI extends Application {
         textArea.setStyle(TEXT_AREA_STYLE);
     }
 
+    /**
+     * It places each player figure on the board, depending on their position.
+     */
     private void setFigures() {
         FlowPane flowPane;
         pawnsGrid.getChildren().clear();
@@ -604,6 +681,11 @@ public class GUI extends Application {
         pawnsGrid.setMouseTransparent(true);
     }
 
+    /**
+     * The character icon image.
+     * @param character the name of the character (dozer,banshee,sprog,distructor,violet).
+     * @return the ImageView created.
+     */
     private ImageView setCharacterImage(String character) {
 
         ImageView imageView = new ImageView(createImage(ICONS_PATH + character + "_icon.png"));
@@ -614,6 +696,12 @@ public class GUI extends Application {
         return imageView;
     }
 
+    /**
+     * Transform the image in a gray scale image.
+     * Used when a weapon is unloaded.
+     * @param sourceImage the image to be transformed.
+     * @return the gray-scaled image.
+     */
     private static Image toGrayScale(Image sourceImage) {
         PixelReader pixelReader = sourceImage.getPixelReader();
 
@@ -656,6 +744,11 @@ public class GUI extends Application {
         return grayImage;
     }
 
+    /**
+     * It displays the players' boards.
+     * Those boards are updated when player receives damage, marks
+     * or are killed.
+     */
     private void displayPlayers(){
 
         Stage playersWindow = new Stage();
@@ -675,6 +768,11 @@ public class GUI extends Application {
         playersWindow.showAndWait();
     }
 
+    /**
+     * A button used to close a window.
+     * @param window window to be closed clicking on the button.
+     * @return the button created.
+     */
     private Button setHomeButton(Stage window){
         ImageView img = new ImageView(createImage("src/main/resources/images/icons/home.png"));
         img.setPreserveRatio(true);
@@ -685,6 +783,11 @@ public class GUI extends Application {
         return closeButton;
     }
 
+    /**
+     * It creates an Image object.
+     * @param path the path used for producing the image.
+     * @return the Image object created.
+     */
     private Image createImage(String path){
         Image image = null;
 
@@ -695,6 +798,10 @@ public class GUI extends Application {
         return image;
     }
 
+    /**
+     * It sets the window's properties.
+     * @param primaryStage first stage.
+     */
     private void setStage(Stage primaryStage){
         window = primaryStage;
         window.setScene(setLoginScene());
@@ -708,6 +815,10 @@ public class GUI extends Application {
         });
     }
 
+    /**
+     * Set the background map
+     * @return the ImageView containing the background map.
+     */
     private ImageView setMap(){
         ImageView imageView = new ImageView(createImage("src/main/resources/images/maps/Map" + mapNumber + ".png"));
         imageView.setFitHeight(700);
@@ -715,6 +826,9 @@ public class GUI extends Application {
         return imageView;
     }
 
+    /**
+     * Arrange the HBoxes around the game scene to match the background map.
+     */
     private void setCabinets(){
         setWeaponView(redBox, myRemoteView.getCabinetRed().getSlot());
         setWeaponView(yellowBox, myRemoteView.getCabinetYellow().getSlot());
@@ -741,18 +855,28 @@ public class GUI extends Application {
         cabinets.getChildren().addAll(redBox, blueBox, yellowBox);
     }
 
+    /**
+     * Set the First Player token on the main game scene.
+     */
     private void setFirstPlayer(){
-        if(guiController.getAllViews().get(0).getUsername().equals(username)){
-            firstPlayer.getChildren().clear();
-            ImageView firstPlayerView = new ImageView(createImage("src/main/resources/images/playerboards/first_player.png"));
-            firstPlayerView.setFitHeight(100);
-            firstPlayerView.setPreserveRatio(true);
-            firstPlayerView.setTranslateX(30);
-            firstPlayerView.setTranslateY(580);
-            firstPlayer.getChildren().add(firstPlayerView);
+        try{
+            if(guiController.getRmiStub().isFirstPlayer(this.username)){
+                firstPlayer.getChildren().clear();
+                ImageView firstPlayerView = new ImageView(createImage("src/main/resources/images/playerboards/first_player.png"));
+                firstPlayerView.setFitHeight(100);
+                firstPlayerView.setPreserveRatio(true);
+                firstPlayerView.setTranslateX(30);
+                firstPlayerView.setTranslateY(580);
+                firstPlayer.getChildren().add(firstPlayerView);
+            }
+        } catch (RemoteException exc){
+            logger.log(Level.INFO,"FirstPlayer error",exc);
         }
     }
 
+    /**
+     * Set the first half of the map ammo configuration.
+     */
     private void setAmmoA1(){
         //square 0
         ammoSet.getChildren().get(0).setTranslateX(-255);
@@ -775,6 +899,9 @@ public class GUI extends Application {
         ammoSet.getChildren().get(9).setTranslateY(210);
     }
 
+    /**
+     * Set the second half of the map ammo configuration.
+     */
     private void setAmmoA2(){
 
         //square 6
@@ -790,6 +917,9 @@ public class GUI extends Application {
         ammoSet.getChildren().get(10).setTranslateY(215);
     }
 
+    /**
+     * Set the first half of the map ammo configuration.
+     */
     private void setAmmoB1(){
         //square 0
         ammoSet.getChildren().get(0).setTranslateX(-260);
@@ -809,6 +939,9 @@ public class GUI extends Application {
 
     }
 
+    /**
+     * Set the second half of the map ammo configuration.
+     */
     private void setAmmoB2(){
 
         //square 3
@@ -832,6 +965,9 @@ public class GUI extends Application {
         ammoSet.getChildren().get(10).setTranslateY(210);
     }
 
+    /**
+     * Reset the squares back to normal.
+     */
     private void restoreSquares(){
         for (int j = 0; j < 12; j++) {
             Rectangle rect = (Rectangle) grid.getChildren().get(j);
@@ -845,6 +981,14 @@ public class GUI extends Application {
         }
     }
 
+    /**
+     * It displays the player's infos:
+     * -Player's name
+     * -Number of cubes owned
+     * -Points
+     * -Number of moves left
+     * -Current active player
+     */
     private void setUserInfos(){
         Label userName = new Label(" "+ myRemoteView.getUsername());
         Label moves = new Label("Moves: "+ myRemoteView.getNumberOfActions());
@@ -921,6 +1065,9 @@ public class GUI extends Application {
         userInfoBox.setSpacing(5);
     }
 
+    /**
+     * It display the weapons inside a cabinet.
+     */
     private void displayCabinet(){
         Stage cabinetWindow = new Stage();
         String color = null;
@@ -1000,6 +1147,9 @@ public class GUI extends Application {
         cabinetWindow.showAndWait();
     }
 
+    /**
+     * It display the weapons the player has while discarding a weapon.
+     */
     private void displayWeaponHand(){
         Stage weaponHandWindow = new Stage();
         HBox hand = new HBox();
@@ -1044,6 +1194,9 @@ public class GUI extends Application {
         weaponHandWindow.showAndWait();
     }
 
+    /**
+     * It creates the main GUI scene
+     */
     private void setGameScene(){
 
         try{
@@ -1198,6 +1351,11 @@ public class GUI extends Application {
 
     }
 
+    /**
+     * Asks the player how he wants to use the selected power up.
+     *
+     * @param index the index of the power up selected.
+     */
     private void powerUpAlert(int index){
         Stage powerUpAlert = new Stage();
         GridPane gridPane = new GridPane();
@@ -1248,6 +1406,9 @@ public class GUI extends Application {
         powerUpAlert.showAndWait();
     }
 
+    /**
+     * It display the power up the player has.
+     */
     private void displayPowerUpHand(){
         Stage powerUpWindow = new Stage();
         HBox powerUpBox = new HBox();
@@ -1301,19 +1462,25 @@ public class GUI extends Application {
         powerUpWindow.showAndWait();
     }
 
+    /**
+     * It display the weapons the player has.
+     */
     private void displayWeapons(){
         Stage displayWindow = new Stage();
         Label info = new Label("These are your weapons.\nGrey ones are unloaded and you can't use them.");
         HBox layout = new HBox();
         BorderPane weaponsPane = new BorderPane();
-
-        ImageView weaponView;
+        Image greyImage;
+        ImageView weaponView = new ImageView();
         Image weaponImage;
         for (Weapon obj : myRemoteView.getWeapons()) {
             weaponImage = createImage(WEAPONS_PATH + obj.getType() + ".png");
-            if(!obj.getLoad())
-                weaponImage = toGrayScale(weaponImage);
-            weaponView = new ImageView(weaponImage);
+            if(!obj.getLoad() && weaponImage!= null){
+                greyImage = toGrayScale(weaponImage);
+                weaponView = new ImageView(greyImage);
+            } else if(weaponImage!= null){
+                weaponView = new ImageView(weaponImage);
+            }
             weaponView.setPreserveRatio(true);
             weaponView.setFitHeight(300);
             layout.getChildren().add(weaponView);
@@ -1343,6 +1510,12 @@ public class GUI extends Application {
         displayWindow.showAndWait();
     }
 
+    /**
+     * Display the Power ups the player has.
+     * By clicking on one of them makes the player spawn
+     * on the selected color.
+     * @param message window message.
+     */
     public void startingDraw(String message){
         Stage startingDrawWindow = new Stage();
 
@@ -1391,10 +1564,21 @@ public class GUI extends Application {
         startingDrawWindow.show();
         }
 
+    /**
+     * Method who makes a Rectangle object invisible.
+     * It sets the color value to (0,0,0,0).
+     * @param rectangle Rectangle object involved.
+     */
     private void setInvisible(Rectangle rectangle){
             rectangle.setFill(Color.color(0,0,0,0));
         }
 
+    /**
+     * Asks the player if he wants to reload the weapons.
+     * @param endTurn indicates if this method is performed
+     *                at the end of the turn or during the
+     *                ReloadShoot Action.
+     */
     private void reloadAlert(boolean endTurn){
         Stage reloadAlert = new Stage();
         GridPane gridPane = new GridPane();
@@ -1459,6 +1643,12 @@ public class GUI extends Application {
         reloadAlert.show();
     }
 
+    /**
+     * It display the weapons the player can reload.
+     * @param endTurn indicates if this method is performed
+     *                at the end of the turn or during the
+     *                ReloadShoot Action.
+     */
     private void displayReloadableWeapons(boolean endTurn){
         Stage weaponToReloadWindow = new Stage();
         HBox weaponsBox = new HBox();
@@ -1538,6 +1728,11 @@ public class GUI extends Application {
         weaponToReloadWindow.show();
     }
 
+    /**
+     * It displays the weapons the player can actually use.
+     *
+     * @param usableWeapons the collection of weapons the player can use.
+     */
     private void displayUsableWeapons(ArrayList<Weapon> usableWeapons){
         Stage usableWeaponsWindow = new Stage();
         HBox weaponsBox = new HBox();
@@ -1586,6 +1781,10 @@ public class GUI extends Application {
         usableWeaponsWindow.showAndWait();
     }
 
+    /**
+     * It displays all the effects the player can use while shooting.
+     * @param chosenWeapon is the selected weapon.
+     */
     private void displayEffects(Weapon chosenWeapon){
         Stage availableEffectsWindow = new Stage();
         ComboBox comboBox = new ComboBox();
@@ -1641,6 +1840,10 @@ public class GUI extends Application {
 
     }
 
+    /**
+     * It displays targets the player can shoot at.
+     * @param weaponShot contains the information needed to perform this action.
+     */
     private void displayTargets(WeaponShot weaponShot){
         Stage weaponTargetWindow = new Stage();
         ComboBox comboBox = new ComboBox();
@@ -1734,6 +1937,10 @@ public class GUI extends Application {
         weaponTargetWindow.show();
     }
 
+    /**
+     * Action performed while using a powerUp.
+     * @param index the index of the Power up used.
+     */
     private void powerUpAction(int index){
         try {
             switch(myRemoteView.getPowerUps().get(index).getType()){
@@ -1772,7 +1979,11 @@ public class GUI extends Application {
         }
     }
 
-    private void teleporterAction(int index) throws RemoteException{
+    /**
+     * It display the squares the player can move on while using the Teleporter Power up.
+     * @param index the index of the Power up used.
+     */
+    private void teleporterAction(int index){
         try{
             PowerUpShot powerUpShot= new PowerUpShot();
             Square[] walkableSquares = guiController.getRmiStub().getAllSquares();
@@ -1804,7 +2015,10 @@ public class GUI extends Application {
         }
 
     }
-
+    /**
+     * Display the targets the player can target using Targeting Scope Power up.
+     * @param index the index of the Power up used.
+     */
     private void displayTargetingScopeTargets(int index){
         Stage targetingScopeWindow = new Stage();
         ComboBox comboBox = new ComboBox();
@@ -1880,6 +2094,10 @@ public class GUI extends Application {
         targetingScopeWindow.showAndWait();
     }
 
+    /**
+     * Display the targets the player can target using Newton Power up.
+     * @param index the index of the Power up used.
+     */
     private void displayNewtonTargets(int index){
 
         Stage newtonWindow = new Stage();
@@ -1966,6 +2184,15 @@ public class GUI extends Application {
         return this.textArea;
     }
 
+    /**
+     * Update all the GUI elements shown in the main Scene:
+     * -Character figures
+     * -Killshot Track
+     * -Available ammos on the terrain
+     * -User informations
+     * -User owned cubes
+     * -Red, blue and yellow weapons cabinets.
+     */
     public void updateAllGUI() {
         this.setFigures();
         this.setKillShotTrack();
@@ -1981,6 +2208,11 @@ public class GUI extends Application {
         return this.scene;
     }
 
+    /**
+     * Method used when shooting with the Railgun. Asks the players in which direction
+     * he wants to shoot.
+     * @param weaponsShot contains the infos needed.
+     */
     private void displayOrientationChoice(WeaponShot weaponsShot){
         Stage orientationWindow = new Stage();
         ComboBox comboBox = new ComboBox();
@@ -2053,6 +2285,10 @@ public class GUI extends Application {
 
     }
 
+    /**
+     * Action used to move around the map.
+     * @param steps number of steps eligible for this action.
+     */
     private void moveAction(int steps){
         try {
             if(guiController.getRmiStub().getActivePlayer().equals(this.username)){
@@ -2076,6 +2312,11 @@ public class GUI extends Application {
         }
     }
 
+    /**
+     * Action that includes movement and grabbing a weapon or an ammo tile.
+     * This action is  affected by adrenaline actions.
+     * @param steps number of steps eligible for this action
+     */
     private void moveGrabAction(int steps){
         try {
             if(guiController.getRmiStub().getActivePlayer().equals(this.username)){
@@ -2099,6 +2340,12 @@ public class GUI extends Application {
         }
     }
 
+    /**
+     * Action that includes shooting or movement and shooting depending on
+     * how many damage the player has.
+     * @param steps number of steps eligible for this action.
+     * @param usableWeapons a collection of weapons the player can use.
+     */
     private void shootAction(int steps,ArrayList<Weapon> usableWeapons){
         try {
             if(guiController.getRmiStub().getActivePlayer().equals(this.username)){
@@ -2122,6 +2369,10 @@ public class GUI extends Application {
         }
     }
 
+    /**
+     * Displays the squares on the GUI map the player can move on during the
+     * MoveAction().
+     */
     private void setMovementSquares(){
         for (int i = 0; i < 12; i++) {
             Rectangle rectangle = (Rectangle) grid.getChildren().get(i);
@@ -2149,6 +2400,10 @@ public class GUI extends Application {
         }
     }
 
+    /**
+     * Displays the squares on the GUI map the player can move on during the
+     * MoveGrabAction().
+     */
     private void setMoveGrabSquares(){
         for (int i = 0; i < 12; i++) {
             Rectangle rectangle = (Rectangle) grid.getChildren().get(i);
@@ -2203,6 +2458,11 @@ public class GUI extends Application {
         }
     }
 
+    /**
+     * Displays the squares on the GUI map the player can move on during the
+     * ShootAction().
+     * @param usableWeapons a collection of weapon the player can use during this action
+     */
     private void setShootSquares(ArrayList<Weapon> usableWeapons){
 
         for (int i = 0; i < 12; i++) {
@@ -2232,7 +2492,10 @@ public class GUI extends Application {
             }
         }
     }
-
+    /**
+     * Displays the squares on the GUI map in order to move enemies
+     * after hitting them. This action can be executed with some weapons.
+     */
     private void setPushSquares(WeaponShot weaponShot){
         try{
             Shot currentEffect = null;
@@ -2269,6 +2532,10 @@ public class GUI extends Application {
         }
     }
 
+    /**
+     * Displays the squares on the GUI map the player can move on during the
+     * reloadShootAction() method
+     */
     private void setReloadShootSquares(){
         for (int i = 0; i < 12; i++) {
             Rectangle rectangle = (Rectangle) grid.getChildren().get(i);
@@ -2291,6 +2558,10 @@ public class GUI extends Application {
         }
     }
 
+    /**
+     * Final Frenzy action that includes: movement, reloading weapons and shoot.
+     * @param steps number of movement steps eligible for this action.
+     */
     private void reloadShootAction(int steps){
         try {
             if(guiController.getRmiStub().getActivePlayer().equals(this.username)){
@@ -2314,6 +2585,10 @@ public class GUI extends Application {
         }
     }
 
+    /**
+     * It performs several mandatory tasks at the end of the game turn.
+     * @throws RemoteException exception thrown if the connection fails.
+     */
     private void endTurnActionsRoutine() throws RemoteException{
         if(guiController.getRmiStub().deathPlayer(this.username)) {
             guiController.getRmiStub().respawnPlayer();
@@ -2324,6 +2599,10 @@ public class GUI extends Application {
         guiController.getRmiStub().setActivePlayer(username);
     }
 
+    /**
+     * It shows the list of targets while using VortexCannon weapon.
+     * @param weaponShot is the WeaponShot object containing infos.
+     */
     private void displayVortexSquares(WeaponShot weaponShot){
         for (int i = 0; i < 12; i++) {
             Rectangle rectangle = (Rectangle) grid.getChildren().get(i);
