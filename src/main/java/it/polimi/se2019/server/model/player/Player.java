@@ -528,7 +528,7 @@ public class Player implements Serializable {
         playerJson.put("position", this.getPosition());
         playerJson.put("score", this.getScore());
         playerJson.put("firstPlayer", this.isFirstPlayer());
-        playerJson.put("suspended", true);  //For resume game, all players have to reconnect --> not suspended
+        playerJson.put("suspended", false);  //For resume game, all players have to reconnect --> not suspended
 
         playerJson.put("playerHand", this.getHand().toJSON());
         playerJson.put("playerBoard", this.getPlayerBoard().toJSON());
