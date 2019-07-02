@@ -405,4 +405,14 @@ public class Match extends Observable implements Serializable {
         return this.finalFrenzyStatus;
 
     }
+
+    public int numberPlayerNotSuspended() {
+        int numberNotSuspended = 0;
+        for (Player player : this.getAllPlayers()) {
+            if (player.getSuspended())
+                numberNotSuspended++;
+        }
+        return numberNotSuspended;
+    }
+
 }

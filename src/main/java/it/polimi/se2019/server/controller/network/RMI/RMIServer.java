@@ -37,9 +37,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -74,11 +72,11 @@ public class RMIServer extends Server implements RMIServerInterface {
 
     private Timer roundTimer = new Timer();
 
+    Timer resetTimer = new Timer();
+
     private int interval = 10;
 
-    private int roundTime = 30;
-
-    private boolean resetTimer = false;
+    private int roundTime = 300;
 
     private boolean existfile;
 
@@ -203,6 +201,7 @@ public class RMIServer extends Server implements RMIServerInterface {
                 virtualView.getClientReference().restoreGUI();
             }
             initAllClient();
+            setResetTimer();
         }
     }
 
@@ -630,7 +629,7 @@ public class RMIServer extends Server implements RMIServerInterface {
                 }
             }
         }
-        if (this.match.getKillShotTrack().size() == 1) {
+        if (this.match.getKillShotTrack().size() == 1 && !this.match.isFinalFrenzyStatus()) {
             this.match.setFinalFrenzyStatus(true);
             this.enableFinalFrenzy(username);
         }
@@ -846,10 +845,13 @@ public class RMIServer extends Server implements RMIServerInterface {
         }
         this.notifyAllClientUserDisconnect(usernameLastPlayer);
         this.closeClient(clientRef);
+
+        if (this.match.numberPlayerNotSuspended() < 3) {
+            this.finishMatch();
+        }
     }
 
     public void setResetTimer() throws RemoteException{
-        Timer resetTimer = new Timer();
         resetTimer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run(){
@@ -866,7 +868,7 @@ public class RMIServer extends Server implements RMIServerInterface {
     public final int countSeconds() throws RemoteException{
         if (roundTime == 1) {
             passRoundTimer();
-            roundTime = 30;
+            roundTime = 300;
         }
         return --roundTime;
     }
@@ -979,5 +981,66 @@ public class RMIServer extends Server implements RMIServerInterface {
 
     public boolean checkExistFile() {
         return this.existfile;
+    }
+
+    private void finishMatch() throws RemoteException{
+        ArrayList<Integer> killPointsShotTrack = new ArrayList<>();
+        killPointsShotTrack.add(8);
+        killPointsShotTrack.add(6);
+        killPointsShotTrack.add(4);
+        killPointsShotTrack.add(2);
+        killPointsShotTrack.add(1);
+        killPointsShotTrack.add(1);
+
+
+        for (Player player : this.match.getAllPlayers()) {
+            this.assignPoints(player);
+        }
+
+
+        Map<String, Integer> pointsKillShotTrack = new HashMap<>();
+        for (Player player : this.match.getKillShotTrack()) {
+            if (!pointsKillShotTrack.containsKey(player.getClientName())) {
+                pointsKillShotTrack.put(player.getClientName(), Integer.valueOf(1));
+            }
+            else {
+                Integer numberOfOccurences = pointsKillShotTrack.get(player.getClientName());
+                pointsKillShotTrack.put(player.getClientName(), Integer.valueOf(numberOfOccurences) + 1);
+            }
+        }
+
+        Player currentPlayer = null;
+        int highest = 0;
+        int size = pointsKillShotTrack.size();
+        //retrieve highest number of occurence
+        for (int i = 0; i < size; i++) {
+            for (Map.Entry<String, Integer> mapEntry : pointsKillShotTrack.entrySet()) {
+                if (mapEntry.getValue() > highest) {
+                    currentPlayer = this.match.searchPlayerByClientName(mapEntry.getKey());
+                    highest = mapEntry.getValue().intValue();
+
+                }
+            }
+            currentPlayer.addPoints(killPointsShotTrack.remove(0));
+            highest = 0;
+            pointsKillShotTrack.remove(currentPlayer.getClientName());
+        }
+
+        Player winner = null;
+        for (Player player : this.match.getAllPlayers()) {
+            if (player.getScore() > highest) {
+                highest = player.getScore();
+                winner = player;
+
+            }
+        }
+
+        for (VirtualView virtualView : allVirtualViews) {
+            GUIControllerInterface clientRef = virtualView.getClientReference();
+            clientRef.closeGUI();
+        }
+
+
+        System.out.println("Il vincitore è: " + winner.getClientName());
     }
 }
