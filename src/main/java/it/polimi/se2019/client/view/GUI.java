@@ -75,9 +75,9 @@ public class GUI extends Application {
     private static final String FIRST_SPAWN_TEXT = "Choose one of the two power ups to discard.\nIt determines your spawn location, based on its color.";
     static final String HIGHLIGHT_BUTTON_STYLE = "-fx-background-color: #bbbbbb;-fx-text-fill: #999999;";
     private static final String TEXT_AREA_STYLE = "-fx-control-inner-background:#717171;  -fx-highlight-fill: #f1f7eb; -fx-highlight-text-fill: #717171; -fx-text-fill: #f1f7eb;-fx-border-color: #ffffff ";
-    private static final String WEAPONS_PATH = "src/main/resources/images/weapons/";
-    private static final String POWERUPS_PATH = "src/main/resources/images/powerUps/";
-    private static final String ICONS_PATH = "src/main/resources/images/icons/";
+    private static final String WEAPONS_PATH = "/Images/Weapons/";
+    private static final String POWERUPS_PATH = "/Images/PowerUps/";
+    private static final String ICONS_PATH = "/Images/icons/";
     private int mapNumber;
     private Scene scene;
 
@@ -155,7 +155,7 @@ public class GUI extends Application {
      */
     private void setKillShotTrack() {
         killShotTrack.getChildren().clear();
-        Image skullImage = createImage("src/main/resources/images/icons/skull_icon.png");
+        Image skullImage = createImage("/Images/icons/skull_icon.png");
         Image characterImage;
         ImageView characterImageView;
         ImageView skullView;
@@ -221,7 +221,7 @@ public class GUI extends Application {
                 damageBar.getChildren().add(iconImg);
             }
             for(int i = 0 ; i<view.getDeathsPlayerBoard();i++){
-                icon = createImage("src/main/resources/images/icons/skull_icon.png");
+                icon = createImage("/Images/icons/skull_icon.png");
                 iconImg = new ImageView(icon);
                 iconImg.setPreserveRatio(true);
                 iconImg.setFitWidth(35);
@@ -237,12 +237,12 @@ public class GUI extends Application {
             }
 
             if(view.getTypePlayerBoard() == 0){
-                image = createImage("src/main/resources/images/playerboards/"+view.getCharacter()+".png");
+                image = createImage("/Images/Playerboards/"+view.getCharacter()+".png");
                 damageBar.setTranslateX(40);
                 deathBar.setTranslateX(100);
             }
             else if(view.getTypePlayerBoard() == 1) {
-                image = createImage("src/main/resources/images/playerboards/"+view.getCharacter()+"_frenzy.png");
+                image = createImage("/Images/Playerboards/"+view.getCharacter()+"_frenzy.png");
                 damageBar.setTranslateX(47);
                 deathBar.setTranslateX(125);
             }
@@ -274,7 +274,7 @@ public class GUI extends Application {
 
         Image ammoBack;
 
-        ammoBack = createImage("src/main/resources/images/ammo/ammoback.png");
+        ammoBack = createImage("/Images/Ammo/ammoback.png");
         ammoSet.getChildren().clear();
         for(int i=0; i<12;i++){
             ammoSet.getChildren().add(new ImageView(ammoBack));
@@ -329,19 +329,19 @@ public class GUI extends Application {
     private void setCubes() {
         cubeBox.getChildren().clear();
         ImageView cubeImage;
-        cubeImage = new ImageView(createImage("src/main/resources/images/icons/redCube.png"));
+        cubeImage = new ImageView(createImage("/Images/icons/redCube.png"));
         cubeImage.setFitWidth(30);
         cubeImage.setPreserveRatio(true);
         Label redLabel = new Label(" " + getMyReds() + "  ", cubeImage);
         redLabel.setStyle("-fx-text-fill: #ff0000; -fx-background-color: #202020");
 
-        cubeImage = new ImageView(createImage("src/main/resources/images/icons/yellowCube.png"));
+        cubeImage = new ImageView(createImage("/Images/icons/yellowCube.png"));
         cubeImage.setFitWidth(30);
         cubeImage.setPreserveRatio(true);
         Label yellowLabel = new Label(" "  + getMyYellows() + "  ", cubeImage);
         yellowLabel.setStyle("-fx-text-fill: #fff000; -fx-background-color: #202020");
 
-        cubeImage = new ImageView(createImage("src/main/resources/images/icons/blueCube.png"));
+        cubeImage = new ImageView(createImage("/Images/icons/blueCube.png"));
         cubeImage.setFitWidth(30);
         cubeImage.setPreserveRatio(true);
         Label blueLabel = new Label(" " + getMyBlues()+"  ", cubeImage);
@@ -580,10 +580,10 @@ public class GUI extends Application {
         VBox sideBox = new VBox();
         VBox mapsBox = new VBox();
         HBox box1 = new HBox();
-        ImageView map1 = new ImageView(createImage("src/main/resources/images/maps/map1_preview.png"));
-        ImageView map2 = new ImageView(createImage("src/main/resources/images/maps/map2_preview.png"));
-        ImageView map3 = new ImageView(createImage("src/main/resources/images/maps/map3_preview.png"));
-        ImageView map4 = new ImageView(createImage("src/main/resources/images/maps/map4_preview.png"));
+        ImageView map1 = new ImageView(createImage("/Images/Maps/map1_preview.png"));
+        ImageView map2 = new ImageView(createImage("/Images/Maps/map2_preview.png"));
+        ImageView map3 = new ImageView(createImage("/Images/Maps/map3_preview.png"));
+        ImageView map4 = new ImageView(createImage("/Images/Maps/map4_preview.png"));
         map1.setPreserveRatio(true);
         map2.setPreserveRatio(true);
         map3.setPreserveRatio(true);
@@ -776,7 +776,7 @@ public class GUI extends Application {
      * @return the button created.
      */
     private Button setHomeButton(Stage window){
-        ImageView img = new ImageView(createImage("src/main/resources/images/icons/home.png"));
+        ImageView img = new ImageView(createImage("/Images/icons/home.png"));
         img.setPreserveRatio(true);
         img.setFitHeight(50);
         Button closeButton = new Button("",img);
@@ -794,8 +794,8 @@ public class GUI extends Application {
         Image image = null;
 
         try{
-            image = new Image(new FileInputStream(path));
-        }catch(FileNotFoundException e){
+            image = new Image(getClass().getResourceAsStream(path));
+        }catch(Exception e){
             logger.log(Level.INFO,"createImage failed",e);        }
         return image;
     }
@@ -822,7 +822,7 @@ public class GUI extends Application {
      * @return the ImageView containing the background map.
      */
     private ImageView setMap(){
-        ImageView imageView = new ImageView(createImage("src/main/resources/images/maps/Map" + mapNumber + ".png"));
+        ImageView imageView = new ImageView(createImage("/Images/Maps/Map" + mapNumber + ".png"));
         imageView.setFitHeight(700);
         imageView.setPreserveRatio(true);
         return imageView;
@@ -864,7 +864,7 @@ public class GUI extends Application {
         try{
             if(guiController.getRmiStub().isFirstPlayer(this.username)){
                 firstPlayer.getChildren().clear();
-                ImageView firstPlayerView = new ImageView(createImage("src/main/resources/images/playerboards/first_player.png"));
+                ImageView firstPlayerView = new ImageView(createImage("/Images/Playerboards/first_player.png"));
                 firstPlayerView.setFitHeight(100);
                 firstPlayerView.setPreserveRatio(true);
                 firstPlayerView.setTranslateX(30);
@@ -1218,13 +1218,13 @@ public class GUI extends Application {
 
         setCabinets();
 
-        Button moveButton = setImageButton("src/main/resources/images/icons/move_icon.png");
-        Button grabButton = setImageButton("src/main/resources/images/icons/grab_icon.png");
-        Button shootButton = setImageButton("src/main/resources/images/icons/shoot_icon.png");
-        Button passButton = setImageButton("src/main/resources/images/icons/pass_icon.png");
-        Button powerUps = setImageButton("src/main/resources/images/icons/powerup_icon.png");
-        Button playersButton = setImageButton("src/main/resources/images/icons/players_icon.png");
-        Button weapons = setImageButton("src/main/resources/images/icons/weapon_icon.png");
+        Button moveButton = setImageButton("/Images/icons/move_icon.png");
+        Button grabButton = setImageButton("/Images/icons/grab_icon.png");
+        Button shootButton = setImageButton("/Images/icons/shoot_icon.png");
+        Button passButton = setImageButton("/Images/icons/pass_icon.png");
+        Button powerUps = setImageButton("/Images/icons/powerup_icon.png");
+        Button playersButton = setImageButton("/Images/icons/players_icon.png");
+        Button weapons = setImageButton("/Images/icons/weapon_icon.png");
 
         moveButton.setOnAction(e ->{
             if(myRemoteView.getFinalFrenzy() == 2)

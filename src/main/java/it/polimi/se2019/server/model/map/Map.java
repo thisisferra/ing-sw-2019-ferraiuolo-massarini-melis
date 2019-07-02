@@ -4,9 +4,7 @@ import com.google.gson.Gson;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.Serializable;
+import java.io.*;
 import java.util.*;
 
 public class Map implements Serializable {
@@ -38,13 +36,13 @@ public class Map implements Serializable {
     public void setAllSquare(){
         Gson gson = new Gson();
         try {
-            if(mapID ==1) allSquare = gson.fromJson(new FileReader("./src/main/resources/map1.json"), Square[].class);
-            else if(mapID ==2) allSquare = gson.fromJson(new FileReader("./src/main/resources/map2.json"), Square[].class);
-                else if (mapID == 3) allSquare = gson.fromJson(new FileReader("./src/main/resources/map3.json"), Square[].class);
-                    else if (mapID == 4) allSquare = gson.fromJson(new FileReader("./src/main/resources/map4.json"), Square[].class);
+            if(mapID ==1) allSquare = gson.fromJson(new InputStreamReader(getClass().getResourceAsStream("/map1.json")), Square[].class);
+            else if(mapID ==2) allSquare = gson.fromJson(new InputStreamReader(getClass().getResourceAsStream("/map2.json")), Square[].class);
+                else if (mapID == 3) allSquare = gson.fromJson(new InputStreamReader(getClass().getResourceAsStream("/map3.json")), Square[].class);
+                    else if (mapID == 4) allSquare = gson.fromJson(new InputStreamReader(getClass().getResourceAsStream("/map4.json")), Square[].class);
                         else System.out.println("Map number :"+ mapID +" doesn't exist!");
 
-        } catch (FileNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

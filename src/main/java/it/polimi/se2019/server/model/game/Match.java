@@ -14,6 +14,7 @@ import it.polimi.se2019.utils.Observable;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.io.FileNotFoundException;
@@ -86,44 +87,44 @@ public class Match extends Observable implements Serializable {
         Gson gson = new Gson();
         Logger logger = Logger.getAnonymousLogger();
         try {
-            aS = gson.fromJson(new FileReader("./src/main/resources/ammo.json"), Ammo[].class);
+            aS = gson.fromJson(new InputStreamReader(getClass().getResourceAsStream("/ammo.json")), Ammo[].class);
 
-            weaponStack.add(gson.fromJson(new FileReader("src/main/resources/plasma_gun.json"), PlasmaGun.class));
-            weaponStack.add(gson.fromJson(new FileReader("src/main/resources/electroscythe.json"), Electroscythe.class));
-            weaponStack.add(gson.fromJson(new FileReader("src/main/resources/lock_rifle.json"), LockRifle.class));
-            weaponStack.add(gson.fromJson(new FileReader("src/main/resources/whisper.json"), Whisper.class));
-            weaponStack.add(gson.fromJson(new FileReader("src/main/resources/zx-2.json"), ZX2.class));
-            weaponStack.add(gson.fromJson(new FileReader("src/main/resources/shockwave.json"), Shockwave.class));
-            weaponStack.add(gson.fromJson(new FileReader("src/main/resources/machine_gun.json"), MachineGun.class));
-            weaponStack.add(gson.fromJson(new FileReader("src/main/resources/flamethrower.json"), Flamethrower.class));
-            weaponStack.add(gson.fromJson(new FileReader("src/main/resources/furnace.json"), Furnace.class));
-            weaponStack.add(gson.fromJson(new FileReader("src/main/resources/hellion.json"), Hellion.class));
-            weaponStack.add(gson.fromJson(new FileReader("src/main/resources/shotgun.json"), Shotgun.class));
-            weaponStack.add(gson.fromJson(new FileReader("src/main/resources/power_glove.json"), PowerGlove.class));
-            weaponStack.add(gson.fromJson(new FileReader("src/main/resources/heatseeker.json"), Heatseeker.class));
-            weaponStack.add(gson.fromJson(new FileReader("src/main/resources/vortex_cannon.json"), VortexCannon.class));
-            weaponStack.add(gson.fromJson(new FileReader("src/main/resources/tractor_beam.json"), TractorBeam.class));
-            weaponStack.add(gson.fromJson(new FileReader("src/main/resources/railgun.json"), Railgun.class));
-            weaponStack.add(gson.fromJson(new FileReader("src/main/resources/sledgehammer.json"), Sledgehammer.class));
-            weaponStack.add(gson.fromJson(new FileReader("src/main/resources/cyberblade.json"), Cyberblade.class));
-            weaponStack.add(gson.fromJson(new FileReader("src/main/resources/rocket_launcher.json"), RocketLauncher.class));
-            weaponStack.add(gson.fromJson(new FileReader("src/main/resources/grenade_launcher.json"), GrenadeLauncher.class));
-            weaponStack.add(gson.fromJson(new FileReader("src/main/resources/thor.json"), Thor.class));
+            weaponStack.add(gson.fromJson(new InputStreamReader(getClass().getResourceAsStream("/plasma_gun.json")), PlasmaGun.class));
+            weaponStack.add(gson.fromJson(new InputStreamReader(getClass().getResourceAsStream("/electroscythe.json")), Electroscythe.class));
+            weaponStack.add(gson.fromJson(new InputStreamReader(getClass().getResourceAsStream("/lock_rifle.json")), LockRifle.class));
+            weaponStack.add(gson.fromJson(new InputStreamReader(getClass().getResourceAsStream("/whisper.json")), Whisper.class));
+            weaponStack.add(gson.fromJson(new InputStreamReader(getClass().getResourceAsStream("/zx-2.json")), ZX2.class));
+            weaponStack.add(gson.fromJson(new InputStreamReader(getClass().getResourceAsStream("/shockwave.json")), Shockwave.class));
+            weaponStack.add(gson.fromJson(new InputStreamReader(getClass().getResourceAsStream("/machine_gun.json")), MachineGun.class));
+            weaponStack.add(gson.fromJson(new InputStreamReader(getClass().getResourceAsStream("/flamethrower.json")), Flamethrower.class));
+            weaponStack.add(gson.fromJson(new InputStreamReader(getClass().getResourceAsStream("/furnace.json")), Furnace.class));
+            weaponStack.add(gson.fromJson(new InputStreamReader(getClass().getResourceAsStream("/hellion.json")), Hellion.class));
+            weaponStack.add(gson.fromJson(new InputStreamReader(getClass().getResourceAsStream("/shotgun.json")), Shotgun.class));
+            weaponStack.add(gson.fromJson(new InputStreamReader(getClass().getResourceAsStream("/power_glove.json")), PowerGlove.class));
+            weaponStack.add(gson.fromJson(new InputStreamReader(getClass().getResourceAsStream("/heatseeker.json")), Heatseeker.class));
+            weaponStack.add(gson.fromJson(new InputStreamReader(getClass().getResourceAsStream("/vortex_cannon.json")), VortexCannon.class));
+            weaponStack.add(gson.fromJson(new InputStreamReader(getClass().getResourceAsStream("/tractor_beam.json")), TractorBeam.class));
+            weaponStack.add(gson.fromJson(new InputStreamReader(getClass().getResourceAsStream("/railgun.json")), Railgun.class));
+            weaponStack.add(gson.fromJson(new InputStreamReader(getClass().getResourceAsStream("/sledgehammer.json")), Sledgehammer.class));
+            weaponStack.add(gson.fromJson(new InputStreamReader(getClass().getResourceAsStream("/cyberblade.json")), Cyberblade.class));
+            weaponStack.add(gson.fromJson(new InputStreamReader(getClass().getResourceAsStream("/rocket_launcher.json")), RocketLauncher.class));
+            weaponStack.add(gson.fromJson(new InputStreamReader(getClass().getResourceAsStream("/grenade_launcher.json")), GrenadeLauncher.class));
+            weaponStack.add(gson.fromJson(new InputStreamReader(getClass().getResourceAsStream("/thor.json")), Thor.class));
 
 
             for (int i = 0; i < 2; i++) {
-                powerUpStack.add(gson.fromJson(new FileReader("./src/main/resources/targeting_scopeRed.json"), TargetingScope.class));
-                powerUpStack.add(gson.fromJson(new FileReader("./src/main/resources/targeting_scopeYellow.json"), TargetingScope.class));
-                powerUpStack.add(gson.fromJson(new FileReader("./src/main/resources/targeting_scopeBlue.json"), TargetingScope.class));
-                powerUpStack.add(gson.fromJson(new FileReader("./src/main/resources/teleporterRed.json"), Teleporter.class));
-                powerUpStack.add(gson.fromJson(new FileReader("./src/main/resources/teleporterYellow.json"), Teleporter.class));
-                powerUpStack.add(gson.fromJson(new FileReader("./src/main/resources/teleporterBlue.json"), Teleporter.class));
-                powerUpStack.add(gson.fromJson(new FileReader("./src/main/resources/tagback_grenadeRed.json"), TagbackGrenade.class));
-                powerUpStack.add(gson.fromJson(new FileReader("./src/main/resources/tagback_grenadeYellow.json"), TagbackGrenade.class));
-                powerUpStack.add(gson.fromJson(new FileReader("./src/main/resources/tagback_grenadeBlue.json"), TagbackGrenade.class));
-                powerUpStack.add(gson.fromJson(new FileReader("./src/main/resources/newtonRed.json"), Newton.class));
-                powerUpStack.add(gson.fromJson(new FileReader("./src/main/resources/newtonYellow.json"), Newton.class));
-                powerUpStack.add(gson.fromJson(new FileReader("./src/main/resources/newtonBlue.json"), Newton.class));
+                powerUpStack.add(gson.fromJson(new InputStreamReader(getClass().getResourceAsStream("/targeting_scopeRed.json")), TargetingScope.class));
+                powerUpStack.add(gson.fromJson(new InputStreamReader(getClass().getResourceAsStream("/targeting_scopeYellow.json")), TargetingScope.class));
+                powerUpStack.add(gson.fromJson(new InputStreamReader(getClass().getResourceAsStream("/targeting_scopeBlue.json")), TargetingScope.class));
+                powerUpStack.add(gson.fromJson(new InputStreamReader(getClass().getResourceAsStream("/teleporterRed.json")), Teleporter.class));
+                powerUpStack.add(gson.fromJson(new InputStreamReader(getClass().getResourceAsStream("/teleporterYellow.json")), Teleporter.class));
+                powerUpStack.add(gson.fromJson(new InputStreamReader(getClass().getResourceAsStream("/teleporterBlue.json")), Teleporter.class));
+                powerUpStack.add(gson.fromJson(new InputStreamReader(getClass().getResourceAsStream("/tagback_grenadeRed.json")), TagbackGrenade.class));
+                powerUpStack.add(gson.fromJson(new InputStreamReader(getClass().getResourceAsStream("/tagback_grenadeYellow.json")), TagbackGrenade.class));
+                powerUpStack.add(gson.fromJson(new InputStreamReader(getClass().getResourceAsStream("/tagback_grenadeBlue.json")), TagbackGrenade.class));
+                powerUpStack.add(gson.fromJson(new InputStreamReader(getClass().getResourceAsStream("/newtonRed.json")), Newton.class));
+                powerUpStack.add(gson.fromJson(new InputStreamReader(getClass().getResourceAsStream("/newtonYellow.json")), Newton.class));
+                powerUpStack.add(gson.fromJson(new InputStreamReader(getClass().getResourceAsStream("/newtonBlue.json")), Newton.class));
             }
             ammoStack = new ArrayList<>(Arrays.asList(aS));
 
@@ -131,7 +132,7 @@ public class Match extends Observable implements Serializable {
             Collections.shuffle(powerUpStack);
             Collections.shuffle(ammoStack);
 
-        } catch (FileNotFoundException e) {
+        } catch (Exception e) {
             logger.log(Level.INFO,"Error while reading json files",e);
         }
     }

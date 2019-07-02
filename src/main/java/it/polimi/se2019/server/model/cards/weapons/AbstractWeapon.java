@@ -11,6 +11,7 @@ import it.polimi.se2019.server.model.cards.*;
 import it.polimi.se2019.server.model.game.Cubes;
 
 import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -189,67 +190,67 @@ public abstract class AbstractWeapon implements Weapon, Serializable {
 
             switch (weaponToResume) {
                 case "plasma_gun":
-                    resumedWeapon = gson.fromJson(new FileReader("src/main/resources/plasma_gun.json"), PlasmaGun.class);
+                    resumedWeapon = gson.fromJson(new InputStreamReader(Object.class.getResourceAsStream("/plasma_gun.json")), PlasmaGun.class);
                     break;
                 case "thor":
-                    resumedWeapon = gson.fromJson(new FileReader("src/main/resources/thor.json"), Thor.class);
+                    resumedWeapon = gson.fromJson(new InputStreamReader(Object.class.getResourceAsStream("/thor.json")), Thor.class);
                     break;
                 case "electroscythe":
-                    resumedWeapon = gson.fromJson(new FileReader("src/main/resources/electroscythe.json"), Electroscythe.class);
+                    resumedWeapon = gson.fromJson(new InputStreamReader(Object.class.getResourceAsStream("/electroscythe.json")), Electroscythe.class);
                     break;
                 case "lock_rifle":
-                    resumedWeapon = gson.fromJson(new FileReader("src/main/resources/lock_rifle.json"), LockRifle.class);
+                    resumedWeapon = gson.fromJson(new InputStreamReader(Object.class.getResourceAsStream("/lock_rifle.json")), LockRifle.class);
                     break;
                 case "whisper":
-                    resumedWeapon = gson.fromJson(new FileReader("src/main/resources/whisper.json"), Whisper.class);
+                    resumedWeapon = gson.fromJson(new InputStreamReader(Object.class.getResourceAsStream("/whisper.json")), Whisper.class);
                     break;
                 case "zx-2":
-                    resumedWeapon = gson.fromJson(new FileReader("src/main/resources/zx-2.json"), ZX2.class);
+                    resumedWeapon = gson.fromJson(new InputStreamReader(Object.class.getResourceAsStream("/zx-2.json")), ZX2.class);
                     break;
                 case "shockwave":
-                    resumedWeapon = gson.fromJson(new FileReader("src/main/resources/shockwave.json"), Shockwave.class);
+                    resumedWeapon = gson.fromJson(new InputStreamReader(Object.class.getResourceAsStream("/shockwave.json")), Shockwave.class);
                     break;
                 case "machine_gun":
-                    resumedWeapon = gson.fromJson(new FileReader("src/main/resources/machine_gun.json"), MachineGun.class);
+                    resumedWeapon = gson.fromJson(new InputStreamReader(Object.class.getResourceAsStream("/machine_gun.json")), MachineGun.class);
                     break;
                 case "flamethrower":
-                    resumedWeapon = gson.fromJson(new FileReader("src/main/resources/flamethrower.json"), Flamethrower.class);
+                    resumedWeapon = gson.fromJson(new InputStreamReader(Object.class.getResourceAsStream("/flamethrower.json")), Flamethrower.class);
                     break;
                 case "furnace":
-                    resumedWeapon = gson.fromJson(new FileReader("src/main/resources/furnace.json"), Furnace.class);
+                    resumedWeapon = gson.fromJson(new InputStreamReader(Object.class.getResourceAsStream("/furnace.json")), Furnace.class);
                     break;
                 case "hellion":
-                    resumedWeapon = gson.fromJson(new FileReader("src/main/resources/hellion.json"), Hellion.class);
+                    resumedWeapon = gson.fromJson(new InputStreamReader(Object.class.getResourceAsStream("/hellion.json")), Hellion.class);
                     break;
                 case "shotgun":
-                    resumedWeapon = gson.fromJson(new FileReader("src/main/resources/shotgun.json"), Shotgun.class);
+                    resumedWeapon = gson.fromJson(new InputStreamReader(Object.class.getResourceAsStream("/shotgun.json")), Shotgun.class);
                     break;
                 case "power_glove":
-                    resumedWeapon = gson.fromJson(new FileReader("src/main/resources/power_glove.json"), PowerGlove.class);
+                    resumedWeapon = gson.fromJson(new InputStreamReader(Object.class.getResourceAsStream("/power_glove.json")), PowerGlove.class);
                     break;
                 case "heatseeker":
-                    resumedWeapon = gson.fromJson(new FileReader("src/main/resources/heatseeker.json"), Heatseeker.class);
+                    resumedWeapon = gson.fromJson(new InputStreamReader(Object.class.getResourceAsStream("/heatseeker.json")), Heatseeker.class);
                     break;
                 case "vortex_cannon":
-                    resumedWeapon = gson.fromJson(new FileReader("src/main/resources/vortex_cannon.json"), VortexCannon.class);
+                    resumedWeapon = gson.fromJson(new InputStreamReader(Object.class.getResourceAsStream("/vortex_cannon.json")), VortexCannon.class);
                     break;
                 case "tractor_beam":
-                    resumedWeapon = gson.fromJson(new FileReader("src/main/resources/tractor_beam.json"), TractorBeam.class);
+                    resumedWeapon = gson.fromJson(new InputStreamReader(Object.class.getResourceAsStream("/tractor_beam.json")), TractorBeam.class);
                     break;
                 case "railgun":
-                    resumedWeapon = gson.fromJson(new FileReader("src/main/resources/railgun.json"), Railgun.class);
+                    resumedWeapon = gson.fromJson(new InputStreamReader(Object.class.getResourceAsStream("/railgun.json")), Railgun.class);
                     break;
                 case "sledgehammer":
-                    resumedWeapon = gson.fromJson(new FileReader("src/main/resources/sledgehammer.json"), Sledgehammer.class);
+                    resumedWeapon = gson.fromJson(new InputStreamReader(Object.class.getResourceAsStream("/sledgehammer.json")), Sledgehammer.class);
                     break;
                 case "cyberblade":
-                    resumedWeapon = gson.fromJson(new FileReader("src/main/resources/cyberblade.json"), Cyberblade.class);
+                    resumedWeapon = gson.fromJson(new InputStreamReader(Object.class.getResourceAsStream("/cyberblade.json")), Cyberblade.class);
                     break;
                 case "rocket_launcher":
-                    resumedWeapon = gson.fromJson(new FileReader("src/main/resources/rocket_launcher.json"), RocketLauncher.class);
+                    resumedWeapon = gson.fromJson(new InputStreamReader(Object.class.getResourceAsStream("/rocket_launcher.json")), RocketLauncher.class);
                     break;
                 case "grenade_launcher":
-                    resumedWeapon = gson.fromJson(new FileReader("src/main/resources/grenade_launcher.json"), GrenadeLauncher.class);
+                    resumedWeapon = gson.fromJson(new InputStreamReader(Object.class.getResourceAsStream("/grenade_launcher.json")), GrenadeLauncher.class);
                     break;
             }
 
