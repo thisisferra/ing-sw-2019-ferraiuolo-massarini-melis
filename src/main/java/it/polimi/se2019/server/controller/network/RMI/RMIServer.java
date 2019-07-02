@@ -736,9 +736,16 @@ public class RMIServer extends Server implements RMIServerInterface {
         updateAllClient();
     }
 
+    public void setCanMove(String username,boolean canMove) throws RemoteException{
+        match.searchPlayerByClientName(username).setCanMove(canMove);
+        updateAllVirtualView();
+        updateAllClient();
+    }
+
     public void  enableFinalFrenzy(String username) throws RemoteException {
         boolean flag = false;
         for (Player player : match.getAllPlayers()) {
+            player.setPhaseAction(0);
             if (flag) {
                 player.setFinalFrenzy(2);
             } else

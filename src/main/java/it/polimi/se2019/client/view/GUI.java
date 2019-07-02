@@ -75,9 +75,9 @@ public class GUI extends Application {
     private static final String FIRST_SPAWN_TEXT = "Choose one of the two power ups to discard.\nIt determines your spawn location, based on its color.";
     static final String HIGHLIGHT_BUTTON_STYLE = "-fx-background-color: #bbbbbb;-fx-text-fill: #999999;";
     private static final String TEXT_AREA_STYLE = "-fx-control-inner-background:#717171;  -fx-highlight-fill: #f1f7eb; -fx-highlight-text-fill: #717171; -fx-text-fill: #f1f7eb;-fx-border-color: #ffffff ";
-    private static final String WEAPONS_PATH = "/Images/Weapons/";
-    private static final String POWERUPS_PATH = "/Images/PowerUps/";
-    private static final String ICONS_PATH = "/Images/icons/";
+    private static final String WEAPONS_PATH = "/images/weapons/";
+    private static final String POWERUPS_PATH = "/images/powerUps/";
+    private static final String ICONS_PATH = "/images/icons/";
     private int mapNumber;
     private Scene scene;
 
@@ -155,7 +155,7 @@ public class GUI extends Application {
      */
     private void setKillShotTrack() {
         killShotTrack.getChildren().clear();
-        Image skullImage = createImage("/Images/icons/skull_icon.png");
+        Image skullImage = createImage("/images/icons/skull_icon.png");
         Image characterImage;
         ImageView characterImageView;
         ImageView skullView;
@@ -221,7 +221,7 @@ public class GUI extends Application {
                 damageBar.getChildren().add(iconImg);
             }
             for(int i = 0 ; i<view.getDeathsPlayerBoard();i++){
-                icon = createImage("/Images/icons/skull_icon.png");
+                icon = createImage("/images/icons/skull_icon.png");
                 iconImg = new ImageView(icon);
                 iconImg.setPreserveRatio(true);
                 iconImg.setFitWidth(35);
@@ -237,12 +237,12 @@ public class GUI extends Application {
             }
 
             if(view.getTypePlayerBoard() == 0){
-                image = createImage("/Images/Playerboards/"+view.getCharacter()+".png");
+                image = createImage("/images/playerboards/"+view.getCharacter()+".png");
                 damageBar.setTranslateX(40);
                 deathBar.setTranslateX(100);
             }
             else if(view.getTypePlayerBoard() == 1) {
-                image = createImage("/Images/Playerboards/"+view.getCharacter()+"_frenzy.png");
+                image = createImage("/images/playerboards/"+view.getCharacter()+"_frenzy.png");
                 damageBar.setTranslateX(47);
                 deathBar.setTranslateX(125);
             }
@@ -274,7 +274,7 @@ public class GUI extends Application {
 
         Image ammoBack;
 
-        ammoBack = createImage("/Images/Ammo/ammoback.png");
+        ammoBack = createImage("/images/ammo/ammoback.png");
         ammoSet.getChildren().clear();
         for(int i=0; i<12;i++){
             ammoSet.getChildren().add(new ImageView(ammoBack));
@@ -329,19 +329,19 @@ public class GUI extends Application {
     private void setCubes() {
         cubeBox.getChildren().clear();
         ImageView cubeImage;
-        cubeImage = new ImageView(createImage("/Images/icons/redCube.png"));
+        cubeImage = new ImageView(createImage("/images/icons/redCube.png"));
         cubeImage.setFitWidth(30);
         cubeImage.setPreserveRatio(true);
         Label redLabel = new Label(" " + getMyReds() + "  ", cubeImage);
         redLabel.setStyle("-fx-text-fill: #ff0000; -fx-background-color: #202020");
 
-        cubeImage = new ImageView(createImage("/Images/icons/yellowCube.png"));
+        cubeImage = new ImageView(createImage("/images/icons/yellowCube.png"));
         cubeImage.setFitWidth(30);
         cubeImage.setPreserveRatio(true);
         Label yellowLabel = new Label(" "  + getMyYellows() + "  ", cubeImage);
         yellowLabel.setStyle("-fx-text-fill: #fff000; -fx-background-color: #202020");
 
-        cubeImage = new ImageView(createImage("/Images/icons/blueCube.png"));
+        cubeImage = new ImageView(createImage("/images/icons/blueCube.png"));
         cubeImage.setFitWidth(30);
         cubeImage.setPreserveRatio(true);
         Label blueLabel = new Label(" " + getMyBlues()+"  ", cubeImage);
@@ -580,10 +580,10 @@ public class GUI extends Application {
         VBox sideBox = new VBox();
         VBox mapsBox = new VBox();
         HBox box1 = new HBox();
-        ImageView map1 = new ImageView(createImage("/Images/Maps/map1_preview.png"));
-        ImageView map2 = new ImageView(createImage("/Images/Maps/map2_preview.png"));
-        ImageView map3 = new ImageView(createImage("/Images/Maps/map3_preview.png"));
-        ImageView map4 = new ImageView(createImage("/Images/Maps/map4_preview.png"));
+        ImageView map1 = new ImageView(createImage("/images/maps/map1_preview.png"));
+        ImageView map2 = new ImageView(createImage("/images/maps/map2_preview.png"));
+        ImageView map3 = new ImageView(createImage("/images/maps/map3_preview.png"));
+        ImageView map4 = new ImageView(createImage("/images/maps/map4_preview.png"));
         map1.setPreserveRatio(true);
         map2.setPreserveRatio(true);
         map3.setPreserveRatio(true);
@@ -776,7 +776,7 @@ public class GUI extends Application {
      * @return the button created.
      */
     private Button setHomeButton(Stage window){
-        ImageView img = new ImageView(createImage("/Images/icons/home.png"));
+        ImageView img = new ImageView(createImage("/images/icons/home.png"));
         img.setPreserveRatio(true);
         img.setFitHeight(50);
         Button closeButton = new Button("",img);
@@ -822,7 +822,7 @@ public class GUI extends Application {
      * @return the ImageView containing the background map.
      */
     private ImageView setMap(){
-        ImageView imageView = new ImageView(createImage("/Images/Maps/Map" + mapNumber + ".png"));
+        ImageView imageView = new ImageView(createImage("/images/maps/Map" + mapNumber + ".png"));
         imageView.setFitHeight(700);
         imageView.setPreserveRatio(true);
         return imageView;
@@ -864,7 +864,7 @@ public class GUI extends Application {
         try{
             if(guiController.getRmiStub().isFirstPlayer(this.username)){
                 firstPlayer.getChildren().clear();
-                ImageView firstPlayerView = new ImageView(createImage("/Images/Playerboards/first_player.png"));
+                ImageView firstPlayerView = new ImageView(createImage("/images/playerboards/first_player.png"));
                 firstPlayerView.setFitHeight(100);
                 firstPlayerView.setPreserveRatio(true);
                 firstPlayerView.setTranslateX(30);
@@ -1218,13 +1218,13 @@ public class GUI extends Application {
 
         setCabinets();
 
-        Button moveButton = setImageButton("/Images/icons/move_icon.png");
-        Button grabButton = setImageButton("/Images/icons/grab_icon.png");
-        Button shootButton = setImageButton("/Images/icons/shoot_icon.png");
-        Button passButton = setImageButton("/Images/icons/pass_icon.png");
-        Button powerUps = setImageButton("/Images/icons/powerup_icon.png");
-        Button playersButton = setImageButton("/Images/icons/players_icon.png");
-        Button weapons = setImageButton("/Images/icons/weapon_icon.png");
+        Button moveButton = setImageButton("/images/icons/move_icon.png");
+        Button grabButton = setImageButton("/images/icons/grab_icon.png");
+        Button shootButton = setImageButton("/images/icons/shoot_icon.png");
+        Button passButton = setImageButton("/images/icons/pass_icon.png");
+        Button powerUps = setImageButton("/images/icons/powerup_icon.png");
+        Button playersButton = setImageButton("/images/icons/players_icon.png");
+        Button weapons = setImageButton("/images/icons/weapon_icon.png");
 
         moveButton.setOnAction(e ->{
             if(myRemoteView.getFinalFrenzy() == 2)
@@ -1611,7 +1611,11 @@ public class GUI extends Application {
                     reloadAlert.close();
                 }
                 else{
-                    shootAction(0,new ArrayList<>());
+                    ArrayList<Weapon> usableWeapons = guiController.getRmiStub().verifyWeapons(this.username);
+                    if(!usableWeapons.isEmpty())
+                        displayUsableWeapons(usableWeapons);
+                    else
+                        guiController.getRmiStub().setCanMove(this.username,false);
                     reloadAlert.close();
                 }
             }catch (Exception e){
@@ -1692,7 +1696,8 @@ public class GUI extends Application {
                                 weaponToReloadWindow.close();
 
                             } else {
-                                shootAction(0,new ArrayList<>());
+                                displayUsableWeapons(guiController.getRmiStub().verifyWeapons(this.username));
+                                weaponToReloadWindow.close();
                             }
                         }
                     }catch (Exception e) {
@@ -1764,12 +1769,28 @@ public class GUI extends Application {
         weaponsBox.setAlignment(Pos.CENTER);
         weaponsBox.setSpacing(30);
         weaponsBox.setStyle(BACKGROUND_STYLE);
+        usableWeaponsWindow.setOnCloseRequest( e-> {
+            try{
+                guiController.getRmiStub().getMatch().searchPlayerByClientName(this.username);
+                guiController.getRmiStub().useAction(this.username);
 
+            }catch (RemoteException exc){
+                logger.log(Level.INFO,"Error ",exc);
+            }
+        });
         Label info = new Label("Which weapon do you want to use?");
         info.setStyle(LABEL_STYLE);
 
         usableWeaponsWindow.initModality(Modality.APPLICATION_MODAL);
+        usableWeaponsWindow.setOnCloseRequest( e-> {
+            try{
+                guiController.getRmiStub().setCanMove(this.username,false);
+                guiController.getRmiStub().useAction(this.username);
 
+            }catch (RemoteException exc){
+                logger.log(Level.INFO,"Error ",exc);
+            }
+        });
         usableWeaponsPane.setCenter(weaponsBox);
         usableWeaponsPane.setAlignment(weaponsBox,Pos.CENTER);
         usableWeaponsPane.setStyle(BACKGROUND_STYLE);
@@ -1780,7 +1801,7 @@ public class GUI extends Application {
         usableWeaponsWindow.setMinWidth(400);
         usableWeaponsWindow.setMinHeight(300);
         usableWeaponsWindow.setResizable(false);
-        usableWeaponsWindow.showAndWait();
+        usableWeaponsWindow.show();
     }
 
     /**
@@ -1823,6 +1844,17 @@ public class GUI extends Application {
 
             availableEffectsWindow.close();
         });
+
+            availableEffectsWindow.setOnCloseRequest( e-> {
+                try{
+                    guiController.getRmiStub().setCanMove(this.username,false);
+                    guiController.getRmiStub().useAction(this.username);
+
+                }catch (RemoteException exc){
+                    logger.log(Level.INFO,"Error ",exc);
+                }
+            });
+
 
         availableEffectsWindow.initModality(Modality.APPLICATION_MODAL);
         availableEffectPane.setCenter(comboBox);
@@ -1903,7 +1935,7 @@ public class GUI extends Application {
 
                         weaponTargetWindow.close();
                     } else if(weaponShot.getChosenEffect().getMaxMovementTarget()>0) {
-                        guiController.getRmiStub().getMatch().searchPlayerByClientName(this.username).setCanMove(true);
+                        guiController.getRmiStub().setCanMove(this.username,true);
                         setPushSquares(weaponShot);
                         weaponTargetWindow.close();
                     } else {
@@ -1930,6 +1962,16 @@ public class GUI extends Application {
         weaponTargetPane.setBottom(confirmButton);
         weaponTargetPane.setAlignment(confirmButton,Pos.CENTER);
         weaponTargetPane.setAlignment(info,Pos.TOP_CENTER);
+
+        weaponTargetWindow.setOnCloseRequest( e-> {
+            try{
+                guiController.getRmiStub().setCanMove(this.username,false);
+                guiController.getRmiStub().useAction(this.username);
+
+            }catch (RemoteException exc){
+                logger.log(Level.INFO,"Error ",exc);
+            }
+        });
 
         Scene usableScene = new Scene(weaponTargetPane);
         weaponTargetWindow.setScene(usableScene);
@@ -2112,7 +2154,7 @@ public class GUI extends Application {
         try{
             allTargets.addAll(guiController.getRmiStub().getMatch().getAllPlayers());
             for(Player target : allTargets){
-                if(!target.getClientName().equals(this.username))
+                if(!target.getClientName().equals(this.username) && target.getPosition() != -1)
                     comboBox.getItems().add(target.getClientName());
             }
 
@@ -2296,7 +2338,7 @@ public class GUI extends Application {
             if(guiController.getRmiStub().getActivePlayer().equals(this.username)){
                 if(guiController.getRmiStub().checkNumberAction(this.username)){
                     if (!myRemoteView.getCanMove()) {
-                        guiController.getRmiStub().toggleAction(this.username);
+                        guiController.getRmiStub().setCanMove(this.username,true);
                         guiController.getMyRemoteView().setReachableSquare(guiController.getRmiStub().reachableSquares(guiController.getMyRemoteView().getPosition(),steps));
                         setMovementSquares();
                     } else {
@@ -2324,7 +2366,7 @@ public class GUI extends Application {
             if(guiController.getRmiStub().getActivePlayer().equals(this.username)){
                 if(guiController.getRmiStub().checkNumberAction(this.username)){
                     if (!myRemoteView.getCanMove()) {
-                        guiController.getRmiStub().toggleAction(this.username);
+                        guiController.getRmiStub().setCanMove(this.username,true);
                         guiController.getMyRemoteView().setReachableSquare(guiController.getRmiStub().reachableSquares(guiController.getRmiStub().getMatch().searchPlayerByClientName(username).getPosition(),steps));
                         setMoveGrabSquares();
                     } else {
@@ -2353,7 +2395,7 @@ public class GUI extends Application {
             if(guiController.getRmiStub().getActivePlayer().equals(this.username)){
                 if(guiController.getRmiStub().checkNumberAction(this.username)){
                     if (!myRemoteView.getCanMove()) {
-                        guiController.getRmiStub().toggleAction(this.username);
+                        guiController.getRmiStub().setCanMove(this.username,true);
                         guiController.getMyRemoteView().setReachableSquare(guiController.getRmiStub().reachableSquares(guiController.getMyRemoteView().getPosition(),steps));
                         setShootSquares(usableWeapons);
                     } else {
@@ -2386,7 +2428,7 @@ public class GUI extends Application {
                             guiController.getRmiStub().setNewPosition(guiController.getRmiStub().getMatch().searchPlayerByClientName(username).getClientName(), Integer.parseInt(rectangle.getId()));
                             guiController.getRmiStub().notifyAllClientMovement(this.username, Integer.parseInt(rectangle.getId()));
                             guiController.getRmiStub().useAction(this.username);
-                            guiController.getRmiStub().toggleAction(this.username);
+                            guiController.getRmiStub().setCanMove(this.username,false);
                             updateAllGUI();
                             restoreSquares();
                         } catch (Exception exc) {
@@ -2444,7 +2486,7 @@ public class GUI extends Application {
                                 }
                             }
                             guiController.getRmiStub().useAction(this.username);
-                            guiController.getRmiStub().toggleAction(this.username);
+                            guiController.getRmiStub().setCanMove(this.username,false);
                             updateAllGUI();
                             restoreSquares();
                         } catch (Exception exc) {
@@ -2477,9 +2519,12 @@ public class GUI extends Application {
                             guiController.getRmiStub().setNewPosition(guiController.getRmiStub().getMatch().searchPlayerByClientName(username).getClientName(), Integer.parseInt(rectangle.getId()));
                             guiController.getRmiStub().notifyAllClientMovement(this.username, Integer.parseInt(rectangle.getId()));
                             ArrayList<Weapon> newUsableWeapons = guiController.getRmiStub().verifyWeapons(this.username);
-                            displayUsableWeapons(newUsableWeapons);
-                            //textArea.setText("New position: " + rectangle.getId()+"\n" + textArea.getText());
-                            guiController.getRmiStub().toggleAction(this.username);
+                            if(!newUsableWeapons.isEmpty())
+                                displayUsableWeapons(newUsableWeapons);
+                            else {
+                                guiController.getRmiStub().setCanMove(this.username,false);
+                                guiController.getRmiStub().useAction(this.username);
+                            }
                             restoreSquares();
                             updateAllGUI();
                         } catch (Exception exc) {
@@ -2518,9 +2563,10 @@ public class GUI extends Application {
                             weaponShot.setNewPosition(Integer.parseInt(rectangle.getId()));
                             guiController.getRmiStub().applyEffectWeapon(weaponShot);
                             restoreSquares();
-                            guiController.getRmiStub().getMatch().searchPlayerByClientName(this.username).setCanMove(false);
+                            guiController.getRmiStub().setCanMove(this.username,false);
                             if(weaponShot.getChosenEffect().getMaxMovementPlayer()>0)
                                 moveAction(weaponShot.getChosenEffect().getMaxMovementPlayer());
+                            else guiController.getRmiStub().useAction(this.username);
                         } catch (Exception exc) {
                             logger.log(Level.INFO,"setMovementSquare() Error",exc);
                         }
@@ -2546,7 +2592,22 @@ public class GUI extends Application {
                     rectangle.setFill(Color.color(0.5, 1, 0.5, 0.4));
                     rectangle.setOnMouseClicked(o -> {
                         try {
-                            reloadAlert(false);
+                            if(!guiController.getRmiStub().getReloadableWeapons(this.username).isEmpty()){
+                                guiController.getRmiStub().setNewPosition(guiController.getRmiStub().getMatch().searchPlayerByClientName(username).getClientName(), Integer.parseInt(rectangle.getId()));
+                                restoreSquares();
+                                reloadAlert(false);
+                            }
+                            else {
+                                guiController.getRmiStub().setNewPosition(guiController.getRmiStub().getMatch().searchPlayerByClientName(username).getClientName(), Integer.parseInt(rectangle.getId()));
+                                restoreSquares();
+                                if(!guiController.getRmiStub().verifyWeapons(this.username).isEmpty())
+                                    displayUsableWeapons(guiController.getRmiStub().verifyWeapons(this.username));
+                                else {
+                                    guiController.getRmiStub().useAction(this.username);
+                                    guiController.getRmiStub().setCanMove(this.username,false);
+                                }
+
+                            }
                         } catch (Exception exc) {
                             logger.log(Level.INFO,"setMovementSquare() Error",exc);
                         }
@@ -2569,7 +2630,7 @@ public class GUI extends Application {
             if(guiController.getRmiStub().getActivePlayer().equals(this.username)){
                 if(guiController.getRmiStub().checkNumberAction(this.username)){
                     if (!myRemoteView.getCanMove()) {
-                        guiController.getRmiStub().toggleAction(this.username);
+                        guiController.getRmiStub().setCanMove(this.username,true);
                         guiController.getMyRemoteView().setReachableSquare(guiController.getRmiStub().reachableSquares(guiController.getMyRemoteView().getPosition(),steps));
                         setReloadShootSquares();
                     } else {

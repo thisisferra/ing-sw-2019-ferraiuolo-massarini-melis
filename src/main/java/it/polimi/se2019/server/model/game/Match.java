@@ -2,7 +2,6 @@ package it.polimi.se2019.server.model.game;
 
 import com.google.gson.Gson;
 
-import it.polimi.se2019.server.controller.VirtualView;
 import it.polimi.se2019.server.model.cards.*;
 import it.polimi.se2019.server.model.cards.powerUp.*;
 import it.polimi.se2019.server.model.cards.weapons.*;
@@ -10,22 +9,19 @@ import it.polimi.se2019.server.model.map.Map;
 import it.polimi.se2019.server.model.map.WeaponSlot;
 import it.polimi.se2019.server.model.player.Player;
 import it.polimi.se2019.server.model.player.PlayerBoard;
-import it.polimi.se2019.utils.Observable;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
-public class Match extends Observable implements Serializable {
+public class Match implements Serializable {
     private ArrayList<Player> players;
     private ArrayList<PowerUp> powerUpStack;
     private ArrayList<Ammo> ammoStack;

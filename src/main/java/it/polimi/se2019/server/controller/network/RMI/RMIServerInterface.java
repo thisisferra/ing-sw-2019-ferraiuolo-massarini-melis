@@ -87,6 +87,8 @@ public interface RMIServerInterface extends Remote {
 
     void toggleAction(String username) throws RemoteException;
 
+    void setCanMove(String username,boolean canMove) throws RemoteException;
+
     void payCubes(String username,int reds,int yellows,int blues) throws RemoteException;
 
     void save() throws RemoteException;

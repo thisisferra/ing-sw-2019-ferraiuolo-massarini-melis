@@ -74,7 +74,7 @@
     "north": -1,
     "east": -1,
     "south": 9,
-    "west": -1,
+    "west": 4,
     "northWall" : 1,
     "eastWall": 6 ,
     "southWall": 9 ,
