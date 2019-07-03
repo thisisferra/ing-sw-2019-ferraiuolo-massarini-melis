@@ -151,10 +151,13 @@ public class Square implements Serializable {
         return this.getPosition() == ((Square) o).getPosition();
     }
     //TODO CHECKTHIS
+    /*
     @Override
     public int hashCode() {
         return hashCode();
     }
+
+     */
 
     public JSONObject toJSON() {
         JSONObject squareJson = new JSONObject();

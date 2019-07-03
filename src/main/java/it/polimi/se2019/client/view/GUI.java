@@ -48,7 +48,6 @@ public class GUI extends Application {
     private GridPane pawnsGrid = new GridPane();
     private HBox redBox = new HBox();
     private HBox blueBox = new HBox();
-    //private boolean firstSpawn = true;
     private HBox yellowBox = new HBox();
     private StackPane cabinets = new StackPane();
     private HBox killShotTrack = new HBox();
@@ -1336,21 +1335,6 @@ public class GUI extends Application {
         window.show();
         logger.log(Level.INFO,"Fine Creazione Scena di gioco");
 
-        ///////
-        Timeline fiveSecondsWonder = new Timeline(new KeyFrame(Duration.seconds(1), o-> {
-            try{
-                if(guiController.getRmiStub().getActivePlayer().equals(username) && guiController.getRmiStub().getMatch().searchPlayerByClientName(this.username).getFirstSpawn()){
-                    startingDraw(FIRST_SPAWN_TEXT);
-                    guiController.getRmiStub().setFirstSpawnPlayer(this.username);
-                }
-            } catch (Exception exception){
-                logger.log(Level.INFO,"startingDraw Error",exception);
-            }
-        }));
-        fiveSecondsWonder.setCycleCount(Timeline.INDEFINITE);
-        fiveSecondsWonder.play();
-        ////////
-
     }
 
     /**
@@ -1992,12 +1976,16 @@ public class GUI extends Application {
                     teleporterAction(index);
                     break;
                 }
-                case "tagback_grenade" : {/*
-                        myRemoteView.getPowerUpShot().setDamagingPlayer(damagingPlayer);
-                        myRemoteView.getPowerUpShot().setTargetingPlayer(targetingPlayer);
-                        guiController.getRmiStub().usePowerUp(this,username, index, myRemoteView.getPowerUpShot);
-                        break;
-                        */
+                case "tagback_grenade" : {
+                    try{
+                        if(!guiController.getRmiStub().getMatch().searchPlayerByClientName(this.username).getLastDamagingPlayers().isEmpty()){
+                            displayTagBackTargets(index);
+                        }
+                    }catch (RemoteException e){
+                        logger.log(Level.INFO,"TagBack Grenade PowerUpAction error");
+                    }
+                    break;
+
                 }
                 case "targeting_scope" : {
                         try{
@@ -2136,6 +2124,61 @@ public class GUI extends Application {
         targetingScopeWindow.setHeight(200);
         targetingScopeWindow.setResizable(false);
         targetingScopeWindow.showAndWait();
+    }
+
+    private void displayTagBackTargets(int index){
+        Stage tagBackWindow = new Stage();
+        ComboBox comboBox = new ComboBox();
+        BorderPane tagBackPane = new BorderPane();
+        tagBackPane.setStyle(BACKGROUND_STYLE);
+        ArrayList<Player> allTargets = new ArrayList<>();
+        try{
+            allTargets.addAll(guiController.getRmiStub().getMatch().searchPlayerByClientName(this.username).getLastDamagingPlayers());
+            for(Player target : allTargets){
+                if(!target.getClientName().equals(this.username))
+                    comboBox.getItems().add(target.getClientName());
+            }
+        }catch (Exception exc){
+            logger.log(Level.INFO,"Targets TagBack error",exc);
+        }
+
+        Label info = new Label("Who is the target?");
+        info.setStyle(LABEL_STYLE);
+        Button confirmButton = new Button("Confirm");
+        setResponsiveButton(confirmButton);
+        comboBox.setPromptText("Select target");
+        comboBox.setPadding(new Insets(10,10,10,10));
+
+        confirmButton.setOnAction(e-> {
+            if(comboBox.getValue()!=null){
+                PowerUpShot powerUpShot = new PowerUpShot();
+                try{
+                    powerUpShot.setDamagingPlayer(guiController.getRmiStub().getMatch().searchPlayerByClientName(this.username));
+                    Player targetingPlayer = guiController.getRmiStub().getMatch().searchPlayerByClientName((String) comboBox.getValue());
+                    powerUpShot.setTargetingPlayer(targetingPlayer);
+                    guiController.getRmiStub().usePowerUp(this.username,index,powerUpShot);
+                    tagBackWindow.close();
+                }catch (Exception err){
+                    logger.log(Level.INFO,"TagBack method error",err);
+                }
+
+            }
+        });
+        tagBackWindow.initModality(Modality.APPLICATION_MODAL);
+        tagBackPane.setCenter(comboBox);
+        tagBackPane.setAlignment(comboBox,Pos.CENTER);
+        tagBackPane.setStyle(BACKGROUND_STYLE);
+        tagBackPane.setTop(info);
+        tagBackPane.setBottom(confirmButton);
+        tagBackPane.setAlignment(confirmButton,Pos.CENTER);
+        tagBackPane.setAlignment(info,Pos.TOP_CENTER);
+
+        Scene usableScene = new Scene(tagBackPane);
+        tagBackWindow.setScene(usableScene);
+        tagBackWindow.setWidth(300);
+        tagBackWindow.setHeight(200);
+        tagBackWindow.setResizable(false);
+        tagBackWindow.showAndWait();
     }
 
     /**

@@ -37,6 +37,8 @@ public class Player implements Serializable {
     private int numberOfAction;
     private ShotController shotController;
     private HashSet<Player> hitThisTurnPlayers = new HashSet<>();
+
+    private HashSet<Player> lastDamagingPlayers = new HashSet<>();
     private int finalFrenzy;
     private int phaseAction;
     private boolean canMove;
@@ -566,6 +568,10 @@ public class Player implements Serializable {
 
     public void setFirstSpawn(boolean firstSpawn) {
         this.firstSpawn = firstSpawn;
+    }
+
+    public HashSet<Player> getLastDamagingPlayers() {
+        return this.lastDamagingPlayers;
     }
 
 }

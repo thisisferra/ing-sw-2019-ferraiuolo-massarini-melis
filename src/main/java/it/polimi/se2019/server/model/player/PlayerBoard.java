@@ -226,6 +226,7 @@ public class PlayerBoard implements Serializable {
             owner.setPhaseAction(2);
         }
         attacker.getHitThisTurnPlayers().add(owner);
+        owner.getLastDamagingPlayers().add(attacker);
         sortAggressor();
     }
 

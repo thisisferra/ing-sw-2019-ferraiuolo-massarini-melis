@@ -448,6 +448,8 @@ public class RMIServer extends Server implements RMIServerInterface {
     }
 
     public void setActivePlayer(String usernameLastPlayer) throws RemoteException{
+        Player currentPlayer = this.match.searchPlayerByClientName(usernameLastPlayer);
+        currentPlayer.setFirstSpawn(false);
         ArrayList<Player> notSuspendedPlayers = new ArrayList<>();
         for (Player player : this.match.getAllPlayers()) {
             player.setCanMove(true);
@@ -460,16 +462,21 @@ public class RMIServer extends Server implements RMIServerInterface {
             index++;
         }
         if (index == size - 1) {
-            activePlayer =notSuspendedPlayers.get(0);
+            activePlayer = notSuspendedPlayers.get(0);
         }
         else {
             activePlayer = notSuspendedPlayers.get(index + 1);
         }
         activePlayer.setCanMove(false);
         activePlayer.clearHitThisTurnPlayers();
+        this.match.searchPlayerByClientName(usernameLastPlayer).getLastDamagingPlayers().clear();
         updateAllVirtualView();
         updateAllClient();
         roundTime = 300;
+        if (activePlayer.getFirstSpawn()) {
+            getMyVirtualView(activePlayer.getClientName()).getClientReference().respawnDialog();
+            activePlayer.setFirstSpawn(false);
+        }
 }
 
     public void setSpecificActivePlayer(Player player) {
@@ -526,6 +533,9 @@ public class RMIServer extends Server implements RMIServerInterface {
         }
         updateAllVirtualView();
         updateAllClient();
+
+
+
     }
 
     public void tradeCube(int index) throws RemoteException{
@@ -827,7 +837,13 @@ public class RMIServer extends Server implements RMIServerInterface {
             System.out.println("Match openConnection: " + this.match.getOpenConnection());
             for (VirtualView virtualView : allVirtualViews) {
                 GUIControllerInterface clientRef = virtualView.getClientReference();
-                clientRef.startingMatch();
+                if(this.match.searchPlayerByClientName(virtualView.getUsername()).isFirstPlayer()) {
+                    clientRef.respawnDialog();
+                    clientRef.startingMatch();
+                }
+                else {
+                    clientRef.startingMatch();
+                }
             }
             setResetTimer();
             initializeMatchTimer.cancel();
