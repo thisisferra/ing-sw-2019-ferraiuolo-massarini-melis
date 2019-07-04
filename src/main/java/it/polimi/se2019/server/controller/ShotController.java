@@ -15,14 +15,29 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * ShotController class aim is to scan each weapon of a player to verify which of the
+ * weapon a player can use to shoot others player.
+ * @author Marco Melis, Mattia Massarini
+ */
+
 public class ShotController implements Serializable {
 
     private Match match;
 
+    /**
+     * Constructor of the class. It links this object with the current match
+     * @param match: the current match
+     */
     public ShotController(Match match) {
         this.match = match;
     }
 
+    /**
+     *The method call in sequence checkIsLoad, checkCubes, checkVisibility and purgeUselessWeapons the verify which weapon a player can use
+     * @param currentPlayer: the current player
+     * @return
+     */
     public ArrayList<Weapon> checkAll(Player currentPlayer) {
         ArrayList<Weapon> loadedWeapon = checkIsLoad(currentPlayer);
         ArrayList<Weapon> checkedWeapon;
@@ -40,6 +55,11 @@ public class ShotController implements Serializable {
         return purgedWeapons;
     }
 
+    /**
+     * checkIsLoad scan all the weapons a player has in his hand and verify if the weapon is load or not.
+     * @param currentPlayer: the current player
+     * @return An ArrayList of only loaded weapon
+     */
     private ArrayList<Weapon> checkIsLoad(Player currentPlayer) {
         ArrayList<Weapon> loadedWeapon = new ArrayList<>();
         for (Weapon currentWeapon : currentPlayer.getHand().getWeapons()) {
@@ -50,6 +70,12 @@ public class ShotController implements Serializable {
         return loadedWeapon;
     }
 
+    /**
+     * Scan all the weapons of the current player to verify which effect of all weapons the players could pay.
+     * @param currentPlayer: the current player
+     * @param loadedWeapon: An ArrayList of loaded weapon
+     * @return An ArrayList of weapon in which the effects the player con't pay are set to null.
+     */
     private ArrayList<Weapon> checkCubes(Player currentPlayer, ArrayList<Weapon> loadedWeapon) {
         CubesChecker cubesChecker;
         for(Weapon currentWeapon : loadedWeapon) {
@@ -64,6 +90,13 @@ public class ShotController implements Serializable {
         return loadedWeapon;
     }
 
+    /**
+     * Scan all the effects of all weapons and check for each effect if there is at
+     * least one target the player could attack related to the typeVisibility of that effect.
+     * @param currentPlayer: the current player
+     * @param checkedWeapon: An ArrayList of weapon loaded without the effect the player can't pay
+     * @return An ArrayList of weapon without the effect that the player can't use because there isn't possible target
+     */
     private ArrayList<Weapon> checkVisibility(Player currentPlayer, ArrayList<Weapon> checkedWeapon) {
 
         ArrayList<Player> visiblePlayers = new ArrayList<>();
@@ -331,8 +364,13 @@ public class ShotController implements Serializable {
             }
         }
         return checkedWeapon;
-        }
+    }
 
+    /**
+     * Scan all the usable weapons in order to delete those weapon that has zero available effect
+     * @param usableWeapon: an ArrayList of usable weapon
+     * @return: An ArrayList of weapon the player can use with the related effects
+     */
     private ArrayList<Weapon> purgeUselessWeapons(ArrayList<Weapon> usableWeapon){
         ArrayList<Weapon> purgedWeapon = new ArrayList<>();
         for(Weapon weapon : usableWeapon){

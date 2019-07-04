@@ -15,48 +15,66 @@ public class PowerUpShot implements Serializable {
 
     /* * *   GETTER   * * */
 
+    /**
+     * Retrieve the damagingPlayer attribute of the class
+     * @return the player who give the damage
+     */
     public Player getDamagingPlayer() {
         return this.damagingPlayer;
     }
 
+    /**
+     * Getter of targetingPlayer
+     * @return targetingPlayer attribute
+     */
     public Player getTargetingPlayer() {
         return this.targetingPlayer;
     }
 
+    /**
+     * Getter of the new position of the player who uses the powerUp
+     * @return newPosition attribute
+     */
     public int getNewPosition() {
         return this.newPosition;
     }
 
-    public Cubes getCubeToPay() {
-        return this.cubeToPay;
-    }
-
     /* * *   SETTER   * * */
 
+    /**
+     * Setter of damagingPlayer
+     * @param damagingPlayer: the player who gives the damage
+     */
     public void setDamagingPlayer(Player damagingPlayer) {
         this.damagingPlayer = damagingPlayer;
     }
 
+    /**
+     * Setter of targetingPlayer attribute
+     * @param targetingPlayer: the player who receives damage
+     */
     public void setTargetingPlayer(Player targetingPlayer) {
         this.targetingPlayer = targetingPlayer;
 
     }
 
+    /**
+     * Setter of newPosition attribute
+     * @param newPosition: the new position of the targeting player or damagingPlayer
+     */
     public void setNewPosition(int newPosition) {
         this.newPosition = newPosition;
     }
 
+    /**
+     * Setter of cubeToPay attribute
+     * @param cubeToPay: cubes the player want to pay
+     */
     public void setCubeToPay(Cubes cubeToPay) {
         this.cubeToPay = cubeToPay;
     }
 
     /* * * OTHERS   * * */
-
-    public void clearPowerUpShot() {
-        this.targetingPlayer = null;
-        this.newPosition = -1;
-        this.cubeToPay = null;
-    }
 
     @Override
     public String toString(){
