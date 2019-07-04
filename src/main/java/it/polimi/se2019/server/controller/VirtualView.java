@@ -59,10 +59,6 @@ public class VirtualView implements Serializable {
 
     //GETTER
 
-    public String getIpClient() {
-        return this.ipClient;
-    }
-
     public GUIControllerInterface getClientReference() {
         return this.clientReference;
     }

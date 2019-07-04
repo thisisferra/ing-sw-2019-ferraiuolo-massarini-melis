@@ -11,15 +11,15 @@ public class OneAboveAll {
 
     private RMIServer rmiServer;
 
-    private OneAboveAll() {
-        rmiServer = new RMIServer(this, rmiPort, remObjName);
+    private OneAboveAll(String args[]) {
+        rmiServer = new RMIServer(this, rmiPort, remObjName, args[0]);
         rmiServer.startServer();
         rmiServer.checkSuspendedMatch();
     }
 
     public static void main(String args[]) {
 
-        new OneAboveAll();
+        new OneAboveAll(args);
 
     }
 }

@@ -19,8 +19,6 @@ public interface RMIServerInterface extends Remote {
 
     void login(String username, GUIControllerInterface guiController) throws RemoteException;
 
-    boolean checkUsername(String username) throws Exception;
-
     String checkUsername2(String username) throws Exception;
 
     void register(String username, GUIControllerInterface guiController,int mapId) throws RemoteException;
@@ -31,7 +29,7 @@ public interface RMIServerInterface extends Remote {
 
     void pickUpAmmo(String username) throws RemoteException;
 
-    Ammo showLastAmmo() throws  RemoteException;
+    Ammo showLastAmmo() throws RemoteException;
 
     void setNewPosition(String username, int newPosition) throws RemoteException;
 

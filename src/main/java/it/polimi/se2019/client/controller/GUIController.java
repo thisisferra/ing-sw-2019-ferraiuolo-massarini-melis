@@ -29,6 +29,10 @@ public class GUIController implements GUIControllerInterface {
 
     private ArrayList<RemoteView> allViews = new ArrayList<>();
 
+    public GUIController() {
+        //for testing only
+    }
+
     public GUIController(String IPAddress, GUI guiObject) {
         try {
             //Registry registry = LocateRegistry.getRegistry("192.168.",0);

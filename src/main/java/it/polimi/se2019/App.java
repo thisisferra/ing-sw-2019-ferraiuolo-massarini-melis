@@ -20,7 +20,18 @@ public class App {
 
         switch (choice) {
             case "1":
-                OneAboveAll.main(new String[]{});
+                System.out.println("How much would you like a turn to last?");
+                Integer stamina = 0;
+                do {
+                    try {
+                        System.out.println("A turn should last for 0 to 300 sec.");
+                        stamina = Integer.parseInt(console.readLine());
+                        System.out.println(stamina);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } while (stamina.intValue() <= 0 || stamina.intValue() > 300);
+                OneAboveAll.main(new String[]{stamina.toString()});
                 break;
             case "2":
                 Bootstrapper.main(new String[]{});

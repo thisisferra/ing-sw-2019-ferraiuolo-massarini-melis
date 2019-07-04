@@ -7,6 +7,10 @@ public abstract class Server {
 
     private OneAboveAll oneAboveAll;
 
+    public Server() {
+        //for testing purpose
+    }
+
     protected Server(OneAboveAll oneAboveAll) {
         this.oneAboveAll = oneAboveAll;
     }

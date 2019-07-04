@@ -121,16 +121,8 @@ public class WeaponShot implements Serializable {
         this.targetPlayers = targetPlayers;
     }
 
-    public void setAlreadyTarget(ArrayList<Player> alreadyTarget) {
-        this.alreadyTarget = alreadyTarget;
-    }
-
     public void setCardinalDirection(String cardinalDirection) {
         this.cardinalDirection = cardinalDirection;
-    }
-
-    public void setNumberOfMoves(int numberOfMoves) {
-        this.numberOfMoves = numberOfMoves;
     }
 
     public void setNewPosition(int newPosition) {

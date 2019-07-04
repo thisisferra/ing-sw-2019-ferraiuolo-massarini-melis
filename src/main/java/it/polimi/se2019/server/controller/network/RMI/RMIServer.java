@@ -58,7 +58,7 @@ public class RMIServer extends Server implements RMIServerInterface {
 
     private String ipAddress;
 
-    private final int port;
+    private final int port; //for testing purpose
 
     private final String remObjName;
 
@@ -84,8 +84,15 @@ public class RMIServer extends Server implements RMIServerInterface {
 
     //Metodi
 
-    public RMIServer(OneAboveAll oneAboveAll, int port, String remObjName) {
+    public RMIServer() {
+        //for testing purpose
+        this.port = 0;
+        this.remObjName = "";
+    }
+
+    public RMIServer(OneAboveAll oneAboveAll, int port, String remObjName, String roundTime) {
         super(oneAboveAll);
+        this.roundTime = Integer.parseInt(roundTime);
         //System.setProperty("java.rmi.server.hostname","192.168.1.208");
         try {
             this.ipAddress = InetAddress.getLocalHost().getHostAddress().trim();
@@ -212,23 +219,6 @@ public class RMIServer extends Server implements RMIServerInterface {
         return null;
     }
 
-    public synchronized boolean checkUsername(String username) {
-
-
-        if (match != null) {
-            if (match.getAllPlayers().size() < 5) {
-                for (Player player : match.getAllPlayers()) {
-                    if (player.getClientName().equals(username)) {
-                        return false;
-                    }
-                }
-            } else {
-                logger.log(Level.INFO,"Already 5 players",new Exception());
-            }
-        }
-        return true;
-    }
-
     public synchronized String checkUsername2(String username) throws Exception {
         if (match != null) {
             if (match.getOpenConnection()) {
@@ -268,14 +258,7 @@ public class RMIServer extends Server implements RMIServerInterface {
         this.updateAllClient();
     }
 
-    public void pickUpPowerUp(String username) throws RemoteException{
-        Player player = match.searchPlayerByClientName(username);
-        player.pickUpPowerUp();
-        updateAllVirtualView();
-        this.updateAllClient();
-    }
-
-    public Ammo showLastAmmo() throws  RemoteException{
+    public Ammo showLastAmmo() throws RemoteException{
         if(!match.getDiscardedAmmos().isEmpty())
             return match.getDiscardedAmmos().get(match.getDiscardedAmmos().size()-1);
         else return null;
@@ -337,11 +320,15 @@ public class RMIServer extends Server implements RMIServerInterface {
         }
     }
 
-    public void pickUpWeapon(String username, int indexToPickUp) throws RemoteException {
+    public void pickUpWeapon(String username, int indexToPickUp){
         Player currentPlayer = match.searchPlayerByClientName(username);
         currentPlayer.pickUpWeapon(indexToPickUp);
         updateAllVirtualView();
-        updateAllClient();
+        try {
+            updateAllClient();
+        } catch (RemoteException remException) {
+            logger.log(Level.INFO, "Can't call the client");
+        }
 
     }
 
@@ -381,7 +368,7 @@ public class RMIServer extends Server implements RMIServerInterface {
         }
     }
 
-    private boolean mapAlreadySelected() {
+    protected boolean mapAlreadySelected() {
         return (mapId != 0);
     }
 
@@ -480,7 +467,7 @@ public class RMIServer extends Server implements RMIServerInterface {
         return this.activePlayer;
     }
 
-    public ArrayList<Player> getKillShotTrack() throws RemoteException{
+    public ArrayList<Player> getKillShotTrack() {
         return match.getKillShotTrack();
     }
 
@@ -1054,5 +1041,14 @@ public class RMIServer extends Server implements RMIServerInterface {
 
 
         System.out.println("Il vincitore è: " + winner.getClientName());
+    }
+
+    public ArrayList<VirtualView> getAllVirtualView() {
+        return this.allVirtualViews;
+    }
+
+    public void setMatch(Match match) {
+        //for testing purpose
+        this.match = match;
     }
 }

@@ -158,26 +158,6 @@ public class ShotController implements Serializable {
                             }
                             break;
                         }
-                        case "CanSeeRoom": {
-                            RoomChecker roomChecker = new RoomChecker(match.getMap(),currentPlayer.getPosition());
-                            ArrayList<Square> roomSquares = new ArrayList<>();
-                            roomSquares.addAll(roomChecker.getAccessibleRooms());
-                            for(Square square : roomSquares){
-                                for(Player player : match.getAllPlayers()){
-                                    if(player.getPosition() == square.getPosition()){
-                                        visiblePlayers.add(player);
-                                    }
-                                }
-                            }
-                            visiblePlayers.remove(currentPlayer);
-                            if(visiblePlayers.isEmpty())
-                                weapon.getEffect()[i] = null;
-                            else{
-                                weaponShot = createInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(), weaponShots,weapon.getEffect()[i]);
-                                weapon.getWeaponShots().add(weaponShot);
-                            }
-                            break;
-                        }
                         case "CanSeeRoomNotIn": {
                             RoomChecker roomChecker = new RoomChecker(match.getMap(),currentPlayer.getPosition());
                             Square[] allSquares = match.getMap().getAllSquare();
@@ -195,32 +175,6 @@ public class ShotController implements Serializable {
                                 }
                             }
                             visiblePlayers.remove(currentPlayer);
-                            if(visiblePlayers.isEmpty())
-                                weapon.getEffect()[i] = null;
-                            else{
-                                weaponShot = createInfoShot(currentPlayer,visiblePlayers,weapon,weapon.getEffect()[i].getNameEffect(), weaponShots,weapon.getEffect()[i]);
-                                weapon.getWeaponShots().add(weaponShot);
-                            }
-                            break;
-                        }
-                        case "DistanceFromAPosition": {
-                            MovementChecker movementChecker;
-                            RoomChecker roomChecker = new RoomChecker(match.getMap(), currentPlayer.getPosition());
-                            ArrayList<Square> viewSquare = roomChecker.getAccessibleRooms();
-                            for (Square square : viewSquare) {
-                                movementChecker = new MovementChecker(match.getMap().getAllSquare(), 1, square.getPosition());
-                                for(Square square1 : movementChecker.getReachableSquares()) {
-                                    for (Player player : match.getAllPlayers()) {
-                                        if (player.getPosition() == square1.getPosition())
-                                            visiblePlayers.add(player);
-                                    }
-                                }
-                            }
-                            Set<Player> targetPlayer= new HashSet<>();
-                            targetPlayer.addAll(visiblePlayers);
-                            targetPlayer.remove(currentPlayer);
-                            visiblePlayers.clear();
-                            visiblePlayers.addAll(targetPlayer);
                             if(visiblePlayers.isEmpty())
                                 weapon.getEffect()[i] = null;
                             else{
@@ -350,7 +304,6 @@ public class ShotController implements Serializable {
                             visiblePlayers.clear();
                             break;
                         }
-
                         case "Vortex": {
                             RoomChecker roomChecker = new RoomChecker(match.getMap(),currentPlayer.getPosition());
                             ArrayList<Square> squares = new ArrayList<>();
