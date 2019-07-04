@@ -1,6 +1,6 @@
 package it.polimi.se2019.server.controller.network.RMI;
 
-import it.polimi.se2019.client.controller.GUIControllerInterface;
+import it.polimi.se2019.client.controller.network.RMI.GUIControllerInterface;
 import it.polimi.se2019.server.controller.WeaponShot;
 import it.polimi.se2019.server.controller.PowerUpShot;
 import it.polimi.se2019.server.model.cards.Ammo;
@@ -9,7 +9,6 @@ import it.polimi.se2019.server.model.game.Match;
 import it.polimi.se2019.server.model.map.Square;
 import it.polimi.se2019.server.model.player.Player;
 
-import javax.management.relation.RelationNotFoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;

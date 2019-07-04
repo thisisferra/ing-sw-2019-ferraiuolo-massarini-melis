@@ -1,6 +1,6 @@
 package it.polimi.se2019.server.controller;
 
-import it.polimi.se2019.client.controller.GUIControllerInterface;
+import it.polimi.se2019.client.controller.network.RMI.GUIControllerInterface;
 import it.polimi.se2019.server.model.cards.powerUp.PowerUp;
 import it.polimi.se2019.server.model.cards.weapons.AbstractWeapon;
 import it.polimi.se2019.server.model.cards.weapons.Weapon;

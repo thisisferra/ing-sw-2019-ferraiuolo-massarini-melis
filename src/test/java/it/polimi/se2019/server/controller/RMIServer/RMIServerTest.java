@@ -1,7 +1,7 @@
 package it.polimi.se2019.server.controller.RMIServer;
 
 import it.polimi.se2019.client.controller.GUIController;
-import it.polimi.se2019.client.controller.GUIControllerInterface;
+import it.polimi.se2019.client.controller.network.RMI.GUIControllerInterface;
 import it.polimi.se2019.client.view.GUI;
 import it.polimi.se2019.server.OneAboveAll;
 import it.polimi.se2019.server.controller.VirtualView;

@@ -1,7 +1,7 @@
 
 package it.polimi.se2019.client;
 
-import it.polimi.se2019.client.controller.Client;
+import it.polimi.se2019.client.controller.network.Client;
 import it.polimi.se2019.client.view.GUI;
 import javafx.application.Application;
 

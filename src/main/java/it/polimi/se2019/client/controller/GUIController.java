@@ -1,5 +1,6 @@
 package it.polimi.se2019.client.controller;
 
+import it.polimi.se2019.client.controller.network.RMI.GUIControllerInterface;
 import it.polimi.se2019.client.view.GUI;
 import it.polimi.se2019.client.view.RemoteView;
 import it.polimi.se2019.server.controller.WeaponShot;

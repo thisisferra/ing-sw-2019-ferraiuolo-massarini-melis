@@ -1,6 +1,5 @@
-package it.polimi.se2019.client.controller;
+package it.polimi.se2019.client.controller.network;
 
-import it.polimi.se2019.client.controller.network.RMI.RMIClient;
 import it.polimi.se2019.server.controller.network.RMI.RMIServerInterface;
 
 //ritorno

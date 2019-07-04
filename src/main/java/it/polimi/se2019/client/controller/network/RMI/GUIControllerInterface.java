@@ -1,4 +1,4 @@
-package it.polimi.se2019.client.controller;
+package it.polimi.se2019.client.controller.network.RMI;
 
 import it.polimi.se2019.server.controller.VirtualView;
 import it.polimi.se2019.server.model.player.Player;

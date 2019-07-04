@@ -6,7 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
-import it.polimi.se2019.client.controller.GUIControllerInterface;
+import it.polimi.se2019.client.controller.network.RMI.GUIControllerInterface;
 import it.polimi.se2019.server.OneAboveAll;
 import it.polimi.se2019.server.controller.WeaponShot;
 import it.polimi.se2019.server.controller.PowerUpShot;
