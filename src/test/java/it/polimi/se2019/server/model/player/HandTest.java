@@ -3,6 +3,8 @@ package it.polimi.se2019.server.model.player;
 import it.polimi.se2019.server.model.cards.powerUp.PowerUp;
 import it.polimi.se2019.server.model.game.Match;
 import it.polimi.se2019.server.model.player.Hand;
+import netscape.javascript.JSObject;
+import org.json.simple.JSONObject;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,16 +29,6 @@ public class HandTest {
         Assert.assertTrue(hand.checkPowerUps());
     }
 
-    /*
-    @Test
-    public void testFalseCheckPowerUps(){
-        PowerUp p1 = new PowerUp();
-        hand.getPowerUps().add(p1);
-        Assert.assertFalse(hand.checkPowerUps());
-    }
-
-     */
-
     @Test
     public void testChooseToDiscardIndexLessThan3() {
         PowerUp powerUpToDiscard = hand.getPowerUps().get(0);
@@ -48,19 +40,20 @@ public class HandTest {
         Assert.assertNull(hand.chooseToDiscard(5));
     }
 
-    /*
     @Test
-    public void testGetPowerUps(){
-        PowerUp p1 = new PowerUp();
-        PowerUp p2 = new PowerUp();
-        Assert.assertEquals(hand.getPowerUps().size(), 3);
-        hand.addPowerUp(p1);
-        Assert.assertEquals(hand.getPowerUps().size(), 4);
-        hand.addPowerUp(p2);
-        Assert.assertEquals(hand.getPowerUps().size(), 4);
-    }
+    public void testResumeHand(){
+        JSONObject handToRestore = hand.toJSON();
+        Hand handRestored = Hand.resumeHand(handToRestore);
 
-     */
+        Assert.assertEquals(handRestored.getPowerUps().get(0).getType(),hand.getPowerUps().get(0).getType());
+        Assert.assertEquals(handRestored.getPowerUps().get(1).getType(),hand.getPowerUps().get(1).getType());
+        Assert.assertEquals(handRestored.getPowerUps().get(2).getType(),hand.getPowerUps().get(2).getType());
+
+        Assert.assertEquals(handRestored.getPowerUps().get(0).getColor(),hand.getPowerUps().get(0).getColor());
+        Assert.assertEquals(handRestored.getPowerUps().get(1).getColor(),hand.getPowerUps().get(1).getColor());
+        Assert.assertEquals(handRestored.getPowerUps().get(2).getColor(),hand.getPowerUps().get(2).getColor());
+
+    }
 
 
 }

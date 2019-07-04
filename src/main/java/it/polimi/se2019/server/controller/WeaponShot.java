@@ -146,6 +146,7 @@ public class WeaponShot implements Serializable {
         return "" + this.getTargetablePlayer();
     }
 
+    /*
     public JSONObject toJSON() {
         JSONObject infoShotJson = new JSONObject();
 
@@ -177,6 +178,7 @@ public class WeaponShot implements Serializable {
 
         return infoShotJson;
     }
+     */
 
 
     /* * *   OTHERS   * * */

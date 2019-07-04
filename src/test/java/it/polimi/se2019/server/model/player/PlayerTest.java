@@ -1,7 +1,10 @@
 package it.polimi.se2019.server.model.player;
 
 import it.polimi.se2019.server.model.cards.powerUp.PowerUp;
+import it.polimi.se2019.server.model.cards.weapons.Weapon;
+import it.polimi.se2019.server.model.game.Cubes;
 import it.polimi.se2019.server.model.game.Match;
+import org.json.simple.JSONObject;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,7 +35,6 @@ public class PlayerTest {
         p4.setColor("yellow");
 
     }
-
 
     @Test
     public void testGetClientName() {
@@ -209,4 +211,45 @@ public class PlayerTest {
             Assert.assertEquals(1,p2.getHand().getPowerUps().size());
         else Assert.assertEquals(0,p2.getHand().getPowerUps().size());
     }
+
+
+    @Test
+    public void testGetReloadableWeapons(){
+        p1.getHand().getWeapons().add(m1.getWeaponStack().remove(0));
+        p1.getHand().getWeapons().get(0).setLoad(false);
+        p1.getPlayerBoard().setAmmoCubes(new Cubes(2,2,2));
+        ArrayList<Weapon> reloadableWeapons = p1.getReloadableWeapons();
+        System.out.println(reloadableWeapons);
+        Assert.assertEquals(reloadableWeapons.get(0).getType(),p1.getHand().getWeapons().get(0).getType());
+    }
+
+    @Test
+    public void testPickUpWeapon(){
+        p1.setPosition(4);
+        p1.pickUpWeapon(0);
+        System.out.println(p1.getHand().getWeapons());
+        Assert.assertNotNull(p1.getHand().getWeapons().get(0));
+    }
+    @Test
+    public void testResumePlayer(){
+        JSONObject p1ToResume = p1.toJSON();
+
+        Player p1Restored = Player.resumePlayer(p1ToResume,m1);
+
+        Assert.assertEquals(p1Restored.getClientName(),p1.getClientName());
+        Assert.assertEquals(p1Restored.getNumberOfAction(),p1.getNumberOfAction());
+        Assert.assertEquals(p1Restored.getCharacter(),p1.getCharacter());
+        Assert.assertEquals(p1Restored.getPosition(),p1.getPosition());
+        Assert.assertEquals(p1Restored.getFinalFrenzy(),p1.getFinalFrenzy());
+        Assert.assertEquals(p1Restored.getCanMove(),p1.getCanMove());
+        Assert.assertEquals(p1Restored.getScore(),p1.getScore());
+        Assert.assertEquals(p1Restored.getPhaseAction(),p1.getPhaseAction());
+        Assert.assertEquals(p1Restored.getSuspended(),p1.getSuspended());
+        Assert.assertEquals(p1Restored.getFirstSpawn(),p1.getFirstSpawn());
+        Assert.assertEquals(p1Restored.getFinalFrenzy(),p1.getFinalFrenzy());
+        Assert.assertEquals(p1Restored.getTypePlayerBoard(),p1.getTypePlayerBoard());
+        Assert.assertEquals(p1Restored.getClientName(),p1.getClientName());
+        Assert.assertEquals(p1Restored.getPlayerDead(),p1.getPlayerDead());
+    }
+
 }

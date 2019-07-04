@@ -5,6 +5,8 @@ import it.polimi.se2019.server.model.game.Match;
 import it.polimi.se2019.server.model.player.EnemyDamage;
 import it.polimi.se2019.server.model.player.Player;
 import it.polimi.se2019.server.model.player.PlayerBoard;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -182,5 +184,36 @@ public class PlayerBoardTest {
         p1.getPlayerBoard().sortAggressor();
         Assert.assertEquals(p3, p1.getPlayerBoard().getEnemyDamages().get(0).getAggressorPlayer());
         Assert.assertEquals(6, p1.getPlayerBoard().getEnemyDamages().get(0).getDamage());
+    }
+
+    @Test
+    public void testResumePlayerboard(){
+        p1.getPlayerBoard().getEnemyDamages().add(new EnemyDamage(p2,2));
+        p1.getPlayerBoard().getDamage().add(p2);
+        p1.getPlayerBoard().getDamage().add(p2);
+        p1.getPlayerBoard().setAmmoCubes(new Cubes(1,1,1));
+        //p1 died once
+        p1.getPlayerBoard().setDeaths();
+        p1.getPlayerBoard().getEnemyMarks().add(new EnemyMark(p2,1));
+        System.out.println(p1.getPlayerBoard().getEnemyDamages().get(0).getAggressorPlayer().getClientName());
+        JSONObject playerboardToRestore = p1.getPlayerBoard().toJSON();
+        PlayerBoard playerboardRestored = PlayerBoard.resumePlayerBoard(playerboardToRestore,m1);
+        String aggressorPlayer = null;
+        for(Object o : (JSONArray) playerboardToRestore.get("enemyDamages")) {
+            if(o != null)
+                aggressorPlayer = (String) ((JSONObject) o).get("aggressorPlayer");
+        }
+
+
+        Assert.assertEquals(playerboardRestored.getAmmoCubes().getReds(),p1.getPlayerBoard().getAmmoCubes().getReds());
+        Assert.assertEquals(playerboardRestored.getAmmoCubes().getBlues(),p1.getPlayerBoard().getAmmoCubes().getBlues());
+        Assert.assertEquals(playerboardRestored.getAmmoCubes().getYellows(),p1.getPlayerBoard().getAmmoCubes().getYellows());
+
+        Assert.assertEquals(playerboardRestored.getEnemyDamages().get(0).getDamage(),p1.getPlayerBoard().getEnemyDamages().get(0).getDamage());
+
+        Assert.assertEquals(playerboardRestored.getEnemyMarks().get(0).getMarks(),p1.getPlayerBoard().getEnemyMarks().get(0).getMarks());
+
+        Assert.assertEquals(aggressorPlayer, p1.getPlayerBoard().getEnemyDamages().get(0).getAggressorPlayer().getClientName());
+        Assert.assertEquals(aggressorPlayer, p1.getPlayerBoard().getEnemyMarks().get(0).getAggressorPlayer().getClientName());
     }
 }

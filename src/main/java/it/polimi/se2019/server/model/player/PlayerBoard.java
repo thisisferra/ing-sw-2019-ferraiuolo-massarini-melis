@@ -78,31 +78,6 @@ public class PlayerBoard implements Serializable {
         return resumedPlayerBoard;
     }
 
-/*
-    public static PlayerBoard resumePlayerBoard(JSONObject playerBoardToResume, PlayerBoard resumedPlayerBoard) {
-        //PlayerBoard resumedPlayerBoard = new PlayerBoard();
-
-        JSONArray damageToResume = (JSONArray) playerBoardToResume.get("damage");
-        for (Object damage : damageToResume) {
-            resumedPlayerBoard.damage.add(new Player()).setClientName((String) damage);
-        }
-
-
-        resumedPlayerBoard.deaths = (int) playerBoardToResume.get("deaths");
-
-        JSONArray pointDeathsToResume = (JSONArray) playerBoardToResume.get("pointDeaths");
-        for (Object pointDeath : pointDeathsToResume) {
-            if (resumedPlayerBoard.pointDeaths.get(0) == pointDeath)
-            resumedPlayerBoard.pointDeaths.remove(0);
-        }
-        resumedPlayerBoard.pointDeaths = ;
-
-        resumedPlayerBoard.ammoCubes = Cubes.resumeCubes((JSONObject) playerBoardToResume.get("ammoCubes"));
-
-        return resumedPlayerBoard;
-    }
-*/
-
     // init pointDeath arrayList at the beginning of the match
     private void setPointDeaths() {
         this.pointDeaths.add(8);

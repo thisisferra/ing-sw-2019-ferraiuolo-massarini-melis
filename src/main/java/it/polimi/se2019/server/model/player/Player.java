@@ -64,11 +64,6 @@ public class Player implements Serializable {
         this.typePlayerBoard = 0;
         this.firstSpawn = true;
     }
-/*
-    public Player() {
-        //Needed for resuming a player from saved match
-    }
-*/
 
     public Player(Match resumedMatch) {
         this.match = resumedMatch;

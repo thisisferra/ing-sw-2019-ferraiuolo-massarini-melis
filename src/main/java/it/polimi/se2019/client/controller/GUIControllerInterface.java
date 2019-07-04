@@ -1,6 +1,7 @@
 package it.polimi.se2019.client.controller;
 
 import it.polimi.se2019.server.controller.VirtualView;
+import it.polimi.se2019.server.model.player.Player;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -31,5 +32,7 @@ public interface GUIControllerInterface extends Remote {
     void closeGUI() throws RemoteException;
 
     void showMessage(String message) throws RemoteException;
+
+    void showEndGameWindow(ArrayList<Player> allPlayers) throws RemoteException;
 
 }

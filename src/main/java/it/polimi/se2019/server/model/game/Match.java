@@ -40,7 +40,6 @@ public class Match implements Serializable {
 
     public Match(int chosenMap){
         this.chosenMap=chosenMap;
-        //this.numberOfPlayers = numberOfPlayers;
         this.arsenal = new ArrayList<>();
         this.discardedAmmos = new ArrayList<>();
         this.discardedPowerUps = new ArrayList<>();
@@ -75,7 +74,6 @@ public class Match implements Serializable {
         weaponStack = new ArrayList<>();
         powerUpStack = new ArrayList<>();
         Ammo[] aS;
-        //PowerUp[]pUS;
         //create the map filling it with squares from the json file, based on the idMap
         map = new Map(this.chosenMap);
         map.setAllSquare();

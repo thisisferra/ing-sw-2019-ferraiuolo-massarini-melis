@@ -30,8 +30,7 @@ import javafx.util.Duration;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -48,6 +47,8 @@ public class GUI extends Application {
     private GridPane pawnsGrid = new GridPane();
     private HBox redBox = new HBox();
     private HBox blueBox = new HBox();
+    private StackPane cardsBackPane = new StackPane();
+    //private boolean firstSpawn = true;
     private HBox yellowBox = new HBox();
     private StackPane cabinets = new StackPane();
     private HBox killShotTrack = new HBox();
@@ -71,6 +72,12 @@ public class GUI extends Application {
     private static final String dozer = "-fx-text-fill: #726B72";
     private static final String sprog = "-fx-text-fill: #077200";
     private static final String violet = "-fx-text-fill: #E81AFF";
+    private static final String bansheeGradient = "-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #1f4f7a, #2b2b2a )";
+    private static final String distructorGradient = "-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #aa9e10, #2b2b2a )";
+    private static final String dozerGradient = "-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #5b5957, #2b2b2a )";
+    private static final String violetGradient = "-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #aa257f, #2b2b2a )";
+    private static final String sprogGradient = "-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #478b25, #2b2b2a )";
+
     private static final String FIRST_SPAWN_TEXT = "Choose one of the two power ups to discard.\nIt determines your spawn location, based on its color.";
     static final String HIGHLIGHT_BUTTON_STYLE = "-fx-background-color: #bbbbbb;-fx-text-fill: #999999;";
     private static final String TEXT_AREA_STYLE = "-fx-control-inner-background:#717171;  -fx-highlight-fill: #f1f7eb; -fx-highlight-text-fill: #717171; -fx-text-fill: #f1f7eb;-fx-border-color: #ffffff ";
@@ -447,12 +454,6 @@ public class GUI extends Application {
         nameInput.setStyle(TEXT_FIELD_STYLE);
         GridPane.setConstraints(nameInput, 0, 0);
 
-        //Password input
-        PasswordField passInput = new PasswordField();
-        passInput.setStyle(TEXT_FIELD_STYLE);
-        passInput.setPromptText("Password");
-        GridPane.setConstraints(passInput, 0, 1);
-
         //IP input
         TextField ipInput = new TextField();
         ipInput.setPromptText("Server IP");
@@ -529,7 +530,7 @@ public class GUI extends Application {
         pane.setPadding(new Insets(10, 10, 10, 10));
         setResponsiveButton(loginButton);
         loginButton.setAlignment(Pos.CENTER);
-        layout.getChildren().addAll(nameInput, passInput, ipInput, loginButton);
+        layout.getChildren().addAll(nameInput, ipInput, loginButton);
         layout.setAlignment(Pos.CENTER_LEFT);
         Scene newScene = new Scene(pane, 500, 400);
         pane.setStyle(BACKGROUND_STYLE);
@@ -873,6 +874,26 @@ public class GUI extends Application {
         } catch (RemoteException exc){
             logger.log(Level.INFO,"FirstPlayer error",exc);
         }
+    }
+
+    private ImageView setPowerUpDeckBack(){
+
+        ImageView powerUpDeckBack = new ImageView(createImage("/images/powerUps/powerupback.png"));
+        powerUpDeckBack.setPreserveRatio(true);
+        powerUpDeckBack.setFitHeight(100);
+        powerUpDeckBack.setTranslateX(399);
+        powerUpDeckBack.setTranslateY(-265);
+        return powerUpDeckBack;
+    }
+
+    private ImageView setWeaponDeckBack(){
+
+        ImageView weaponsDeckBack = new ImageView(createImage("/images/weapons/weaponback.png"));
+        weaponsDeckBack.setPreserveRatio(true);
+        weaponsDeckBack.setFitHeight(150);
+        weaponsDeckBack.setTranslateX(385);
+        weaponsDeckBack.setTranslateY(-88);
+        return weaponsDeckBack;
     }
 
     /**
@@ -1323,7 +1344,7 @@ public class GUI extends Application {
         rightPane.getChildren().add(textArea);
         rightPane.setSpacing(10);
 
-        stack.getChildren().addAll(setMap(), ammoSet, firstPlayer, killShotTrack, cabinets, grid, pawnsGrid);
+        stack.getChildren().addAll(setMap(),setWeaponDeckBack(),setPowerUpDeckBack(), ammoSet, firstPlayer, killShotTrack, cabinets, grid, pawnsGrid);
         Group root = new Group(stack);
         root.setTranslateY(-375);
         root.setTranslateX(25);
@@ -2707,7 +2728,7 @@ public class GUI extends Application {
 
     /**
      * It shows the list of targets while using VortexCannon weapon.
-     * @param weaponShot is the WeaponShot object containing infos.
+     * @param weaponShot  the WeaponShot object containing infos.
      */
     private void displayVortexSquares(WeaponShot weaponShot){
         for (int i = 0; i < 12; i++) {
@@ -2726,7 +2747,7 @@ public class GUI extends Application {
                             }
                             restoreSquares();
                         } catch (Exception exc) {
-                            logger.log(Level.INFO,"setMovementSquare() Error",exc);
+                            logger.log(Level.INFO,"displayVortexSquares Error",exc);
                         }
                     });
                     rectangle.setOnMouseEntered( enter ->
@@ -2736,6 +2757,62 @@ public class GUI extends Application {
                 }
             }
         }
+    }
+
+    public void setEndScene(ArrayList<Player> players){
+        BorderPane leaderboardPane = new BorderPane();
+        VBox playersBox = new VBox();
+        VBox winnerBox = new VBox();
+        Label winnerLabel = new Label();
+        Label winnerPlayerLabel = new Label();
+        winnerPlayerLabel.setStyle(LABEL_STYLE);
+        winnerLabel.setStyle(LABEL_STYLE);
+        //players.sort(Comparator.comparingInt(Player::getScore).reversed());
+        Collections.sort(players, Comparator.comparingInt(Player::getScore).reversed());
+        winnerPlayerLabel.setText(players.get(0).getClientName());
+        switch(players.get(0).getCharacter()){
+            case "distructor" : {
+                leaderboardPane.setStyle(distructorGradient);
+                break;
+            }
+            case "violet" : {
+                leaderboardPane.setStyle(violetGradient);
+                break;
+            }
+            case "dozer" : {
+                leaderboardPane.setStyle(dozerGradient);
+                break;
+            }
+            case "sprog" : {
+                leaderboardPane.setStyle(sprogGradient);
+                break;
+            }
+            case "banshee" : {
+                leaderboardPane.setStyle(bansheeGradient);
+                break;
+            }
+            default : leaderboardPane.setStyle("-fx-background-color: #202020");
+        }
+        int i = 1;
+        for(Player player : players){
+            Label tempLabel = new Label(i+"° "+player.getClientName() + " " + player.getScore());
+            tempLabel.setStyle(LABEL_STYLE);
+            playersBox.getChildren().add(tempLabel);
+            i++;
+        }
+        winnerLabel.setText("The winner is: \n");
+        winnerBox.getChildren().addAll(winnerLabel,winnerPlayerLabel);
+        winnerBox.setSpacing(10);
+        playersBox.setSpacing(20);
+        winnerBox.setAlignment(Pos.CENTER);
+        playersBox.setAlignment(Pos.CENTER);
+        leaderboardPane.setTop(winnerBox);
+        leaderboardPane.setCenter(playersBox);
+        Scene winnerScene = new Scene(leaderboardPane,200,300);
+        window.setScene(winnerScene);
+        window.setResizable(false);
+        window.show();
+
     }
 
     public void startMatch() {

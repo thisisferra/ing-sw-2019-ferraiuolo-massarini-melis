@@ -1,8 +1,10 @@
 package it.polimi.se2019.server.model.game;
 
+import com.google.gson.JsonObject;
 import it.polimi.se2019.server.model.cards.weapons.Weapon;
 import it.polimi.se2019.server.model.game.Match;
 import it.polimi.se2019.server.model.player.Player;
+import org.json.simple.JSONObject;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -123,6 +125,29 @@ public class MatchTest {
         Assert.assertEquals(3,m3.getMap().getMapID());
         Assert.assertEquals(4,m4.getMap().getMapID());
         Assert.assertEquals(1,m5.getMap().getMapID());
+
+    }
+
+    @Test
+    public void restoreMatch(){
+        JSONObject m1ToRestore = m1.toJSON();
+        JSONObject m2ToRestore = m2.toJSON();
+        JSONObject m3ToRestore = m3.toJSON();
+        JSONObject m4ToRestore = m4.toJSON();
+        JSONObject m5ToRestore = m5.toJSON();
+
+        Match m1Restored = Match.resumeMatch(m1ToRestore,m1.getMap().getMapID());
+        Match m2Restored = Match.resumeMatch(m2ToRestore,m2.getMap().getMapID());
+        Match m3Restored = Match.resumeMatch(m3ToRestore,m3.getMap().getMapID());
+        Match m4Restored = Match.resumeMatch(m4ToRestore,m4.getMap().getMapID());
+        Match m5Restored = Match.resumeMatch(m5ToRestore,m5.getMap().getMapID());
+
+        Assert.assertEquals(m1Restored.getMap().getMapID(),m1.getMap().getMapID());
+        Assert.assertEquals(m2Restored.getMap().getMapID(),m2.getMap().getMapID());
+        Assert.assertEquals(m3Restored.getMap().getMapID(),m3.getMap().getMapID());
+        Assert.assertEquals(m4Restored.getMap().getMapID(),m4.getMap().getMapID());
+        Assert.assertEquals(m5Restored.getMap().getMapID(),m5.getMap().getMapID());
+
 
     }
 }

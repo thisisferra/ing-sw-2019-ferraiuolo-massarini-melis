@@ -5,6 +5,7 @@ import it.polimi.se2019.client.view.RemoteView;
 import it.polimi.se2019.server.controller.WeaponShot;
 import it.polimi.se2019.server.controller.VirtualView;
 import it.polimi.se2019.server.controller.network.RMI.RMIServerInterface;
+import it.polimi.se2019.server.model.player.Player;
 import javafx.application.Platform;
 import javafx.scene.control.TextArea;
 
@@ -180,15 +181,6 @@ public class GUIController implements GUIControllerInterface {
          */
     }
 
-    //TODO check this
-    /*
-    public void verifyWeapons() throws RemoteException{
-        RemoteView myRemoteView = this.getMyRemoteView();
-        myRemoteView.getUsableWeapon().clear();
-        myRemoteView.setAvailableWeapon(this.getRmiStub().verifyWeapons(this.username));
-    }
-     */
-
     public void applyEffect(WeaponShot weaponShot) throws RemoteException{
         this.getRmiStub().applyEffectWeapon(weaponShot);
     }
@@ -221,6 +213,12 @@ public class GUIController implements GUIControllerInterface {
 
     public void startingMatch() throws RemoteException {
         Platform.runLater(() -> this.guiObject.startMatch());
+    }
+
+    public void showEndGameWindow(ArrayList<Player> allPlayers){
+        Platform.runLater(() -> {
+            this.guiObject.setEndScene(allPlayers);
+        });
     }
 
     public void closeGUI() throws RemoteException{

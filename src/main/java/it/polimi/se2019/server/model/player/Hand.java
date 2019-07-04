@@ -47,25 +47,13 @@ public class Hand implements Serializable {
         return powerUps;
     }
 
-    public void discardWeapon(){
-
-    }
-
-    public void discardPowerUp() {
-        int index = this.indexToDiscard();
-        this.chooseToDiscard(index);
-    }
-
     public void addPowerUp(PowerUp currentPowerUp) {
         if (checkPowerUps()) {
             this.powerUps.add( currentPowerUp);
         }
         else{
             this.powerUps.add( currentPowerUp);
-            int index = indexToDiscard();
-            this.chooseToDiscard(index);
-
-
+            this.chooseToDiscard(1);
         }
     }
 
@@ -78,14 +66,6 @@ public class Hand implements Serializable {
         else{
             return false;
         }
-    }
-
-    //TODO da mettere nel controller
-    public int indexToDiscard() {
-        Scanner input = new Scanner(System.in);
-        int index = 1;
-        //int index = Integer.parseInt(input.nextLine());
-        return index;
     }
 
     public PowerUp chooseToDiscard(int indexToDiscard) {

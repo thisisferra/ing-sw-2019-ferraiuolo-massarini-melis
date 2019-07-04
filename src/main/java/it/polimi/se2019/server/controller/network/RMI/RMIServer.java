@@ -52,6 +52,8 @@ public class RMIServer extends Server implements RMIServerInterface {
 
     private Match match;
 
+    private int endgameIndex;
+
     private int mapId = 0;
 
     private String ipAddress;
@@ -72,7 +74,7 @@ public class RMIServer extends Server implements RMIServerInterface {
 
     private Timer roundTimer = new Timer();
 
-    Timer resetTimer = new Timer();
+    private Timer resetTimer = new Timer();
 
     private int interval = 10;
 
@@ -144,27 +146,12 @@ public class RMIServer extends Server implements RMIServerInterface {
         }
     }
 
-    /*
-    private String getClientIP(GUIControllerInterface guiController){
-        String ipClient = null;
-        String port = null;
-        Pattern IP_PATTERN = Pattern.compile("(((\\d)+(\\.)*)+:(\\d)+)");
-        Matcher matcher = IP_PATTERN.matcher(guiController.toString());
-        while(matcher.find()) {
-            ipClient = matcher.group(0);
-        }
-        System.out.println("ipClient: " + ipClient);
-        return ipClient;
-    }
-     */
-
     public synchronized void register(String username, GUIControllerInterface guiController,int mapId) throws RemoteException{
         if (!mapAlreadySelected()) {
             this.createMatch(mapId);
             this.startingMatchTimer();
 
         }
-        //String ipClient = getClientIP(guiController);
         VirtualView virtualView = createVirtualView(guiController);
         Player player = createPlayer(username);
         virtualView.updateVirtualView(player, match);
@@ -177,7 +164,6 @@ public class RMIServer extends Server implements RMIServerInterface {
         if (this.match.getOpenConnection()) {
             virtualView.getClientReference().waitPlayers();
         }
-        //this.pingClient();
     }
 
     public synchronized void login(String username, GUIControllerInterface guiControllerToResume) throws RemoteException {
@@ -477,6 +463,12 @@ public class RMIServer extends Server implements RMIServerInterface {
             getMyVirtualView(activePlayer.getClientName()).getClientReference().respawnDialog();
             activePlayer.setFirstSpawn(false);
         }
+        if (this.match.isFinalFrenzyStatus()) {
+            endgameIndex++;
+            if(endgameIndex == match.getAllPlayers().size()+1){
+                this.finishMatch();
+            }
+        }
 }
 
     public void setSpecificActivePlayer(Player player) {
@@ -533,9 +525,6 @@ public class RMIServer extends Server implements RMIServerInterface {
         }
         updateAllVirtualView();
         updateAllClient();
-
-
-
     }
 
     public void tradeCube(int index) throws RemoteException{
@@ -1060,7 +1049,7 @@ public class RMIServer extends Server implements RMIServerInterface {
 
         for (VirtualView virtualView : allVirtualViews) {
             GUIControllerInterface clientRef = virtualView.getClientReference();
-            clientRef.closeGUI();
+            clientRef.showEndGameWindow(this.match.getAllPlayers());
         }
 
 
