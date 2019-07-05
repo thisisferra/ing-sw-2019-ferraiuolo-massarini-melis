@@ -401,12 +401,16 @@ public class RMIServer extends Server implements RMIServerInterface {
      * @throws RemoteException
      */
     public void updateAllClient() throws RemoteException{
-        pingAllClient();
-        for (VirtualView virtualView : allVirtualViews) {
-            if (!this.match.searchPlayerByClientName(virtualView.getUsername()).getSuspended()) {
-                GUIControllerInterface clientRef = virtualView.getClientReference();
-                clientRef.update(allVirtualViews);
+        try {
+            pingAllClient();
+            for (VirtualView virtualView : allVirtualViews) {
+                if (!this.match.searchPlayerByClientName(virtualView.getUsername()).getSuspended()) {
+                    GUIControllerInterface clientRef = virtualView.getClientReference();
+                    clientRef.update(allVirtualViews);
+                }
             }
+        } catch(RemoteException remException) {
+            logger.log(Level.SEVERE, "Can't connect to the client");
         }
     }
 
@@ -887,7 +891,7 @@ public class RMIServer extends Server implements RMIServerInterface {
      * @param player the player that is dead.
      * @throws RemoteException if the method can't do the remote call to the client.
      */
-    private void assignPoints(Player player) throws RemoteException{
+    public void assignPoints(Player player) throws RemoteException{
         PlayerBoard playerBoard = player.getPlayerBoard();
         int indexPointDeaths = 0;
         for (EnemyDamage enemyDamagePoints : playerBoard.getEnemyDamages()) {
@@ -903,7 +907,12 @@ public class RMIServer extends Server implements RMIServerInterface {
         playerBoard.getPointDeaths().remove(0);
         playerBoard.clearDamage();
         updateAllVirtualView();
-        updateAllClient();
+        try {
+            updateAllClient();
+        } catch(RemoteException remException) {
+            logger.log(Level.SEVERE, "Can't connect to the client");
+        }
+
     }
 
     /**
@@ -1383,7 +1392,16 @@ public class RMIServer extends Server implements RMIServerInterface {
      * The method computes the damage on all player-boards and computes the points to assign to each player for each kill.
      * @throws RemoteException if the client isn't reachable.
      */
-    private void finishMatch() throws RemoteException{
+    public void finishMatch() throws RemoteException{
+
+
+        for (Player player : this.match.getAllPlayers()) {
+            this.assignPoints(player);
+        }
+        this.computePointsFinal();
+    }
+
+    public void computePointsFinal() throws RemoteException{
         ArrayList<Integer> killPointsShotTrack = new ArrayList<>();
         killPointsShotTrack.add(8);
         killPointsShotTrack.add(6);
@@ -1391,12 +1409,6 @@ public class RMIServer extends Server implements RMIServerInterface {
         killPointsShotTrack.add(2);
         killPointsShotTrack.add(1);
         killPointsShotTrack.add(1);
-
-
-        for (Player player : this.match.getAllPlayers()) {
-            this.assignPoints(player);
-        }
-
 
         Map<String, Integer> pointsKillShotTrack = new HashMap<>();
         for (Player player : this.match.getKillShotTrack()) {

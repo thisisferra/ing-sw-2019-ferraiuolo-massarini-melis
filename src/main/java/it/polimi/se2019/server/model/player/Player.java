@@ -178,6 +178,14 @@ public class Player implements Serializable {
     }
 
     /**
+     * setter of the score of the player.
+     * Increase the score by the amount specified as parameter
+     */
+    public void setScore(int score) {
+        this.score = this.score + score;
+    }
+
+    /**
      * getter of the position of the player
      * @return the position (integer) of the player
      */

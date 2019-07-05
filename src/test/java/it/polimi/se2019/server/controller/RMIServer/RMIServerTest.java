@@ -10,6 +10,7 @@ import it.polimi.se2019.server.model.cards.Ammo;
 import it.polimi.se2019.server.model.cards.weapons.Weapon;
 import it.polimi.se2019.server.model.game.Match;
 import it.polimi.se2019.server.model.map.Square;
+import it.polimi.se2019.server.model.player.EnemyDamage;
 import it.polimi.se2019.server.model.player.Player;
 import junit.framework.AssertionFailedError;
 import org.junit.*;
@@ -370,8 +371,113 @@ public class RMIServerTest {
         Assert.assertTrue(rmiServer.checkSizeWeapon(username));
     }
 
-    @Test
-    public void usePowerUpTest() {
+    @Test(expected = NullPointerException.class)
+    public void assignPointsTest() {
+        //Damage player1
+        EnemyDamage enemyDamage1 = new EnemyDamage(p2, 3);
+        EnemyDamage enemyDamage2 = new EnemyDamage(p4, 2);
+        EnemyDamage enemyDamage = new EnemyDamage(p3, 5);
+        p1.getPlayerBoard().getEnemyDamages().add(enemyDamage1);
+        p1.getPlayerBoard().getEnemyDamages().add(enemyDamage2);
+        p1.getPlayerBoard().getEnemyDamages().add(enemyDamage);
+        p1.getPlayerBoard().getDamage().add(p2);
+        p1.getPlayerBoard().getDamage().add(p2);
+        p1.getPlayerBoard().getDamage().add(p2);
+        p1.getPlayerBoard().getDamage().add(p4);
+        p1.getPlayerBoard().getDamage().add(p4);
+        p1.getPlayerBoard().getDamage().add(p3);
+        p1.getPlayerBoard().getDamage().add(p3);
+        p1.getPlayerBoard().getDamage().add(p3);
+        p1.getPlayerBoard().getDamage().add(p3);
+        p1.getPlayerBoard().getDamage().add(p3);
+        //1 point first death
+        p2.setScore(1);
+
+        p1.getPlayerBoard().sortAggressor();
+
+        try {
+            rmiServer.assignPoints(p1);
+        } catch(RemoteException remExc) {
+            remExc.getMessage();
+        }
+
+        //Assert.assertEquals(13, p1.getScore());
+        Assert.assertEquals(7, p2.getScore());
+        Assert.assertEquals(8, p3.getScore());
+        Assert.assertEquals(4, p4.getScore());
+
+
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void computePointsFinalTest() {
+        EnemyDamage enemyDamage1 = new EnemyDamage(p2, 3);
+        EnemyDamage enemyDamage2 = new EnemyDamage(p4, 2);
+        p1.getPlayerBoard().getEnemyDamages().add(enemyDamage1);
+        p1.getPlayerBoard().getEnemyDamages().add(enemyDamage2);
+        p1.getPlayerBoard().getDamage().add(p2);
+        p1.getPlayerBoard().getDamage().add(p2);
+        p1.getPlayerBoard().getDamage().add(p2);
+        p1.getPlayerBoard().getDamage().add(p4);
+        p1.getPlayerBoard().getDamage().add(p4);
+        //1 point first death
+        p2.setScore(1);
+
+        //Damage player 2
+        EnemyDamage enemyDamage3 = new EnemyDamage(p1, 1);
+        EnemyDamage enemyDamage4 = new EnemyDamage(p4, 3);
+        EnemyDamage enemyDamage5 = new EnemyDamage(p3, 2);
+        p2.getPlayerBoard().getEnemyDamages().add(enemyDamage3);
+        p2.getPlayerBoard().getEnemyDamages().add(enemyDamage4);
+        p2.getPlayerBoard().getEnemyDamages().add(enemyDamage5);
+        p2.getPlayerBoard().getDamage().add(p1);
+        p2.getPlayerBoard().getDamage().add(p4);
+        p2.getPlayerBoard().getDamage().add(p4);
+        p2.getPlayerBoard().getDamage().add(p4);
+        p2.getPlayerBoard().getDamage().add(p3);
+        p2.getPlayerBoard().getDamage().add(p3);
+        //1 point first death
+        p1.setScore(1);
+
+        EnemyDamage enemyDamage6 = new EnemyDamage(p2, 2);
+        EnemyDamage enemyDamage7 = new EnemyDamage(p1, 3);
+        p3.getPlayerBoard().getEnemyDamages().add(enemyDamage6);
+        p3.getPlayerBoard().getEnemyDamages().add(enemyDamage7);
+        p3.getPlayerBoard().getDamage().add(p2);
+        p3.getPlayerBoard().getDamage().add(p2);
+        p3.getPlayerBoard().getDamage().add(p1);
+        p3.getPlayerBoard().getDamage().add(p1);
+        p3.getPlayerBoard().getDamage().add(p1);
+        //1 point first death
+        p2.setScore(1);
+
+        EnemyDamage enemyDamage8 = new EnemyDamage(p3, 3);
+        p4.getPlayerBoard().getEnemyDamages().add(enemyDamage8);
+        p4.getPlayerBoard().getDamage().add(p3);
+        p4.getPlayerBoard().getDamage().add(p3);
+        p4.getPlayerBoard().getDamage().add(p3);
+        //1 point first death
+        p3.setScore(1);
+
+        //KillShotTrack
+        rmiServer.getMatch().getKillShotTrack().add(p2);
+
+        p1.getPlayerBoard().sortAggressor();
+        p2.getPlayerBoard().sortAggressor();
+        p3.getPlayerBoard().sortAggressor();
+        p4.getPlayerBoard().sortAggressor();
+
+        try {
+            rmiServer.computePointsFinal();
+        } catch(RemoteException remException) {
+            remException.getMessage();
+        }
+
+        Assert.assertEquals(0, p1.getScore());
+        Assert.assertEquals(8, p2.getScore());
+        Assert.assertEquals(0, p3.getScore());
+        Assert.assertEquals(0, p4.getScore());
+
 
     }
 
