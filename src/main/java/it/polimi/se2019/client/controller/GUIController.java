@@ -17,7 +17,12 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 
-//ritorno
+/**
+ * This class contains the stub of the server, so through this stub we can call server method.
+ * It contains also the remoteView of all players used to show the right information on the GUI.
+ * @author merklind, mattiamassarini, thisisferra
+ */
+
 public class GUIController implements GUIControllerInterface {
 
     private GUI guiObject;
@@ -48,20 +53,34 @@ public class GUIController implements GUIControllerInterface {
         out = new PrintStream(System.out);
     }
 
-    //GETTER
-
+    /**
+     * Get the stub object
+     * @return the stub object
+     */
     public RMIServerInterface getRmiStub() {
         return this.rmiStub;
     }
 
+    /**
+     * Get the username
+     * @return the username attribute
+     */
     public String getUsername() {
         return this.username;
     }
 
+    /**
+     * Get the allViews ArrayList
+     * @return allViews ArrayList
+     */
     public ArrayList<RemoteView> getAllViews() {
         return  this.allViews;
     }
 
+    /**
+     * Scan allViews ArrayList and search the one that has the username equals to username attribute
+     * @return The remote view with my username
+     */
     public RemoteView getMyRemoteView() {
         for (RemoteView remoteView : allViews) {
             if (remoteView.getUsername().equals(username)) {
@@ -71,20 +90,24 @@ public class GUIController implements GUIControllerInterface {
         return null;
     }
 
-    //SETTER
-
+    /**
+     * Set the username
+     * @param username: my username
+     */
     public void setUsername(String username) {
         this.username = username;
     }
 
-    //ALTRO
 
-
-    //Create remote view if it hasn't already created
-    //Call to "update" that update all remotes view
+    /**
+     * Scan the ArrayList of virtualView passed as parameter, retrieve the username of each virtualView
+     * then scan the ArrayList allView, if exists a remoteView with the same username of the virtualView, nothing happens,
+     * create and add to allViews ArrayList otherwise
+     * @param allVirtualView: ArrayList of virtualView
+     * @throws RemoteException
+     */
     public void initRemoteView(ArrayList<VirtualView> allVirtualView) throws RemoteException {
         boolean alreadyCreated = false;
-        //out.println("Remote view locali: ");
         for (VirtualView virtualView : allVirtualView) {
             String username = virtualView.getUsername();
             for (RemoteView remoteView : allViews) {
@@ -104,6 +127,9 @@ public class GUIController implements GUIControllerInterface {
 
     }
 
+    /**
+     * Restore the GUI
+     */
     public void restoreGUI() {
         Platform.runLater(()->{
             guiObject.getWindow().close();
@@ -114,6 +140,9 @@ public class GUIController implements GUIControllerInterface {
         });
     }
 
+    /**
+     * Show the login window
+     */
     public void recallLoginScene() {
         Platform.runLater(()->{
             guiObject.getWindow().close();
@@ -122,12 +151,21 @@ public class GUIController implements GUIControllerInterface {
         });
     }
 
+    /**
+     *Restore the remote view when a match is resumed
+     * @param virtualViewToRestore: virtual view to restore
+     */
     public void restoreRemoteView(VirtualView virtualViewToRestore) {
         allViews.add(new RemoteView(virtualViewToRestore.getUsername()));
         getMyRemoteView().updateRemoteView(virtualViewToRestore);
     }
 
-    //Find the corrispondence between VirtualView and RemoteView and update its data
+    /**
+     * Update all the data of all remotes view with the data contains in virtualView.
+     * Then update the GUI
+     * @param allVirtualView: ArrayList of virtualView containing the data to save in remoteView
+     * @throws RemoteException
+     */
     @Override
     public void update(ArrayList<VirtualView> allVirtualView) throws RemoteException {
         for (VirtualView virtualView : allVirtualView) {
@@ -143,60 +181,22 @@ public class GUIController implements GUIControllerInterface {
                     guiObject.updateAllGUI();
             });
         }
-        this.notifyClient();
     }
 
-    public void notifyClient(){
-        /*
-        out.flush();
-        out.println("Informazioni di gioco:");
-        for (RemoteView remoteView : allViews) {
-            out.println("Username: " + remoteView.getUsername() + " (" + remoteView.getCharacter() + ")");
-            out.println("Position: " + remoteView.getPosition());
-            if (remoteView.getUsername().equals(this.username)) {
-                out.println("# action available: " + remoteView.getNumberOfActions());
-                out.println("Weapons: " + remoteView.getWeapons());
-                out.println("Power-up: " + remoteView.getPowerUps());
-                out.println("Points " + remoteView.getPoints());
-            }
-            out.println("Cubes: " + remoteView.getCubes());
-            out.print("Cabinet red: [");
-            for (int i = 0; i < 3; i++) {
-                if (remoteView.getCabinetRed().getSlot()[i] != null) {
-                    out.print(remoteView.getCabinetRed().getSlot()[i] + "  ");
-                }
-            }
-            out.println("]");
-            out.print("Cabinet yellow: [");
-            for (int i = 0; i < 3; i++) {
-                if (remoteView.getCabinetYellow().getSlot()[i] != null) {
-                    out.print(remoteView.getCabinetYellow().getSlot()[i] + "  ");
-                }
-            }
-            out.println("]");
-            out.print("Cabinet blue: [");
-            for (int i = 0; i < 3; i++) {
-                if (remoteView.getCabinetBlue().getSlot()[i] != null) {
-                    out.print(remoteView.getCabinetBlue().getSlot()[i] + "  ");
-                }
-            }
-            out.println("]");
-            out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-            out.println();
-        }
-         */
-    }
-
+    /**
+     * Do a remote call to the server to apply the effect of a weapon
+     * @param weaponShot: object that contains the info of a shoot
+     * @throws RemoteException if the client can't call the server
+     */
     public void applyEffect(WeaponShot weaponShot) throws RemoteException{
         this.getRmiStub().applyEffectWeapon(weaponShot);
     }
 
-    @Override
-    public String ping() {
-        System.out.println("Client " + this.username + " still connected!");
-        return this.username;
-    }
-
+    /**
+     * Show a message in each client GUI
+     * @param message: the message to show
+     * @throws RemoteException
+     */
     @Override
     public void showMessage(String message) throws RemoteException {
         TextArea textArea = guiObject.getTextArea();
@@ -204,29 +204,52 @@ public class GUIController implements GUIControllerInterface {
 
     }
 
+    /**
+     * Show a windows in the GUI to choose a powerUp for the respawn
+     */
     public void respawnDialog() {
         Platform.runLater(() -> this.guiObject.startingDraw("Choose one power ups to discard.\nIt determines your spawn location, based on its color."));
     }
 
+    /**
+     * Method called by the server to verify if the client is still alive
+     * @return
+     */
     public int pingClient() {
         return 13;
         //System.out.println("Client " +this.username + " connesso");
     }
 
+    /**
+     * Call a GUI method to show the waiting window
+     * @throws RemoteException
+     */
     public void waitPlayers() throws RemoteException {
         Platform.runLater(() -> this.guiObject.setWaitScene());
     }
 
+    /**
+     * Call a GUI method to start the GUI
+     * @throws RemoteException
+     */
     public void startingMatch() throws RemoteException {
         Platform.runLater(() -> this.guiObject.startMatch());
     }
 
+    /**
+     * Call a GUI method to show the end window
+     * @param allPlayers
+     */
     public void showEndGameWindow(ArrayList<Player> allPlayers){
         Platform.runLater(() -> {
             this.guiObject.setEndScene(allPlayers);
         });
     }
 
+    /**
+     * Call a GUI method to close the GUI
+     * @throws RemoteException
+     */
     public void closeGUI() throws RemoteException{
         Platform.runLater(() -> this.guiObject.closeWindow());
     }

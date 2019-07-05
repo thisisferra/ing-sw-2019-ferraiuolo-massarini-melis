@@ -13,8 +13,6 @@ public interface GUIControllerInterface extends Remote {
 
     void update(ArrayList<VirtualView> allVirtualView) throws RemoteException;
 
-    String ping() throws RemoteException;
-
     void respawnDialog() throws RemoteException;
 
     void restoreGUI() throws RemoteException;
