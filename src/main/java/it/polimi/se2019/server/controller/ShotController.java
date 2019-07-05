@@ -16,7 +16,7 @@ import java.util.HashSet;
 /**
  * ShotController class aim is to scan each weapon of a player to verify which of the
  * weapon a player can use to shoot others player.
- * @author Marco Melis, Mattia Massarini
+ * @author merklind, mattiamassarini
  */
 
 public class ShotController implements Serializable {
