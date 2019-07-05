@@ -659,7 +659,7 @@ public class GUI extends Application {
     /**
      * It places each player figure on the board, depending on their position.
      */
-    private void setFigures() {
+    public void setFigures() {
         FlowPane flowPane;
         pawnsGrid.getChildren().clear();
         for (int row = 0; row < 3; row++) {

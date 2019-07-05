@@ -108,6 +108,7 @@ public class GUIController implements GUIControllerInterface {
         Platform.runLater(()->{
             guiObject.getWindow().close();
             guiObject.setGameScene();
+            guiObject.setFigures();
             guiObject.getWindow().setScene(guiObject.getScene());
             guiObject.getWindow().show();
         });
