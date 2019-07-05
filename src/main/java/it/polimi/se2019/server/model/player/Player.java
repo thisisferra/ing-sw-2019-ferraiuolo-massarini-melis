@@ -9,17 +9,17 @@ import it.polimi.se2019.server.model.game.Match;
 import it.polimi.se2019.server.model.map.Square;
 import it.polimi.se2019.server.model.map.WeaponSlot;
 import org.json.simple.JSONObject;
-
-import javax.net.ssl.SSLEngineResult;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
- * Represents the player game. Each player is identified by its clientName
- * It has some attributes such as color, position, score...
- * Each player has a reference to its playerboard, hand and match
+ * Represents the player itself. Each player is identified by its clientName
+ * It has some attributes such as character, position, score...
+ * Each player has a reference to its playerboard, hand and match.
+ * @author mattiamassarini, merklind, thisisferra.
  */
 
 
@@ -37,7 +37,6 @@ public class Player implements Serializable {
     private int numberOfAction;
     private ShotController shotController;
     private HashSet<Player> hitThisTurnPlayers = new HashSet<>();
-
     private HashSet<Player> lastDamagingPlayers = new HashSet<>();
     private int finalFrenzy;
     private int phaseAction;
@@ -45,6 +44,8 @@ public class Player implements Serializable {
     private boolean playerDead;
     private int typePlayerBoard;
     private boolean firstSpawn;
+
+    private transient Logger logger = Logger.getAnonymousLogger();
 
     public Player(String clientName, Match match) {
         this.clientName = clientName;
@@ -69,6 +70,12 @@ public class Player implements Serializable {
         this.match = resumedMatch;
     }
 
+    /**
+     * Resume the a player from a JSONObject object.
+     * @param playerToResume the player to be restored.
+     * @param resumedMatch the match in which the player is.
+     * @return the Player object restored.
+     */
     public static Player resumePlayer(JSONObject playerToResume, Match resumedMatch) {
         Player resumedPlayer = new Player(resumedMatch);
 
@@ -91,28 +98,10 @@ public class Player implements Serializable {
         return resumedPlayer;
     }
 
-/*
-    public static Player resumePlayer(JSONObject playerToResume, Player resumedPlayer) {
-        //Player resumedPlayer = new Player();
-
-        resumedPlayer.character = (String) playerToResume.get("character");
-        resumedPlayer.clientName = (String) playerToResume.get("clientName");
-        resumedPlayer.color = (String) playerToResume.get("color");
-        resumedPlayer.position = (int) playerToResume.get("position");
-        resumedPlayer.score = (int) playerToResume.get("score");
-        resumedPlayer.firstPlayer = (boolean) playerToResume.get("firstPlayer");
-        resumedPlayer.suspended = (boolean) playerToResume.get("suspended");
-        resumedPlayer.playerHand = Hand.resumeHand((JSONObject) playerToResume.get("playerHand"));
-        resumedPlayer.playerBoard = PlayerBoard.resumePlayerBoard((JSONObject) playerToResume.get("playerBoard"), new PlayerBoard(resumedPlayer));
-        resumedPlayer.numberOfAction = (int) playerToResume.get("numberOfAction");
-        resumedPlayer.finalFrenzy = (boolean) playerToResume.get("finalFrenzy");
-        resumedPlayer.phaseAction = (int) playerToResume.get("phaseAction");
-        resumedPlayer.canMove = (boolean) playerToResume.get("canMove");
-        resumedPlayer.playerDead = (boolean) playerToResume.get("playerDead");
-
-        return resumedPlayer;
-    }
-*/
+    /**
+     * Getter method of the character field.
+     * @return the name of the character assigned to the player.
+     */
     public String getCharacter() {
         return this.character;
     }
@@ -133,38 +122,78 @@ public class Player implements Serializable {
         this.clientName= clientName;
     }
 
+    /**
+     * Setter of the phaseAction field
+     * @param phaseAction the number of phase action the player is in.
+     */
     public void setPhaseAction(int phaseAction){
         this.phaseAction=phaseAction;
     }
 
+    /**
+     * Getter of the phaseAction field.
+     * @return an int indicating the phase action status the player is in.
+     */
     public int getPhaseAction(){
         return this.phaseAction;
     }
 
+    /**
+     * Setter of the color field.
+     * @param color the color assigned to the player. It relates to the character.
+     */
     public void setColor(String color){
         this.color = color;
     }
 
+    /**
+     * Getter of the color field.
+     * @return the color assigned to the player.
+     */
     public String getColor(){
         return this.color;
     }
 
+    /**
+     * Getter of the final frenzy status.
+     * It's 0 when the final frenzy hasn't started yet,
+     * 1 if the final frenzy has started and the player has 1 move available
+     * 2 if the final frenzy has started and the player has 2 moves available.
+     *
+     * @return the int representing the final frenzy status.
+     */
     public int getFinalFrenzy(){
         return this.finalFrenzy;
     }
 
+    /**
+     * Setter of the final frenzy field.
+     * @param finalFrenzy the finalfrenzy status the player is in.
+     */
     public void setFinalFrenzy(int finalFrenzy){
         this.finalFrenzy=finalFrenzy;
     }
 
+    /**
+     * Getter of the canMove field.
+     * @return if the player can use one of his action or not.
+     */
     public boolean getCanMove(){
         return this.canMove;
     }
 
+    /**
+     * Setter of the firstPlayer field.
+     * @param firstPlayer true if the player is the first player of the game, false otherwise.
+     */
     public void setFirstPlayer(boolean firstPlayer){
         this.firstPlayer = firstPlayer;
     }
 
+    /**
+     * Setter of the canMove field.
+     * @param canMove true if the player can use one of his action, false otherwise.
+     */
     public void setCanMove(boolean canMove){
         this.canMove=canMove;
     }
@@ -238,30 +267,55 @@ public class Player implements Serializable {
         this.position = position;
     }
 
+    /**
+     * Getter of the hitThisTurnPlayers collection.
+     * @return the collection of player the current player hit this turn.
+     */
     public HashSet<Player> getHitThisTurnPlayers(){
         return this.hitThisTurnPlayers;
     }
 
+    /**
+     * It clears the hitThisTurnPlayer list.
+     */
     public void clearHitThisTurnPlayers(){
         this.hitThisTurnPlayers.clear();
     }
 
+    /**
+     * Getter of the number of actions the player has.
+     * @return the number of action left.
+     */
     public int getNumberOfAction() {
         return this.numberOfAction;
     }
 
+    /**
+     * Decrease by one the numberOfAction field.
+     */
     public void decreaseNumberOfAction() {
         this.numberOfAction = this.numberOfAction - 1;
     }
 
+    /**
+     * Increase by one the numberOfAction field.
+     */
     public void increaseNumberOfAction(){
         this.numberOfAction = this.numberOfAction +1;
     }
 
+    /**
+     * Setter of the numberOfAction field.
+     * @param numberOfAction the number of actions assigned.
+     */
     public void setNumberOfAction(int numberOfAction) {
         this.numberOfAction = numberOfAction;
     }
 
+    /**
+     * Reset the number of action according to the game and player states.
+     *
+     */
     public void resetNumberOfAction() {
         if (this.getFinalFrenzy() == 0)
             this.numberOfAction = 2;
@@ -300,14 +354,17 @@ public class Player implements Serializable {
                 playerBoard.setAmmoCubes(currentCubes);
             }
             else {
-                System.out.println("You have already picked up this ammo");
+                logger.log(Level.INFO,"You have already picked up this ammo");
             }
         }
         else{
-            System.out.println("You are in a spawn point, you can't pick up an ammo");
+            logger.log(Level.INFO,"You are in a spawn point, you can't pick up an ammo");
         }
     }
 
+    /**
+     * It picks up a power up only if the current power up array's size is less than three.
+     */
     public void pickUpPowerUp(){
         if(playerHand.getPowerUps().size()<3){
             PowerUp powerUp = match.pickUpPowerUp();
@@ -315,6 +372,11 @@ public class Player implements Serializable {
         }
     }
 
+    /**
+     * It picks up a power up even if the current hand is three.
+     * Used when discarding a power up for spawning.
+     * @return the power up drawn.
+     */
     public PowerUp pickUpPowerUpToRespawn() {
         PowerUp powerUp = match.pickUpPowerUp();
         playerHand.addPowerUp(powerUp);
@@ -322,10 +384,10 @@ public class Player implements Serializable {
     }
 
     /**
-     * Pick up a weapon in case i have less then 3 weapons, it deletes from the right arsenal the weapon
-     * I chose and add it to my hand. In the method I also pay the right amount of cubes to buy the weapon.
-     * @param indexToPickUp index of the weapon slot where I pick uop the weapon
-     * @return true if I can draw a weapon, false otherwise
+     * Pick up a weapon in case the player has less than 3 weapons, it removes from the arsenal the weapon
+     * the player chose and add it to his hand. Additionally the player pay the right amount of cubes to buy the weapon.
+     * @param indexToPickUp index of the weaponsSlot array the players pick up the weapon from.
+     * @return true if the player can draw a weapon, false otherwise
      */
     public boolean pickUpWeapon(int indexToPickUp) {
         if (this.getHand().getWeapons().size() < 3) {
@@ -374,6 +436,15 @@ public class Player implements Serializable {
         }
     }
 
+    /**
+     * Pick up a weapon in case the player has more than 3 weapons, it removes from the arsenal the weapon
+     * the player chose and add it to his hand. The player pays the right amount of cubes to buy the weapon.
+     * The player put a weapon of his choice back inside the same cabinet he picked up the chosen weapons from.
+     * The returned weapon is loaded.
+     * @param indexToPickUp index of the weaponsSlot array the players pick up the weapon from.
+     * @param indexToSwitch index of the weapon to be returned.
+     * @return true if the player can draw a weapon, false otherwise
+     */
     public boolean pickUpWeapon(int indexToPickUp, int indexToSwitch) {
         //Check if the player has already three weapons in his hand
         if (this.getHand().getWeapons().size() == 3) {
@@ -425,7 +496,7 @@ public class Player implements Serializable {
     }
 
     /**
-     * Switch a power-up with the cubes specified by the power-up
+     * Trade a power up with a cube of the same color.
      */
     public void tradeCube(int index){
         PowerUp powerUp = this.playerHand.chooseToDiscard(index);
@@ -460,7 +531,7 @@ public class Player implements Serializable {
     }
 
     /**
-     * Check how many damages a player has got. If it has 11 or 12 damages it is dead
+     * Check how many damages a player has got. If he has 11 or 12 damages he is dead
      * @return true if the player has got 11 or 12 damages, false otherwise.
      */
     public boolean checkDeath() {
@@ -473,7 +544,7 @@ public class Player implements Serializable {
     }
 
     /**
-     * Set the new score of the player
+     * Add points to the current points.
      * @param pointsGained is the score the player has gained
      */
     public void addPoints(int pointsGained){
@@ -486,8 +557,8 @@ public class Player implements Serializable {
     }
 
     /**
-     * getter of the match
-     * @return a reference to thc current match
+     * Getter method of the match.
+     * @return a reference to the current match
      */
     public Match getMatch() {
         return this.match;
@@ -502,6 +573,13 @@ public class Player implements Serializable {
     // is unloaded.
     // (E.G. if the player has 1 red cube and three weapons whose reload cost is 1 red cube each, this method will
     //  return all three weapons)
+
+    /**
+     * It finds the list of weapons the player can actually reload, taking into account the
+     * number of cubes the player has, the number of cubes needed in order to pay the reload cost
+     * and if the weapon is loaded or not.
+     * @return a subset of weapons that the player has and that can be reloaded.
+     */
     public ArrayList<Weapon> getReloadableWeapons(){
         ArrayList<Weapon> reloadableWeapons = new ArrayList<>();
         for(Weapon weapon : this.getHand().getWeapons()){
@@ -516,14 +594,26 @@ public class Player implements Serializable {
         return reloadableWeapons;
     }
 
+    /**
+     * Getter of the playerdead status.
+     * @return if the player is currently dead or not.
+     */
     public boolean getPlayerDead() {
         return this.playerDead;
     }
 
+    /**
+     * Setter of the playerDead field.
+     * @param playerDead true if the player died, false otherwise.
+     */
     public void setPlayerDead(boolean playerDead) {
         this.playerDead = playerDead;
     }
 
+    /**
+     * It saves the status of the player into a JSONObject object.
+     * @return the JSONObject containing all the information in order to resume the player.
+     */
     public JSONObject toJSON() {
         JSONObject playerJson = new JSONObject();
 
@@ -550,14 +640,26 @@ public class Player implements Serializable {
         return playerJson;
     }
 
+    /**
+     * Setter of the suspended field.
+     * @param suspended true if the player is suspended, false otherwise.
+     */
     public void setSuspended(boolean suspended) {
         this.suspended = suspended;
     }
 
+    /**
+     * Getter method of the typePlayerBoard field.
+     * @return the number type of the playerboard. 0 is the normal type, 1 the final frenzy type.
+     */
     public int getTypePlayerBoard() {
         return this.typePlayerBoard;
     }
 
+    /**
+     * Method called to setUp the final frenzy boards, according to the rules.
+     * @param typePlayerBoard the number type of the playerboard. 0 is the normal type, 1 the final frenzy type.
+     */
     public void setTypePlayerBoard(int typePlayerBoard) {
         this.getPlayerBoard().setFinalFrenzyPointDeaths();
         this.getPlayerBoard().resetDeaths();
@@ -565,14 +667,26 @@ public class Player implements Serializable {
 
     }
 
+    /**
+     * Getter method of the firstSpawn field.
+     * @return if the player is spawning for the first time or not.
+     */
     public boolean getFirstSpawn() {
         return this.firstSpawn;
     }
 
+    /**
+     * Setter method of the firstSpawn field.
+     * @param firstSpawn true if the player hasn't spawned yet, false otherwise.
+     */
     public void setFirstSpawn(boolean firstSpawn) {
         this.firstSpawn = firstSpawn;
     }
 
+    /**
+     * Getter of the lastDamagingPlayer list
+     * @return the player collection containing all the player who attacked you from the player last turn to the current.
+     */
     public HashSet<Player> getLastDamagingPlayers() {
         return this.lastDamagingPlayers;
     }

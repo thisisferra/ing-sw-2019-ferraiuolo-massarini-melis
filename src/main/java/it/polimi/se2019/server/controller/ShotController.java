@@ -8,12 +8,10 @@ import it.polimi.se2019.server.model.game.MovementChecker;
 import it.polimi.se2019.server.model.game.RoomChecker;
 import it.polimi.se2019.server.model.map.Square;
 import it.polimi.se2019.server.model.player.Player;
-
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Set;
+
 
 /**
  * ShotController class aim is to scan each weapon of a player to verify which of the

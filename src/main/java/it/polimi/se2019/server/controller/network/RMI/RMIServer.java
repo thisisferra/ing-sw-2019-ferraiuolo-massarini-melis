@@ -76,7 +76,7 @@ public class RMIServer extends Server implements RMIServerInterface {
 
     private ShotController shotController;
 
-    private Logger logger = Logger.getAnonymousLogger();
+    private transient Logger logger = Logger.getAnonymousLogger();
 
     private Timer initializeMatchTimer = new Timer();
 
@@ -175,7 +175,7 @@ public class RMIServer extends Server implements RMIServerInterface {
 
             logger.log(Level.INFO, "Match recovered! Latching all players...");
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.log(Level.INFO,"resumeRMIServer error",e);
         }
     }
 
@@ -1233,10 +1233,11 @@ public class RMIServer extends Server implements RMIServerInterface {
     }
 
     /**
-     *
-     * @param steps
-     * @param position
-     * @return
+     * Method used to obtain the squares available while pushing an enemy on
+     * cardinal directions.
+     * @param steps the number of square the player can push.
+     * @param position the position where the push starts.
+     * @return the list of squares the player can push someone on.
      */
     public ArrayList<Square> getCardinalDirectionsSquares(int steps,int position){
         ArrayList<Square> newtonSquares = new ArrayList<>();
@@ -1250,10 +1251,10 @@ public class RMIServer extends Server implements RMIServerInterface {
     }
 
     /**
-     *
-     * @param currentPlayer
-     * @param position
-     * @return
+     * This method is used while calculating targets for the Vortex Cannon.
+     * @param currentPlayer the player using the weapon
+     * @param position the position the player wants to set the vortex to.
+     * @return the list of player that can be hit.
      * @throws RemoteException
      */
     public ArrayList<Player> getLocalTargets(String currentPlayer, int position) throws RemoteException{
@@ -1335,10 +1336,11 @@ public class RMIServer extends Server implements RMIServerInterface {
     }
 
     /**
-     *
-     * @param weaponShot
-     * @param targetsSize
-     * @return
+     * This method is used when calculating the enemy targets using the thor weapon.
+     * @param weaponShot the weaponShot object containing the data of the targets.
+     * @param targetsSize the index of the list containing the targets already hit,
+     *                    needed to calculate the next target.
+     * @return the weaponShot updated with new targets.
      * @throws RemoteException
      */
     public WeaponShot getThorTargets(WeaponShot weaponShot,int targetsSize) throws RemoteException{
@@ -1451,9 +1453,6 @@ public class RMIServer extends Server implements RMIServerInterface {
             GUIControllerInterface clientRef = virtualView.getClientReference();
             clientRef.showEndGameWindow(this.match.getAllPlayers());
         }
-
-
-        System.out.println("Il vincitore è: " + winner.getClientName());
     }
 
     /**

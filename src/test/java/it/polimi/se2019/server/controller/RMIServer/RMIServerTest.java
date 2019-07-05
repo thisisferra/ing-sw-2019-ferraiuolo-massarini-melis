@@ -23,11 +23,11 @@ import java.util.ArrayList;
 public class RMIServerTest {
 
     static RMIServer rmiServer;
-    Match match1;
-    Player p1;
-    Player p2;
-    Player p3;
-    Player p4;
+    private Match match1;
+    private Player p1;
+    private Player p2;
+    private Player p3;
+    private Player p4;
 
     @BeforeClass
     public static void onceSetClass() {

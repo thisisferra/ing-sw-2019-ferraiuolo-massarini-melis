@@ -21,6 +21,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
+/**
+ * Match class is the core and root of the game's Model . It contains all the structures
+ * used for the game to progress: weapons, power ups and ammo decks,
+ * killshot track, the map, the list of players and so on.
+ * @author mattiamassarini,merklin,thisisferra.
+ */
 public class Match implements Serializable {
     private ArrayList<Player> players;
     private ArrayList<PowerUp> powerUpStack;
@@ -35,9 +41,12 @@ public class Match implements Serializable {
     private ArrayList<String> characterAvailable = new ArrayList<>();
     private ArrayList<Player> playersDead = new ArrayList<>();
     private boolean openConnection;
-
     private boolean finalFrenzyStatus;
 
+    /**
+     * Match constructor.
+     * @param chosenMap the map chosen at the start of the game.
+     */
     public Match(int chosenMap){
         this.chosenMap=chosenMap;
         this.arsenal = new ArrayList<>();
@@ -49,12 +58,18 @@ public class Match implements Serializable {
 
     }
 
+    /**
+     * This method contains the method to initialize the match structures.
+     */
     public void initializeMatch(){
         this.initGameField();
         this.initCabinets();
         this.initializeCharacterAvailable();
     }
 
+    /**
+     * It fills characterAvailable list with all the characters.
+     */
     public void initializeCharacterAvailable() {
         this.characterAvailable.add("distructor");
         this.characterAvailable.add("banshee");
@@ -63,18 +78,16 @@ public class Match implements Serializable {
         this.characterAvailable.add("violet");
     }
 
-    /*Generate the game field:
-    * -the map is generated starting from mapID (1,2,3 or 4)
-    * -ammo tiles, weapon and powerup cards are created by reading the json files located in the
-    *  Resources folder.*/
+    /** Generate the game field:
+     *  - the map is create calling the Map constructor, passing the mapId parameter.
+     *  -weaponStack, powerUpStack and ammoStack are created here by reading the respective
+     *  json files.
+     *  The stacks are shuffled before the game starts.
+     */
     private void initGameField(){
-        /*aS and pUS are required in order to parse the json file.
-        * Each json file define an array containing Ammo, Weapon and PowerUp instances respectively.
-        * After parsing each file into three arrays, they are converted into ArrayLists*/
         weaponStack = new ArrayList<>();
         powerUpStack = new ArrayList<>();
         Ammo[] aS;
-        //create the map filling it with squares from the json file, based on the idMap
         map = new Map(this.chosenMap);
         map.setAllSquare();
         map.setRoomSquare();
@@ -131,31 +144,54 @@ public class Match implements Serializable {
         }
     }
 
+    /**
+     * Initialize the red, yellow and blue cabinets.
+     */
     private void initCabinets(){
         this.arsenal.add(new WeaponSlot("red",this));
         this.arsenal.add(new WeaponSlot("yellow",this));
         this.arsenal.add(new WeaponSlot("blue",this));
     }
 
+    /**
+     * Getter of allPlayers field.
+     * @return the list of all players.
+     */
     public ArrayList<Player> getAllPlayers() {
         return this.players;
     }
 
+    /**
+     * It draws a card from the ammo list's bottom.
+     * @return a powerup from the list.
+     */
     //if the stack isn't empty, it return the ammo card from the last position (arraylist size -1)
     public Ammo pickUpAmmoStack() {
         int size = ammoStack.size();
         return ammoStack.remove(size-1);
     }
 
+    /**
+     * It draws a card from the power up list's bottom.
+     * @return a powerup from the list.
+     */
     //if the stack isn't empty, it return the powerup card from the last position (arraylist size -1)
     public PowerUp pickUpPowerUp() {
         return powerUpStack.remove(powerUpStack.size() - 1);
     }
 
+    /**
+     * It draws a card from the weapons list's bottom.
+     * @return a powerup from the list.
+     */
     public Weapon pickUpWeapon(){
         return weaponStack.remove(weaponStack.size()-1);
     }
 
+    /**
+     * The discarded ammo goes on the discardedAmmos stack.
+     * @param currentAmmo the ammo discarded.
+     */
     // currentAmmo is discarded and saved in discardedAmmos
     public void discardAmmo(Ammo currentAmmo) {
         //currentAmmo is the last ammo I've picked up
@@ -163,14 +199,26 @@ public class Match implements Serializable {
 
     }
 
+    /**
+     * Getter of the map reference.
+     * @return the Map object of the map.
+     */
     public Map getMap(){
         return this.map;
     }
 
+    /**
+     * Getter of the WeaponSlot list containing the colored cabinets.
+     * @return the list of the colored cabinets(red, yellow and blue).
+     */
     public ArrayList<WeaponSlot> getArsenal(){
         return this.arsenal;
     }
 
+    /**
+     * Add to the killshot track the reference of the player who made the kill.
+     * @param dead the player who died.
+     */
     public void addPlayerKillShot(Player dead){
         PlayerBoard playerBoard = dead.getPlayerBoard();
         if (playerBoard.getDamage().size() == 11) {
@@ -181,30 +229,59 @@ public class Match implements Serializable {
         }
     }
 
+    /**
+     * Getter of the killShotTrack field.
+     * @return the killShotTrack list.
+     */
     public ArrayList<Player> getKillShotTrack(){
         return this.killShotTrack;
     }
 
+    /**
+     * Getter of the powerUpStack field.
+     * @return the powerUpStack list.
+     */
     public ArrayList<PowerUp> getPowerUpStack(){
         return this.powerUpStack;
     }
 
+    /**
+     * Getter of the weaponStack field.
+     * @return the weaponStack list.
+     */
     public ArrayList<Weapon> getWeaponStack(){
         return this.weaponStack;
     }
 
+    /**
+     * Getter of the ammoStack field.
+     * @return the ammoStack list.
+     */
     public ArrayList<Ammo> getAmmoStack(){
         return this.ammoStack;
     }
 
+    /**
+     * Getter of the discardedAmmos field.
+     * @return the discardedAmmos list.
+     */
     public ArrayList<Ammo> getDiscardedAmmos(){
         return this.discardedAmmos;
     }
 
+    /**
+     * Getter of the discardedPowerUp field.
+     * @return the discardedPowerUps list.
+     */
     public ArrayList<PowerUp> getDiscardedPowerUps(){
         return this.discardedPowerUps;
     }
 
+    /**
+     * Search the Player reference based on its clientName.
+     * @param clientName the name of player.
+     * @return the Player reference  containing the clientName wanted, null otherwise.
+     */
     public Player searchPlayerByClientName(String clientName) {
         for (Player player : this.getAllPlayers()) {
             if (player.getClientName().equals(clientName)) {
@@ -214,6 +291,10 @@ public class Match implements Serializable {
         return null;
     }
 
+    /**
+     * Getter of the characterAvailableList.
+     * @return the characterAvailable list.
+     */
     public ArrayList<String> getCharacterAvailable() {
         return this.characterAvailable;
     }
@@ -230,6 +311,10 @@ public class Match implements Serializable {
         return this.playersDead;
     }
 
+    /**
+     * It saves the match state into a JSONObject object.
+     * @return the JSONObject containing all the match's infos.
+     */
     public JSONObject toJSON() {
         JSONObject matchJson = new JSONObject();
 
@@ -302,11 +387,14 @@ public class Match implements Serializable {
         return matchJson;
     }
 
-    //public static Match resumeMatch(JSONObject matchToResume, int chosenMap, Match resumedMatch) {
+    /**
+     * Restore the match from a JSONObject object.
+     * @param matchToResume the match to be restored
+     * @param chosenMap the match's map id.
+     * @return the Match object restored from the JSON file.
+     */
     public static Match resumeMatch(JSONObject matchToResume, int chosenMap) {
         Match resumedMatch = new Match(chosenMap);
-        //Se ragionamento corretto, rinominare resumedMatch in resumingMatch
-
         JSONArray discardedPowerUpsToResume = (JSONArray) matchToResume.get("discardedPowerUps");
         for (Object discardedPowerUpToResume : discardedPowerUpsToResume) {
             resumedMatch.discardedPowerUps.add(PowerUp.resumePowerUp((JSONObject) discardedPowerUpToResume));
@@ -349,7 +437,6 @@ public class Match implements Serializable {
 
         JSONArray playersToResume = (JSONArray) matchToResume.get("players");
         for (Object playerToResume : playersToResume) {
-            //Dopo (JSONObject) playerToResume aggiungere ", new Player()" (stesso ragionamento fatto per resumeMatch())
             resumedMatch.players.add(Player.resumePlayer((JSONObject) playerToResume, resumedMatch));
         }
 
@@ -384,23 +471,43 @@ public class Match implements Serializable {
 
     }
 
+    /**
+     * Setter of the openConnection field.
+     * @param openConnection true if the lobby is open, false otherwise.
+     */
     public void setOpenConnection(boolean openConnection) {
         this.openConnection = openConnection;
     }
 
+    /**
+     * Getter of the openConnection field.
+     * @return true if the match can accept new players, false otherwise.
+     */
     public boolean getOpenConnection() {
         return this.openConnection;
     }
 
+    /**
+     * Setter of the final frenzy field.
+     * @param finalFrenzyStatus is true if the game is in the final frenzy mode, false otherwise.
+     */
     public void setFinalFrenzyStatus(boolean finalFrenzyStatus) {
         this.finalFrenzyStatus =finalFrenzyStatus;
     }
 
+    /**
+     * Getter of the finalFrenzyStatus field.
+     * @return the true if the final frenzy is on, false otherwise.
+     */
     public boolean isFinalFrenzyStatus() {
         return this.finalFrenzyStatus;
 
     }
 
+    /**
+     * Counts the number of players who are not suspended in a given time.
+     * @return the number of active players.
+     */
     public int numberPlayerNotSuspended() {
         int numberNotSuspended = 0;
         for (Player player : this.getAllPlayers()) {
