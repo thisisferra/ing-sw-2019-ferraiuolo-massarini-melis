@@ -859,7 +859,7 @@ public class RMIServer extends Server implements RMIServerInterface {
     /**
      * Method that scan all player in search of players who are dead.
      * Verify if is the time to start the final frenzy.
-     * @param username Username of the player who do the lsk kill.
+     * @param username Username of the player who do the last kill.
      * @return a flag that is True if there was a kill, false otherwise.
      * @throws RemoteException if the method can't do the remote call to the client.
      */
@@ -920,7 +920,7 @@ public class RMIServer extends Server implements RMIServerInterface {
      * @param weaponShot object that contains the info of which weapons has to be unloaded.
      * @throws RemoteException if the method can't do the remote call to the client.
      */
-    private void unloadWeapon(WeaponShot weaponShot) throws RemoteException{
+    public void unloadWeapon(WeaponShot weaponShot) throws RemoteException{
         for(Weapon weapon : match.searchPlayerByClientName(weaponShot.getDamagingPlayer().getClientName()).getHand().getWeapons()){
             if(weaponShot.getWeapon().getType().equals(weapon.getType()))
                 weapon.setLoad(false);
@@ -939,8 +939,8 @@ public class RMIServer extends Server implements RMIServerInterface {
             if (playerToRespawn.getPlayerDead() && !playerToRespawn.getSuspended()) {
                 this.setSpecificActivePlayer(playerToRespawn);
                 playerToRespawn.pickUpPowerUpToRespawn();
-                getMyVirtualView(playerToRespawn.getClientName()).getClientReference().respawnDialog();
                 playerToRespawn.setPlayerDead(false);
+                getMyVirtualView(playerToRespawn.getClientName()).getClientReference().respawnDialog();
             }
             if (playerToRespawn.getPlayerDead() && playerToRespawn.getSuspended()) {
                 playerToRespawn.pickUpPowerUpToRespawn();
@@ -1021,9 +1021,9 @@ public class RMIServer extends Server implements RMIServerInterface {
     }
 
     /**
-     *
-     * @param username
-     * @throws RemoteException
+     * Set canMove attribute to the opposite of the actual value
+     * @param username: the currentu player
+     * @throws RemoteException if the method can't do the remote call to the client.
      */
     public void toggleAction(String username) throws RemoteException{
         match.searchPlayerByClientName(username).setCanMove(!match.searchPlayerByClientName(username).getCanMove());
@@ -1282,6 +1282,7 @@ public class RMIServer extends Server implements RMIServerInterface {
             logger.log(Level.INFO, "Can't close the window");
         }
     }
+
     /**
      * Save the string passed by saveState on a file in order to later retrieve the state of the match.
      * Eventually, it close all clients' GUI.

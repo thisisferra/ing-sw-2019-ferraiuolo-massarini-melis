@@ -4,9 +4,12 @@ import it.polimi.se2019.client.controller.GUIController;
 import it.polimi.se2019.client.controller.network.RMI.GUIControllerInterface;
 import it.polimi.se2019.client.view.GUI;
 import it.polimi.se2019.server.OneAboveAll;
+import it.polimi.se2019.server.controller.PowerUpShot;
 import it.polimi.se2019.server.controller.VirtualView;
+import it.polimi.se2019.server.controller.WeaponShot;
 import it.polimi.se2019.server.controller.network.RMI.RMIServer;
 import it.polimi.se2019.server.model.cards.Ammo;
+import it.polimi.se2019.server.model.cards.weapons.LockRifle;
 import it.polimi.se2019.server.model.cards.weapons.Weapon;
 import it.polimi.se2019.server.model.game.Match;
 import it.polimi.se2019.server.model.map.Square;
@@ -481,7 +484,113 @@ public class RMIServerTest {
 
     }
 
+    @Test
+    public void enableFinalFrenzyTest() {
+        p1.getPlayerBoard().getEnemyDamages().add(new EnemyDamage(p3, 2));
+        p1.getPlayerBoard().getDamage().add(p3);
+        p1.getPlayerBoard().getDamage().add(p3);
+        String username = "Ferra";
+        try {
+            rmiServer.enableFinalFrenzy(username);
+        }
+        catch (RemoteException remException) {
+            remException.getCause();
+        }
+        Assert.assertEquals(0, p1.getTypePlayerBoard());
+        Assert.assertEquals(1, p2.getTypePlayerBoard());
+        Assert.assertEquals(2, p4.getFinalFrenzy());
+    }
 
+    @Test
+    public void deathPlayerTest() {
+        //Add damage to p2 player
+        EnemyDamage enemyDamage = new EnemyDamage(p1, 10);
+        p2.getPlayerBoard().getEnemyDamages().add(enemyDamage);
+        for(int i = 0; i < 11; i++) {
+            p2.getPlayerBoard().getDamage().add(p1);
+        }
+
+        //Set p2 player as dead
+        p2.setPlayerDead(true);
+
+        //Call deathPlayer method
+        try {
+            rmiServer.deathPlayer("Marco");
+        } catch(RemoteException remException) {
+            remException.getCause();
+        }
+
+        //Check that the reference on killSHotTrack is the same that do the last kill
+        Assert.assertEquals(p1, rmiServer.getMatch().getKillShotTrack().get(0));
+        //Check that p1 player gain 8 points for the kill
+        Assert.assertEquals(8, p1.getScore());
+        Assert.assertEquals(0, p2.getScore());
+        Assert.assertEquals(0, p3.getScore());
+        Assert.assertEquals(0, p4.getScore());
+        Assert.assertTrue(p2.getPlayerDead());
+        Assert.assertEquals(0, p2.getPhaseAction());
+        Assert.assertTrue(rmiServer.getMatch().isFinalFrenzyStatus());
+    }
+
+    @Test
+    public void applyEffectWeaponTest() {
+        WeaponShot weaponShot = new WeaponShot();
+        /*
+        for (Weapon weapon : rmiServer.getMatch().getWeaponStack()) {
+            if (weapon.getType().equals("lock_rifle")) {
+                p1.getHand().getWeapons().add(weapon);
+                weaponShot.setWeapon(weapon);
+            }
+        }
+
+         */
+        p1.getHand().getWeapons().add(rmiServer.getMatch().getWeaponStack().get(0));
+        ArrayList<Player> targetsPlayer = new ArrayList<>();
+        targetsPlayer.add(p2);
+        targetsPlayer.add(p3);
+        weaponShot.setWeapon(p1.getHand().getWeapons().get(0));
+        weaponShot.setTargetPlayers(targetsPlayer);
+        weaponShot.setNameEffect("BasicEffect");
+        weaponShot.setNewPosition(0);
+        weaponShot.setDamagingPlayer(p1);
+        try {
+            rmiServer.applyEffectWeapon(weaponShot);
+        } catch (RemoteException remException) {
+            remException.getCause();
+        } catch(NullPointerException nullPointer) {
+            nullPointer.getCause();
+        }
+
+        Assert.assertFalse(p1.getHand().getWeapons().get(0).getLoad());
+
+
+    }
+
+    @Test
+    public void usePowerUpTest() {
+        String username = "Marco";
+        int index = 0;
+        PowerUpShot powerUpShot = new PowerUpShot();
+        powerUpShot.setTargetingPlayer(p3);
+        powerUpShot.setDamagingPlayer(p1);
+        for (int i = 0; i < rmiServer.getMatch().getPowerUpStack().size(); i++) {
+            if (rmiServer.getMatch().getPowerUpStack().get(i).getType().equals("teleporter")) {
+                p1.getHand().getPowerUps().add(rmiServer.getMatch().getPowerUpStack().get(i));
+                break;
+            }
+        }
+
+        Assert.assertEquals(1, p1.getHand().getPowerUps().size());
+        try {
+            rmiServer.usePowerUp(username, index, powerUpShot);
+        } catch(RemoteException remException) {
+            remException.getCause();
+        } catch (NullPointerException nullPointer) {
+            nullPointer.getCause();
+        }
+
+        Assert.assertEquals(0, p1.getHand().getPowerUps().size());
+    }
 
 
 
