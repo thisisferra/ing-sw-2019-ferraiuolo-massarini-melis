@@ -5,7 +5,7 @@ package it.polimi.se2019.server.controller.network.RMI;
  * Manage the communication between server and client.
  * Manage the timer of setup and of the rounds.
  * Manage the logic of the game
- * @author Alessandro Ferraiuolo, Marco Melis
+ * @author thisisferra, merklind
  */
 
 import com.google.gson.Gson;

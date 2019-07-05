@@ -13,6 +13,7 @@ import java.util.ArrayList;
 /**
  * WeaponShot is the object of support for shoot an enemy. It contains all the useful information like
  * the weapon the player want use, an ArrayList of targetable player,...
+ * @author mattiamassarini, merklind, thisisferra
  */
 public class WeaponShot implements Serializable {
 

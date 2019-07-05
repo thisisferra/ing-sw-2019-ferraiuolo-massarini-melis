@@ -6,6 +6,12 @@ import it.polimi.se2019.server.model.player.PlayerBoard;
 
 import java.io.Serializable;
 
+/**
+ * Support class where we save useful info for use the PowerUp.
+ * In this class we save information like the damaging player, tha targeting player, the new position
+ * of the targeting or damaging player
+ * @author marcomelis, thisisferra, mattiamassarini
+ */
 public class PowerUpShot implements Serializable {
 
     private Player damagingPlayer;
