@@ -877,7 +877,7 @@ public class RMIServer extends Server implements RMIServerInterface {
                 }
             }
         }
-        if (this.match.getKillShotTrack().size() == 1 && !this.match.isFinalFrenzyStatus()) {
+        if (this.match.getKillShotTrack().size() == 8 && !this.match.isFinalFrenzyStatus()) {
             this.match.setFinalFrenzyStatus(true);
             this.enableFinalFrenzy(username);
         }
