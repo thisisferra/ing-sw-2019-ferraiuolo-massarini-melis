@@ -84,7 +84,7 @@
          "damage": [2, 1, 1, 1],
          "mark": [0, 0, 0, 0],
          "maxMovementTarget": 1,
-         "maxMovementPlayer": 0,
+         "maxMovementPlayer": 2,
          "minDistanceTarget": 1,
          "maxDistanceTarget": -1
        }

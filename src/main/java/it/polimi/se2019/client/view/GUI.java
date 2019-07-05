@@ -36,10 +36,12 @@ import java.util.logging.Logger;
  * A wait scene displays the number of players who are waiting for the game
  * to start.
  * The main game scene is made of a BorderPane object:
- * on the left side there are the main buttons, on the right side a textarea that
+ * on the left side there are the main buttons and  on the right side a textarea that
  * shows the action of all players, updating during the game's progress.
  * The buttons are used to make moves, checking weapons and powerup
  * cards and the enemy playerboards.
+ * In the center is located the game board, showing in real time
+ * weapons inside the cabinets, ammo tiles, the killshot track and players.
  * The endgame scene shows the leaderboards and the winner player.
  * @author mattiamassarini.
  */
