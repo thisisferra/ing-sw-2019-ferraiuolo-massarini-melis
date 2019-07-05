@@ -529,7 +529,7 @@ public class RMIServerTest {
         Assert.assertEquals(0, p4.getScore());
         Assert.assertTrue(p2.getPlayerDead());
         Assert.assertEquals(0, p2.getPhaseAction());
-        Assert.assertTrue(rmiServer.getMatch().isFinalFrenzyStatus());
+        Assert.assertFalse(rmiServer.getMatch().isFinalFrenzyStatus());
     }
 
     @Test

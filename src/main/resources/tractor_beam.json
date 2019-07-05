@@ -45,7 +45,7 @@
          "sameDamage": true,
          "damage": [3],
          "mark": [0],
-         "maxMovementTarget": 2,
+         "maxMovementTarget": 0,
          "maxMovementPlayer": 0,
          "minDistanceTarget": 0,
          "maxDistanceTarget": 0

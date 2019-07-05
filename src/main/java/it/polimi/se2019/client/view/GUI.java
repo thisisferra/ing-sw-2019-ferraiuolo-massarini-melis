@@ -1943,6 +1943,7 @@ public class GUI extends Application {
                             else {
                                 guiController.getRmiStub().applyEffectWeapon(weaponShot1);
                                 guiController.getRmiStub().useAction(this.username);
+                                guiController.getRmiStub().setCanMove(this.username,false);
                                 weaponTargetWindow.close();
                             }
                         } else{
@@ -1961,6 +1962,7 @@ public class GUI extends Application {
                             guiController.getRmiStub().giftAction(this.username);
                             moveAction(weaponShot.getChosenEffect().getMaxMovementPlayer());
                         }
+                        guiController.getRmiStub().setCanMove(this.username,false);
                         weaponTargetWindow.close();
                     }
 
