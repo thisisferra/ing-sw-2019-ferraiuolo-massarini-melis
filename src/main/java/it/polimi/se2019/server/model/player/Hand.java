@@ -1,21 +1,28 @@
 package it.polimi.se2019.server.model.player;
 
-import com.google.gson.Gson;
 import it.polimi.se2019.server.model.cards.weapons.*;
 import it.polimi.se2019.server.model.cards.powerUp.PowerUp;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-
-import java.io.FileReader;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Scanner;
+
+/**
+ * Hand class represent the cards the player has.
+ * It contains weapons and powerUps lists, containing Weapon and PowerUps objects respectively.
+ * @author mattiamassarini,merklind,thisisferra.
+ */
 
 public class Hand implements Serializable {
 
     private ArrayList<Weapon> weapons = new ArrayList<>();
     private ArrayList<PowerUp> powerUps = new ArrayList<>();
 
+    /**
+     * It resume a Hand object from a JSONObject object.
+     * @param playerHandToResume the JSONObject object to be restored.
+     * @return the Hand object restored.
+     */
     public static Hand resumeHand(JSONObject playerHandToResume) {
         Hand resumedPlayerHand = new Hand();
 
@@ -33,20 +40,26 @@ public class Hand implements Serializable {
         return resumedPlayerHand;
     }
 
-    /*
-      discard one card from the player hand,
-      the card is lost if it's a weapon card,
-      otherwise it's added on the corresponding
-      discarded list
-    */
+    /**
+     * Getter of the weapons list.
+     * @return the list of weapons the player has.
+     */
     public ArrayList<Weapon> getWeapons() {
         return weapons;
     }
 
+    /**
+     * Getter of the powerUps list.
+     * @return the list of power ups the player has.
+     */
     public ArrayList<PowerUp> getPowerUps() {
         return powerUps;
     }
 
+    /**
+     * Adds the currentPowerUp to the player hand, if the current hand is 2 cards or less.
+     * @param currentPowerUp the powerUp to be added.
+     */
     public void addPowerUp(PowerUp currentPowerUp) {
         if (checkPowerUps()) {
             this.powerUps.add( currentPowerUp);
@@ -57,8 +70,10 @@ public class Hand implements Serializable {
         }
     }
 
-    //Check how many powerUp the player has in his hand.
-    //Return true if the player can draw a powerUp, false otherwise.
+    /**
+     * Check how many power ups the player has in his hand.
+     * Return true if the player can draw a power up, false otherwise.
+     */
     public boolean checkPowerUps() {
         if(powerUps.size() <= 3) {
             return true;
@@ -68,25 +83,25 @@ public class Hand implements Serializable {
         }
     }
 
+    /**
+     * Discard the power up selected base on the indexToDiscard parameter
+     * if the index is a number among 0 and 3.
+     * @param indexToDiscard the array index.
+     * @return the powerup discarded.
+     */
     public PowerUp chooseToDiscard(int indexToDiscard) {
-        int index = 1;
-        //Print the list of all powerups the player own
-        for(PowerUp object : powerUps) {
-            System.out.println(index + ". " + object.getType() + " - " + object.getColor());
-            index++;
-        }
-
         if(indexToDiscard >=4) {
-            System.out.println("You have typed an illegal number");
             return null;
         }
         else {
-            //remove from the ArrayList the powerUp chosen
             return powerUps.remove(indexToDiscard);
-
         }
     }
 
+    /**
+     * It saves the current hand states on a JSONObject object.
+     * @return the JSONObject object serialized.
+     */
     public JSONObject toJSON() {
         JSONObject handJson = new JSONObject();
 

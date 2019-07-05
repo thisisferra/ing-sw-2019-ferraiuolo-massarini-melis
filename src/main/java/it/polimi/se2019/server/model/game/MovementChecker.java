@@ -1,10 +1,18 @@
 package it.polimi.se2019.server.model.game;
 
 import it.polimi.se2019.server.model.map.Square;
-
 import java.io.Serializable;
 import java.util.*;
 
+/**
+ * MovementChecker class implements the movement game mechanic.
+ * Given a Map object, an index and a steps field, it checks
+ * all the squares reachable from a certain position, within a range
+ * defined by the steps field.
+ * The class uses a Breadth First Search algorithm in order to retrieve the
+ * reachable squares.
+ * @author mattiamassarini.
+ */
 public class MovementChecker implements Serializable {
     private Square[] allSquares ;
     private ArrayList<Square> reachableSquares = new ArrayList<>();
@@ -12,6 +20,12 @@ public class MovementChecker implements Serializable {
     private int index;
     private int validSquares;
 
+    /**
+     * Constructor of MovementChecker class.
+     * @param squareList the square list of the map
+     * @param steps the maximum number of steps.
+     * @param index the square index representing the starting point.
+     */
     public MovementChecker(Square[] squareList,int steps,int index){
         allSquares = new Square[squareList.length];
         int valid =0;
@@ -27,6 +41,13 @@ public class MovementChecker implements Serializable {
     }
 
 
+    /**
+     * Using a BFS algorithm, starting from a given square, the method saves in reachableSquares field all
+     * the square reachable by the player within a number of steps defined in the steps field.
+     * Once a square in discovered the field visited is marked, and it will be ignored in the following
+     * computation. The algorithm stops when all the squares are visited, or when reaching the number
+     * of steps admissible.
+     */
     private void check(){
         int i =0;
         Square newSquare;
@@ -71,11 +92,21 @@ public class MovementChecker implements Serializable {
             object.setVisited(false);
         }
     }
+
+    /**
+     * Getter of the reachableSquares field.
+     * @return it returns the list of squares reachable.
+     */
     public ArrayList<Square> getReachableSquares(){
         return this.reachableSquares;
     }
 
     //return the list of squares from your position to the first right wall
+
+    /**
+     * Find all the squares a player can walk heading east until he finds a wall.
+     * @return all the squares the player can cross walking right.
+     */
     public ArrayList<Square> getWalkableRightSquares(){
         ArrayList<Square> rightHorizontalSquares = new ArrayList<>();
         int next = allSquares[index].getEast();
@@ -88,7 +119,10 @@ public class MovementChecker implements Serializable {
         return rightHorizontalSquares;
     }
 
-    //return the list of squares from your position to the first left wall
+    /**
+     * Find all the squares a player can walk heading west until he finds a wall.
+     * @return all the squares the player can cross walking left.
+     */
     public ArrayList<Square> getWalkableLeftSquares(){
         ArrayList<Square> leftHorizontalSquares = new ArrayList<>();
         int next = allSquares[index].getWest();
@@ -102,8 +136,10 @@ public class MovementChecker implements Serializable {
 
     }
 
-    //return the list of squares from your position to the first upwards wall
-    public ArrayList<Square> getWalkableUpwardsSquares(){
+    /**
+     * Find all the squares a player can walk heading north until he finds a wall.
+     * @return all the squares the player can cross walking upwards.
+     */    public ArrayList<Square> getWalkableUpwardsSquares(){
         ArrayList<Square> upwardsSquares = new ArrayList<>();
         int next = allSquares[index].getNorth();
         int moves = 0;
@@ -115,8 +151,10 @@ public class MovementChecker implements Serializable {
         return upwardsSquares;
     }
 
-    //return the list of squares from your position to the first downwards wall
-    public ArrayList<Square> getWalkableDownwardsSquares(){
+    /**
+     * Find all the squares a player can walk heading south until he finds a wall.
+     * @return all the squares the player can cross walking downwards.
+     */    public ArrayList<Square> getWalkableDownwardsSquares(){
         ArrayList<Square> downwardsSquares = new ArrayList<>();
         int next = allSquares[index].getSouth();
         int moves = 0;
@@ -128,6 +166,10 @@ public class MovementChecker implements Serializable {
         return downwardsSquares;
     }
 
+    /**
+     * Find all the squares heading north ignoring walls.
+     * @return all the squares upwards.
+     */
     public ArrayList<Square> getAllUpwardsSquares(){
         ArrayList<Square> upwardsSquares = new ArrayList<>();
         int next = allSquares[index].getNorthWall();
@@ -140,6 +182,10 @@ public class MovementChecker implements Serializable {
         return upwardsSquares;
     }
 
+    /**
+     * Find all the squares heading east ignoring walls.
+     * @return all the squares on the right.
+     */
     public ArrayList<Square> getAllRightSquares(){
         ArrayList<Square> rightSquares = new ArrayList<>();
         int next = allSquares[index].getEastWall();
@@ -152,6 +198,10 @@ public class MovementChecker implements Serializable {
         return rightSquares;
     }
 
+    /**
+     * Find all the squares heading south ignoring walls.
+     * @return all the squares downward.
+     */
     public ArrayList<Square> getAllDownwardsSquares(){
         ArrayList<Square> downwardsSquares = new ArrayList<>();
         int next = allSquares[index].getSouthWall();
@@ -164,6 +214,10 @@ public class MovementChecker implements Serializable {
         return downwardsSquares;
     }
 
+    /**
+     * Find all the squares heading west ignoring walls.
+     * @return all the squares on the left.
+     */
     public ArrayList<Square> getAllLeftSquares(){
         ArrayList<Square> leftSquares = new ArrayList<>();
         int next = allSquares[index].getWestWall();

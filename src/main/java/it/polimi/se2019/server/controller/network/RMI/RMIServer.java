@@ -1,5 +1,13 @@
 package it.polimi.se2019.server.controller.network.RMI;
 
+/**
+ * Do the main setup of the server
+ * Manage the communication between server and client.
+ * Manage the timer of setup and of the rounds.
+ * Manage the logic of the game
+ * @author thisisferra, merklind
+ */
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -68,11 +76,9 @@ public class RMIServer extends Server implements RMIServerInterface {
 
     private ShotController shotController;
 
-    private Logger logger = Logger.getAnonymousLogger();
+    private transient Logger logger = Logger.getAnonymousLogger();
 
     private Timer initializeMatchTimer = new Timer();
-
-    private Timer roundTimer = new Timer();
 
     private Timer resetTimer = new Timer();
 
@@ -84,12 +90,22 @@ public class RMIServer extends Server implements RMIServerInterface {
 
     //Metodi
 
+    /**
+     * Constructor used for testing purpose
+     */
     public RMIServer() {
         //for testing purpose
         this.port = 0;
         this.remObjName = "";
     }
 
+    /**
+     * Construcotr of this class
+     * @param oneAboveAll: the main class the creates this class
+     * @param port: the port where the registry is registered.
+     * @param remObjName: the name of the remote object.
+     * @param roundTime: the lenght of a round in seconds.
+     */
     public RMIServer(OneAboveAll oneAboveAll, int port, String remObjName, String roundTime) {
         super(oneAboveAll);
         this.roundTime = Integer.parseInt(roundTime);
@@ -105,6 +121,9 @@ public class RMIServer extends Server implements RMIServerInterface {
         this.remObjName = remObjName;
     }
 
+    /**
+     * The setup method of RMI, it creates a registry and export the stub.
+     */
     public void startServer() {
         try {
             System.out.println("Server is up");
@@ -117,6 +136,9 @@ public class RMIServer extends Server implements RMIServerInterface {
         }
     }
 
+    /**
+     * Verify if exists a saving file
+     */
     public void checkSuspendedMatch() {
         File suspendedFile = new File("./AdrenalinaMatchData.json");
 
@@ -130,6 +152,10 @@ public class RMIServer extends Server implements RMIServerInterface {
         }
     }
 
+    /**
+     * Read from a JSON file the last status of this class to resume in case the player want to resume the match.
+     * @param suspendedFile: the file to be read.
+     */
     public void resumeRMIServer(File suspendedFile) {
 
         try (FileReader fr = new FileReader(suspendedFile)) {
@@ -149,10 +175,19 @@ public class RMIServer extends Server implements RMIServerInterface {
 
             logger.log(Level.INFO, "Match recovered! Latching all players...");
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.log(Level.INFO,"resumeRMIServer error",e);
         }
     }
 
+    /**
+     * Method called when a user want to join to a match. It verify of there is already a created match, if no create it.
+     * Start the timer of setup, create a new virtualView and a new player and initialize all all the virtualView and call the related method
+     * to update the remoteView.
+     * @param username: the name choose by the user.
+     * @param guiController: the reference of the client
+     * @param mapId: the number of the mao
+     * @throws RemoteException if the method can't do the remote call to the client.
+     */
     public synchronized void register(String username, GUIControllerInterface guiController,int mapId) throws RemoteException{
         if (!mapAlreadySelected()) {
             this.createMatch(mapId);
@@ -173,6 +208,12 @@ public class RMIServer extends Server implements RMIServerInterface {
         }
     }
 
+    /**
+     *
+     * @param username
+     * @param guiControllerToResume
+     * @throws RemoteException
+     */
     public synchronized void login(String username, GUIControllerInterface guiControllerToResume) throws RemoteException {
         ArrayList<Player> allPlayers = this.match.getAllPlayers();
         boolean foundPlayer = false;
@@ -198,6 +239,10 @@ public class RMIServer extends Server implements RMIServerInterface {
         }
     }
 
+    /**
+     * Count the number of player reconnected
+     * @return The number of player reconnected
+     */
     public int playersReconnected() {
         int reconnections = 0;
         for (VirtualView virtualView : allVirtualViews) {
@@ -209,6 +254,11 @@ public class RMIServer extends Server implements RMIServerInterface {
         return reconnections;
     }
 
+    /**
+     * search inside allVirtualView ArrayList the virtualView with the same username passed as parameter.
+     * @param clientName: the username that has to be the same.
+     * @return the virtualView found.
+     */
     public VirtualView searchVirtualViewByClientName(String clientName) {
         for (VirtualView virtualView : this.allVirtualViews) {
             if (virtualView.getUsername().equals(clientName)) {
@@ -219,6 +269,15 @@ public class RMIServer extends Server implements RMIServerInterface {
         return null;
     }
 
+    /**
+     * Verify if the clientName specified as parameter is already useb by other player.
+     * @param username: the username typed by the user.
+     * @return "NotUsed" if nobody typed the specified username.
+     * @return "AlreadyUsed" if someone typed the specified username.
+     * @return "Reconnect" if openConnection attribute is false and the user has typed a username present in the match.
+     * @return "CantConnect" if openConnection attribute is false and the user has typed a username not present in the match.
+     * @throws Exception if the method can't do the remote call to the client.
+     */
     public synchronized String checkUsername2(String username) throws Exception {
         if (match != null) {
             if (match.getOpenConnection()) {
@@ -241,15 +300,30 @@ public class RMIServer extends Server implements RMIServerInterface {
         return "NotUsed";
     }
 
+    /**
+     * Compute the reachable square from a specified position with a max number of steps.
+     * @param position: the starting position
+     * @param steps: max number of steps.
+     * @return An ArrayList cointaining all the reachable square.
+     */
     public ArrayList<Square> reachableSquares(int position, int steps){
         MovementChecker movementChecker = new MovementChecker(match.getMap().getAllSquare(), steps, position);
         return movementChecker.getReachableSquares();
     }
 
+    /**
+     * retrieve all the square of the map.
+     * @return a vector containing all the square.
+     */
     public Square[] getAllSquares(){
         return match.getMap().getAllSquare();
     }
 
+    /**
+     * Call the related model method to pick up an ammo and update all the virtual view.
+     * @param username: the username of the player who picked up the ammo.
+     * @throws RemoteException
+     */
     public void pickUpAmmo(String username) throws RemoteException{
         Player player = match.searchPlayerByClientName(username);
         Square square = match.getMap().searchSquare(player.getPosition());
@@ -258,12 +332,22 @@ public class RMIServer extends Server implements RMIServerInterface {
         this.updateAllClient();
     }
 
+    /**
+     * Retrieve the last ammo that was discarded
+     * @return the last ammo discarded
+     * @throws RemoteException if the method can't do the remote call to the client.
+     */
     public Ammo showLastAmmo() throws RemoteException{
         if(!match.getDiscardedAmmos().isEmpty())
             return match.getDiscardedAmmos().get(match.getDiscardedAmmos().size()-1);
         else return null;
     }
 
+    /**
+     * Set the new position of the player identified by the username.
+     * @param username: the username of the player.
+     * @param newPosition: the new position of the player.
+     */
     public void setNewPosition(String username, int newPosition){
         Player currentPlayer = match.searchPlayerByClientName(username);
         currentPlayer.setPosition(newPosition);
@@ -278,12 +362,18 @@ public class RMIServer extends Server implements RMIServerInterface {
         }
     }
 
+    /**
+     * Print the stub of all client that are registered to the match.
+     */
     public void printClientConnected() {
         int size = allVirtualViews.size();
         out.println(allVirtualViews.get(size - 1).getUsername() + "---" + allVirtualViews.get(allVirtualViews.size() - 1).getClientReference());
     }
 
-    //Call to each client to create all remotes view
+    /**
+     * Scan allVirtualView ArrayList to gain the clientRef and call the remote method to init the remote view.
+     * @throws RemoteException: if the method can't do the remote call to the client.
+     */
     public void initAllClient() throws RemoteException{
         for (VirtualView virtualView : allVirtualViews) {
             GUIControllerInterface clientRef = virtualView.getClientReference();
@@ -292,6 +382,11 @@ public class RMIServer extends Server implements RMIServerInterface {
 
     }
 
+    /**
+     * Scan virtualView ArrayList and search the virtualView that has the same username passed as parameter.
+     * @param username: the username to compare with virtualView username.
+     * @return the virtualView with the same username of the parameter, null if there is any VirtualView with the same username.
+     */
     public VirtualView getMyVirtualView(String username) {
         for(VirtualView virtualView : allVirtualViews) {
             if (virtualView.getUsername().equals(username)) {
@@ -301,16 +396,29 @@ public class RMIServer extends Server implements RMIServerInterface {
         return null;
     }
 
+    /**
+     * Scan all virtualView to gain the clientRef and for each client update call the remote method to update the remote view,
+     * @throws RemoteException
+     */
     public void updateAllClient() throws RemoteException{
-        pingAllClient();
-        for (VirtualView virtualView : allVirtualViews) {
-            if (!this.match.searchPlayerByClientName(virtualView.getUsername()).getSuspended()) {
-                GUIControllerInterface clientRef = virtualView.getClientReference();
-                clientRef.update(allVirtualViews);
+        try {
+            pingAllClient();
+            for (VirtualView virtualView : allVirtualViews) {
+                if (!this.match.searchPlayerByClientName(virtualView.getUsername()).getSuspended()) {
+                    GUIControllerInterface clientRef = virtualView.getClientReference();
+                    clientRef.update(allVirtualViews);
+                }
             }
+        } catch(RemoteException remException) {
+            logger.log(Level.SEVERE, "Can't connect to the client");
         }
     }
 
+    /**
+     * Check if the current square identified by the position is a spawn point
+     * @param position: the integer that represents the square
+     * @return true if the square is a spawn point, false otherwise.
+     */
     public boolean isSpawnPoint(int position) {
         if (match.getMap().searchSquare(position).isSpawnPoint()) {
             return true;
@@ -320,6 +428,11 @@ public class RMIServer extends Server implements RMIServerInterface {
         }
     }
 
+    /**
+     * Call the related model method to pick up a weapon in case the player has less than three weapon in his hand.
+     * @param username: username of the player who want to pick up the weapon.
+     * @param indexToPickUp: index of the weapon to pick up.
+     */
     public void pickUpWeapon(String username, int indexToPickUp){
         Player currentPlayer = match.searchPlayerByClientName(username);
         currentPlayer.pickUpWeapon(indexToPickUp);
@@ -332,6 +445,13 @@ public class RMIServer extends Server implements RMIServerInterface {
 
     }
 
+    /**
+     * Call the related model method to pick up a weapon in the case the player has already three weapon in his hand.
+     * @param username: the username of the player who want to pick up the weapon
+     * @param indexToPickUp: index of the weapon to pick up
+     * @param indexToDrop: index of the weapon to switch
+     * @throws RemoteException: if the method can't do the remote call to the client.
+     */
     public void pickUpWeapon(String username, int indexToPickUp, int indexToDrop) throws RemoteException{
         Player currentPlayer = match.searchPlayerByClientName(username);
         currentPlayer.pickUpWeapon(indexToPickUp,indexToDrop);
@@ -342,6 +462,10 @@ public class RMIServer extends Server implements RMIServerInterface {
 
     }
 
+    /**
+     * Call restoreTile and restoreWeaponSlot method.
+     * @throws RemoteException
+     */
     public void restoreMap()throws RemoteException{
         restoreTile();
         restoreWeaponSlot();
@@ -349,6 +473,9 @@ public class RMIServer extends Server implements RMIServerInterface {
         updateAllClient();
     }
 
+    /**
+     * Scan all square in the map and refill it if there wasn't an ammo.
+     */
     private void restoreTile() {
         for(Square square : match.getMap().getAllSquare()) {
             if (!square.isSpawnPoint()) {
@@ -357,6 +484,9 @@ public class RMIServer extends Server implements RMIServerInterface {
         }
     }
 
+    /**
+     * Scan all weaponSlot in the match and for each slot assign a new weapon picked uo from the weaponStack if it was null.
+     */
     private void restoreWeaponSlot() {
         for (WeaponSlot weaponSlot : match.getArsenal()) {
             for (int i = 0; i < 3; i++) {
@@ -368,10 +498,18 @@ public class RMIServer extends Server implements RMIServerInterface {
         }
     }
 
+    /**
+     * Check if the mapId variable is already set
+     * @return true if mapID is already selected false otherwise
+     */
     protected boolean mapAlreadySelected() {
         return (mapId != 0);
     }
 
+    /**
+     * Create a new matxh with the specified mapID and initialize it
+     * @param mapId: the number of the map
+     */
     private void createMatch(int mapId) {
         match = new Match(mapId);
         this.mapId = mapId;
@@ -380,12 +518,22 @@ public class RMIServer extends Server implements RMIServerInterface {
         out.println("Match created");
     }
 
+    /**
+     * Create a new VirtualView and add it to the allVirtualView ArrayList
+     * @param guiController: the regerence of the client
+     * @return the virtualView created
+     */
     private VirtualView createVirtualView(GUIControllerInterface guiController){
         VirtualView virtualView = new VirtualView(guiController);
         allVirtualViews.add(virtualView);
         return virtualView;
     }
 
+    /**
+     * Create a new player and add it to allPlayers ArrayList.
+     * @param username: the username of the player to be added.
+     * @return the player created
+     */
     private Player createPlayer(String username) {
         Player player = new Player(username, match);
         this.match.getAllPlayers().add(player);
@@ -394,10 +542,19 @@ public class RMIServer extends Server implements RMIServerInterface {
         return player;
     }
 
+    /**
+     * Retrieve the match varibale
+     * @return the match variable
+     */
     public Match getMatch() {
         return this.match;
     }
 
+    /**
+     * Check if a player has actions availables.
+     * @param username: the username of the current player
+     * @return true if the player has at least one action, false otherwise
+     */
     public boolean checkNumberAction(String username) {
         Player currentPlayer = this.match.searchPlayerByClientName(username);
         if (currentPlayer.getNumberOfAction() > 0) {
@@ -406,6 +563,11 @@ public class RMIServer extends Server implements RMIServerInterface {
         return false;
     }
 
+    /**
+     * Increase by one the number of actions of the specified player
+     * @param username: the current player
+     * @throws RemoteException: if the method can't do the remote call to the client.
+     */
     public void giftAction(String username) throws RemoteException{
         Player currentPlayer = match.searchPlayerByClientName(username);
         currentPlayer.increaseNumberOfAction();
@@ -413,6 +575,11 @@ public class RMIServer extends Server implements RMIServerInterface {
         this.updateAllClient();
     }
 
+    /**
+     * Decrease the number of action of a player
+     * @param username: the current player
+     * @throws RemoteException: if the method can't do the remote call to the client.
+     */
     public void useAction(String username) throws RemoteException{
         Player currentPlayer = this.match.searchPlayerByClientName(username);
         currentPlayer.decreaseNumberOfAction();
@@ -420,6 +587,10 @@ public class RMIServer extends Server implements RMIServerInterface {
         this.updateAllClient();
     }
 
+    /**
+     * Set the active player
+     * @param usernameLastPlayer: the name of the player to assign to activePlayer variable
+     */
     public void setActivePlayer(String usernameLastPlayer) throws RemoteException{
         Player currentPlayer = this.match.searchPlayerByClientName(usernameLastPlayer);
         currentPlayer.setFirstSpawn(false);
@@ -458,23 +629,44 @@ public class RMIServer extends Server implements RMIServerInterface {
         }
 }
 
+    /**
+     * Set the active player
+     * @param player: the player to assign to activePlayer variable
+     */
     public void setSpecificActivePlayer(Player player) {
         this.activePlayer = player;
 
     }
 
+    /**
+     * Retrieve the active player.
+     * @return
+     */
     public Player getSpecificActivePlayer() {
         return this.activePlayer;
     }
 
+    /**
+     * Retrieve the active player.
+     * @return
+     */
     public ArrayList<Player> getKillShotTrack() {
         return match.getKillShotTrack();
     }
 
+    /**
+     * retrieve the active player.
+     * @return
+     */
     public String getActivePlayer() {
         return this.activePlayer.getClientName();
     }
 
+    /**
+     * Reset the number of action of a player at the end of his round.
+     * @param username
+     * @throws RemoteException
+     */
     public void resetActionNumber(String username) throws RemoteException{
         Player currentPlayer = this.match.searchPlayerByClientName(username);
         currentPlayer.resetNumberOfAction();
@@ -482,15 +674,30 @@ public class RMIServer extends Server implements RMIServerInterface {
         this.updateAllClient();
     }
 
+    /**
+     * Call the the shotController method "checkAll" that verify which weapon a player can use in his round.
+     * @param username: the current player
+     * @return
+     */
     public ArrayList<Weapon> verifyWeapons(String username) {
         Player currentPlayer = this.match.searchPlayerByClientName(username);
         return getShotController().checkAll(currentPlayer);
     }
 
+    /**
+     * Get the shotController variable
+     * @return
+     */
     public ShotController getShotController() {
         return this.shotController;
     }
 
+    /**
+     * Retfrieve the useful info about damaging player, targeting player, which weapon the player want to use from the WeaponShot object.+
+     * Apply the effect of the weapon calling the related model method and decrease the number of cubes
+     * @param weaponShot: object that contains all the info about the weapon and its effect.
+     * @throws RemoteException: if the method can't do the remote call to the client.
+     */
     public void applyEffectWeapon(WeaponShot weaponShot) throws RemoteException{
         WeaponShot newWeaponShot = new WeaponShot();
         for(Player target : weaponShot.getTargetPlayer()){
@@ -514,6 +721,11 @@ public class RMIServer extends Server implements RMIServerInterface {
         updateAllClient();
     }
 
+    /**
+     * Call the related model method to trade a powerUp in change of a cubes.
+     * @param index: index of the powerUp to discard
+     * @throws RemoteException if the method can't do the remote call to the client.
+     */
     public void tradeCube(int index) throws RemoteException{
         activePlayer.tradeCube(index);
         this.updateAllVirtualView();
@@ -521,6 +733,14 @@ public class RMIServer extends Server implements RMIServerInterface {
 
     }
 
+    /**
+     * Method that removes from the hand of the specified player the powerUp related to the index passed as parameter
+     * and add it to the discardedPowerUp ArrayList
+     * It sets the new position of the player after the respawn in base of the color of the powerUp.
+     * @param username: the player dead
+     * @param index: index of the powerUp in the hand of the player.
+     * @throws RemoteException if the method can't do the remote call to the client.
+     */
     public void discardAndSpawn(String username,int index) throws RemoteException{
         Player player = this.match.searchPlayerByClientName(username);
         PowerUp discardedPowerUp = player.getHand().getPowerUps().remove(index);
@@ -546,11 +766,23 @@ public class RMIServer extends Server implements RMIServerInterface {
         this.updateAllClient();
     }
 
+    /**
+     * Method that return which weapons the player can reload
+     * @param username: the current player
+     * @return An ArrayList containing the weapon the player can reload.
+     * @throws RemoteException if the method can't do the remote call to the client.
+     */
     public ArrayList<Weapon> getReloadableWeapons(String username) throws RemoteException{
         Player player = this.match.searchPlayerByClientName(username);
         return player.getReloadableWeapons();
     }
 
+    /**
+     * Set to true the variable load of the weapon
+     * @param username: the current player
+     * @param index: index of the weapon to be reload
+     * @throws RemoteException if the method can't do the remote call to the client.
+     */
     public void reloadWeapon(String username ,int index) throws RemoteException{
         Player player = this.match.searchPlayerByClientName(username);
         Weapon weaponToReload = player.getHand().getWeapons().get(index);
@@ -560,12 +792,25 @@ public class RMIServer extends Server implements RMIServerInterface {
         this.updateAllClient();
     }
 
+    /**
+     * Check if the player has some weapon in his hand
+     * @param username: the current player
+     * @return true if the player has some weapon in his hand, false otherwise
+     */
     public boolean checkSizeWeapon(String username) {
         Player currentPlayer = this.match.searchPlayerByClientName(username);
         return !currentPlayer.getHand().getWeapons().isEmpty();
 
     }
 
+    /**
+     * Method that call the related model method to apply the effect of a powerUp.
+     * It sets the targeting player, the damaging player and removed the powerUp from the hand of the player.
+     * @param username: the player who want to use the powerUp
+     * @param index: index in the hand of the powerUp
+     * @param powerUpShot: object that contains all the useful info about the usage of the powerUp
+     * @throws RemoteException if the method can't do the remote call to the client.
+     */
     public void usePowerUp(String username, int index, PowerUpShot powerUpShot) throws RemoteException{
         Player currentPlayer = this.match.searchPlayerByClientName(username);
         Player targetPlayer = this.match.searchPlayerByClientName(powerUpShot.getTargetingPlayer().getClientName());
@@ -579,6 +824,13 @@ public class RMIServer extends Server implements RMIServerInterface {
 
     }
 
+    /**
+     * Method that call the related model method to decrease the number of cubes that a player has.
+     * @param username the current Player
+     * @param reds number of red cubes
+     * @param yellows number of yellows cubes
+     * @param blues number of blues cubes
+     */
     public void payCubes(String username,int reds, int yellows, int blues){
         Cubes cubesToPay = new Cubes(reds,yellows,blues);
         getMatch().searchPlayerByClientName(username).getPlayerBoard().payCubes(cubesToPay);
@@ -590,6 +842,9 @@ public class RMIServer extends Server implements RMIServerInterface {
         }
     }
 
+    /**
+     * Method that scan all the virtualView to update the data.
+     */
     public void updateAllVirtualView() {
         for (Player player : this.match.getAllPlayers()) {
             for (VirtualView virtualView : allVirtualViews) {
@@ -601,6 +856,13 @@ public class RMIServer extends Server implements RMIServerInterface {
 
     }
 
+    /**
+     * Method that scan all player in search of players who are dead.
+     * Verify if is the time to start the final frenzy.
+     * @param username Username of the player who do the last kill.
+     * @return a flag that is True if there was a kill, false otherwise.
+     * @throws RemoteException if the method can't do the remote call to the client.
+     */
     public boolean deathPlayer(String username) throws RemoteException {
         boolean flagDeath = false;
         for (Player player : match.getAllPlayers()) {
@@ -615,7 +877,7 @@ public class RMIServer extends Server implements RMIServerInterface {
                 }
             }
         }
-        if (this.match.getKillShotTrack().size() == 1 && !this.match.isFinalFrenzyStatus()) {
+        if (this.match.getKillShotTrack().size() == 8 && !this.match.isFinalFrenzyStatus()) {
             this.match.setFinalFrenzyStatus(true);
             this.enableFinalFrenzy(username);
         }
@@ -624,7 +886,12 @@ public class RMIServer extends Server implements RMIServerInterface {
         return flagDeath;
     }
 
-    private void assignPoints(Player player) throws RemoteException{
+    /**
+     * Method that computes how many points each player has to gain from a kill.
+     * @param player the player that is dead.
+     * @throws RemoteException if the method can't do the remote call to the client.
+     */
+    public void assignPoints(Player player) throws RemoteException{
         PlayerBoard playerBoard = player.getPlayerBoard();
         int indexPointDeaths = 0;
         for (EnemyDamage enemyDamagePoints : playerBoard.getEnemyDamages()) {
@@ -640,10 +907,20 @@ public class RMIServer extends Server implements RMIServerInterface {
         playerBoard.getPointDeaths().remove(0);
         playerBoard.clearDamage();
         updateAllVirtualView();
-        updateAllClient();
+        try {
+            updateAllClient();
+        } catch(RemoteException remException) {
+            logger.log(Level.SEVERE, "Can't connect to the client");
+        }
+
     }
 
-    private void unloadWeapon(WeaponShot weaponShot) throws RemoteException{
+    /**
+     * Set the load property of a weapon to False
+     * @param weaponShot object that contains the info of which weapons has to be unloaded.
+     * @throws RemoteException if the method can't do the remote call to the client.
+     */
+    public void unloadWeapon(WeaponShot weaponShot) throws RemoteException{
         for(Weapon weapon : match.searchPlayerByClientName(weaponShot.getDamagingPlayer().getClientName()).getHand().getWeapons()){
             if(weaponShot.getWeapon().getType().equals(weapon.getType()))
                 weapon.setLoad(false);
@@ -652,13 +929,18 @@ public class RMIServer extends Server implements RMIServerInterface {
         updateAllClient();
     }
 
+    /**
+     * Scan all player, if a player is set to dead and not suspended, he pick up a power up,
+     * then choose one to discard and respawn in the spawn point of the color of the powerUp.
+     * @throws RemoteException if the method can't do the remote call to the client.
+     */
     public void respawnPlayer() throws  RemoteException{
         for (Player playerToRespawn : this.match.getAllPlayers()) {
             if (playerToRespawn.getPlayerDead() && !playerToRespawn.getSuspended()) {
                 this.setSpecificActivePlayer(playerToRespawn);
                 playerToRespawn.pickUpPowerUpToRespawn();
-                getMyVirtualView(playerToRespawn.getClientName()).getClientReference().respawnDialog();
                 playerToRespawn.setPlayerDead(false);
+                getMyVirtualView(playerToRespawn.getClientName()).getClientReference().respawnDialog();
             }
             if (playerToRespawn.getPlayerDead() && playerToRespawn.getSuspended()) {
                 playerToRespawn.pickUpPowerUpToRespawn();
@@ -673,6 +955,12 @@ public class RMIServer extends Server implements RMIServerInterface {
         updateAllClient();
     }
 
+    /**
+     * Do a remote call to each client to notify them that a user moves himself.
+     * @param username of the active player.
+     * @param newPosition the new position the player.
+     * @throws RemoteException if the method can't do the remote call to the client.
+     */
     public void notifyAllClientMovement(String username, Integer newPosition) throws  RemoteException{
         String movementMessage = username + " new position is " + newPosition;
         for (VirtualView virtualView : allVirtualViews) {
@@ -683,6 +971,11 @@ public class RMIServer extends Server implements RMIServerInterface {
         }
     }
 
+    /**
+     * Do a remote call to each client to notify them that a user picked up a weapon.
+     * @param username of the player who picked up the weapon.
+     * @throws RemoteException if the method can't do the remote call to the client.
+     */
     public void notifyAllClientPickUpWeapon(String username) throws RemoteException{
         String pickUpWeaponMessage = username + " pick up a weapon";
         for (VirtualView virtualView : allVirtualViews) {
@@ -694,6 +987,12 @@ public class RMIServer extends Server implements RMIServerInterface {
 
     }
 
+    /**
+     * Do a remote call to each client to notify them that a user picked up an ammo.
+     * @param username of the player who picked up the ammo.
+     * @param lastAmmo the ammo thet the player has picked up
+     * @throws RemoteException if the method can't do the remote call to the client.
+     */
     public void notifyAllClientPickUpAmmo(String username, String lastAmmo) throws RemoteException {
         String pickUpWeaponMessage = username + " picked up an ammo:\n" + lastAmmo;
         for (VirtualView virtualView : allVirtualViews) {
@@ -705,6 +1004,11 @@ public class RMIServer extends Server implements RMIServerInterface {
 
     }
 
+    /**
+     * Do a remote call to each client to notify them that a user has disconnected from the match.
+     * @param username of player who is disconnected.
+     * @throws RemoteException if the method can't do the remote call to the client
+     */
     public void notifyAllClientUserDisconnect(String username) throws RemoteException{
         String clientDisconnect = username + " disconnected from the match\n";
         for (VirtualView virtualView : allVirtualViews) {
@@ -716,18 +1020,34 @@ public class RMIServer extends Server implements RMIServerInterface {
         }
     }
 
+    /**
+     * Set canMove attribute to the opposite of the actual value
+     * @param username: the currentu player
+     * @throws RemoteException if the method can't do the remote call to the client.
+     */
     public void toggleAction(String username) throws RemoteException{
         match.searchPlayerByClientName(username).setCanMove(!match.searchPlayerByClientName(username).getCanMove());
         updateAllVirtualView();
         updateAllClient();
     }
 
+    /**
+     * Set the canMove variable of a player to the parameter canMove
+     * @param username username of the player
+     * @param canMove boolean that indicates if a player can move or not.
+     * @throws RemoteException if the method can't do the remote call to the client-
+     */
     public void setCanMove(String username,boolean canMove) throws RemoteException{
         match.searchPlayerByClientName(username).setCanMove(canMove);
         updateAllVirtualView();
         updateAllClient();
     }
 
+    /**
+     * The method set in a roght way how many action and which type of action a user can do during the final frenzy.
+     * @param username the username of the player who do the last kill.
+     * @throws RemoteException if the method can't do the remote call to the client
+     */
     public void  enableFinalFrenzy(String username) throws RemoteException {
         boolean flag = false;
         for (Player player : match.getAllPlayers()) {
@@ -747,6 +1067,9 @@ public class RMIServer extends Server implements RMIServerInterface {
 
     }
 
+    /**
+     * Scan all virtualView to gain the clientRef of each client. The method do a remote call to each client to verify that the client is still alive.
+     */
     public void pingAllClient() {
         for (VirtualView virtualView : allVirtualViews) {
             GUIControllerInterface clientRef = virtualView.getClientReference();
@@ -763,6 +1086,13 @@ public class RMIServer extends Server implements RMIServerInterface {
         }
     }
 
+    /**
+     * Method that implement the reconnection when a user is disconnected from a match.
+     * The clientRed of the player is switched with a new one.
+     * @param usernameTyped the username of the player who wants to reconnect.
+     * @param guiController The new clientRef
+     * @throws RemoteException if the method can't do the remote call to the client
+     */
     public void reconnect(String usernameTyped, GUIControllerInterface guiController) throws RemoteException {
         for (VirtualView virtualView : allVirtualViews) {
             if (virtualView.getUsername().equals(usernameTyped)) {
@@ -778,6 +1108,10 @@ public class RMIServer extends Server implements RMIServerInterface {
 
     }
 
+    /**
+     * Implement a timer that each second check how many user are registred to the match.
+     * If there is three players the timer is deleted and the setMatchTimer is called.
+     */
     public void startingMatchTimer() {
         Timer startingMatchTimer = new Timer();
         startingMatchTimer.scheduleAtFixedRate(new TimerTask() {
@@ -792,6 +1126,9 @@ public class RMIServer extends Server implements RMIServerInterface {
         }, 0, 1000);
     }
 
+    /**
+     * Implement a timer that each second call the countMatchTimer method.
+     */
     public void setMatchTimer() {
         initializeMatchTimer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -807,6 +1144,13 @@ public class RMIServer extends Server implements RMIServerInterface {
         }, 0, 1000);
     }
 
+    /**
+     * Each second the interval variable is decreased, if it is equals to 1, the openConnection variable of the match is set to false.
+     * It means that nobody can connect him to the current match. The method browse each virtualView saved into the ArrayList allVirtualView
+     * to gain the clientRef and call a method that shows the GUI on each client.
+     * @return the interval variable decreased by 1.
+     * @throws RemoteException if the method can't do the remote call to the client
+     */
     private final int countMatchTimer() throws RemoteException{
         if (interval == 1) {
             this.match.setOpenConnection(false);
@@ -827,6 +1171,12 @@ public class RMIServer extends Server implements RMIServerInterface {
         return --interval;
     }
 
+    /**
+     * passRoundTimer is called when roundTimer variable is equals to 1.
+     * It means the current player has not pass the round so he become suspended. The round is passed to the next player not suspended.
+     * If in the match remains only two player tha match will finish.
+     * @throws RemoteException if the method can't do a remote call to the client.
+     */
     public void passRoundTimer() throws RemoteException{
         String usernameLastPlayer = activePlayer.getClientName();
         GUIControllerInterface clientRef = getMyVirtualView(usernameLastPlayer).getClientReference();
@@ -850,6 +1200,10 @@ public class RMIServer extends Server implements RMIServerInterface {
         }
     }
 
+    /**
+     * Implement a timer that each second call the countSeconds methos
+     * @throws RemoteException
+     */
     public void setResetTimer() throws RemoteException{
         resetTimer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -864,6 +1218,12 @@ public class RMIServer extends Server implements RMIServerInterface {
         }, 0, 1000);
     }
 
+    /**
+     * A method call by the timer each second that decrease roundTime variable.
+     * When roundTime variable is equals to 1 another method is called and roundTime varibale is intialized.
+     * @return roundTime decreased of 1.
+     * @throws RemoteException
+     */
     public final int countSeconds() throws RemoteException{
         if (roundTime == 1) {
             passRoundTimer();
@@ -872,6 +1232,13 @@ public class RMIServer extends Server implements RMIServerInterface {
         return --roundTime;
     }
 
+    /**
+     * Method used to obtain the squares available while pushing an enemy on
+     * cardinal directions.
+     * @param steps the number of square the player can push.
+     * @param position the position where the push starts.
+     * @return the list of squares the player can push someone on.
+     */
     public ArrayList<Square> getCardinalDirectionsSquares(int steps,int position){
         ArrayList<Square> newtonSquares = new ArrayList<>();
         MovementChecker movementChecker = new MovementChecker(match.getMap().getAllSquare(),steps,position);
@@ -883,6 +1250,13 @@ public class RMIServer extends Server implements RMIServerInterface {
         return newtonSquares;
     }
 
+    /**
+     * This method is used while calculating targets for the Vortex Cannon.
+     * @param currentPlayer the player using the weapon
+     * @param position the position the player wants to set the vortex to.
+     * @return the list of player that can be hit.
+     * @throws RemoteException
+     */
     public ArrayList<Player> getLocalTargets(String currentPlayer, int position) throws RemoteException{
         MovementChecker movementChecker = new MovementChecker(match.getMap().getAllSquare(),1,position);
         ArrayList<Player> targets = new ArrayList<>();
@@ -896,7 +1270,11 @@ public class RMIServer extends Server implements RMIServerInterface {
         return targets;
     }
 
-    public void closeClient(GUIControllerInterface clientRef){
+    /**
+     * Do a remote call to close the GUI of a specified client
+     * @param clientRef the reference to a specified client
+     */
+    public void closeClient(GUIControllerInterface clientRef) throws RemoteException{
         try {
             clientRef.closeGUI();
         }
@@ -905,6 +1283,11 @@ public class RMIServer extends Server implements RMIServerInterface {
         }
     }
 
+    /**
+     * Save the string passed by saveState on a file in order to later retrieve the state of the match.
+     * Eventually, it close all clients' GUI.
+     * @return A JSON object that serialize the state of the match.
+     */
     public void save() {
         String matchData = saveState();
 
@@ -929,6 +1312,10 @@ public class RMIServer extends Server implements RMIServerInterface {
         }
     }
 
+    /**
+     * Save the state of this class in order to resume the match
+     * @return A JSON object that serialize the state of the match.
+     */
     public String saveState() {
         JSONObject rmiserverJson = new JSONObject();
 
@@ -949,6 +1336,14 @@ public class RMIServer extends Server implements RMIServerInterface {
         return rmiserverJson.toJSONString();
     }
 
+    /**
+     * This method is used when calculating the enemy targets using the thor weapon.
+     * @param weaponShot the weaponShot object containing the data of the targets.
+     * @param targetsSize the index of the list containing the targets already hit,
+     *                    needed to calculate the next target.
+     * @return the weaponShot updated with new targets.
+     * @throws RemoteException
+     */
     public WeaponShot getThorTargets(WeaponShot weaponShot,int targetsSize) throws RemoteException{
         RoomChecker roomChecker = new RoomChecker(match.getMap(),weaponShot.getTargetPlayer().get(targetsSize).getPosition());
         ArrayList<Player> trueTargets = new ArrayList<>();
@@ -969,20 +1364,47 @@ public class RMIServer extends Server implements RMIServerInterface {
         return weaponShot;
     }
 
+    /**
+     * Set to false the first spawn variable of the player with the specified username.
+     * @param username of the player
+     */
     public void setFirstSpawnPlayer(String username) {
         this.match.searchPlayerByClientName(username).setFirstSpawn(false);
     }
 
-    public boolean isFirstPlayer(String username) throws RemoteException{
+    /**
+     * Find the player related to a specific username and check if he is the first player
+     * @param username username of the player
+     * @return true if the player is the first, false otherwise
+     */
+    public boolean isFirstPlayer(String username) {
         Player player = match.searchPlayerByClientName(username);
         return player.isFirstPlayer();
     }
 
+    /**
+     * Return a boolean that indicates if a saving file exists or not
+     * @return True if a saving file exists, false otherwise
+     */
     public boolean checkExistFile() {
         return this.existfile;
     }
 
-    private void finishMatch() throws RemoteException{
+    /**
+     * This method is called when final frenzy finish or when after a disconnection only two user remains in the match.
+     * The method computes the damage on all player-boards and computes the points to assign to each player for each kill.
+     * @throws RemoteException if the client isn't reachable.
+     */
+    public void finishMatch() throws RemoteException{
+
+
+        for (Player player : this.match.getAllPlayers()) {
+            this.assignPoints(player);
+        }
+        this.computePointsFinal();
+    }
+
+    public void computePointsFinal() throws RemoteException{
         ArrayList<Integer> killPointsShotTrack = new ArrayList<>();
         killPointsShotTrack.add(8);
         killPointsShotTrack.add(6);
@@ -990,12 +1412,6 @@ public class RMIServer extends Server implements RMIServerInterface {
         killPointsShotTrack.add(2);
         killPointsShotTrack.add(1);
         killPointsShotTrack.add(1);
-
-
-        for (Player player : this.match.getAllPlayers()) {
-            this.assignPoints(player);
-        }
-
 
         Map<String, Integer> pointsKillShotTrack = new HashMap<>();
         for (Player player : this.match.getKillShotTrack()) {
@@ -1038,15 +1454,20 @@ public class RMIServer extends Server implements RMIServerInterface {
             GUIControllerInterface clientRef = virtualView.getClientReference();
             clientRef.showEndGameWindow(this.match.getAllPlayers());
         }
-
-
-        System.out.println("Il vincitore è: " + winner.getClientName());
     }
 
+    /**
+     * Get all virtual view in allVirtualView variable
+     * @return ArrayList of VirtualView
+     */
     public ArrayList<VirtualView> getAllVirtualView() {
         return this.allVirtualViews;
     }
 
+    /**
+     * Set the created match in the match variable
+     * @param match the current match
+     */
     public void setMatch(Match match) {
         //for testing purpose
         this.match = match;

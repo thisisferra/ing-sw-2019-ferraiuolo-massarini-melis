@@ -3,36 +3,64 @@ package it.polimi.se2019.server.model.map;
 import com.google.gson.Gson;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-
 import java.io.*;
 import java.util.*;
 
+/**
+ * Map class represent the game map.
+ * The field mapID refers to the map's configuration (from 1 to 4).
+ * Map is made of squares who are divided by rooms.
+ * Squares who belongs to a room share the color.
+ * @author mattiamassarini,merklind,thisisferra.
+ */
 public class Map implements Serializable {
     private int mapID;
     private Square[] allSquare;
     private ArrayList<ArrayList<Square>> roomSquare;
 
+    /**
+     * Setter of the mapID field.
+     * @param mapID the unique id of the map. It must be a number greater than 0.
+     */
     public void setMapID(int mapID){
         if(mapID > 0) {
             this.mapID = mapID;
         }
         else throw new ArithmeticException("mapID cannot be negative or equal to 0");
     }
+
+    /**
+     * Getter of the mapID field.
+     * @return the current map id.
+     */
     public int getMapID(){
         return this.mapID;
     }
 
-    //get an array of all squares of the map
+    /**
+     * Getter of the allSquare field.
+     * @return an array of all squares that make the map.
+     */
     public Square[] getAllSquare(){
         return this.allSquare;
     }
 
+    /**
+     * Setter method of the mapID field.
+     * @param mapID the map id chosen.
+     */
     public Map(int mapID){
         this.mapID = mapID;
     }
 
     //based on mapID number the method parse the json file with the same id
     // filling the array allSquares with Square objects
+
+    /**
+     * Setter of allSquare field.
+     * It sets the map's squares based on the mapID chosen reading the
+     * square information from a Json configuration file.
+     */
     public void setAllSquare(){
         Gson gson = new Gson();
         try {
@@ -48,6 +76,12 @@ public class Map implements Serializable {
     }
 
     //fills roomSquare with the reference of all map squares, sorted based on their colours
+
+    /**
+     * Setter of the roomSquare field.
+     * It fills the collection with collections of squares, sorted by color.
+     * Each list contains the squares that share the same color.
+     */
     public void setRoomSquare(){
 
         this.roomSquare = new ArrayList<>();
@@ -82,6 +116,11 @@ public class Map implements Serializable {
         }
     }
 
+    /**
+     * It search for a square if the position parameter is valid.
+     * @param position the number of the square.
+     * @return the square required or null if the position is invalid.
+     */
     public Square searchSquare(int position) {
         for (Square square : allSquare) {
             if (square.getPosition() == position) return square;
@@ -90,6 +129,11 @@ public class Map implements Serializable {
     }
 
     //return the number of different colors on the map
+
+    /**
+     * It counts the number of different colors of the rooms.
+     * @return the number of different rooms colors of the map.
+     */
     public int colorCount(){
 
         Set <String> colorSet = new HashSet<>();
@@ -99,13 +143,27 @@ public class Map implements Serializable {
         }
         return colorSet.size();
     }
+
+    /**
+     * Getter of the roomSquare field.
+     * @return the list of lists of squares, sorted by colors.
+     */
     public ArrayList<ArrayList<Square>> getRoomSquare(){
         return this.roomSquare;
     }
+
+    /**
+     * @param indexSquare the square's index requested.
+     * @return the square matching the index requested.
+     */
     public Square getSpecificSquare(int indexSquare) {
         return allSquare[indexSquare];
     }
 
+    /**
+     * It saves the map state to a JSONObject object.
+     * @return the JSONObject to be restored.
+     */
     public JSONObject toJSON() {
         JSONObject mapJson = new JSONObject();
 
@@ -130,6 +188,12 @@ public class Map implements Serializable {
         return mapJson;
     }
 
+    /**
+     * It restores the Map object from a JSONObject containing information about the map.
+     * @param mapToResume the JSONObject to be restored.
+     * @param chosenMap the map ID of the JSONObject to be restored.
+     * @return the map restored.
+     */
     public static Map resumeMap(JSONObject mapToResume, int chosenMap) {
         Map resumedMap = new Map(chosenMap);
 

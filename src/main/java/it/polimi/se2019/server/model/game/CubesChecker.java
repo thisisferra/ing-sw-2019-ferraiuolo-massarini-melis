@@ -2,31 +2,30 @@ package it.polimi.se2019.server.model.game;
 
 public class CubesChecker {
 
+    /**
+     * CubesChecker class used to check if cubes can be paid, based on the amount of cubes owned and due.
+     * @author mattiamassarini.
+     */
     private Cubes cubesStored;
     private Cubes cubesBeingPayed;
 
+    /**
+     * Constructor of CubesChecker.
+     * @param cubesStored cubes the player has.
+     * @param cubesBeingPayed cubes the player has to pay.
+     */
     public CubesChecker(Cubes cubesStored, Cubes cubesBeingPayed){
         this.cubesStored = cubesStored;
         this.cubesBeingPayed = cubesBeingPayed;
     }
 
-    //the price can be payed if the cubes owned are greater or equal of the cubes the player
-    // has to pay
-    // if the player can pay it return true, else it return false
+    /**
+     * Check if the cubes can be paid.
+     * @return true if the price can be paid, false otherwise.
+     */
     public boolean check(){
         return(cubesStored.getReds() >= cubesBeingPayed.getReds() &&
                 cubesStored.getYellows() >= cubesBeingPayed.getYellows() &&
                     cubesStored.getBlues() >= cubesBeingPayed.getBlues() );
-
     }
-    /*
-    public Cubes subtract(){
-        if(this.check()){
-            return new Cubes((this.cubesStored.getReds()-this.cubesBeingPayed.getReds()),
-                    (cubesStored.getYellows()-cubesBeingPayed.getYellows()),
-                    (cubesStored.getBlues()-cubesBeingPayed.getBlues()));
-        }
-        else return null;
-    }
-     */
 }

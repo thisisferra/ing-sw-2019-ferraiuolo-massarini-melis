@@ -16,6 +16,10 @@ import org.json.simple.JSONObject;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * VirtualView is an object that represent the model data that are sernt to the client to show thr right information
+ * @author mattiamassarini, merklind, thisisferra
+ */
 public class VirtualView implements Serializable {
 
     private GUIControllerInterface clientReference;
@@ -48,225 +52,495 @@ public class VirtualView implements Serializable {
     private boolean suspended;
 
 
-    //COSTRUTTORE
+    /**
+     * Instantiates a new Virtual view.
+     *
+     * @param clientReference the client reference
+     */
+//COSTRUTTORE
     public VirtualView(GUIControllerInterface clientReference) {
         this.clientReference = clientReference;
     }
 
+    /**
+     * Instantiates a new Virtual view.
+     */
     public VirtualView() {
         //Needed for resuming a virtualView from saved match
     }
 
     //GETTER
 
+    /**
+     * Gets client reference.
+     *
+     * @return the client reference
+     */
     public GUIControllerInterface getClientReference() {
         return this.clientReference;
     }
 
+    /**
+     * getter of the username of the virtualView
+     *
+     * @return the username of the virtualView
+     */
     public String getUsername() {
         return this.username;
     }
 
+
+    /**
+     * Gets character.
+     *
+     * @return the character
+     */
     public String getCharacter() {
         return this.character;
     }
 
+    /**
+     * Gets position.
+     *
+     * @return the position
+     */
     public int getPosition() {
         return this.position;
     }
 
+    /**
+     * Gets damage.
+     *
+     * @return the damage
+     */
     public int getDamage() {
         return this.damage;
     }
 
+    /**
+     * Gets number of actions.
+     *
+     * @return the number of actions
+     */
     public int getNumberOfActions() {
         return this.numberOfActions;
     }
 
+    /**
+     * Get reachable square array list.
+     *
+     * @return the array list
+     */
     public ArrayList<Square> getReachableSquare(){
         return this.reachableSquare;
     }
 
+    /**
+     * Get weapons array list.
+     *
+     * @return the array list
+     */
     public ArrayList<Weapon> getWeapons(){
         return this.weapons;
     }
 
+    /**
+     * Gets power ups.
+     *
+     * @return ArrayList of power ups
+     */
     public ArrayList<PowerUp> getPowerUps() {
         return this.powerUps;
     }
 
+    /**
+     * Gets phase action.
+     *
+     * @return int that represent the type of phase action
+     */
     public int getPhaseAction() {
         return phaseAction;
     }
 
+    /**
+     * Get final frenzy int.
+     *
+     * @return int that represent the type of finalFrenzy
+     */
     public int getFinalFrenzy(){
         return this.finalFrenzy;
     }
 
+    /**
+     * Gets points.
+     *
+     * @return the points
+     */
     public int getPoints() {
         return points;
     }
 
+    /**
+     * Get deaths player board int.
+     *
+     * @return the int
+     */
     public int getDeathsPlayerBoard(){
         return this.deathsPlayerBoard;
     }
 
+    /**
+     * Get mark player board array list.
+     *
+     * @return the array list
+     */
     public ArrayList<EnemyMark> getMarkPlayerBoard(){
         return this.markPlayerBoard;
     }
 
+    /**
+     * Get damage player board array list.
+     *
+     * @return the array list
+     */
     public ArrayList<Player> getDamagePlayerBoard(){
         return this.damagePlayerBoard;
     }
 
+    /**
+     * Get kill shot track array list.
+     *
+     * @return the array list
+     */
     public ArrayList<Player> getKillShotTrack(){
         return this.killShotTrack;
     }
 
+    /**
+     * Get cubes cubes.
+     *
+     * @return the cubes
+     */
     public Cubes getCubes(){
         return this.cubes;
     }
 
+    /**
+     * Gets cabinet red.
+     *
+     * @return the cabinet red
+     */
     public WeaponSlot getCabinetRed() {
         return this.cabinetRed;
     }
 
+    /**
+     * Gets cabinet yellow.
+     *
+     * @return the cabinet yellow
+     */
     public WeaponSlot getCabinetYellow() {
         return this.cabinetYellow;
     }
 
+    /**
+     * Gets cabinet blue.
+     *
+     * @return the cabinet blue
+     */
     public WeaponSlot getCabinetBlue() {
         return this.cabinetBlue;
     }
 
+    /**
+     * Gets weapon shot.
+     *
+     * @return the weapon shot
+     */
     public WeaponShot getWeaponShot() { return
             this.weaponShot;
     }
 
+    /**
+     * Get available weapons array list.
+     *
+     * @return the array list
+     */
     public ArrayList<Weapon> getAvailableWeapons(){
         return this.availableWeapons;
     }
 
+    /**
+     * Get can move boolean.
+     *
+     * @return the boolean
+     */
     public boolean getCanMove(){
         return this.canMove;
     }
 
+    /**
+     * Get type player board int.
+     *
+     * @return the int
+     */
     public int getTypePlayerBoard(){
         return this.typePlayerBoard;
     }
 
+    /**
+     * Gets suspended.
+     *
+     * @return the suspended
+     */
     public boolean getSuspended() {
         return this.suspended;
     }
 
     //SETTER
 
+    /**
+     * Sets client reference.
+     *
+     * @param clientReference the client reference
+     */
     public void setClientReference(GUIControllerInterface  clientReference) {
         this.clientReference = clientReference;
     }
 
+    /**
+     * Sets username.
+     *
+     * @param username the username
+     */
     public void setUsername(String username) {
         this.username = username;
     }
 
+    /**
+     * Sets character.
+     *
+     * @param character the character
+     */
     public void setCharacter(String character) {
         this.character = character;
     }
 
+    /**
+     * Sets position.
+     *
+     * @param position the position
+     */
     public void setPosition(int position) {
         this.position = position;
     }
 
+    /**
+     * Set points.
+     *
+     * @param points the points
+     */
     public void setPoints(int points){
         this.points = points;
     }
 
+    /**
+     * Set reachable square.
+     *
+     * @param reachableSquare the reachable square
+     */
     public void setReachableSquare(ArrayList<Square> reachableSquare){
         this.reachableSquare = reachableSquare;
     }
 
+    /**
+     * Sets phase action.
+     *
+     * @param phaseAction the phase action
+     */
     public void setPhaseAction(int phaseAction) {
         this.phaseAction = phaseAction;
     }
 
+    /**
+     * Sets damage.
+     *
+     * @param damage the damage
+     */
     public void setDamage(int damage) {
         this.damage = damage;
     }
 
+    /**
+     * Sets number of actions.
+     *
+     * @param numberOfActions the number of actions
+     */
     public void setNumberOfActions(int numberOfActions) {
         this.numberOfActions = numberOfActions;
     }
 
+    /**
+     * Sets weapons.
+     *
+     * @param weapons the weapons
+     */
     public void setWeapons(ArrayList<Weapon> weapons) {
         this.weapons = weapons;
     }
 
+    /**
+     * Sets power ups.
+     *
+     * @param powerUps the power ups
+     */
     public void setPowerUps(ArrayList<PowerUp> powerUps) {
         this.powerUps = powerUps;
     }
 
+    /**
+     * Set can move.
+     *
+     * @param canMove the can move
+     */
     public void setCanMove(boolean canMove){
         this.canMove = canMove;
     }
 
+    /**
+     * Set deaths player board.
+     *
+     * @param deathsPlayerBoard the deaths player board
+     */
     public void setDeathsPlayerBoard(int deathsPlayerBoard){
         this.deathsPlayerBoard = deathsPlayerBoard;
     }
 
+    /**
+     * Set final frenzy.
+     *
+     * @param finalFrenzy the final frenzy
+     */
     public void setFinalFrenzy(int finalFrenzy){
         this.finalFrenzy = finalFrenzy;
     }
 
+    /**
+     * Sets cubes.
+     *
+     * @param cubes the cubes
+     */
     public void setCubes(Cubes cubes) {
         this.cubes = cubes;
     }
 
+    /**
+     * Sets cabinet red.
+     *
+     * @param cabinetRed the cabinet red
+     */
     public void setCabinetRed(WeaponSlot cabinetRed) {
         this.cabinetRed = cabinetRed;
     }
 
+    /**
+     * Sets cabinet yellow.
+     *
+     * @param cabinetYellow the cabinet yellow
+     */
     public void setCabinetYellow(WeaponSlot cabinetYellow) {
         this.cabinetYellow = cabinetYellow;
     }
 
+    /**
+     * Sets cabinet blue.
+     *
+     * @param cabinetBlue the cabinet blue
+     */
     public void setCabinetBlue(WeaponSlot cabinetBlue) {
         this.cabinetBlue = cabinetBlue;
     }
 
+    /**
+     * Sets weapon shot.
+     *
+     * @param weaponShot the weapon shot
+     */
     public void setWeaponShot(WeaponShot weaponShot) {
         this.weaponShot = weaponShot;
     }
 
+    /**
+     * Set available weapons.
+     *
+     * @param availableWeapons the available weapons
+     */
     public void setAvailableWeapons(ArrayList<Weapon> availableWeapons){
         this.availableWeapons = availableWeapons;
     }
 
+    /**
+     * Set mark player board.
+     *
+     * @param markPlayerBoard the mark player board
+     */
     public void setMarkPlayerBoard(ArrayList<EnemyMark> markPlayerBoard){
         this.markPlayerBoard = markPlayerBoard;
     }
 
+    /**
+     * Set damage player board.
+     *
+     * @param damagePlayerBoard the damage player board
+     */
     public void setDamagePlayerBoard(ArrayList<Player> damagePlayerBoard){
         this.damagePlayerBoard = damagePlayerBoard;
     }
 
+    /**
+     * Set kill shot track.
+     *
+     * @param killShotTrack the kill shot track
+     */
     public void setKillShotTrack(ArrayList<Player> killShotTrack ){
         this.killShotTrack = killShotTrack;
     }
 
+    /**
+     * Sets type player board.
+     *
+     * @param typePlayerBoard the type player board
+     */
     public void setTypePlayerBoard(int typePlayerBoard) {
         this.typePlayerBoard = typePlayerBoard;
     }
 
+    /**
+     * Sets suspended.
+     *
+     * @param suspended the suspended
+     */
     public void setSuspended(boolean suspended) {
         this.suspended = suspended;
     }
 
     //ALTRO
 
+    /**
+     * Re set virtual view.
+     *
+     * @param guiControllerToResume the gui controller to resume
+     */
     public void reSetVirtualView(GUIControllerInterface guiControllerToResume) {
         this.clientReference = guiControllerToResume;
     }
 
+    /**
+     * Update virtual view.
+     *
+     * @param player the player
+     * @param match  the match
+     */
     public void updateVirtualView(Player player, Match match) {
         this.setUsername(player.getClientName());
         this.setPosition(player.getPosition());
@@ -290,6 +564,11 @@ public class VirtualView implements Serializable {
         this.setSuspended(player.getSuspended());
     }
 
+    /**
+     * To json json object.
+     *
+     * @return the json object
+     */
     public JSONObject toJSON() {
         JSONObject virtualViewJson = new JSONObject();
 
@@ -363,6 +642,13 @@ public class VirtualView implements Serializable {
         return virtualViewJson;
     }
 
+    /**
+     * Resume virtual view from a saved match
+     *
+     * @param virtualViewToResume the virtual view to resume
+     * @param resumedMatch        the resumed match
+     * @return the virtual view resumed
+     */
     public static VirtualView resumeVirtualView(JSONObject virtualViewToResume, Match resumedMatch) {
         VirtualView resumedVirtualView = new VirtualView();
 

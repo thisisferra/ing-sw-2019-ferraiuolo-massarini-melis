@@ -8,8 +8,6 @@ import it.polimi.se2019.server.model.cards.powerUp.PowerUp;
 import it.polimi.se2019.server.model.cards.weapons.Weapon;
 import it.polimi.se2019.server.model.map.Square;
 import it.polimi.se2019.server.model.player.Player;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -26,14 +24,27 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.rmi.RemoteException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * GUI class is the graphical user interface of the game.
+ * It is composed by a login scene, showing the map previews,
+ * a text field for the username inputting and a map selector;
+ * A wait scene displays the number of players who are waiting for the game
+ * to start.
+ * The main game scene is made of a BorderPane object:
+ * on the left side there are the main buttons and  on the right side a textarea that
+ * shows the action of all players, updating during the game's progress.
+ * The buttons are used to make moves, checking weapons and powerup
+ * cards and the enemy playerboards.
+ * In the center is located the game board, showing in real time
+ * weapons inside the cabinets, ammo tiles, the killshot track and players.
+ * The endgame scene shows the leaderboards and the winner player.
+ * @author mattiamassarini.
+ */
 public class GUI extends Application {
 
     private Logger logger = Logger.getAnonymousLogger();
@@ -47,8 +58,6 @@ public class GUI extends Application {
     private GridPane pawnsGrid = new GridPane();
     private HBox redBox = new HBox();
     private HBox blueBox = new HBox();
-    private StackPane cardsBackPane = new StackPane();
-    //private boolean firstSpawn = true;
     private HBox yellowBox = new HBox();
     private StackPane cabinets = new StackPane();
     private HBox killShotTrack = new HBox();
@@ -96,7 +105,7 @@ public class GUI extends Application {
     }
 
     /**
-     * It displays the grid showing coloured rectangles
+     * Displays the grid showing colored rectangles
      * during the game progress.
      */
     private void setMapGrid(){
@@ -114,7 +123,7 @@ public class GUI extends Application {
     }
 
     /**
-     * It shows an ImageView on the game scene while hovering on
+     * Shows an ImageView on the game scene while hovering on
      * a weapon. Its purpose is to magnify the cards.
      * @param cabinet the cabinet containing the weapon the player wants to zoom.
      * @param weaponsArray the weapon array.
@@ -156,7 +165,7 @@ public class GUI extends Application {
     }
 
     /**
-     * It creates the HBox containing skulls or tears, based on
+     * Creates the HBox containing skulls or tears, based on
      * the number of death occured during the game.
      */
     private void setKillShotTrack() {
@@ -198,7 +207,11 @@ public class GUI extends Application {
     }
 
     /**
-     * It creates the Playerboards StackPanes.
+     * Creates the Playerboards StackPanes.
+     * Each stackpane contains 3 HBoxes:
+     * - damage Hbox, displaying damages
+     * - marks Hbox, containing the marks
+     * - death Hbox, showing the available points for scoring the board.
      * @return a VBox which include all the players boards.
      */
     private VBox setPlayerBoardsStack(){
@@ -394,7 +407,7 @@ public class GUI extends Application {
             try {
                 guiController.getRmiStub().save();
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.log(Level.INFO,"Save error",e);
             }
             window.close();
 
@@ -418,8 +431,6 @@ public class GUI extends Application {
         setResponsiveButton(newButton);
         return newButton;
     }
-
-    //HERE I CUTTED PREVIOUS LOGIN SCENE
 
     /**
      * It set the button to be color responsive on mouse hovering.
@@ -520,7 +531,7 @@ public class GUI extends Application {
                     }
                 }
             } catch (Exception ex) {
-                logger.log(Level.INFO,"Failed to load login window",ex);
+                logger.log(Level.INFO,"Failed to wait window",ex);
             }
         });
         BorderPane pane = new BorderPane();

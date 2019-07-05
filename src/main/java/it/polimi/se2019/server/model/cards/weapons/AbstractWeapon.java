@@ -3,17 +3,12 @@ package it.polimi.se2019.server.model.cards.weapons;
 import com.google.gson.Gson;
 import it.polimi.se2019.server.model.cards.*;
 import it.polimi.se2019.server.model.game.Cubes;
-import it.polimi.se2019.server.model.player.Player;
-import org.json.simple.JSONObject;
-
 import it.polimi.se2019.server.controller.WeaponShot;
-import it.polimi.se2019.server.model.cards.*;
-import it.polimi.se2019.server.model.game.Cubes;
-
-import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public abstract class AbstractWeapon implements Weapon, Serializable {
 
@@ -183,7 +178,7 @@ public abstract class AbstractWeapon implements Weapon, Serializable {
 
     public static Weapon resumeWeapon(String weaponToResume) {
         Weapon resumedWeapon = null;
-
+        Logger logger = Logger.getAnonymousLogger();
         Gson gson = new Gson();
 
         try {
@@ -255,7 +250,7 @@ public abstract class AbstractWeapon implements Weapon, Serializable {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.log(Level.INFO,"Resuming weapons error",e);
         }
 
         return resumedWeapon;

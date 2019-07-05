@@ -3,10 +3,17 @@ package it.polimi.se2019.server.model.game;
 import it.polimi.se2019.server.model.map.Map;
 import it.polimi.se2019.server.model.map.Square;
 import it.polimi.se2019.server.model.player.Player;
-
 import java.util.*;
-import java.util.stream.Collectors;
 
+/**
+ * RoomChecker class implements the visibility game mechanic.
+ * Given a Map and an index, it checks the rooms you can see from that position.
+ * The collection roomsColor is necessary in order to store the rooms' colors.
+ * The collection visibleRooms contains all the squares visible from a given position.
+ * Both collection are filled during the constructor call, and the object created can be used for
+ * retrieving additional infos like the visible players and non visible players.
+ * @author mattiamassarini.
+ */
 public class RoomChecker {
 
     private ArrayList<String> roomsColor = new ArrayList<>();
@@ -36,9 +43,10 @@ public class RoomChecker {
         return this.roomsColor;
     }
 
-    //this method fills accessibleRooms array with all the squares whose color is found
-    //in roomColor.
-    //e.g. if roomColor = {red,blue}, accessibleRooms will contain all red and blue squares.
+    /**It fills accessibleRooms array with all the squares whose color is found
+     * in roomColor.
+     * e.g. if roomColor = {red,blue}, accessibleRooms will contain all red and blue squares.
+     */
     private void setAccessibleRooms(){
         ArrayList<ArrayList<Square>> roomSquares= map.getRoomSquare();
         for(ArrayList<Square> list: roomSquares){
@@ -50,10 +58,21 @@ public class RoomChecker {
             }
         this.visibleRooms.sort(Comparator.comparing(Square::getPosition));
     }
+
+    /**
+     * Getter of accessibleRooms field.
+     * @return the visible squares.
+     */
     public ArrayList<Square> getAccessibleRooms(){
         return this.visibleRooms;
     }
 
+    /**
+     * Finds all the players visible from the owner player, excluding the owner.
+     * @param match the current match.
+     * @param owner the player from where the visibility property is calculated.
+     * @return the list of all visible players from owner perspective.
+     */
     public ArrayList<Player> getVisiblePlayers(Match match, Player owner){
         ArrayList<Player> visiblePlayers = new ArrayList<>();
         for(Square object: visibleRooms){
@@ -68,6 +87,15 @@ public class RoomChecker {
     }
 
     //return the list of players you cannot see
+
+    /**
+     * Finds all the non visible players from the owner player.
+     * The method simply subtract the visiblePlayer list from the list
+     * of all players, also removing the owner.
+     * @param match the current match.
+     * @param owner the player from where the visibility property is calculated.
+     * @return the list of all the non visible players.
+     */
     public ArrayList<Player> getNonVisiblePlayers(Match match, Player owner){
         ArrayList<Player> nonVisiblePlayers = new ArrayList<>();
         for(Player player : match.getAllPlayers())

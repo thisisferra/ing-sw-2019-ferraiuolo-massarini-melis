@@ -11,6 +11,7 @@ public abstract class Server {
         //for testing purpose
     }
 
+
     protected Server(OneAboveAll oneAboveAll) {
         this.oneAboveAll = oneAboveAll;
     }
