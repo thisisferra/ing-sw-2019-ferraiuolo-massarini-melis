@@ -1,0 +1,16 @@
+it.polimi.se2019
+it.polimi.se2019.client
+it.polimi.se2019.client.controller
+it.polimi.se2019.client.controller.network
+it.polimi.se2019.client.controller.network.RMI
+it.polimi.se2019.client.view
+it.polimi.se2019.server
+it.polimi.se2019.server.controller
+it.polimi.se2019.server.controller.network
+it.polimi.se2019.server.controller.network.RMI
+it.polimi.se2019.server.model.cards
+it.polimi.se2019.server.model.cards.powerUp
+it.polimi.se2019.server.model.cards.weapons
+it.polimi.se2019.server.model.game
+it.polimi.se2019.server.model.map
+it.polimi.se2019.server.model.player
